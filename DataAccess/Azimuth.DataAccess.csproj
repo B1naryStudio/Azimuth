@@ -56,6 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Location.cs" />
+    <Compile Include="Entities\Name.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Infrastructure\BaseEntity.cs" />
     <Compile Include="Infrastructure\BaseRepository.cs" />

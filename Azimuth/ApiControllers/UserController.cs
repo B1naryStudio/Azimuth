@@ -30,7 +30,7 @@ namespace Azimuth.ApiControllers
 
             UserBrief dto = new UserBrief
             {
-                Name = user.DisplayName,
+                Name = user.ScreenName,
                 Email = user.Email
             };
 
