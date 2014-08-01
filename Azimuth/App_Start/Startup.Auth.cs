@@ -33,6 +33,11 @@ namespace Azimuth
             //   appSecret: "");
 
             //app.UseGoogleAuthentication();
+
+            app.UseVkontakteAuthentication(
+                appId: "4469725",
+                appSecret: "1vUUwTGWEIp3bSLqDHuw",
+                scope: "audio");
         }
     }
 }
