@@ -26,13 +26,13 @@ namespace Azimuth
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
+            app.UseTwitterAuthentication(
+               consumerKey: "LlXtJmJSLVQd8gzALZEctToQC",
+               consumerSecret: "VrO3OXhWoCxAwQxzGvEoTVHeua1MoKTZv1zZ7dM47WnhKAOgAn");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "609844869113324",
+               appSecret: "399f367e79f11226d1522c00c72a6c6d");
 
             app.UseGoogleAuthentication(
                 clientId: "847308079087-bl2m5iev3iibsp9pfoulodosek33rtrl.apps.googleusercontent.com",
