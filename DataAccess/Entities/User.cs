@@ -12,5 +12,6 @@ namespace Azimuth.DataAccess.Entities
         public virtual int Timezone { get; set; }
         public virtual Location Location { get; set; }
         public virtual string Email { get; set; }
+        public virtual Iesi.Collections.Generic.ISet<UserSocialNetwork> SocialNetworks { get; set; }
     }
 }
