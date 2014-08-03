@@ -3,6 +3,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Repositories;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Tool.hbm2ddl;
 using Ninject.Extensions.Factory;
 using Ninject.Modules;
 
@@ -19,6 +20,8 @@ namespace Azimuth.DataAccess.Infrastructure
                 var cfg = new Configuration();
                 cfg.Configure();
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
+                var schemaExport = new SchemaExport(cfg);
+                schemaExport.Create(false, true);
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
