@@ -1,17 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Azimuth.DataAccess" namespace="Azimuth.DataAccess.Entities">
   <class name="UserSocialNetwork" table="UserSocialNetworks">
-    <!--<id name="Id">
-      <generator class="native"/>
-    </id>-->
-
     <composite-id name ="Identifier" class="UserSNIdentifier">
       <key-property name="UserId" column="UserId"/>
       <key-property name="SocialNetworkId" column="SocialNetworkId"/>
     </composite-id>
-    
-    <many-to-one name="User" column="UserId" />
-    <many-to-one name="SocialNetwork" column="SocialNetworkId"/>
     <property name="ThirdPartId"/>
   </class>
 </hibernate-mapping>
