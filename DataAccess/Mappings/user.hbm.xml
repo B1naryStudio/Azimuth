@@ -4,7 +4,19 @@
     <id name="Id">
       <generator class="native"/>
     </id>
-  <property name="DisplayName"/>
-  <property name="Email"/>
+    <component name="Name" class="Name">
+      <property name="FirstName"/>
+      <property name="LastName" />
+    </component>
+    <property name="ScreenName" />
+    <property name="Gender" />
+    <property name="Birthday" />
+    <property name="Photo" />
+    <property name="Timezone" />
+    <component name="Location" class="Location">
+      <property name="Country" />
+      <property name="City" />
+    </component>
+    <property name="Email"/>
   </class>
 </hibernate-mapping>
