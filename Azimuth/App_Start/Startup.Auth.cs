@@ -37,6 +37,11 @@ namespace Azimuth
             app.UseGoogleAuthentication(
                 clientId: "847308079087-bl2m5iev3iibsp9pfoulodosek33rtrl.apps.googleusercontent.com",
                 clientSecret: "oHy-Vd8TS48P4Ybz_Gsp_y2h");
+
+            app.UseVkontakteAuthentication(
+                appId: "4469725",
+                appSecret: "1vUUwTGWEIp3bSLqDHuw",
+                scope: "audio");
         }
     }
 }

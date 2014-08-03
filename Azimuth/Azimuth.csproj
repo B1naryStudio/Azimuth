@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Duke.Owin.VkontakteMiddleware">
+      <HintPath>..\packages\Duke.Owin.VkontakteMiddleware.1.2.0.0\lib\net45\Duke.Owin.VkontakteMiddleware.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
