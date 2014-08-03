@@ -5,20 +5,24 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Azimuth.DataAccess.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
+using Ninject;
 
 namespace Azimuth.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private IKernel _kernel;
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
+            _kernel = new StandardKernel(new DataAccessModule());
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
