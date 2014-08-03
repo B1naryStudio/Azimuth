@@ -11,8 +11,6 @@ namespace Azimuth.DataAccess.Entities
     public class UserSocialNetwork:BaseEntity
     {
         public virtual UserSNIdentifier Identifier { get; set; }
-        public virtual User User { get; set; }
-        public virtual SocialNetwork SocialNetwork { get; set; }
         public virtual string ThirdPartId { get; set; }
     }
 
