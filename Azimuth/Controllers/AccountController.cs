@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
+using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -205,27 +206,6 @@ namespace Azimuth.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            //var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            //if (loginInfo == null)
-            //{
-            //    return RedirectToAction("Login");
-            //}
-
-            //// Sign in the user with this external login provider if the user already has a login
-            //var user = await UserManager.FindAsync(loginInfo.Login);
-            //if (user != null)
-            //{
-            //    await SignInAsync(user, isPersistent: false);
-            //    return RedirectToLocal(returnUrl);
-            //}
-            //else
-            //{
-            //    // If the user does not have an account, then prompt the user to create an account
-            //    ViewBag.ReturnUrl = returnUrl;
-            //    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-            //    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
-            //}
-
             var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
             if (result == null || result.Identity == null)
             {
@@ -234,9 +214,12 @@ namespace Azimuth.Controllers
 
             var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
 
+            // Get Facebook Accesstoken and expire time
             var externalIdentity = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
-            var accessToken = externalIdentity.FindAll(idClaim.Issuer + "AccessToken").First();
-            WriteUserData(accessToken.Value, idClaim.Issuer);
+            var accessToken = externalIdentity.FindFirst(idClaim.Issuer + "AccessToken");
+            var tokenExpiresIn = externalIdentity.FindFirst(idClaim.Issuer + "AccessTokenExpiresIn");
+            FacebookDataService fbDataService = new FacebookDataService(accessToken.Value,tokenExpiresIn.Value);
+            fbDataService.GetUserData();
 
             if (idClaim == null)
             {
@@ -259,80 +242,6 @@ namespace Azimuth.Controllers
                 ViewBag.ReturnUrl = returnUrl;
                 ViewBag.LoginProvider = login.LoginProvider;
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = name });
-            }
-        }
-
-        public void WriteUserData(string accessToken, string socialNetwork)
-        {
-            //var result = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
-            //var facebookAccessToken = result.FindAll("FacebookAccessToken").First();
-
-            //if (accessToken == null)
-            //{
-            //    return RedirectToAction("Login");
-            //}
-            
-            //switch (socialNetwork)
-            //{
-            //    case "Facebook": var snClient = new FacebookClient(accessToken);
-            //        var userInfo =
-            //            snClient.Get(
-            //                "/me?fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)");
-            //        var data = JsonConvert.DeserializeObject<FacebookUserData>(userInfo.ToString());
-            //        break;
-            //}
-            
-            var snClient = new FacebookClient(accessToken);
-            var userInfo =
-                snClient.Get(
-                    "/me?fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)");
-            var data = JsonConvert.DeserializeObject<FacebookUserData>(userInfo.ToString());
-            //var photoJson = snClient.Get("/me/picture");
-            //var some = JsonConvert.DeserializeObject<Photo>(photoJson.ToString());
-
-
-            using (var unitOfWork = _kernel.Get<IUnitOfWork>())
-            {
-                IRepository<User> userRepository = unitOfWork.GetRepository<User>();
-                User user = new User()
-                {
-                    Name = new Name() { FirstName = data.first_name, LastName = data.last_name },
-                    ScreenName = data.name,
-                    Gender = data.gender,
-                    Birthday = data.birthday,
-                    Email = data.email,
-                    Timezone = data.timezone,
-                    Location =
-                        new DataAccess.Entities.Location()
-                        {
-                            City = data.Location.name.Split(',')[0],
-                            Country = data.Location.name.Split(' ')[1]
-                        }
-                };
-                userRepository.AddItem(user);
-
-                var snRepository = unitOfWork.GetRepository<SocialNetwork>();
-                var snEnum = snRepository.Get(new Func<SocialNetwork, bool>(network => network.Name == socialNetwork));
-                var sn = snEnum.ToList();
-
-                var userSN = unitOfWork.GetRepository<UserSocialNetwork>();
-                //userSN.AddItem(new UserSocialNetwork()
-                //{
-                //    Identifier = new UserSNIdentifier(){ UserId = user.Id, SocialNetworkId = sn[0].Id},
-                //    User = user,
-                //    SocialNetwork = sn[0],
-                //    ThirdPartId = data.id
-                //});
-
-                userSN.AddItem(new UserSocialNetwork()
-                {
-                    Identifier = new UserSNIdentifier() { UserId = user.Id, SocialNetworkId = sn[0].Id },
-                    //User = user,
-                    //SocialNetwork = sn[0],
-                    ThirdPartId = data.id
-                });
-
-                unitOfWork.Commit();
             }
         }
 

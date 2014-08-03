@@ -1,4 +1,5 @@
 ﻿using System.Security.AccessControl;
+using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -45,7 +46,11 @@ namespace Azimuth
                 {
                     // Get accesstoken from Facebook and store it in the database and
                     // user Facebook C# SDK to get more information about the user
-                    context.Identity.AddClaim(new System.Security.Claims.Claim("FacebookAccessToken", context.AccessToken));
+                    context.Identity.AddClaim(new Claim("FacebookAccessToken", context.AccessToken));
+                    context.Identity.AddClaim(new Claim("FacebookAccessTokenExpiresIn", context.ExpiresIn.ToString()));
+                    //context.Identity.AddClaim(new Claim("FacebookUserId", context.Id));
+
+
                 }
             };
             fb.SignInAsAuthenticationType = DefaultAuthenticationTypes.ExternalCookie;
