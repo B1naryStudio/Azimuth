@@ -11,15 +11,15 @@ namespace Azimuth.DataAccess.Entities
     public class UserSocialNetwork:BaseEntity
     {
         public virtual UserSNIdentifier Identifier { get; set; }
-        public virtual User User { get; set; }
-        public virtual SocialNetwork SocialNetwork { get; set; }
         public virtual string ThirdPartId { get; set; }
+        public virtual string AccessToken { get; set; }
+        public virtual string TokenExpires { get; set; }
     }
 
     public class UserSNIdentifier
     {
-        public virtual long UserId { get; set; }
-        public virtual long SocialNetworkId { get; set; }
+        public virtual User User { get; set; }
+        public virtual SocialNetwork SocialNetwork { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -29,7 +29,7 @@ namespace Azimuth.DataAccess.Entities
             }
             UserSNIdentifier id;
             id = (UserSNIdentifier) obj;
-            if (UserId == id.UserId && SocialNetworkId == id.SocialNetworkId)
+            if (User == id.User && SocialNetwork == id.SocialNetwork)
             {
                 return true;
             }
@@ -38,7 +38,7 @@ namespace Azimuth.DataAccess.Entities
 
         public override int GetHashCode()
         {
-            return (UserId + "|" + SocialNetworkId).GetHashCode();
+            return (User + "|" + SocialNetwork).GetHashCode();
         }
     }
 }
