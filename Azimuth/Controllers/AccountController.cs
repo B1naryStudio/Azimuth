@@ -219,7 +219,7 @@ namespace Azimuth.Controllers
             var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
             // Test with VkService
             var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            var user1 = await service.GetUserInfoAsync();
+            var user1 = service.GetUserInfo();
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
