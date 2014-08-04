@@ -9,6 +9,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
+using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -229,6 +230,14 @@ namespace Azimuth.Controllers
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
+
+            var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
+
+            var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
+            // Test with VkService
+            var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
+            var user1 = service.GetUserInfo();
+
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
             if (user != null)
@@ -296,7 +305,7 @@ namespace Azimuth.Controllers
                     var idClaim = res.Identity.FindFirst(ClaimTypes.NameIdentifier);
                     if (idClaim != null)
                     {
-                        loginInfo = new ExternalLoginInfo()
+                        loginInfo = new ExternalLoginInfo
                         {
                             DefaultUserName = res.Identity.Name == null ? "" : res.Identity.Name.Replace(" ", ""),
                             Login = new UserLoginInfo(idClaim.Issuer, idClaim.Value)
