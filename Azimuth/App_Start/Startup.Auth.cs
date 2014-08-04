@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Duke.Owin.VkontakteMiddleware;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;

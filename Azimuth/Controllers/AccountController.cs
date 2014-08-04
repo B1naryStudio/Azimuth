@@ -215,7 +215,7 @@ namespace Azimuth.Controllers
 
             // Test with VkService
             var vkService = new VkDataService(idClaim.Value);
-            var user1 = vkService.GetUserInfo();
+            var user1 = await vkService.GetUserInfoAsync();
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
