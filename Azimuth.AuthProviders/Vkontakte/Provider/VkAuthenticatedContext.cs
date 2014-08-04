@@ -41,14 +41,7 @@ namespace Azimuth.AuthProviders.Vkontakte.Provider
             Name = TryGetValue(User, "first_name");
             LastName = TryGetValue(User, "last_name");
             UserName = TryGetValue(User, "screen_name");
-            Nickname = TryGetValue(User, "nickname");
             Email = TryGetValue(User, "email");
-            Link = TryGetValue(User, "photo_200");
-            Sex = TryGetValue(User, "sex");
-            Bdate = TryGetValue(User, "bdate");
-            City = TryGetValue(User, "city");
-            Country = TryGetValue(User, "country");
-            Timezone = TryGetValue(User, "timezone");
         }
 
         /// <summary>
@@ -92,49 +85,15 @@ namespace Azimuth.AuthProviders.Vkontakte.Provider
             }
         }
 
-
-        /// <summary>
-        /// Gets the user's DefaultName
-        /// </summary>
-        public string DefaultName
-        {
-            get
-            {
-                if (!String.IsNullOrEmpty(UserName))
-                    return UserName;
-
-                if (!String.IsNullOrEmpty(Nickname))
-                    return Nickname;
-
-                return FullName;
-            }
-        }
-
         /// <summary>
         /// Get's the user's Email
         /// </summary>
         public string Email { get; private set; }
 
         /// <summary>
-        /// Gets the user's picture link
-        /// </summary>
-        public string Link { get; private set; }
-
-        /// <summary>
         /// Gets the username
         /// </summary>
         public string UserName { get; private set; }
-
-        /// <summary>
-        /// Gets the Nickname
-        /// </summary>
-        public string Nickname { get; private set; }
-
-        public string Sex { get; private set; }
-        public string Bdate { get; private set; }
-        public string City { get; private set; }
-        public string Country { get; private set; }
-        public string Timezone { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ClaimsIdentity"/> representing the user

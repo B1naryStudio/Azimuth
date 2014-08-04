@@ -208,7 +208,7 @@ namespace Azimuth.AuthProviders.Vkontakte
                 //public method which dont require token
                 string userInfoLink = GraphApiEndpoint + "users.get" +
                                       "?user_ids=" + Uri.EscapeDataString(userid) +
-                                      "&fields=" + Uri.EscapeDataString("sex,bdate,city,country,timezone,nickname,screen_name,photo_200");
+                                      "&fields=";
 
                 var graphResponse = await _httpClient.GetAsync(userInfoLink, Request.CallCancelled);
                 graphResponse.EnsureSuccessStatusCode();
@@ -236,53 +236,17 @@ namespace Azimuth.AuthProviders.Vkontakte
                 {
                     context.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, context.FullName, XmlSchemaString, Options.AuthenticationType));
                 }
-                if (!string.IsNullOrEmpty(context.Link))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:link", context.Link, XmlSchemaString, Options.AuthenticationType));
-                }
                 if (!string.IsNullOrEmpty(email))
                 {
                     context.Identity.AddClaim(new Claim(ClaimTypes.Email, email, XmlSchemaString, Options.AuthenticationType));
                 }
                 if (!string.IsNullOrEmpty(accessToken))
                 {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:access_token", accessToken, XmlSchemaString, Options.AuthenticationType));
+                    context.Identity.AddClaim(new Claim("AccessToken", accessToken, XmlSchemaString, Options.AuthenticationType));
                 }
                 if (!string.IsNullOrEmpty(context.ExpiresIn.ToString()))
                 {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:expires_in", context.ExpiresIn.ToString(), XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Name))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:first_name", context.Name, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.LastName))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:last_name", context.LastName, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Id))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:id", context.Id, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Bdate))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:bdate", context.Bdate, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.City))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:city", context.City, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Country))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:country", context.Country, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Sex))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:sex", context.Sex, XmlSchemaString, Options.AuthenticationType));
-                }
-                if (!string.IsNullOrEmpty(context.Timezone))
-                {
-                    context.Identity.AddClaim(new Claim("urn:vkontakte:timezone", context.Timezone, XmlSchemaString, Options.AuthenticationType));
+                    context.Identity.AddClaim(new Claim("Expired", context.ExpiresIn.ToString(), XmlSchemaString, Options.AuthenticationType));
                 }
                 context.Properties = properties;
 

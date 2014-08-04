@@ -232,7 +232,7 @@ namespace Azimuth.Controllers
 
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
-
+            
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
             if (user != null)
