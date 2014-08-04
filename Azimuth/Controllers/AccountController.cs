@@ -216,11 +216,11 @@ namespace Azimuth.Controllers
             var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
 
             // Get Facebook Accesstoken and expire time
-            var externalIdentity = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
-            var accessToken = externalIdentity.FindFirst(idClaim.Issuer + "AccessToken");
-            var tokenExpiresIn = externalIdentity.FindFirst(idClaim.Issuer + "AccessTokenExpiresIn");
-            FacebookDataService fbDataService = new FacebookDataService(accessToken.Value,tokenExpiresIn.Value);
-            fbDataService.GetUserData();
+            //var externalIdentity = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
+            //var accessToken = externalIdentity.FindFirst(idClaim.Issuer + "AccessToken");
+            //var tokenExpiresIn = externalIdentity.FindFirst(idClaim.Issuer + "AccessTokenExpiresIn");
+            //FacebookDataService fbDataService = new FacebookDataService(accessToken.Value,tokenExpiresIn.Value);
+            //fbDataService.GetUserData();
 
             if (idClaim == null)
             {
@@ -236,7 +236,7 @@ namespace Azimuth.Controllers
             var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
             // Test with VkService
             var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            var user1 = service.GetUserInfo();
+            var user1 = await service.GetUserInfoAsync();
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);

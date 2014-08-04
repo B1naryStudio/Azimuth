@@ -208,6 +208,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\FacebookDataService.cs" />
+    <Compile Include="Infrastructure\DataService.cs" />
     <Compile Include="Infrastructure\DataServicesFactory.cs" />
     <Compile Include="Infrastructure\IDataService.cs" />
     <Compile Include="Infrastructure\VkDataService.cs" />

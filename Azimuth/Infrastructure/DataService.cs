@@ -9,9 +9,9 @@ namespace Azimuth.Infrastructure
 {
     public abstract class DataService : IDataService
     {
-        public abstract User GetUserInfo();
+        public abstract Task<User> GetUserInfoAsync();
 
-        protected static string GetRequest(string url)
+        protected static async Task<string> GetRequest(string url)
         {
             try
             {

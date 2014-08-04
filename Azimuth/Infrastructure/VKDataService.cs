@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Newtonsoft.Json.Linq;
 
@@ -21,9 +22,9 @@ namespace Azimuth.Infrastructure
                 accessToken);
         }
 
-        public override User GetUserInfo()
+        public override async Task<User> GetUserInfoAsync()
         {
-            var response = GetRequest(UserInfoUrl);
+            var response = await GetRequest(UserInfoUrl);
 
             var sJObject = JObject.Parse(response);
             var userInfo = sJObject["response"][0];
