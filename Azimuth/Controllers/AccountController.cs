@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -197,27 +198,6 @@ namespace Azimuth.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            //var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            //if (loginInfo == null)
-            //{
-            //    return RedirectToAction("Login");
-            //}
-
-            //// Sign in the user with this external login provider if the user already has a login
-            //var user = await UserManager.FindAsync(loginInfo.Login);
-            //if (user != null)
-            //{
-            //    await SignInAsync(user, isPersistent: false);
-            //    return RedirectToLocal(returnUrl);
-            //}
-            //else
-            //{
-            //    // If the user does not have an account, then prompt the user to create an account
-            //    ViewBag.ReturnUrl = returnUrl;
-            //    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-            //    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
-            //}
-
             var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
             if (result == null || result.Identity == null)
             {
@@ -232,6 +212,11 @@ namespace Azimuth.Controllers
 
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
+
+            // Test with VkService
+            //var vkService = new VkDataService(idClaim.Value);
+            var vkService = (VkDataService)DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value);
+            var user1 = await vkService.GetUserInfoAsync();
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
@@ -300,7 +285,7 @@ namespace Azimuth.Controllers
                     var idClaim = res.Identity.FindFirst(ClaimTypes.NameIdentifier);
                     if (idClaim != null)
                     {
-                        loginInfo = new ExternalLoginInfo()
+                        loginInfo = new ExternalLoginInfo
                         {
                             DefaultUserName = res.Identity.Name == null ? "" : res.Identity.Name.Replace(" ", ""),
                             Login = new UserLoginInfo(idClaim.Issuer, idClaim.Value)
