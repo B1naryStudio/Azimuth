@@ -35,8 +35,15 @@ namespace Azimuth
                appSecret: "399f367e79f11226d1522c00c72a6c6d");
 
             app.UseGoogleAuthentication(
-                clientId: "847308079087-bl2m5iev3iibsp9pfoulodosek33rtrl.apps.googleusercontent.com",
-                clientSecret: "oHy-Vd8TS48P4Ybz_Gsp_y2h");
+                new GoogleOAuth2AuthenticationOptions
+                {
+                    ClientId = "847308079087-bl2m5iev3iibsp9pfoulodosek33rtrl.apps.googleusercontent.com",
+                    ClientSecret = "oHy-Vd8TS48P4Ybz_Gsp_y2h",
+                    Provider = new GoogleOAuth2AuthenticationProvider
+                    {
+                        OnAuthenticated = async context => context.Identity.AddClaim(new System.Security.Claims.Claim("GoogleAccessToken", context.AccessToken))
+                    }
+                });
 
             app.UseVkontakteAuthentication(
                 appId: "4469725",
