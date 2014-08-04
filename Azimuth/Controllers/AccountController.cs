@@ -213,10 +213,13 @@ namespace Azimuth.Controllers
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
+
+            var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
+
+            var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
             // Test with VkService
-            //var vkService = new VkDataService(idClaim.Value);
-            var vkService = (VkDataService)DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value);
-            var user1 = await vkService.GetUserInfoAsync();
+            var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
+            var user1 = await service.GetUserInfoAsync();
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
