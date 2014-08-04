@@ -214,7 +214,8 @@ namespace Azimuth.Controllers
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
             // Test with VkService
-            var vkService = new VkDataService(idClaim.Value);
+            //var vkService = new VkDataService(idClaim.Value);
+            var vkService = (VkDataService)DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value);
             var user1 = await vkService.GetUserInfoAsync();
 
             // Sign in the user with this external login provider if the user already has a login

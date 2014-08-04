@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Azimuth.Infrastructure
 {
-    public class VkDataService
+    public class VkDataService : IDataService
     {
         private readonly string _userId;
         private readonly string _accessToken;
