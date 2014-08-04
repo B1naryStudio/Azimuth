@@ -49,7 +49,7 @@ namespace Azimuth
             app.UseVkontakteAuthentication(
                 appId: "4469725",
                 appSecret: "1vUUwTGWEIp3bSLqDHuw",
-                scope: "audio");
+                scope: "audio,email");
         }
     }
 }

@@ -41,9 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Duke.Owin.VkontakteMiddleware">
-      <HintPath>..\packages\Duke.Owin.VkontakteMiddleware.1.2.0.0\lib\net45\Duke.Owin.VkontakteMiddleware.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -272,6 +269,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Azimuth.AuthProviders\Azimuth.AuthProviders.csproj">
+      <Project>{0ab9917e-886d-43d5-b2ce-7dce3aeb5f11}</Project>
+      <Name>Azimuth.AuthProviders</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Azimuth.Shared\Azimuth.Shared.csproj">
       <Project>{9eabb5cb-d796-493e-804f-5e59f898e02f}</Project>
       <Name>Azimuth.Shared</Name>

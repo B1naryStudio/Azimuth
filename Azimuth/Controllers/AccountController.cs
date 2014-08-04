@@ -212,7 +212,7 @@ namespace Azimuth.Controllers
 
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
-
+            
 
             var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
 
