@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -10,7 +11,7 @@ using Ninject;
 
 namespace Azimuth.Infrastructure
 {
-    public class FacebookDataService
+    public class FacebookDataService: DataService
     {
         private readonly string _accessToken;
         private readonly string _tokenExpiresIn;
@@ -19,17 +20,16 @@ namespace Azimuth.Infrastructure
         private IRepository<UserSocialNetwork> _userSNRepository;
         private IRepository<SocialNetwork> _snRepository; 
 
-        public FacebookDataService(string accessToken, string tokenExpiresIn)
+        public FacebookDataService(string accessToken)
         {
             this._accessToken = accessToken;
-            this._tokenExpiresIn = tokenExpiresIn;
 
             _kernel = new StandardKernel(new DataAccessModule());
         }
 
         private string MakeRequestString()
         {
-            return "/me?fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)";
+            return String.Format(@"https://graph.facebook.com/v2.0/me?access_token={0}&fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)", _accessToken);
         }
 
         public User GetUserData()
@@ -107,6 +107,30 @@ namespace Azimuth.Infrastructure
             }
 
             return user;
+        }
+
+        public override async Task<User> GetUserInfoAsync()
+        {
+            // Make query to Facebook Api
+            var userDataJson = await GetRequest(MakeRequestString());
+            var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
+
+            return new User()
+            {
+                Name = new Name() { FirstName = userData.first_name, LastName = userData.last_name },
+                ScreenName = userData.name,
+                Gender = userData.gender,
+                Birthday = userData.birthday,
+                Email = userData.email,
+                Location =
+                    new DataAccess.Entities.Location()
+                    {
+                        City = userData.Location.name.Split(',')[0],
+                        Country = userData.Location.name.Split(' ')[1]
+                    },
+                Timezone = userData.timezone
+
+            };
         }
     }
 }
