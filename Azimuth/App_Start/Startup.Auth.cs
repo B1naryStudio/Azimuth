@@ -1,8 +1,12 @@
+
+﻿using System.Security.AccessControl;
+using System.Security.Claims;
 ﻿using Duke.Owin.VkontakteMiddleware;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Owin;
 
@@ -31,9 +35,31 @@ namespace Azimuth
                consumerKey: "LlXtJmJSLVQd8gzALZEctToQC",
                consumerSecret: "VrO3OXhWoCxAwQxzGvEoTVHeua1MoKTZv1zZ7dM47WnhKAOgAn");
 
-            app.UseFacebookAuthentication(
-               appId: "609844869113324",
-               appSecret: "399f367e79f11226d1522c00c72a6c6d");
+            var fb = new FacebookAuthenticationOptions();
+            fb.Scope.Add("email");
+            fb.Scope.Add("user_birthday");
+            fb.Scope.Add("user_location");
+            fb.Scope.Add("user_photos");
+            fb.AppId = "609844869113324";
+            fb.AppSecret = "399f367e79f11226d1522c00c72a6c6d";
+            fb.Provider = new FacebookAuthenticationProvider()
+            {
+                OnAuthenticated = async context =>
+                {
+                    // Get accesstoken from Facebook and store it in the database and
+                    // user Facebook C# SDK to get more information about the user
+                    context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
+                    context.Identity.AddClaim(new Claim("AccessTokenExpiresIn", context.ExpiresIn.ToString()));
+                    //context.Identity.AddClaim(new Claim("FacebookUserId", context.Id));
+
+
+                }
+            };
+            fb.SignInAsAuthenticationType = DefaultAuthenticationTypes.ExternalCookie;
+            app.UseFacebookAuthentication(fb);
+            //app.UseFacebookAuthentication(
+            //   appId: "609844869113324",
+            //   appSecret: "399f367e79f11226d1522c00c72a6c6d");
 
             app.UseGoogleAuthentication(
                 new GoogleOAuth2AuthenticationOptions

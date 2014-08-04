@@ -5,12 +5,19 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Azimuth.DataAccess.Entities;
+using Azimuth.DataAccess.Infrastructure;
+using Azimuth.Infrastructure;
+using Azimuth.Shared.Dto;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
+using Ninject;
+using Facebook;
+using Newtonsoft.Json;
 
 namespace Azimuth.Controllers
 {
@@ -205,6 +212,7 @@ namespace Azimuth.Controllers
             }
 
             var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
+
             if (idClaim == null)
             {
                 return RedirectToAction("Login");
@@ -215,11 +223,18 @@ namespace Azimuth.Controllers
             
 
             var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
-
             var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
+
+            var tokenExpiresInClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessTokenExpiresIn");
+            var tokenExpiresIn = (tokenExpiresInClaim != null) ? tokenExpiresInClaim.Value : String.Empty;
             // Test with VkService
+            //var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
+            //var user1 = await service.GetUserInfoAsync();
+            // Test with FacebookService
             var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            var user1 = await service.GetUserInfoAsync();
+            var currentUser = await service.GetUserInfoAsync();
+            var dbService = new DatabaseService();
+            var storeResult = dbService.SaveOrUpdateUserData(currentUser, idClaim.Value, idClaim.Issuer, accessToken, tokenExpiresIn);
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);

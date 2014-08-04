@@ -29,5 +29,10 @@ namespace Azimuth.DataAccess.Infrastructure
         {
             return _session.Query<T>();
         }
+
+        public void AddItem(T item)
+        {
+            _session.Save(item);
+        }
     }
 }

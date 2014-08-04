@@ -28,12 +28,12 @@ namespace Azimuth.DataAccess.Entities
                 return false;
             }
             UserSNIdentifier id;
-            id = (UserSNIdentifier) obj;
+            id = (UserSNIdentifier)obj;
             if (User == id.User && SocialNetwork == id.SocialNetwork)
             {
                 return true;
             }
-            return false;;
+            return false; ;
         }
 
         public override int GetHashCode()

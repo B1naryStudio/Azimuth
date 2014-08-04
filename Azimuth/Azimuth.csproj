@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.7.0\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -201,6 +204,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\DatabaseService.cs" />
+    <Compile Include="Infrastructure\FacebookDataService.cs" />
     <Compile Include="Infrastructure\DataService.cs" />
     <Compile Include="Infrastructure\DataServicesFactory.cs" />
     <Compile Include="Infrastructure\IDataService.cs" />

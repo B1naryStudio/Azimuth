@@ -25,6 +25,8 @@ namespace Azimuth.DataAccess.Infrastructure
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
+            Bind<IRepository<SocialNetwork>, BaseRepository<SocialNetwork>>().To<SocialNetworkRepository>();
+            Bind<IRepository<UserSocialNetwork>, BaseRepository<UserSocialNetwork>>().To<UserSocialNetworkRepository>();
         }
     }
 

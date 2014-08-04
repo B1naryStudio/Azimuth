@@ -8,6 +8,8 @@
             {
                 case "Vkontakte":
                     return new VkDataService(userId, accessToken);
+                case "Facebook":
+                    return new FacebookDataService(accessToken);
                 default:
                     return null;
             }

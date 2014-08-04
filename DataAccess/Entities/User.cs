@@ -13,5 +13,11 @@ namespace Azimuth.DataAccess.Entities
         public virtual Location Location { get; set; }
         public virtual string Email { get; set; }
         public virtual Iesi.Collections.Generic.ISet<UserSocialNetwork> SocialNetworks { get; set; }
+
+        public override string ToString()
+        {
+            return Name.FirstName + Name.LastName + ScreenName + Gender + Email + Birthday + Timezone + Location.City +
+                   ", " + Location.Country; // Think about location format
+        }
     }
 }

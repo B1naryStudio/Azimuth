@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\UserBrief.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
