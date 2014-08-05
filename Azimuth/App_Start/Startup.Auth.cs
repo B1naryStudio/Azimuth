@@ -7,7 +7,8 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
-using Owin;
+﻿using Microsoft.Owin.Security.Twitter;
+﻿using Owin;
 
 namespace Azimuth
 {
@@ -30,9 +31,22 @@ namespace Azimuth
             //    clientId: "",
             //    clientSecret: "");
 
-            app.UseTwitterAuthentication(
-               consumerKey: "LlXtJmJSLVQd8gzALZEctToQC",
-               consumerSecret: "VrO3OXhWoCxAwQxzGvEoTVHeua1MoKTZv1zZ7dM47WnhKAOgAn");
+            //app.UseTwitterAuthentication(
+            //   consumerKey: "LlXtJmJSLVQd8gzALZEctToQC",
+            //   consumerSecret: "VrO3OXhWoCxAwQxzGvEoTVHeua1MoKTZv1zZ7dM47WnhKAOgAn");
+            app.UseTwitterAuthentication(new TwitterAuthenticationOptions()
+            {
+                ConsumerKey = "WUOz1dJWadM5NSUmgMrcPgiIa",
+                ConsumerSecret = "9tO77dgpGcQuve4MDf0ZTKuHY3TVw8QLpjRTCTxDXh9vJpQXyc",
+                Provider = new TwitterAuthenticationProvider()
+                {
+                    OnAuthenticated = async context =>
+                    {
+                        context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
+                        context.Identity.AddClaim(new Claim("AccessTokenSecret", context.AccessTokenSecret)); // ???
+                    }
+                }
+            });
 
             var fb = new FacebookAuthenticationOptions();
             fb.Scope.Add("email");
