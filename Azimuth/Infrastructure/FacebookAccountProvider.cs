@@ -19,7 +19,7 @@ namespace Azimuth.Infrastructure
 
         public string UserInfoUrl { get; private set; }
 
-        public FacebookAccountProvider(string accessToken)
+        public FacebookAccountProvider(string userId, string accessToken)
         {
             this._accessToken = accessToken;
 

@@ -11,15 +11,20 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
+using Ninject;
+using Ninject.Parameters;
 
 namespace Azimuth.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private IKernel _kernel;
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
+            _kernel = new StandardKernel(new AccountProviderModule());
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -213,7 +218,7 @@ namespace Azimuth.Controllers
 
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
-            
+
 
             var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
             var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
@@ -223,9 +228,13 @@ namespace Azimuth.Controllers
 
             var emailClaim = result.Identity.Claims.FirstOrDefault(c => c.Type.Contains("email"));
             var email = (emailClaim != null) ? emailClaim.Value : String.Empty;
-            
-            var service = AccountProviderFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            var currentUser = await service.GetUserInfoAsync(email);
+
+            var accessTokenParam = new ConstructorArgument("accessToken", accessToken);
+            var userIDParam = new ConstructorArgument("userId", idClaim.Value);
+
+            IAccountProvider provider = _kernel.Get<IAccountProvider>(idClaim.Issuer, userIDParam, accessTokenParam);
+
+            var currentUser = await provider.GetUserInfoAsync(email);
             var dbService = new DatabaseProvider();
             var storeResult = dbService.SaveOrUpdateUserData(currentUser, idClaim.Value, idClaim.Issuer, accessToken, tokenExpiresIn);
 
