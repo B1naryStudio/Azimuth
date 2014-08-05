@@ -13,6 +13,7 @@ namespace Azimuth.Infrastructure
         {
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
+            Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");
         }
     }
 }
