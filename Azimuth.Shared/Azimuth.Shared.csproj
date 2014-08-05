@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\UserBrief.cs" />
+    <Compile Include="Dto\VKUserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

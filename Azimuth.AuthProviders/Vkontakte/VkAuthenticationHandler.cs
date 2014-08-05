@@ -246,7 +246,7 @@ namespace Azimuth.AuthProviders.Vkontakte
                 }
                 if (!string.IsNullOrEmpty(context.ExpiresIn.ToString()))
                 {
-                    context.Identity.AddClaim(new Claim("Expired", context.ExpiresIn.ToString(), XmlSchemaString, Options.AuthenticationType));
+                    context.Identity.AddClaim(new Claim("AccessTokenExpiresIn", context.ExpiresIn.ToString(), XmlSchemaString, Options.AuthenticationType));
                 }
                 context.Properties = properties;
 

@@ -204,12 +204,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\DatabaseService.cs" />
-    <Compile Include="Infrastructure\FacebookDataService.cs" />
-    <Compile Include="Infrastructure\DataService.cs" />
-    <Compile Include="Infrastructure\DataServicesFactory.cs" />
-    <Compile Include="Infrastructure\IDataService.cs" />
-    <Compile Include="Infrastructure\VkDataService.cs" />
+    <Compile Include="Infrastructure\DatabaseProvider.cs" />
+    <Compile Include="Infrastructure\FacebookAccountProvider.cs" />
+    <Compile Include="Infrastructure\AccountProvider.cs" />
+    <Compile Include="Infrastructure\AccountProviderFactory.cs" />
+    <Compile Include="Infrastructure\IAccountProvider.cs" />
+    <Compile Include="Infrastructure\VKAccountProvider.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

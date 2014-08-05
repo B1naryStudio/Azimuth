@@ -1,7 +1,6 @@
 
 ﻿using System.Security.AccessControl;
 using System.Security.Claims;
-﻿using Duke.Owin.VkontakteMiddleware;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;

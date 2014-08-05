@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
-using Azimuth.Infrastructure;
-using Azimuth.Shared.Dto;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
-using Ninject;
-using Facebook;
-using Newtonsoft.Json;
 
 namespace Azimuth.Controllers
 {
@@ -227,13 +220,13 @@ namespace Azimuth.Controllers
 
             var tokenExpiresInClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessTokenExpiresIn");
             var tokenExpiresIn = (tokenExpiresInClaim != null) ? tokenExpiresInClaim.Value : String.Empty;
-            // Test with VkService
-            //var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            //var user1 = await service.GetUserInfoAsync();
-            // Test with FacebookService
-            var service = DataServicesFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
-            var currentUser = await service.GetUserInfoAsync();
-            var dbService = new DatabaseService();
+
+            var emailClaim = result.Identity.Claims.FirstOrDefault(c => c.Type.Contains("email"));
+            var email = (emailClaim != null) ? emailClaim.Value : String.Empty;
+            
+            var service = AccountProviderFactory.GetService(idClaim.Issuer, idClaim.Value, accessToken);
+            var currentUser = await service.GetUserInfoAsync(email);
+            var dbService = new DatabaseProvider();
             var storeResult = dbService.SaveOrUpdateUserData(currentUser, idClaim.Value, idClaim.Issuer, accessToken, tokenExpiresIn);
 
             // Sign in the user with this external login provider if the user already has a login
