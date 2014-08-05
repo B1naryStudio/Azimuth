@@ -67,7 +67,11 @@ namespace Azimuth
                     ClientSecret = "oHy-Vd8TS48P4Ybz_Gsp_y2h",
                     Provider = new GoogleOAuth2AuthenticationProvider
                     {
-                        OnAuthenticated = async context => context.Identity.AddClaim(new System.Security.Claims.Claim("AccessToken", context.AccessToken))
+                        OnAuthenticated = async context =>
+                        {
+                            context.Identity.AddClaim(new Claim("AccessToken",context.AccessToken));
+                            context.Identity.AddClaim(new Claim("AccessTokenExpiresIn", context.ExpiresIn.ToString()));
+                        }
                     }
                 });
 
