@@ -32,15 +32,15 @@ namespace Azimuth.Infrastructure
             var city = (userData.Location.name != null) ? userData.Location.name.Split(',')[0] : String.Empty;
             var country = (userData.Location.name != null) ? userData.Location.name.Split(' ')[1] : String.Empty;
 
-            return new User()
+            return new User
             {
-                Name = new Name() { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
+                Name = new Name { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
                 ScreenName = userData.name ?? String.Empty,
                 Gender = userData.gender ?? String.Empty,
                 Birthday = userData.birthday ?? String.Empty,
                 Email = email ?? String.Empty,
                 Location =
-                    new DataAccess.Entities.Location()
+                    new DataAccess.Entities.Location
                     {
                         City = city,
                         Country = country

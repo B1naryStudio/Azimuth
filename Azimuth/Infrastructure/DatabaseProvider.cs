@@ -36,12 +36,12 @@ namespace Azimuth.Infrastructure
                     // If user exists in database check his data fields for updating
                     if (user.ToString() != getUserFromDB[0].Identifier.User.ToString())
                     {
-                        getUserFromDB[0].Identifier.User.Name = new Name() { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
+                        getUserFromDB[0].Identifier.User.Name = new Name { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
                         getUserFromDB[0].Identifier.User.ScreenName = user.ScreenName;
                         getUserFromDB[0].Identifier.User.Gender = user.Gender;
                         getUserFromDB[0].Identifier.User.Email = user.Email;
                         getUserFromDB[0].Identifier.User.Birthday = user.Birthday;
-                        getUserFromDB[0].Identifier.User.Location = new Location() { Country = user.Location.Country, City = user.Location.City };
+                        getUserFromDB[0].Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
                         getUserFromDB[0].Identifier.User.Timezone = user.Timezone;
                     }
                 }
@@ -50,7 +50,7 @@ namespace Azimuth.Infrastructure
                     var currentSN = _snRepository.Get(s => s.Name == socialNetwork).ToList();
 
                     _userRepository.AddItem(user);
-                    _userSNRepository.AddItem(new UserSocialNetwork()
+                    _userSNRepository.AddItem(new UserSocialNetwork
                     {
                         Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN[0]},
                         ThirdPartId = socialId,

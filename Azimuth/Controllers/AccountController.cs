@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -12,7 +11,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
 using Ninject;
-using Ninject.Parameters;
 
 namespace Azimuth.Controllers
 {
@@ -220,23 +218,12 @@ namespace Azimuth.Controllers
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
 
-            var accessTokenClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessToken");
-            var accessToken = (accessTokenClaim != null) ? accessTokenClaim.Value : String.Empty;
-
-            var tokenExpiresInClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessTokenExpiresIn");
-            var tokenExpiresIn = (tokenExpiresInClaim != null) ? tokenExpiresInClaim.Value : String.Empty;
-
-            var emailClaim = result.Identity.Claims.FirstOrDefault(c => c.Type.Contains("email"));
-            var email = (emailClaim != null) ? emailClaim.Value : String.Empty;
-
-            var accessTokenSecretClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessTokenSecret");
-            var accessTokenSecret = (accessTokenSecretClaim != null) ? accessTokenSecretClaim.Value : String.Empty;
-
-            var consumerKeyClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "ConsumerKey");
-            var consumerKey = (consumerKeyClaim != null) ? consumerKeyClaim.Value : String.Empty;
-
-            var consumerSecretClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "ConsumerSecret");
-            var consumerSecret = (consumerSecretClaim != null) ? consumerSecretClaim.Value : String.Empty;
+            var accessToken = GetClaim(result, "AccessToken");
+            var tokenExpiresIn = GetClaim(result, "AccessTokenExpiresIn");
+            var email = GetClaim(result, "email");
+            var accessTokenSecret = GetClaim(result, "AccessTokenSecret");
+            var consumerKey = GetClaim(result, "ConsumerKey");
+            var consumerSecret = GetClaim(result, "ConsumerSecret");
 
             IAccountProvider provider = AccountProviderFactory.GetAccountProvider(idClaim.Issuer, idClaim.Value, accessToken, accessTokenSecret, consumerKey, consumerSecret);
 
@@ -258,6 +245,13 @@ namespace Azimuth.Controllers
                 ViewBag.LoginProvider = login.LoginProvider;
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = name });
             }
+        }
+
+        private static string GetClaim(AuthenticateResult result, string claimType)
+        {
+            var claim = result.Identity.Claims.FirstOrDefault(c => c.Type == claimType);
+            var data = (claim != null) ? claim.Value : String.Empty;
+            return data;
         }
 
         //
@@ -323,7 +317,7 @@ namespace Azimuth.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var user = new ApplicationUser { UserName = model.UserName };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -364,7 +358,7 @@ namespace Azimuth.Controllers
         {
             var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
             ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
-            return (ActionResult)PartialView("_RemoveAccountPartial", linkedAccounts);
+            return PartialView("_RemoveAccountPartial", linkedAccounts);
         }
 
         protected override void Dispose(bool disposing)
@@ -393,7 +387,7 @@ namespace Azimuth.Controllers
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
         }
 
         private void AddErrors(IdentityResult result)

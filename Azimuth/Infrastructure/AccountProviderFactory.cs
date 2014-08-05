@@ -5,7 +5,7 @@ namespace Azimuth.Infrastructure
 {
     public static class AccountProviderFactory
     {
-        private static IKernel _kernel;
+        private static readonly IKernel _kernel;
 
         static AccountProviderFactory()
         {
