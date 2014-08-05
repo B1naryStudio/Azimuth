@@ -44,6 +44,7 @@ namespace Azimuth
                     {
                         context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
                         context.Identity.AddClaim(new Claim("AccessTokenSecret", context.AccessTokenSecret)); // ???
+                        context.Identity.AddClaim(new Claim("ScreenName", context.ScreenName));
                     }
                 }
             });
