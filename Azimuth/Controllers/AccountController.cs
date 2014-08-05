@@ -229,10 +229,7 @@ namespace Azimuth.Controllers
             var emailClaim = result.Identity.Claims.FirstOrDefault(c => c.Type.Contains("email"));
             var email = (emailClaim != null) ? emailClaim.Value : String.Empty;
 
-            var accessTokenParam = new ConstructorArgument("accessToken", accessToken);
-            var userIDParam = new ConstructorArgument("userId", idClaim.Value);
-
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(idClaim.Issuer, userIDParam, accessTokenParam);
+            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(idClaim.Issuer, idClaim.Value, accessToken);
 
             var currentUser = await provider.GetUserInfoAsync(email);
             var dbService = new DatabaseProvider();
