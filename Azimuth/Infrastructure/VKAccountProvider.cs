@@ -37,18 +37,18 @@ namespace Azimuth.Infrastructure
             var city = userData.City.title;
             var country = userData.Country.title;
 
-            return new User()
+            return new User
             {
-                Name = new Name() { FirstName = (userData.first_name != null) ? userData.first_name : String.Empty, LastName = (userData.last_name != null) ? userData.last_name : String.Empty },
-                ScreenName = (userData.screen_name != null) ? userData.screen_name : String.Empty,
+                Name = new Name { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
+                ScreenName = userData.screen_name ?? String.Empty,
                 Gender = (userData.sex != 0) ? userData.sex.ToString() : String.Empty,
-                Birthday = (userData.bdate != null) ? userData.bdate : String.Empty,
-                Email = (email != null) ? email : String.Empty,
+                Birthday = userData.bdate ?? String.Empty,
+                Email = email ?? String.Empty,
                 Location =
-                    new Location()
+                    new Location
                     {
-                        City = (city != null) ? city : String.Empty,
-                        Country = (country != null) ? country : String.Empty
+                        City = city ?? String.Empty,
+                        Country = country ?? String.Empty
                     },
                 Timezone = userData.timezone,
                 Photo = userData.photo_max_orig

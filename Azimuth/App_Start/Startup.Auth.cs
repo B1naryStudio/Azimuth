@@ -1,9 +1,6 @@
-
-﻿using System.Security.AccessControl;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
@@ -82,7 +79,7 @@ namespace Azimuth
                     ClientSecret = "oHy-Vd8TS48P4Ybz_Gsp_y2h",
                     Provider = new GoogleOAuth2AuthenticationProvider
                     {
-                        OnAuthenticated = async context => context.Identity.AddClaim(new System.Security.Claims.Claim("AccessToken", context.AccessToken))
+                        OnAuthenticated = async context => context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken))
                     }
                 });
 

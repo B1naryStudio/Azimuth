@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Azimuth.DataAccess.Entities;
-using Azimuth.Shared.Dto;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using TweetSharp;
 
 namespace Azimuth.Infrastructure
@@ -45,13 +34,13 @@ namespace Azimuth.Infrastructure
             service.AuthenticateWith(_accessToken, _accessTokenSecret);
             var user = service.GetUserProfile(new GetUserProfileOptions());
 
-            return new User()
+            return new User
             {
-                Name = new Name() { FirstName = user.Name, LastName = String.Empty},
+                Name = new Name { FirstName = user.Name, LastName = String.Empty},
                 Birthday = String.Empty, //
                 Email = String.Empty, //
                 Gender = String.Empty, //
-                Location = new DataAccess.Entities.Location() { City = user.Location, Country = String.Empty},
+                Location = new DataAccess.Entities.Location { City = user.Location, Country = String.Empty},
                 Timezone = -100,
                 ScreenName = user.ScreenName,
                 Photo = user.ProfileImageUrl

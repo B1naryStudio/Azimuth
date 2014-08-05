@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
 using Azimuth.Shared.Dto;
-using Facebook;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Ninject;
 
 namespace Azimuth.Infrastructure
 {
@@ -39,16 +34,16 @@ namespace Azimuth.Infrastructure
 
             return new User()
             {
-                Name = new Name() { FirstName = (userData.first_name != null) ? userData.first_name : String.Empty, LastName = (userData.last_name != null) ? userData.last_name : String.Empty },
-                ScreenName = (userData.name != null) ? userData.name : String.Empty,
-                Gender = (userData.gender != null) ? userData.gender : String.Empty,
-                Birthday = (userData.birthday != null) ? userData.birthday : String.Empty,
-                Email = (email != null) ? email : String.Empty,
+                Name = new Name() { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
+                ScreenName = userData.name ?? String.Empty,
+                Gender = userData.gender ?? String.Empty,
+                Birthday = userData.birthday ?? String.Empty,
+                Email = email ?? String.Empty,
                 Location =
                     new DataAccess.Entities.Location()
                     {
-                        City = (city != null) ? city : String.Empty,
-                        Country = (country != null) ? country : String.Empty
+                        City = city ?? String.Empty,
+                        Country = country ?? String.Empty
                     },
                 Timezone = userData.timezone,
                 Photo = userDataObject["picture"]["data"]["url"].ToString()

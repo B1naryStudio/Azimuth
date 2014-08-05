@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI.WebControls;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Ninject;
@@ -33,7 +30,7 @@ namespace Azimuth.Infrastructure
 
                 // Check wheter current user exists in database
                 var getUserFromDB =
-                    _userSNRepository.Get(new Func<UserSocialNetwork, bool>(s => s.ThirdPartId == socialId)).ToList();
+                    _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
                 if (getUserFromDB.Count != 0)
                 {
                     // If user exists in database check his data fields for updating
@@ -50,12 +47,12 @@ namespace Azimuth.Infrastructure
                 }
                 else
                 {
-                    var currentSN = _snRepository.Get(new Func<SocialNetwork, bool>(s => s.Name == socialNetwork)).ToList();
+                    var currentSN = _snRepository.Get(s => s.Name == socialNetwork).ToList();
 
                     _userRepository.AddItem(user);
                     _userSNRepository.AddItem(new UserSocialNetwork()
                     {
-                        Identifier = new UserSNIdentifier() {User = user, SocialNetwork = currentSN[0]},
+                        Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN[0]},
                         ThirdPartId = socialId,
                         AccessToken = accessToken,
                         TokenExpires = tokenExpiresIn

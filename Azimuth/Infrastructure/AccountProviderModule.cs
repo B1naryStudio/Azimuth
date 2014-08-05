@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Azimuth.Shared.Dto;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 
 namespace Azimuth.Infrastructure
 {
