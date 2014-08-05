@@ -16,12 +16,15 @@ namespace Azimuth.Infrastructure
             _kernel = new StandardKernel(new AccountProviderModule());
         }
 
-        public static IAccountProvider GetAccountProvider(string socialNetwork, string userId, string accessToken)
+        public static IAccountProvider GetAccountProvider(string socialNetwork, string userId, string accessToken, string accessTokenSecret, string consumerKey, string consumerSecret)
         {
             var userIdParam = new ConstructorArgument("userId", userId);
             var accessTokenParam = new ConstructorArgument("accessToken", accessToken);
+            var accessTokenSecretParam = new ConstructorArgument("accessTokenSecret", accessTokenSecret);
+            var consumerKeyParam = new ConstructorArgument("consumerKey", consumerKey);
+            var consumerSecretParam = new ConstructorArgument("consumerSecret", consumerSecret);
 
-            return _kernel.Get<IAccountProvider>(socialNetwork, userIdParam, accessTokenParam);
+            return _kernel.Get<IAccountProvider>(socialNetwork, userIdParam, accessTokenParam, accessTokenSecretParam, consumerKeyParam, consumerSecretParam);
         }
     }
 }

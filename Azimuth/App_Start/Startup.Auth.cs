@@ -43,8 +43,9 @@ namespace Azimuth
                     OnAuthenticated = async context =>
                     {
                         context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
-                        context.Identity.AddClaim(new Claim("AccessTokenSecret", context.AccessTokenSecret)); // ???
-                        context.Identity.AddClaim(new Claim("ScreenName", context.ScreenName));
+                        context.Identity.AddClaim(new Claim("AccessTokenSecret", context.AccessTokenSecret));
+                        context.Identity.AddClaim(new Claim("ConsumerKey", "WUOz1dJWadM5NSUmgMrcPgiIa"));
+                        context.Identity.AddClaim(new Claim("ConsumerSecret", "9tO77dgpGcQuve4MDf0ZTKuHY3TVw8QLpjRTCTxDXh9vJpQXyc"));
                     }
                 }
             });

@@ -229,7 +229,16 @@ namespace Azimuth.Controllers
             var emailClaim = result.Identity.Claims.FirstOrDefault(c => c.Type.Contains("email"));
             var email = (emailClaim != null) ? emailClaim.Value : String.Empty;
 
-            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(idClaim.Issuer, idClaim.Value, accessToken);
+            var accessTokenSecretClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "AccessTokenSecret");
+            var accessTokenSecret = (accessTokenSecretClaim != null) ? accessTokenSecretClaim.Value : String.Empty;
+
+            var consumerKeyClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "ConsumerKey");
+            var consumerKey = (consumerKeyClaim != null) ? consumerKeyClaim.Value : String.Empty;
+
+            var consumerSecretClaim = result.Identity.Claims.FirstOrDefault(c => c.Type == "ConsumerSecret");
+            var consumerSecret = (consumerSecretClaim != null) ? consumerSecretClaim.Value : String.Empty;
+
+            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(idClaim.Issuer, idClaim.Value, accessToken, accessTokenSecret, consumerKey, consumerSecret);
 
             var currentUser = await provider.GetUserInfoAsync(email);
             var dbService = new DatabaseProvider();
