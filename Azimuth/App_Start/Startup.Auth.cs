@@ -65,7 +65,6 @@ namespace Azimuth
                     // user Facebook C# SDK to get more information about the user
                     context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
                     context.Identity.AddClaim(new Claim("AccessTokenExpiresIn", context.ExpiresIn.ToString()));
-                    //context.Identity.AddClaim(new Claim("FacebookUserId", context.Id));
 
 
                 }
