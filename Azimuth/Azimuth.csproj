@@ -209,6 +209,7 @@
     <Compile Include="Infrastructure\DatabaseProvider.cs" />
     <Compile Include="Infrastructure\FacebookAccountProvider.cs" />
     <Compile Include="Infrastructure\AccountProvider.cs" />
+    <Compile Include="Infrastructure\GoogleAccountProvider.cs" />
     <Compile Include="Infrastructure\IAccountProvider.cs" />
     <Compile Include="Infrastructure\VKAccountProvider.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
