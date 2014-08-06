@@ -34,7 +34,7 @@ namespace Azimuth.Infrastructure
             var userData = JsonConvert.DeserializeObject<GoogleUserData>(userInfo.ToString());
 
             var timezone = -100;
-            var myPlace = ((userData.placesLived ?? new GoogleLocation[]{}).First(p => p.primary) ?? new GoogleLocation{value = String.Empty}).value;
+            var myPlace = ((userData.placesLived ?? new GoogleLocation[]{}).FirstOrDefault(p => p.primary) ?? new GoogleLocation{value = String.Empty}).value;
             var places = myPlace.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (!String.IsNullOrEmpty(myPlace))
             {
