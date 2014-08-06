@@ -217,7 +217,6 @@ namespace Azimuth.Controllers
             var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
-
             var accessToken = GetClaim(result, "AccessToken");
             var tokenExpiresIn = GetClaim(result, "AccessTokenExpiresIn");
             var email = GetClaim(result, "email");
