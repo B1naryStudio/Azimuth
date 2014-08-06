@@ -219,7 +219,7 @@ namespace Azimuth.Controllers
 
             var accessToken = GetClaim(result, "AccessToken");
             var tokenExpiresIn = GetClaim(result, "AccessTokenExpiresIn");
-            var email = GetClaim(result, "email");
+            var email = GetClaim(result, ClaimTypes.Email);
             var accessTokenSecret = GetClaim(result, "AccessTokenSecret");
             var consumerKey = GetClaim(result, "ConsumerKey");
             var consumerSecret = GetClaim(result, "ConsumerSecret");
