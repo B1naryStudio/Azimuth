@@ -9,6 +9,7 @@ namespace Azimuth.Infrastructure
         public override void Load()
         {
             Bind<IAccountService>().To<AccountService>();
+            Bind<IWebClient>().To<WebClient>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");

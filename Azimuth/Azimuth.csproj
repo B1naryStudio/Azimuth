@@ -228,8 +228,10 @@
     <Compile Include="Infrastructure\GoogleAccountProvider.cs" />
     <Compile Include="Infrastructure\IAccountProvider.cs" />
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
+    <Compile Include="Infrastructure\IWebClient.cs" />
     <Compile Include="Infrastructure\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\VKAccountProvider.cs" />
+    <Compile Include="Infrastructure\WebClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
