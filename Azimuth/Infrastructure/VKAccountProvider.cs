@@ -14,7 +14,7 @@ namespace Azimuth.Infrastructure
         private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
 
-        public VKAccountProvider(IWebClient webClient, string userId, string accessToken = "")
+        public VKAccountProvider(IWebClient webClient, string userId, string accessToken)
             :base(webClient)
         {
             _userId = userId;
