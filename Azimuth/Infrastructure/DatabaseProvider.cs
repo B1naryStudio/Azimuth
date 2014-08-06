@@ -43,6 +43,7 @@ namespace Azimuth.Infrastructure
                         getUserFromDB[0].Identifier.User.Birthday = user.Birthday;
                         getUserFromDB[0].Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
                         getUserFromDB[0].Identifier.User.Timezone = user.Timezone;
+                        getUserFromDB[0].Identifier.User.Photo = user.Photo;
                     }
                 }
                 else

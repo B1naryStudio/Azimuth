@@ -17,7 +17,7 @@ namespace Azimuth.DataAccess.Entities
         public override string ToString()
         {
             return Name.FirstName + Name.LastName + ScreenName + Gender + Email + Birthday + Timezone + Location.City +
-                   ", " + Location.Country; // Think about location format
+                   ", " + Location.Country + Photo; // Think about location format
         }
     }
 }

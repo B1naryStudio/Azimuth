@@ -29,8 +29,22 @@ namespace Azimuth.Infrastructure
             var userDataObject = JObject.Parse(userDataJson);
             var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
 
-            var city = (userData.Location.name != null) ? userData.Location.name.Split(',')[0] : String.Empty;
-            var country = (userData.Location.name != null) ? userData.Location.name.Split(' ')[1] : String.Empty;
+            string city = "", country = "", photoUrl = "";
+
+            if (userData.Location != null)
+            {
+                if (userData.Location.name != null)
+                {
+                    city = userData.Location.name.Split(',')[0];
+                    country = userData.Location.name.Split(' ')[1];
+                }
+            }
+
+            if (userDataObject["picture"] != null)
+            {
+                photoUrl = userDataObject["picture"]["data"]["url"].ToString();
+            }
+            
 
             return new User
             {
@@ -46,8 +60,7 @@ namespace Azimuth.Infrastructure
                         Country = country
                     },
                 Timezone = userData.timezone,
-                Photo = userDataObject["picture"]["data"]["url"].ToString()
-
+                Photo = photoUrl
             };
         }
     }
