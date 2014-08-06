@@ -76,6 +76,7 @@
     <Compile Include="AccountProviderFactoryTests.cs" />
     <Compile Include="FacebookAccountProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VKAccountProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

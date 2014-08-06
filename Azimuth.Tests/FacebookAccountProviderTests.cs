@@ -66,7 +66,7 @@ namespace Azimuth.Tests
 
         private IWebClient _webRequest;
 
-        private RootObject fbUserData;
+        private RootObject _fbUserData;
 
         [SetUp]
         public void Setup()
@@ -83,7 +83,7 @@ namespace Azimuth.Tests
                     _accessToken);
 
             // Object that we will make Json
-            fbUserData = new RootObject
+            _fbUserData = new RootObject
             {
                 id = "12345",
                 first_name = "Beseda",
@@ -103,7 +103,7 @@ namespace Azimuth.Tests
                 }
             };
 
-            _userToJson = JsonConvert.SerializeObject(fbUserData);
+            _userToJson = JsonConvert.SerializeObject(_fbUserData);
 
             _webRequest = Substitute.For<IWebClient>();
             _webRequest.GetWebData(UserInfoUrl).Returns(Task.FromResult(_userToJson));
@@ -117,27 +117,26 @@ namespace Azimuth.Tests
             {
                 Name = new Name
                 {
-                    FirstName = fbUserData.first_name,
-                    LastName = fbUserData.last_name
+                    FirstName = _fbUserData.first_name,
+                    LastName = _fbUserData.last_name
                 },
-                ScreenName = fbUserData.name,
-                Gender = fbUserData.gender,
-                Email = fbUserData.email,
-                Birthday = fbUserData.birthday,
-                Timezone = fbUserData.timezone,
+                ScreenName = _fbUserData.name,
+                Gender = _fbUserData.gender,
+                Email = _fbUserData.email,
+                Birthday = _fbUserData.birthday,
+                Timezone = _fbUserData.timezone,
                 Location = new DataAccess.Entities.Location
                 {
-                    City = fbUserData.location.name.Split(',').First(),
-                    Country = fbUserData.location.name.Split(' ').Last()
+                    City = _fbUserData.location.name.Split(',').First(),
+                    Country = _fbUserData.location.name.Split(' ').Last()
                 },
-                Photo = fbUserData.picture.data.url
+                Photo = _fbUserData.picture.data.url
             };
             // Act
             var provider = new FacebookAccountProvider(_webRequest, _userId, _accessToken);
             var user = await provider.GetUserInfoAsync("besedadg@gmail.com");
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
-
         }
     }
 }
