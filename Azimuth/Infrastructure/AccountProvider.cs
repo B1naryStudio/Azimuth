@@ -9,40 +9,12 @@ namespace Azimuth.Infrastructure
 {
     public abstract class AccountProvider : IAccountProvider
     {
+        protected IWebClient _webClient;
         public abstract Task<User> GetUserInfoAsync(string email = "");
 
-        protected static async Task<string> GetRequest(string url)
+        protected AccountProvider(IWebClient webClient)
         {
-            try
-            {
-                var request = (HttpWebRequest) WebRequest.Create(url);
-                var myResponse = (HttpWebResponse) await Task.Factory.FromAsync<WebResponse>(
-                    request.BeginGetResponse, 
-                    request.EndGetResponse,
-                    null);
-                var stream = myResponse.GetResponseStream();
-
-                if (stream == null)
-                    return String.Empty;
-
-                var objReader = new StreamReader(stream);
-
-                var sb = new StringBuilder();
-                while (true)
-                {
-                    string line = objReader.ReadLine();
-                    if (line != null) sb.Append(line);
-
-                    else
-                    {
-                        return sb.ToString();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return "";
-            }
+            _webClient = webClient;
         }
     }
 }

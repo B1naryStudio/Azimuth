@@ -14,7 +14,8 @@ namespace Azimuth.Infrastructure
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
 
-        public TwitterAccountProvider(string userId, string accessToken, string accessTokenSecret, string consumerKey, string consumerSecret)
+        public TwitterAccountProvider(IWebClient webClient, string userId, string accessToken, string accessTokenSecret, string consumerKey, string consumerSecret)
+            :base(webClient)
         {
             this._accessToken = accessToken;
             this._userId = userId;

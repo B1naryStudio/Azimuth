@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
@@ -14,7 +15,8 @@ namespace Azimuth.Infrastructure
 
         public string UserInfoUrl { get; private set; }
 
-        public FacebookAccountProvider(string userId, string accessToken)
+        public FacebookAccountProvider(IWebClient webClient, string userId, string accessToken)
+            :base(webClient)
         {
             this._accessToken = accessToken;
 
@@ -25,7 +27,7 @@ namespace Azimuth.Infrastructure
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
             // Make query to Facebook Api
-            var userDataJson = await GetRequest(UserInfoUrl);
+            var userDataJson = await _webClient.GetWebData(UserInfoUrl);
             var userDataObject = JObject.Parse(userDataJson);
             var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
 

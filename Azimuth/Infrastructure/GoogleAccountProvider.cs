@@ -16,7 +16,8 @@ namespace Azimuth.Infrastructure
         private readonly string _userId;
         private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
-        public GoogleAccountProvider(string userId, string accessToken = "")
+        public GoogleAccountProvider(IWebClient webClient, string userId, string accessToken)
+            :base(webClient)
         {
             _userId = userId;
             _accessToken = accessToken;
@@ -29,7 +30,7 @@ namespace Azimuth.Infrastructure
 
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
-            var response = await GetRequest(UserInfoUrl);
+            var response = await _webClient.GetWebData(UserInfoUrl);
             var userInfo = JObject.Parse(response);
             var userData = JsonConvert.DeserializeObject<GoogleUserData>(userInfo.ToString());
 
@@ -40,7 +41,7 @@ namespace Azimuth.Infrastructure
             {
                 var userLocCoordUrl = String.Format(
                     @"https://maps.googleapis.com/maps/api/geocode/json?address={0}",myPlace);
-                response = await GetRequest(userLocCoordUrl);
+                response = await _webClient.GetWebData(userLocCoordUrl);
                 var locInfo = JObject.Parse(response);
                 if (locInfo["results"].Any())
                 {
@@ -51,7 +52,7 @@ namespace Azimuth.Infrastructure
                     var userTimezoneUrl = String.Format(
                         @"https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp=1331161200",
                         coord.Item1.Replace(',', '.'), coord.Item2.Replace(',', '.'));
-                    response = await GetRequest(userTimezoneUrl);
+                    response = await _webClient.GetWebData(userTimezoneUrl);
                     var timezoneInfo = JObject.Parse(response);
                     timezone = Int32.Parse(timezoneInfo["rawOffset"].ToString()) / 3600;
                 }

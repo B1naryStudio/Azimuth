@@ -14,7 +14,8 @@ namespace Azimuth.Infrastructure
         private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
 
-        public VKAccountProvider(string userId, string accessToken = "")
+        public VKAccountProvider(IWebClient webClient, string userId, string accessToken = "")
+            :base(webClient)
         {
             _userId = userId;
             _accessToken = accessToken;
@@ -27,7 +28,7 @@ namespace Azimuth.Infrastructure
 
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
-            var response = await GetRequest(UserInfoUrl);
+            var response = await _webClient.GetWebData(UserInfoUrl);
 
             var sJObject = JObject.Parse(response);
             var userInfo = sJObject["response"][0];
