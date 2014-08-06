@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IdentityModel.Services;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,23 +14,22 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Azimuth.Models;
-using Ninject;
 
 namespace Azimuth.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private IKernel _kernel;
+        private readonly IAccountService _accountService;
 
-        public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        public AccountController(IAccountService accountService)
+            : this(accountService, new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
-            _kernel = new StandardKernel(new AccountProviderModule());
         }
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(IAccountService accountService, UserManager<ApplicationUser> userManager)
         {
+            _accountService = accountService;
             UserManager = userManager;
         }
 
@@ -202,33 +205,29 @@ namespace Azimuth.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+            
             if (result == null || result.Identity == null)
             {
                 return RedirectToAction("Login");
             }
 
-            var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (idClaim == null)
+            try
+            {
+                Authenticate(result.Identity);
+            }
+            catch(AuthenticationException)
             {
                 return RedirectToAction("Login");
             }
 
-            var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
+            var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
+            var login = new UserLoginInfo(identity.SocialNetworkName, identity.SocialNetworkID);
             var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
-            var accessToken = GetClaim(result, "AccessToken");
-            var tokenExpiresIn = GetClaim(result, "AccessTokenExpiresIn");
-            var email = GetClaim(result, "email");
-            var accessTokenSecret = GetClaim(result, "AccessTokenSecret");
-            var consumerKey = GetClaim(result, "ConsumerKey");
-            var consumerSecret = GetClaim(result, "ConsumerSecret");
+            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.SocialNetworkName, identity.SocialNetworkID, identity.AccessToken, identity.AccessTokenSecret, identity.ConsumerKey, identity.ConsumerSecret);
 
-            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(idClaim.Issuer, idClaim.Value, accessToken, accessTokenSecret, consumerKey, consumerSecret);
-
-            var currentUser = await provider.GetUserInfoAsync(email);
-            var dbService = new DatabaseProvider();
-            var storeResult = dbService.SaveOrUpdateUserData(currentUser, idClaim.Value, idClaim.Issuer, accessToken, tokenExpiresIn);
+            var currentUser = await provider.GetUserInfoAsync(identity.Email);
+            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.SocialNetworkID, identity.SocialNetworkName, identity.AccessToken, identity.AccessTokenExpiresIn);
 
             // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(login);
@@ -246,11 +245,13 @@ namespace Azimuth.Controllers
             }
         }
 
-        private static string GetClaim(AuthenticateResult result, string claimType)
+        private void Authenticate(IIdentity identity)
         {
-            var claim = result.Identity.Claims.FirstOrDefault(c => c.Type == claimType);
-            var data = (claim != null) ? claim.Value : String.Empty;
-            return data;
+            var authManger = FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager;
+            var principal = authManger.Authenticate(String.Empty, new ClaimsPrincipal(identity));
+
+            Thread.CurrentPrincipal = principal;
+            HttpContext.User = principal;
         }
 
         //

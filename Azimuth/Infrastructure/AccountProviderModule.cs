@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Ninject.Extensions.Factory;
+using Ninject.Modules;
+using Ninject.Parameters;
 
 namespace Azimuth.Infrastructure
 {
@@ -6,6 +8,7 @@ namespace Azimuth.Infrastructure
     {
         public override void Load()
         {
+            Bind<IAccountService>().To<AccountService>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");
