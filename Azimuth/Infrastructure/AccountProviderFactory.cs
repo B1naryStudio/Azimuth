@@ -13,9 +13,7 @@ namespace Azimuth.Infrastructure
             var consumerKeyParam = new ConstructorArgument("consumerKey", consumerKey);
             var consumerSecretParam = new ConstructorArgument("consumerSecret", consumerSecret);
 
-            var webClient = new ConstructorArgument("webClient", MvcApplication.Container.Get<IWebClient>());
-
-            return MvcApplication.Container.Get<IAccountProvider>(socialNetwork, webClient, userIdParam, accessTokenParam, accessTokenSecretParam, consumerKeyParam, consumerSecretParam);
+            return MvcApplication.Container.Get<IAccountProvider>(socialNetwork, userIdParam, accessTokenParam, accessTokenSecretParam, consumerKeyParam, consumerSecretParam);
         }
     }
 }
