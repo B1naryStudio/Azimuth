@@ -24,22 +24,21 @@ namespace Azimuth.Shared.Dto
             return first_name + last_name + name + gender + email + birthday + timezone +
                    location.name;
         }
-    }
 
-    public class Location
-    {
-        public string id { get; set; }
-        public string name { get; set; }
-    }
+        public class Location
+        {
+            public string id { get; set; }
+            public string name { get; set; }
+        }
 
-    public class Picture
-    {
-        public Data data { get; set; }
+        public class Picture
+        {
+            public Data data { get; set; }
+        }
+        public class Data
+        {
+            public bool is_silhouette { get; set; }
+            public string url { get; set; }
+        }
     }
-    public class Data
-    {
-        public bool is_silhouette { get; set; }
-        public string url { get; set; }
-    }
-    
 }
