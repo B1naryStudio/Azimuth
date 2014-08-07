@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
@@ -16,50 +13,18 @@ namespace Azimuth.Tests
     [TestFixture]
     public class GoogleAccountProviderTests
     {
-        // Classes for write JsonSerialization
-
-        class Data
-        {
-            public bool is_silhouette { get; set; }
-            public string url { get; set; }
-        }
-
-        class Picture
-        {
-            public Data data { get; set; }
-        }
-
-        class RootObject
-        {
-            public GoogleName name { get; set; }
-            public GoogleLocation[] placesLived { get; set; }
-            public GoogleUserData.Photo image { get; set; }
-            public string birthday { get; set; }
-            public string gender { get; set; }
-            public string displayName { get; set; }
-            public Email[] emails { get; set; }
-        }
-
-        class TimeZone
-        {
-            public int rawOffset { get; set; }
-        }
-
         // Fields for tests
         private string _userToJson;
 
         private string _accessToken;
         private string _userId;
 
-        //private ConstructorArgument _accessTokenParam;
-        //private ConstructorArgument _userIdParam;
-
         public string UserInfoUrl { get; set; }
 
         private IWebClient _webRequest;
 
         private GoogleUserData _googleUserData;
-        private TimeZone _googleTimeZone;
+        private GoogleUserData.Timezone _googleTimeZone;
 
         [SetUp]
         public void Setup()
@@ -67,9 +32,6 @@ namespace Azimuth.Tests
             // Parametres for calling GetUSerInfoAsync
             _accessToken = "some access token";
             _userId = "some user id";
-
-            //_accessTokenParam = new ConstructorArgument("accessToken", _accessToken);
-            //_userIdParam = new ConstructorArgument("userId", _userId);
 
             // Query to facebook api
             UserInfoUrl = String.Format(
@@ -82,20 +44,20 @@ namespace Azimuth.Tests
             const string liveCoord = "40,30";
             _googleUserData = new GoogleUserData
             {
-                name = new GoogleName
+                name = new GoogleUserData.GoogleName
                 {
                     givenName = "Ivan",
                     familyName = "Bakun"
                 },
                 displayName = "Ivan Bakun",
                 gender = "male",
-                emails = new []{new Email
+                emails = new []{new GoogleUserData.Email
                 {
                     type = "account",
                     value = "ivanbakun@gmail.com"
                 }},
                 birthday = "26/1/1994",
-                placesLived = new []{new GoogleLocation
+                placesLived = new []{new GoogleUserData.GoogleLocation
                 {
                     primary = true,
                     value = "Donetsk, Ukraine" 
@@ -122,7 +84,7 @@ namespace Azimuth.Tests
                     }
                 }
             };
-            _googleTimeZone = new TimeZone
+            _googleTimeZone = new GoogleUserData.Timezone
             {
                 rawOffset = 3600
             };
@@ -160,7 +122,7 @@ namespace Azimuth.Tests
 
             
             var emails = _googleUserData.emails;
-            _googleUserData.placesLived = new GoogleLocation[]{ };//Delete location from googleacc
+            _googleUserData.placesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
             
             var expectedUser = (User)_googleUserData;
             expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;

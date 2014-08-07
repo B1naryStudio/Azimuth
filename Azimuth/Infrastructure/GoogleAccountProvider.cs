@@ -7,6 +7,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TweetSharp;
 using Location = Azimuth.DataAccess.Entities.Location;
 
 namespace Azimuth.Infrastructure
@@ -35,7 +36,7 @@ namespace Azimuth.Infrastructure
             var userData = JsonConvert.DeserializeObject<GoogleUserData>(userInfo.ToString());
 
             var timezone = -100;
-            var myPlace = ((userData.placesLived ?? new GoogleLocation[]{}).FirstOrDefault(p => p.primary) ?? new GoogleLocation{value = String.Empty}).value;
+            var myPlace = ((userData.placesLived ?? new GoogleUserData.GoogleLocation[]{}).FirstOrDefault(p => p.primary) ?? new GoogleUserData.GoogleLocation{value = String.Empty}).value;
             var places = myPlace.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (!String.IsNullOrEmpty(myPlace))
             {
@@ -43,18 +44,18 @@ namespace Azimuth.Infrastructure
                     @"https://maps.googleapis.com/maps/api/geocode/json?address={0}",myPlace);
                 response = await _webClient.GetWebData(userLocCoordUrl);
                 var locInfo = JObject.Parse(response);
+
                 if (locInfo["results"].Any())
                 {
-                    var locData = locInfo["results"][0];
-                    var coordInfo = locData["geometry"]["location"];
-                    var coord = new Tuple<string, string>(coordInfo["lat"].ToString(),
-                        coordInfo["lng"].ToString());
+                    var locData = JsonConvert.DeserializeObject<GoogleUserData.LocationData>(response);
+                    var coordInfo = locData.results.First().geometry.location;
+                    var coord = new Tuple<string, string>(coordInfo.lat.ToString(), coordInfo.lng.ToString());
                     var userTimezoneUrl = String.Format(
                         @"https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp=1331161200",
                         coord.Item1.Replace(',', '.'), coord.Item2.Replace(',', '.'));
                     response = await _webClient.GetWebData(userTimezoneUrl);
-                    var timezoneInfo = JObject.Parse(response);
-                    timezone = Int32.Parse(timezoneInfo["rawOffset"].ToString()) / 3600;
+                    var timezoneInfo = JsonConvert.DeserializeObject<GoogleUserData.Timezone>(response);
+                    timezone = timezoneInfo.rawOffset / 3600;
                 }
             }
             string city = null;

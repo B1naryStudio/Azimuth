@@ -33,7 +33,7 @@ namespace Azimuth.DataAccess.Entities
         {
             string city = null;
             string country = null;
-            var myPlace = ((userData.placesLived ?? new GoogleLocation[] { }).FirstOrDefault(p => p.primary) ?? new GoogleLocation { value = String.Empty }).value;
+            var myPlace = ((userData.placesLived ?? new GoogleUserData.GoogleLocation[] { }).FirstOrDefault(p => p.primary) ?? new GoogleUserData.GoogleLocation { value = String.Empty }).value;
             var places = myPlace.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (places.Length == 1)
             {
