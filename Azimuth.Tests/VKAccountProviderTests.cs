@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Ninject.Parameters;
 using NSubstitute;
 using NUnit.Framework;
@@ -49,7 +45,7 @@ namespace Azimuth.Tests
             public RootObject response { get; set; } 
         }
 
-        public enum sex
+        public enum Sex
         {
             none = 0,
             female = 1,
@@ -62,8 +58,8 @@ namespace Azimuth.Tests
         private string _accessToken;
         private string _userId;
 
-        private ConstructorArgument _accessTokenParam;
-        private ConstructorArgument _userIdParam;
+        //private ConstructorArgument _accessTokenParam;
+        //private ConstructorArgument _userIdParam;
 
         public string UserInfoUrl { get; set; }
 
@@ -90,7 +86,7 @@ namespace Azimuth.Tests
                 first_name = "Beseda",
                 last_name = "Dmitrij",
                 screen_name = "Beseda Dmitrij",
-                sex = sex.male.ToString(),
+                sex = (int)Sex.male,
                 bdate = "12/1/1992",
                 city = new City{id = 1, title = "Donetsk"},
                 country = new Country {id = 1, title = "Ukraine"},
@@ -100,15 +96,17 @@ namespace Azimuth.Tests
 
 
             // Make Json
-            var userToJson = "{\"response\":[" + JsonConvert.SerializeObject(_vkUserData) + "]}";
+            _userToJson = "{\"response\":[" + JsonConvert.SerializeObject(_vkUserData) + "]}";
 
             _webRequest = Substitute.For<IWebClient>();
-            _webRequest.GetWebData(UserInfoUrl).Returns(Task.FromResult(userToJson));
+            _webRequest.GetWebData(UserInfoUrl).Returns(Task.FromResult(_userToJson));
         }
 
         [Test]
         public async void Get_VK_User_Data()
         {
+            string email = "besedadg@gmail.com";
+
             // Arrange
             User expectedUser = new User
             {
@@ -118,8 +116,8 @@ namespace Azimuth.Tests
                     LastName = _vkUserData.last_name
                 },
                 ScreenName = _vkUserData.screen_name,
-                Gender = _vkUserData.sex.ToString(),
-                Email = "besedadg@gmail.com", // ???
+                Gender = Sex.male.ToString(),
+                Email = email,
                 Birthday = _vkUserData.bdate,
                 Timezone = _vkUserData.timezone,
                 Location = new DataAccess.Entities.Location
@@ -132,7 +130,7 @@ namespace Azimuth.Tests
 
             // Act
             var provider = new VKAccountProvider(_webRequest, _userId, _accessToken);
-            var user = await provider.GetUserInfoAsync("besedadg@gmail.com");
+            var user = await provider.GetUserInfoAsync(email);
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
         }
