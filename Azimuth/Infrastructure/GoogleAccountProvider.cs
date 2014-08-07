@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TweetSharp;
-using Location = Azimuth.DataAccess.Entities.Location;
 
 namespace Azimuth.Infrastructure
 {

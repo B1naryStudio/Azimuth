@@ -70,8 +70,8 @@ namespace Azimuth.DataAccess.Entities
             {
                 if (userData.location.name != null)
                 {
-                    city = userData.location.name.Split(',')[0];
-                    country = userData.location.name.Split(' ')[1];
+                    city = userData.location.name.Split(',').First();
+                    country = userData.location.name.Split(' ').Last();
                 }
             }
 
@@ -100,21 +100,21 @@ namespace Azimuth.DataAccess.Entities
                 Name =
                     new Name
                     {
-                        FirstName = userData.response[0].first_name ?? String.Empty,
-                        LastName = userData.response[0].last_name ?? String.Empty
+                        FirstName = userData.response.First().first_name ?? String.Empty,
+                        LastName = userData.response.First().last_name ?? String.Empty
                     },
-                ScreenName = userData.response[0].screen_name ?? String.Empty,
-                Gender = (userData.response[0].sex != 0) ? userData.response[0].sex.ToString() : String.Empty,
-                Birthday = userData.response[0].bdate ?? String.Empty,
-                Email = userData.response[0].email ?? String.Empty,
+                ScreenName = userData.response.First().screen_name ?? String.Empty,
+                Gender = (userData.response.First().sex != 0) ? userData.response.First().sex.ToString() : String.Empty,
+                Birthday = userData.response.First().bdate ?? String.Empty,
+                Email = userData.response.First().email ?? String.Empty,
                 Location =
                     new Location
                     {
-                        City = userData.response[0].city.title ?? String.Empty,
-                        Country = userData.response[0].country.title ?? String.Empty
+                        City = userData.response.First().city.title ?? String.Empty,
+                        Country = userData.response.First().country.title ?? String.Empty
                     },
-                Timezone = userData.response[0].timezone,
-                Photo = userData.response[0].photo_max_orig
+                Timezone = userData.response.First().timezone,
+                Photo = userData.response.First().photo_max_orig
             };
         }
 

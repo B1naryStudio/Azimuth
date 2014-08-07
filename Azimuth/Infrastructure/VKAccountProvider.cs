@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
-using Location = Azimuth.DataAccess.Entities.Location;
 
 namespace Azimuth.Infrastructure
 {
@@ -30,8 +30,8 @@ namespace Azimuth.Infrastructure
             var response = await _webClient.GetWebData(UserInfoUrl);
             var userData = JsonConvert.DeserializeObject<VKUserdata.Response>(response);
 
-            var city = userData.response[0].city.title;
-            var country = userData.response[0].country.title;
+            var city = userData.response.First().city.title;
+            var country = userData.response.First().country.title;
 
             return new User
             {

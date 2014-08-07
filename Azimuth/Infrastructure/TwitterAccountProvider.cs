@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
-using TweetSharp;
 
 namespace Azimuth.Infrastructure
 {

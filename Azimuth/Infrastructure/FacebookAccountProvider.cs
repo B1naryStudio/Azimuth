@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls.WebParts;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Azimuth.Infrastructure
 {
@@ -28,7 +26,6 @@ namespace Azimuth.Infrastructure
         {
             // Make query to Facebook Api
             var userDataJson = await _webClient.GetWebData(UserInfoUrl);
-            var userDataObject = JObject.Parse(userDataJson);
             var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
 
             string city = "", country = "", photoUrl = "";
@@ -42,12 +39,6 @@ namespace Azimuth.Infrastructure
                 }
             }
 
-            //if (userDataObject["picture"] != null)
-            //{
-            //    photoUrl = userDataObject["picture"]["data"]["url"].ToString();
-            //}
-            
-
             return new User
             {
                 Name = new Name { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
@@ -56,7 +47,7 @@ namespace Azimuth.Infrastructure
                 Birthday = userData.birthday ?? String.Empty,
                 Email = email ?? String.Empty,
                 Location =
-                    new DataAccess.Entities.Location
+                    new Location
                     {
                         City = city,
                         Country = country
