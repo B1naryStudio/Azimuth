@@ -2,6 +2,7 @@
 using System.Linq;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Shared.Dto;
+using TweetSharp;
 
 namespace Azimuth.DataAccess.Entities
 {
@@ -114,7 +115,21 @@ namespace Azimuth.DataAccess.Entities
                     },
                 Timezone = userData.timezone,
                 Photo = userData.photo_max_orig
+            };
+        }
 
+        public static explicit operator User(TwitterUser userData)
+        {
+            return new User
+            {
+                Name = new Name {FirstName = userData.Name ?? String.Empty, LastName = String.Empty},
+                Birthday = String.Empty,
+                Email = String.Empty,
+                Gender = String.Empty,
+                Location = new Location {City = userData.Location ?? String.Empty, Country = String.Empty},
+                Timezone = -100,
+                ScreenName = userData.ScreenName ?? String.Empty,
+                Photo = userData.ProfileImageUrl ?? String.Empty
             };
         }
     }
