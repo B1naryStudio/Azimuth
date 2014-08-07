@@ -93,28 +93,28 @@ namespace Azimuth.DataAccess.Entities
             };
         }
 
-        public static explicit operator User(VKUserdata userData)
+        public static explicit operator User(VKUserdata.Response userData)
         {
             return new User
             {
                 Name =
                     new Name
                     {
-                        FirstName = userData.first_name ?? String.Empty,
-                        LastName = userData.last_name ?? String.Empty
+                        FirstName = userData.response[0].first_name ?? String.Empty,
+                        LastName = userData.response[0].last_name ?? String.Empty
                     },
-                ScreenName = userData.screen_name ?? String.Empty,
-                Gender = (userData.sex != 0) ? userData.sex.ToString() : String.Empty,
-                Birthday = userData.bdate ?? String.Empty,
-                Email = userData.email ?? String.Empty,
+                ScreenName = userData.response[0].screen_name ?? String.Empty,
+                Gender = (userData.response[0].sex != 0) ? userData.response[0].sex.ToString() : String.Empty,
+                Birthday = userData.response[0].bdate ?? String.Empty,
+                Email = userData.response[0].email ?? String.Empty,
                 Location =
                     new Location
                     {
-                        City = userData.City.title ?? String.Empty,
-                        Country = userData.Country.title ?? String.Empty
+                        City = userData.response[0].city.title ?? String.Empty,
+                        Country = userData.response[0].country.title ?? String.Empty
                     },
-                Timezone = userData.timezone,
-                Photo = userData.photo_max_orig
+                Timezone = userData.response[0].timezone,
+                Photo = userData.response[0].photo_max_orig
             };
         }
 
