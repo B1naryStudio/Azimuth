@@ -3,15 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
-using Azimuth.Shared.Dto;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Ninject;
 using Ninject.Parameters;
 using NSubstitute;
 using NUnit.Framework;
-using Location = Azimuth.Shared.Dto.Location;
 
 namespace Azimuth.Tests
 {
@@ -59,8 +55,8 @@ namespace Azimuth.Tests
         private string _accessToken;
         private string _userId;
 
-        private ConstructorArgument _accessTokenParam;
-        private ConstructorArgument _userIdParam;
+        //private ConstructorArgument _accessTokenParam;
+        //private ConstructorArgument _userIdParam;
 
         public string UserInfoUrl { get; set; }
 
@@ -75,8 +71,8 @@ namespace Azimuth.Tests
             _accessToken = "some access token";
             _userId = "some user id";
 
-            _accessTokenParam = new ConstructorArgument("accessToken", _accessToken);
-            _userIdParam = new ConstructorArgument("userId", _userId);
+            //_accessTokenParam = new ConstructorArgument("accessToken", _accessToken);
+            //_userIdParam = new ConstructorArgument("userId", _userId);
 
             // Query to facebook api
             UserInfoUrl = String.Format(@"https://graph.facebook.com/v2.0/me?access_token={0}&fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)",
