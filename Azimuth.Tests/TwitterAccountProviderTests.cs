@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
@@ -44,20 +43,7 @@ namespace Azimuth.Tests
         public async void Get_Twitter_User_Data()
         {
             // Arrange
-            //User expectedUser = new User
-            //{
-            //    Name = new Name {FirstName = "Azimuth Project", LastName = String.Empty},
-            //    Birthday = String.Empty,
-            //    Email = String.Empty,
-            //    Gender = String.Empty,
-            //    Location = new Location {City = "Donetsk, Ukraine", Country = String.Empty},
-            //    Timezone = -100,
-            //    ScreenName = "AzimuthP",
-            //    Photo = "photo.jpg"
-            //};
-
             User expectedUser = (User) _user;
-
             // Act
             IAccountProvider provider = new TwitterAccountProvider(_webClient, _userId, _accessToken, _accessSecret,
                 _consumerKey, _consumerSecret);
