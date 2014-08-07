@@ -33,7 +33,7 @@ namespace Azimuth.Tests
         {
             public GoogleName name { get; set; }
             public GoogleLocation[] placesLived { get; set; }
-            public Photo image { get; set; }
+            public GoogleUserData.Photo image { get; set; }
             public string birthday { get; set; }
             public string gender { get; set; }
             public string displayName { get; set; }
@@ -100,7 +100,7 @@ namespace Azimuth.Tests
                     primary = true,
                     value = "Donetsk, Ukraine" 
                 } },
-                image = new Photo
+                image = new GoogleUserData.Photo
                 {
                     url = "photo.jpg"
                 }

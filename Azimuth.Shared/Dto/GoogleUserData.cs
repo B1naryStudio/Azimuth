@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Photo = Azimuth.Shared.Dto.Photo;
 namespace Azimuth.Shared.Dto
 {
     public class GoogleUserData
@@ -16,6 +15,11 @@ namespace Azimuth.Shared.Dto
         public string gender { get; set; }
         public string displayName { get; set; }
         public Email[] emails { get; set; }
+
+        public class Photo
+        {
+            public string url { get; set; }
+        }
     }
 
     public class GoogleLocation
