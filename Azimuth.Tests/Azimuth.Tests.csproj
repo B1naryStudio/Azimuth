@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="AccountProviderFactoryTests.cs" />
     <Compile Include="FacebookAccountProviderTests.cs" />
+    <Compile Include="GoogleProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterAccountProviderTests.cs" />
     <Compile Include="VKAccountProviderTests.cs" />
