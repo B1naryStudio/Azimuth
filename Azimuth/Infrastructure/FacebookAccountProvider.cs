@@ -33,19 +33,19 @@ namespace Azimuth.Infrastructure
 
             string city = "", country = "", photoUrl = "";
 
-            if (userData.Location != null)
+            if (userData.location != null)
             {
-                if (userData.Location.name != null)
+                if (userData.location.name != null)
                 {
-                    city = userData.Location.name.Split(',')[0];
-                    country = userData.Location.name.Split(' ')[1];
+                    city = userData.location.name.Split(',')[0];
+                    country = userData.location.name.Split(' ')[1];
                 }
             }
 
-            if (userDataObject["picture"] != null)
-            {
-                photoUrl = userDataObject["picture"]["data"]["url"].ToString();
-            }
+            //if (userDataObject["picture"] != null)
+            //{
+            //    photoUrl = userDataObject["picture"]["data"]["url"].ToString();
+            //}
             
 
             return new User
@@ -62,7 +62,7 @@ namespace Azimuth.Infrastructure
                         Country = country
                     },
                 Timezone = userData.timezone,
-                Photo = photoUrl
+                Photo = userData.picture.data.url
             };
         }
     }

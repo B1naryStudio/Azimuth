@@ -66,12 +66,12 @@ namespace Azimuth.DataAccess.Entities
         {
             string city = "", country = "";
 
-            if (userData.Location != null)
+            if (userData.location != null)
             {
-                if (userData.Location.name != null)
+                if (userData.location.name != null)
                 {
-                    city = userData.Location.name.Split(',')[0];
-                    country = userData.Location.name.Split(' ')[1];
+                    city = userData.location.name.Split(',')[0];
+                    country = userData.location.name.Split(' ')[1];
                 }
             }
 
@@ -89,7 +89,7 @@ namespace Azimuth.DataAccess.Entities
                         Country = country
                     },
                 Timezone = userData.timezone,
-                Photo = userData.Photo.url
+                Photo = userData.picture.data.url
             };
         }
 
