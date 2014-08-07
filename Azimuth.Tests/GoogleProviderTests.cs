@@ -58,7 +58,7 @@ namespace Azimuth.Tests
 
         private IWebClient _webRequest;
 
-        private RootObject _googleUserData;
+        private GoogleUserData _googleUserData;
         private TimeZone _googleTimeZone;
 
         [SetUp]
@@ -80,7 +80,7 @@ namespace Azimuth.Tests
             // Object that we will make Json
             const string livePlace = "Donetsk, Ukraine";
             const string liveCoord = "40,30";
-            _googleUserData = new RootObject
+            _googleUserData = new GoogleUserData
             {
                 name = new GoogleName
                 {
@@ -144,30 +144,34 @@ namespace Azimuth.Tests
         public async void Get_Google_User_Data()
         {
             // Arrange
-            var expectedUser = new User
-            {
-                Name = new Name
-                {
-                    FirstName = _googleUserData.name.givenName,
-                    LastName = _googleUserData.name.familyName
-                },
-                ScreenName = _googleUserData.displayName,
-                Gender = _googleUserData.gender,
-                Email = _googleUserData.emails[0].value,
-                Birthday = _googleUserData.birthday,
-                Timezone = _googleTimeZone.rawOffset/3600,
-                Location = new DataAccess.Entities.Location
-                {
-                    City = _googleUserData.placesLived[0].value.Split(',').First(),
-                    Country = _googleUserData.placesLived[0].value.Split(' ').Last()
-                },
-                Photo = _googleUserData.image.url
-            };
+            var expectedUser = (User) _googleUserData;
+            expectedUser.Timezone = _googleTimeZone.rawOffset/3600;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
+        }
+
+        [Test]
+        public async void GetGoogleUserWithoutLocation()
+        {
+            // Arrange
+
+            
+            var emails = _googleUserData.emails;
+            _googleUserData.placesLived = new GoogleLocation[]{ };//Delete location from googleacc
+            
+            var expectedUser = (User)_googleUserData;
+            expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
+            expectedUser.Location.City = String.Empty;//Delete location from expected user
+            expectedUser.Location.Country = String.Empty;
+            // Act
+            var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
+            var user = await provider.GetUserInfoAsync();
+            // Assert
+            user.ToString().Should().Be(expectedUser.ToString(), "");
+            _googleUserData.emails = emails;
         }
     }
 }

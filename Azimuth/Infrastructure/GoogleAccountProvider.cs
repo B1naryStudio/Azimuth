@@ -59,6 +59,10 @@ namespace Azimuth.Infrastructure
             }
             string city = null;
             string country = null;
+            if (places.Length == 1)
+            {
+                city = places.First();
+            }
             if (places.Length > 1)
             {
                 city = places.First();
@@ -79,7 +83,6 @@ namespace Azimuth.Infrastructure
                     },
                 Timezone = timezone,
                 Photo = userData.image.url
-
             };;
         }
     }
