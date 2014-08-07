@@ -12,7 +12,6 @@ namespace Azimuth.Infrastructure
         {
             "AccessToken",
             "AccessTokenExpiresIn",
-            "email",
             "AccessTokenSecret",
             "ConsumerKey",
             "ConsumerSecret"

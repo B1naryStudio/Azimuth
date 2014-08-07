@@ -28,9 +28,6 @@ namespace Azimuth
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "LlXtJmJSLVQd8gzALZEctToQC",
-            //   consumerSecret: "VrO3OXhWoCxAwQxzGvEoTVHeua1MoKTZv1zZ7dM47WnhKAOgAn");
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions()
             {
                 ConsumerKey = "WUOz1dJWadM5NSUmgMrcPgiIa",
@@ -62,15 +59,10 @@ namespace Azimuth
                     // user Facebook C# SDK to get more information about the user
                     context.Identity.AddClaim(new Claim("AccessToken", context.AccessToken));
                     context.Identity.AddClaim(new Claim("AccessTokenExpiresIn", context.ExpiresIn.ToString()));
-
-
                 }
             };
             fb.SignInAsAuthenticationType = DefaultAuthenticationTypes.ExternalCookie;
             app.UseFacebookAuthentication(fb);
-            //app.UseFacebookAuthentication(
-            //   appId: "609844869113324",
-            //   appSecret: "399f367e79f11226d1522c00c72a6c6d");
 
             app.UseGoogleAuthentication(
                 new GoogleOAuth2AuthenticationOptions
