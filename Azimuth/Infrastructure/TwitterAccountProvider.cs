@@ -25,9 +25,7 @@ namespace Azimuth.Infrastructure
         }
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
-            var service = new TwitterService(_consumerKey, _consumerSecret);
-            service.AuthenticateWith(_accessToken, _accessTokenSecret);
-            var user = service.GetUserProfile(new GetUserProfileOptions());
+            var user = await _webClient.GetWebData(_consumerKey, _consumerSecret, _accessToken, _accessTokenSecret);
 
             return new User
             {
