@@ -28,17 +28,6 @@ namespace Azimuth.Infrastructure
             var userDataJson = await _webClient.GetWebData(UserInfoUrl);
             var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
 
-            string city = "", country = "", photoUrl = "";
-
-            if (userData.location != null)
-            {
-                if (userData.location.name != null)
-                {
-                    city = userData.location.name.Split(',')[0];
-                    country = userData.location.name.Split(' ')[1];
-                }
-            }
-
             return (User) userData;
         }
     }

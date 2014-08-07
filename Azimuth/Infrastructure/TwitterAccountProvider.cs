@@ -26,17 +26,7 @@ namespace Azimuth.Infrastructure
         {
             var user = await _webClient.GetWebData(_consumerKey, _consumerSecret, _accessToken, _accessTokenSecret);
 
-            return new User
-            {
-                Name = new Name { FirstName = user.Name ?? String.Empty, LastName = String.Empty},
-                Birthday = String.Empty, 
-                Email = String.Empty, 
-                Gender = String.Empty, 
-                Location = new Location { City = user.Location ?? String.Empty, Country = String.Empty},
-                Timezone = -100,
-                ScreenName = user.ScreenName ?? String.Empty,
-                Photo = user.ProfileImageUrl
-            };
+            return (User) user;
         }
     }
 }

@@ -33,22 +33,15 @@ namespace Azimuth.Infrastructure
             var city = userData.response.First().city.title;
             var country = userData.response.First().country.title;
 
-            return new User
+            User currentUser = (User) userData;
+            currentUser.Location = new Location
             {
-                Name = new Name { FirstName = userData.response[0].first_name ?? String.Empty, LastName = userData.response[0].last_name ?? String.Empty },
-                ScreenName = userData.response[0].screen_name ?? String.Empty,
-                Gender = (userData.response[0].sex != 0) ? userData.response[0].sex.ToString() : String.Empty,
-                Birthday = userData.response[0].bdate ?? String.Empty,
-                Email = email ?? String.Empty,
-                Location =
-                    new Location
-                    {
-                        City = city ?? String.Empty,
-                        Country = country ?? String.Empty
-                    },
-                Timezone = userData.response[0].timezone,
-                Photo = userData.response[0].photo_max_orig
-            };  
+                City = city ?? String.Empty,
+                Country = country ?? String.Empty
+            };
+            currentUser.Email = email ?? String.Empty;
+
+            return currentUser;
         }
     }
 }

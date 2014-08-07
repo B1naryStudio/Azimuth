@@ -68,27 +68,14 @@ namespace Azimuth.Infrastructure
             }
 
             User currentUser = (User) userData;
-            currentUser.Location.City = city ?? String.Empty;
+            currentUser.Location = new Location
+            {
+                City = city ?? String.Empty,
+                Country = country ?? String.Empty
+            };
             currentUser.Location.Country = country ?? String.Empty;
             currentUser.Timezone = timezone;
             return currentUser;
-
-            //return new User
-            //{
-            //    Name = new Name { FirstName = userData.name.givenName?? String.Empty, LastName = userData.name.familyName ?? String.Empty },
-            //    ScreenName = userData.displayName ?? String.Empty,
-            //    Gender = userData.gender,
-            //    Birthday = userData.birthday ?? String.Empty,
-            //    Email = userData.emails.FirstOrDefault(e=>e.type.Equals("account")).value ?? String.Empty,
-            //    Location =
-            //        new Location
-            //        {
-            //            City = city ?? String.Empty,
-            //            Country = country ?? String.Empty
-            //        },
-            //    Timezone = timezone,
-            //    Photo = userData.image.url
-            //};
         }
     }
 }
