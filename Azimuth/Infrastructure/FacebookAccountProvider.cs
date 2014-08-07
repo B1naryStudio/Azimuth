@@ -39,22 +39,7 @@ namespace Azimuth.Infrastructure
                 }
             }
 
-            return new User
-            {
-                Name = new Name { FirstName = userData.first_name ?? String.Empty, LastName = userData.last_name ?? String.Empty },
-                ScreenName = userData.name ?? String.Empty,
-                Gender = userData.gender ?? String.Empty,
-                Birthday = userData.birthday ?? String.Empty,
-                Email = email ?? String.Empty,
-                Location =
-                    new Location
-                    {
-                        City = city,
-                        Country = country
-                    },
-                Timezone = userData.timezone,
-                Photo = userData.picture.data.url
-            };
+            return (User) userData;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Web.ModelBinding;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 
@@ -20,6 +21,11 @@ namespace Azimuth.Infrastructure
 
         public bool SaveOrUpdateUserData(User user, string socialId, string socialNetwork, string accessToken, string tokenExpiresIn)
         {
+            if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
+            {
+                ((UnitOfWork)_unitOfWork).ReopenSession();
+            }
+
             using (_unitOfWork)
             {
                 try
@@ -71,10 +77,29 @@ namespace Azimuth.Infrastructure
             }
             return true;
         }
+
+        public bool CheckUserInDB(string socialId)
+        {
+            if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
+            {
+                ((UnitOfWork) _unitOfWork).ReopenSession();
+            }
+            using (_unitOfWork)
+            {
+                _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
+
+                var userSN = _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
+                if (userSN.Count > 0)
+                    if (userSN.First().Identifier.User != null)
+                        return true;
+            }
+            return false;
+        }
     }
 
     public interface IAccountService
     {
         bool SaveOrUpdateUserData(User user, string socialId, string socialNetwork, string accessToken, string tokenExpiresIn);
+        bool CheckUserInDB(string socialId);
     }
 }

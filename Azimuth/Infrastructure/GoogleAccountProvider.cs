@@ -5,6 +5,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NHibernate.Type;
 
 namespace Azimuth.Infrastructure
 {
@@ -65,22 +66,29 @@ namespace Azimuth.Infrastructure
                 city = places.First();
                 country = places.Last();
             }
-            return new User
-            {
-                Name = new Name { FirstName = userData.name.givenName?? String.Empty, LastName = userData.name.familyName ?? String.Empty },
-                ScreenName = userData.displayName ?? String.Empty,
-                Gender = userData.gender,
-                Birthday = userData.birthday ?? String.Empty,
-                Email = userData.emails.FirstOrDefault(e=>e.type.Equals("account")).value ?? String.Empty,
-                Location =
-                    new Location
-                    {
-                        City = city ?? String.Empty,
-                        Country = country ?? String.Empty
-                    },
-                Timezone = timezone,
-                Photo = userData.image.url
-            };;
+
+            User currentUser = (User) userData;
+            currentUser.Location.City = city ?? String.Empty;
+            currentUser.Location.Country = country ?? String.Empty;
+            currentUser.Timezone = timezone;
+            return currentUser;
+
+            //return new User
+            //{
+            //    Name = new Name { FirstName = userData.name.givenName?? String.Empty, LastName = userData.name.familyName ?? String.Empty },
+            //    ScreenName = userData.displayName ?? String.Empty,
+            //    Gender = userData.gender,
+            //    Birthday = userData.birthday ?? String.Empty,
+            //    Email = userData.emails.FirstOrDefault(e=>e.type.Equals("account")).value ?? String.Empty,
+            //    Location =
+            //        new Location
+            //        {
+            //            City = city ?? String.Empty,
+            //            Country = country ?? String.Empty
+            //        },
+            //    Timezone = timezone,
+            //    Photo = userData.image.url
+            //};
         }
     }
 }

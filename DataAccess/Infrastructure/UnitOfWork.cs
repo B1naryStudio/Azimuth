@@ -5,7 +5,7 @@ namespace Azimuth.DataAccess.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ISessionFactory _sessionFactory;
+        protected readonly ISessionFactory _sessionFactory;
         private readonly IRepositoryFactory _repoFactory;
         private ISession _currentSession;
         private ITransaction _currentTransaction;
@@ -27,6 +27,11 @@ namespace Azimuth.DataAccess.Infrastructure
                 }
                 return _currentSession;
             }
+        }
+
+        public void ReopenSession()
+        {
+            _currentSession = _sessionFactory.OpenSession();
         }
 
         public IRepository<T> GetRepository<T>() where T : class, IEntity

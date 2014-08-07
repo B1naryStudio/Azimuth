@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Services;
-using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -24,16 +22,10 @@ namespace Azimuth.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        private readonly IRepository<User> _userRepository;
-        private readonly IRepository<UserSocialNetwork> _userSNRepository;
-        private readonly IRepository<SocialNetwork> _snRepository; 
 
-        public AccountController(IAccountService accountService, IUnitOfWork unitOfWork)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _userRepository = unitOfWork.GetRepository<User>();
-            _userSNRepository = unitOfWork.GetRepository<UserSocialNetwork>();
-            _snRepository = unitOfWork.GetRepository<SocialNetwork>();
         }
 
         //
@@ -79,7 +71,6 @@ namespace Azimuth.Controllers
 
             var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
             var login = new UserLoginInfo(identity.SocialNetworkName, identity.SocialNetworkID);
-            var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
 
             IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.SocialNetworkName, identity.SocialNetworkID, identity.AccessToken, identity.AccessTokenSecret, identity.ConsumerKey, identity.ConsumerSecret);
 
@@ -88,10 +79,10 @@ namespace Azimuth.Controllers
 
             if (storeResult)
             {
-                var userSN = _userSNRepository.Get(s => s.ThirdPartId == login.ProviderKey).ToList();
-                if (userSN.Count > 0)
-                    if (userSN.First().Identifier.User != null)
-                        await SignInAsync(currentUser, login.LoginProvider);
+                if (_accountService.CheckUserInDB(login.ProviderKey))
+                {
+                    await SignInAsync(currentUser, login.LoginProvider);
+                }
             }
             return RedirectToLocal(returnUrl);
         }
