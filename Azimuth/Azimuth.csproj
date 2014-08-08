@@ -221,6 +221,7 @@
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
     <Compile Include="Infrastructure\TwitterAccountProvider.cs" />
+    <Compile Include="Infrastructure\UserCredential.cs" />
     <Compile Include="Infrastructure\VKAccountProvider.cs" />
     <Compile Include="Infrastructure\WebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

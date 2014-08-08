@@ -17,74 +17,27 @@ namespace Azimuth.Infrastructure
             "ConsumerSecret"
         };
 
+        public UserCredential UserCredential
+        {
+            get
+            {
+                return new UserCredential
+                {
+                    AccessToken = GetClaim("AccessToken"),
+                    AccessTokenExpiresIn = GetClaim("AccessTokenExpiresIn"),
+                    AccessTokenSecret = GetClaim("AccessTokenSecret"),
+                    ConsumerKey = GetClaim("ConsumerKey"),
+                    ConsumerSecret = GetClaim("ConsumerSecret"),
+                    SocialNetworkId = GetSocialNetworkId(),
+                    SocialNetworkName = GetSocialNetworkName(),
+                    Email = GetClaim(ClaimTypes.Email)
+                };
+            }
+        }
+
         public static string[] RequiredClaims
         {
             get { return _requiredClaims; }
-        }
-
-        public string AccessToken
-        {
-            get
-            {
-                return GetClaim("AccessToken");
-            }
-        }
-
-        public string AccessTokenExpiresIn
-        {
-            get
-            {
-                return GetClaim("AccessTokenExpiresIn");
-            }
-        }
-
-        public string Email
-        {
-            get
-            {
-                return GetClaim(ClaimTypes.Email);
-            }
-        }
-
-        public string AccessTokenSecret
-        {
-            get
-            {
-                return GetClaim("AccessTokenSecret");
-            }
-        }
-
-        public string ConsumerKey
-        {
-            get
-            {
-                return GetClaim("ConsumerKey");
-            }
-        }
-
-        public string ConsumerSecret
-        {
-            get
-            {
-                return GetClaim("ConsumerSecret");
-            }
-        }
-
-        public string SocialNetworkName
-        {
-            get
-            {
-                var claim = Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-                return claim == null ? String.Empty : claim.Issuer;
-            }
-        }
-
-        public string SocialNetworkID
-        {
-            get
-            {
-                return GetClaim(ClaimTypes.NameIdentifier);
-            }
         }
 
         public AzimuthIdentity(IEnumerable<Claim> claims) : base(claims)
@@ -96,6 +49,18 @@ namespace Azimuth.Infrastructure
             var claim = Claims.FirstOrDefault(c => c.Type == claimType);
             var data = (claim != null) ? claim.Value : String.Empty;
             return data;
+        }
+
+
+        private string GetSocialNetworkName()
+        {
+            var claim = Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            return claim == null ? String.Empty : claim.Issuer;
+        }
+
+        private string GetSocialNetworkId()
+        {
+            return GetClaim(ClaimTypes.NameIdentifier);
         }
     }
 }

@@ -70,12 +70,12 @@ namespace Azimuth.Controllers
             }
 
             var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
-            var login = new UserLoginInfo(identity.SocialNetworkName, identity.SocialNetworkID);
+            var login = new UserLoginInfo(identity.UserCredential.SocialNetworkName, identity.UserCredential.SocialNetworkId);
 
-            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.SocialNetworkName, identity.SocialNetworkID, identity.AccessToken, identity.AccessTokenSecret, identity.ConsumerKey, identity.ConsumerSecret);
+            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
 
-            var currentUser = await provider.GetUserInfoAsync(identity.Email);
-            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.SocialNetworkID, identity.SocialNetworkName, identity.AccessToken, identity.AccessTokenExpiresIn);
+            var currentUser = await provider.GetUserInfoAsync(identity.UserCredential.Email);
+            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.UserCredential);
 
             if (storeResult)
             {

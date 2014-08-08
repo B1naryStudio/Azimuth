@@ -13,16 +13,16 @@ namespace Azimuth.Infrastructure
         private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
 
-        public VKAccountProvider(IWebClient webClient, string userId, string accessToken)
+        public VKAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
-            _userId = userId;
-            _accessToken = accessToken;
+            _userId = userCredential.SocialNetworkId;
+            _accessToken = userCredential.AccessToken;
 
             UserInfoUrl = String.Format(
                 @"https://api.vk.com/method/users.get?user_id={0}&fields=screen_name,bdate,sex,city,country,photo_max_orig,timezone&v=5.23&access_token={1}",
-                userId,
-                accessToken);
+                _userId,
+                _accessToken);
         }
 
         public override async Task<User> GetUserInfoAsync(string email = "")

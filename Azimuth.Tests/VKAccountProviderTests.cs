@@ -72,7 +72,11 @@ namespace Azimuth.Tests
             // Arrange
             User expectedUser = (User) _vkUserData;
             // Act
-            var provider = new VKAccountProvider(_webRequest, _userId, _accessToken);
+            var provider = new VKAccountProvider(_webRequest, new UserCredential
+            {
+                SocialNetworkId = _userId,
+                AccessToken = _accessToken
+            });
             var user = await provider.GetUserInfoAsync(_email);
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");

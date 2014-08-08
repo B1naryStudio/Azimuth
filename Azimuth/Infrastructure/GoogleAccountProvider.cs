@@ -14,15 +14,15 @@ namespace Azimuth.Infrastructure
         private readonly string _userId;
         private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
-        public GoogleAccountProvider(IWebClient webClient, string userId, string accessToken)
+        public GoogleAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
-            _userId = userId;
-            _accessToken = accessToken;
+            _userId = userCredential.SocialNetworkId;
+            _accessToken = userCredential.AccessToken;
             UserInfoUrl =
                 String.Format(
                     @"https://www.googleapis.com/plus/v1/people/{0}?access_token={1}&fields=birthday%2CdisplayName%2Cemails%2Cgender%2Cimage%2Cname(familyName%2CgivenName)%2CplacesLived",
-                    userId,
+                    _userId,
                     _accessToken);
         }
 

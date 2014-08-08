@@ -19,7 +19,7 @@ namespace Azimuth.Infrastructure
             _unitOfWork = unitOfWork;
         }
 
-        public bool SaveOrUpdateUserData(User user, string socialId, string socialNetwork, string accessToken, string tokenExpiresIn)
+        public bool SaveOrUpdateUserData(User user, UserCredential userCredential)
         {
             if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
             {
@@ -37,7 +37,7 @@ namespace Azimuth.Infrastructure
 
                     // Check wheter current user exists in database
                     var getUserFromDB =
-                        _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
+                        _userSNRepository.Get(s => s.ThirdPartId == userCredential.SocialNetworkId).ToList();
                     if (getUserFromDB.Count != 0)
                     {
                         // If user exists in database check his data fields for updating
@@ -55,15 +55,15 @@ namespace Azimuth.Infrastructure
                     }
                     else
                     {
-                        var currentSN = _snRepository.Get(s => s.Name == socialNetwork).ToList();
+                        var currentSN = _snRepository.Get(s => s.Name == userCredential.SocialNetworkName).ToList();
 
                         _userRepository.AddItem(user);
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
                             Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN[0]},
-                            ThirdPartId = socialId,
-                            AccessToken = accessToken,
-                            TokenExpires = tokenExpiresIn
+                            ThirdPartId = userCredential.SocialNetworkId,
+                            AccessToken = userCredential.AccessToken,
+                            TokenExpires = userCredential.AccessTokenExpiresIn
                         });
                     }
 
@@ -99,7 +99,7 @@ namespace Azimuth.Infrastructure
 
     public interface IAccountService
     {
-        bool SaveOrUpdateUserData(User user, string socialId, string socialNetwork, string accessToken, string tokenExpiresIn);
+        bool SaveOrUpdateUserData(User user, UserCredential userCredential);
         bool CheckUserInDB(string socialId);
     }
 }
