@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.ModelBinding;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 
@@ -21,11 +18,6 @@ namespace Azimuth.Infrastructure
 
         public bool SaveOrUpdateUserData(User user, string socialId, string socialNetwork, string accessToken, string tokenExpiresIn)
         {
-            if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
-            {
-                ((UnitOfWork)_unitOfWork).ReopenSession();
-            }
-
             using (_unitOfWork)
             {
                 try
