@@ -8,13 +8,13 @@ namespace Azimuth.Infrastructure
     public class AzimuthIdentity : ClaimsIdentity
     {
 
-        private static string[] _requiredClaims =
+        private static readonly string[] _requiredClaims =
         {
-            "AccessToken",
-            "AccessTokenExpiresIn",
-            "AccessTokenSecret",
-            "ConsumerKey",
-            "ConsumerSecret"
+            AzimuthClaims.ACCESS_TOKEN,
+            AzimuthClaims.ACCESS_TOKEN_EXPIRES_IN,
+            AzimuthClaims.ACCESS_TOKEN_SECRET,
+            AzimuthClaims.CONSUMER_KEY,
+            AzimuthClaims.CONSUMER_SECRET
         };
 
         public UserCredential UserCredential
@@ -23,11 +23,11 @@ namespace Azimuth.Infrastructure
             {
                 return new UserCredential
                 {
-                    AccessToken = GetClaim("AccessToken"),
-                    AccessTokenExpiresIn = GetClaim("AccessTokenExpiresIn"),
-                    AccessTokenSecret = GetClaim("AccessTokenSecret"),
-                    ConsumerKey = GetClaim("ConsumerKey"),
-                    ConsumerSecret = GetClaim("ConsumerSecret"),
+                    AccessToken = GetClaim(AzimuthClaims.ACCESS_TOKEN),
+                    AccessTokenExpiresIn = GetClaim(AzimuthClaims.ACCESS_TOKEN_EXPIRES_IN),
+                    AccessTokenSecret = GetClaim(AzimuthClaims.ACCESS_TOKEN_SECRET),
+                    ConsumerKey = GetClaim(AzimuthClaims.CONSUMER_KEY),
+                    ConsumerSecret = GetClaim(AzimuthClaims.CONSUMER_SECRET),
                     SocialNetworkId = GetSocialNetworkId(),
                     SocialNetworkName = GetSocialNetworkName(),
                     Email = GetClaim(ClaimTypes.Email)
@@ -62,5 +62,18 @@ namespace Azimuth.Infrastructure
         {
             return GetClaim(ClaimTypes.NameIdentifier);
         }
+    }
+
+    public static class AzimuthClaims
+    {
+        public const string ACCESS_TOKEN = "AccessToken";
+
+        public const string ACCESS_TOKEN_EXPIRES_IN = "AccessTokenExpiresIn";
+        
+        public const string ACCESS_TOKEN_SECRET = "AccessTokenSecret";
+        
+        public const string CONSUMER_KEY = "ConsumerKey";
+
+        public const string CONSUMER_SECRET = "ConsumerSecret";
     }
 }
