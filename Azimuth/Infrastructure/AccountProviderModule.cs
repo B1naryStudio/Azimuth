@@ -1,4 +1,6 @@
-﻿using Ninject.Extensions.Factory;
+﻿using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
+using Ninject.Extensions.Factory;
 using Ninject.Modules;
 using Ninject.Parameters;
 

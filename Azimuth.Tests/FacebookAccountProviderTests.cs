@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using FluentAssertions;
@@ -64,7 +66,11 @@ namespace Azimuth.Tests
             // Arranage
             User expectedUser = (User) _fbUserData;
             // Act
-            var provider = new FacebookAccountProvider(_webRequest, _userId, _accessToken);
+            var provider = new FacebookAccountProvider(_webRequest, new UserCredential
+            {
+                SocialNetworkId = _userId,
+                AccessToken = _accessToken
+            });
             var user = await provider.GetUserInfoAsync("besedadg@gmail.com");
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");

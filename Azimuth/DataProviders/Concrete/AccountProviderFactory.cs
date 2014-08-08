@@ -1,7 +1,9 @@
-﻿using Ninject;
+﻿using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
+using Ninject;
 using Ninject.Parameters;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public static class AccountProviderFactory
     {

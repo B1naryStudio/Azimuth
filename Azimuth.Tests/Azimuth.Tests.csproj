@@ -90,6 +90,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Azimuth.AuthProviders\Azimuth.AuthProviders.csproj">
+      <Project>{0ab9917e-886d-43d5-b2ce-7dce3aeb5f11}</Project>
+      <Name>Azimuth.AuthProviders</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

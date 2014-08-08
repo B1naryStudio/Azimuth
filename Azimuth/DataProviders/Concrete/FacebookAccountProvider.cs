@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public class FacebookAccountProvider: AccountProvider
     {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.ModelBinding;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
+using Azimuth.Infrastructure;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public class AccountService : IAccountService
     {

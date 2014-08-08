@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Interfaces
 {
     public interface IAccountProvider
     {

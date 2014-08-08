@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;

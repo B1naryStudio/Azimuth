@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using TweetSharp;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Interfaces
 {
     public interface IWebClient
     {

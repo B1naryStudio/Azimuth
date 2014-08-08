@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NHibernate.Type;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public class GoogleAccountProvider : AccountProvider
     {
