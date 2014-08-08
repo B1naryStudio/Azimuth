@@ -87,9 +87,8 @@ namespace Azimuth.DataProviders.Concrete
             {
                 _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
 
-                var userSN = _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
-                if (userSN.Count > 0)
-                    if (userSN.First().Identifier.User != null)
+                var userSN = _userSNRepository.GetOne(s => s.ThirdPartId == socialId);
+                if ((userSN != null) && (userSN.Identifier.User != null))
                         return true;
             }
             return false;

@@ -1,4 +1,5 @@
-﻿using Azimuth.DataProviders.Concrete;
+﻿
+using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using FluentAssertions;
