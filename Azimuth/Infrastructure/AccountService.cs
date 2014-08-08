@@ -36,31 +36,30 @@ namespace Azimuth.Infrastructure
                     _snRepository = _unitOfWork.GetRepository<SocialNetwork>();
 
                     // Check wheter current user exists in database
-                    var getUserFromDB =
-                        _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
-                    if (getUserFromDB.Count != 0)
+                    var getUserFromDB = _userSNRepository.GetOne(s => s.ThirdPartId == socialId);
+                    if (getUserFromDB != null)
                     {
                         // If user exists in database check his data fields for updating
-                        if (user.ToString() != getUserFromDB[0].Identifier.User.ToString())
+                        if (user.ToString() != getUserFromDB.Identifier.User.ToString())
                         {
-                            getUserFromDB[0].Identifier.User.Name = new Name { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
-                            getUserFromDB[0].Identifier.User.ScreenName = user.ScreenName;
-                            getUserFromDB[0].Identifier.User.Gender = user.Gender;
-                            getUserFromDB[0].Identifier.User.Email = user.Email;
-                            getUserFromDB[0].Identifier.User.Birthday = user.Birthday;
-                            getUserFromDB[0].Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
-                            getUserFromDB[0].Identifier.User.Timezone = user.Timezone;
-                            getUserFromDB[0].Identifier.User.Photo = user.Photo;
+                            getUserFromDB.Identifier.User.Name = new Name { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
+                            getUserFromDB.Identifier.User.ScreenName = user.ScreenName;
+                            getUserFromDB.Identifier.User.Gender = user.Gender;
+                            getUserFromDB.Identifier.User.Email = user.Email;
+                            getUserFromDB.Identifier.User.Birthday = user.Birthday;
+                            getUserFromDB.Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
+                            getUserFromDB.Identifier.User.Timezone = user.Timezone;
+                            getUserFromDB.Identifier.User.Photo = user.Photo;
                         }
                     }
                     else
                     {
-                        var currentSN = _snRepository.Get(s => s.Name == socialNetwork).ToList();
+                        var currentSN = _snRepository.GetOne(s => s.Name == socialNetwork);
 
                         _userRepository.AddItem(user);
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
-                            Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN[0]},
+                            Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN},
                             ThirdPartId = socialId,
                             AccessToken = accessToken,
                             TokenExpires = tokenExpiresIn
@@ -88,9 +87,8 @@ namespace Azimuth.Infrastructure
             {
                 _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
 
-                var userSN = _userSNRepository.Get(s => s.ThirdPartId == socialId).ToList();
-                if (userSN.Count > 0)
-                    if (userSN.First().Identifier.User != null)
+                var userSN = _userSNRepository.GetOne(s => s.ThirdPartId == socialId);
+                if ((userSN != null) && (userSN.Identifier.User != null))
                         return true;
             }
             return false;
