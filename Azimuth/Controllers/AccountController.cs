@@ -72,7 +72,6 @@ namespace Azimuth.Controllers
             }
 
             var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
-            var login = new UserLoginInfo(identity.UserCredential.SocialNetworkName, identity.UserCredential.SocialNetworkId);
 
             IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
 
@@ -81,9 +80,9 @@ namespace Azimuth.Controllers
 
             if (storeResult)
             {
-                if (_accountService.CheckUserInDB(login.ProviderKey))
+                if (_accountService.CheckUserInDB(identity.UserCredential.SocialNetworkId))
                 {
-                    await SignInAsync(currentUser, login.LoginProvider);
+                    await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
                 }
             }
             return RedirectToLocal(returnUrl);
