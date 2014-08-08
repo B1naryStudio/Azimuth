@@ -80,10 +80,7 @@ namespace Azimuth.Controllers
 
             if (storeResult)
             {
-                if (_accountService.CheckUserInDB(identity.UserCredential.SocialNetworkId))
-                {
-                    await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
-                }
+                await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
             }
             return RedirectToLocal(returnUrl);
         }

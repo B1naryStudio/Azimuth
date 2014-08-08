@@ -16,24 +16,19 @@ namespace Azimuth.DataProviders.Concrete
         public AccountService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+
+            // Get repositories
+            _userRepository = _unitOfWork.GetRepository<User>();
+            _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
+            _snRepository = _unitOfWork.GetRepository<SocialNetwork>();
         }
 
         public bool SaveOrUpdateUserData(User user, UserCredential userCredential)
         {
-            if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
-            {
-                ((UnitOfWork)_unitOfWork).ReopenSession();
-            }
-
             using (_unitOfWork)
             {
                 try
                 {
-                    // Get repositories
-                    _userRepository = _unitOfWork.GetRepository<User>();
-                    _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
-                    _snRepository = _unitOfWork.GetRepository<SocialNetwork>();
-
                     // Check wheter current user exists in database
                     var getUserFromDB =
                         _userSNRepository.Get(s => s.ThirdPartId == userCredential.SocialNetworkId).ToList();
@@ -76,28 +71,10 @@ namespace Azimuth.DataProviders.Concrete
             }
             return true;
         }
-
-        public bool CheckUserInDB(string socialId)
-        {
-            if (!((UnitOfWork)_unitOfWork).CurrentSession.IsOpen)
-            {
-                ((UnitOfWork) _unitOfWork).ReopenSession();
-            }
-            using (_unitOfWork)
-            {
-                _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>();
-
-                var userSN = _userSNRepository.GetOne(s => s.ThirdPartId == socialId);
-                if ((userSN != null) && (userSN.Identifier.User != null))
-                        return true;
-            }
-            return false;
-        }
     }
 
     public interface IAccountService
     {
         bool SaveOrUpdateUserData(User user, UserCredential userCredential);
-        bool CheckUserInDB(string socialId);
     }
 }
