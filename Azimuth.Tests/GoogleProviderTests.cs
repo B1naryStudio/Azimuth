@@ -138,7 +138,11 @@ namespace Azimuth.Tests
             _googleUserData.placesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
             var expectedUser = (User)_googleUserData;
             // Act
-            var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
+            var provider = new GoogleAccountProvider(_webRequest, new UserCredential
+            {
+                SocialNetworkId = _userId,
+                AccessToken = _accessToken
+            });
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");

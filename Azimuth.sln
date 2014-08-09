@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azimuth", "Azimuth\Azimuth.csproj", "{69C19809-4178-4EB8-ACD2-1F0D983FD336}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azimuth.DataAccess", "DataAccess\Azimuth.DataAccess.csproj", "{46ED0DC9-403A-4B7C-992F-97C4F38D22D8}"
@@ -21,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azimuth.AuthProviders", "Azimuth.AuthProviders\Azimuth.AuthProviders.csproj", "{0AB9917E-886D-43D5-B2CE-7DCE3AEB5F11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azimuth.Tests", "Azimuth.Tests\Azimuth.Tests.csproj", "{8973F7BD-5535-4250-B810-61063C79F949}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azimuth.Migrations", "Azimuth.Migrations\Azimuth.Migrations.csproj", "{CE7216BD-6419-4FC4-94AC-476ACC50AD00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +52,10 @@ Global
 		{8973F7BD-5535-4250-B810-61063C79F949}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8973F7BD-5535-4250-B810-61063C79F949}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8973F7BD-5535-4250-B810-61063C79F949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7216BD-6419-4FC4-94AC-476ACC50AD00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7216BD-6419-4FC4-94AC-476ACC50AD00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7216BD-6419-4FC4-94AC-476ACC50AD00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7216BD-6419-4FC4-94AC-476ACC50AD00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
