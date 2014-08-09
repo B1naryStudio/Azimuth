@@ -1,8 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public class TwitterAccountProvider: AccountProvider
     {
@@ -13,14 +14,14 @@ namespace Azimuth.Infrastructure
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
 
-        public TwitterAccountProvider(IWebClient webClient, string userId, string accessToken, string accessTokenSecret, string consumerKey, string consumerSecret)
+        public TwitterAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
-            this._accessToken = accessToken;
-            this._userId = userId;
-            this._accessTokenSecret = accessTokenSecret;
-            this._consumerKey = consumerKey;
-            this._consumerSecret = consumerSecret;
+            this._accessToken = userCredential.AccessToken;
+            this._userId = userCredential.SocialNetworkId;
+            this._accessTokenSecret = userCredential.AccessTokenSecret;
+            this._consumerKey = userCredential.ConsumerKey;
+            this._consumerSecret = userCredential.ConsumerSecret;
         }
         public override async Task<User> GetUserInfoAsync(string email = "")
         {

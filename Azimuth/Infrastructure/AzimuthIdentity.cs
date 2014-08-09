@@ -8,83 +8,36 @@ namespace Azimuth.Infrastructure
     public class AzimuthIdentity : ClaimsIdentity
     {
 
-        private static string[] _requiredClaims =
+        private static readonly string[] _requiredClaims =
         {
-            "AccessToken",
-            "AccessTokenExpiresIn",
-            "AccessTokenSecret",
-            "ConsumerKey",
-            "ConsumerSecret"
+            AzimuthClaims.ACCESS_TOKEN,
+            AzimuthClaims.ACCESS_TOKEN_EXPIRES_IN,
+            AzimuthClaims.ACCESS_TOKEN_SECRET,
+            AzimuthClaims.CONSUMER_KEY,
+            AzimuthClaims.CONSUMER_SECRET
         };
+
+        public UserCredential UserCredential
+        {
+            get
+            {
+                return new UserCredential
+                {
+                    AccessToken = GetClaim(AzimuthClaims.ACCESS_TOKEN),
+                    AccessTokenExpiresIn = GetClaim(AzimuthClaims.ACCESS_TOKEN_EXPIRES_IN),
+                    AccessTokenSecret = GetClaim(AzimuthClaims.ACCESS_TOKEN_SECRET),
+                    ConsumerKey = GetClaim(AzimuthClaims.CONSUMER_KEY),
+                    ConsumerSecret = GetClaim(AzimuthClaims.CONSUMER_SECRET),
+                    SocialNetworkId = GetSocialNetworkId(),
+                    SocialNetworkName = GetSocialNetworkName(),
+                    Email = GetClaim(ClaimTypes.Email)
+                };
+            }
+        }
 
         public static string[] RequiredClaims
         {
             get { return _requiredClaims; }
-        }
-
-        public string AccessToken
-        {
-            get
-            {
-                return GetClaim("AccessToken");
-            }
-        }
-
-        public string AccessTokenExpiresIn
-        {
-            get
-            {
-                return GetClaim("AccessTokenExpiresIn");
-            }
-        }
-
-        public string Email
-        {
-            get
-            {
-                return GetClaim(ClaimTypes.Email);
-            }
-        }
-
-        public string AccessTokenSecret
-        {
-            get
-            {
-                return GetClaim("AccessTokenSecret");
-            }
-        }
-
-        public string ConsumerKey
-        {
-            get
-            {
-                return GetClaim("ConsumerKey");
-            }
-        }
-
-        public string ConsumerSecret
-        {
-            get
-            {
-                return GetClaim("ConsumerSecret");
-            }
-        }
-
-        public string SocialNetworkName
-        {
-            get
-            {
-                var claim = Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-                return claim == null ? String.Empty : claim.Issuer;
-            }
-        }
-
-        public string SocialNetworkID
-        {
-            get
-            {
-                return GetClaim(ClaimTypes.NameIdentifier);
-            }
         }
 
         public AzimuthIdentity(IEnumerable<Claim> claims) : base(claims)
@@ -97,5 +50,30 @@ namespace Azimuth.Infrastructure
             var data = (claim != null) ? claim.Value : String.Empty;
             return data;
         }
+
+
+        private string GetSocialNetworkName()
+        {
+            var claim = Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            return claim == null ? String.Empty : claim.Issuer;
+        }
+
+        private string GetSocialNetworkId()
+        {
+            return GetClaim(ClaimTypes.NameIdentifier);
+        }
+    }
+
+    public static class AzimuthClaims
+    {
+        public const string ACCESS_TOKEN = "AccessToken";
+
+        public const string ACCESS_TOKEN_EXPIRES_IN = "AccessTokenExpiresIn";
+        
+        public const string ACCESS_TOKEN_SECRET = "AccessTokenSecret";
+        
+        public const string CONSUMER_KEY = "ConsumerKey";
+
+        public const string CONSUMER_SECRET = "ConsumerSecret";
     }
 }

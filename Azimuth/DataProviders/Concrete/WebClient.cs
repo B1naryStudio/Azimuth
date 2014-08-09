@@ -1,8 +1,9 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Azimuth.DataProviders.Interfaces;
 using TweetSharp;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public class WebClient : IWebClient
     {

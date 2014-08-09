@@ -1,4 +1,7 @@
-﻿using Azimuth.Infrastructure;
+﻿
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 using FluentAssertions;
 using Ninject;
 using Ninject.Parameters;
@@ -50,7 +53,7 @@ namespace Tests
             // Act
             IAccountProvider fbAccountProvider = _kernel.Get<IAccountProvider>(_socialNetwork, _userIdParam, _accessTokenParam);
             // Assert
-            fbAccountProvider.Should().BeOfType<Azimuth.Infrastructure.FacebookAccountProvider>("we asked account provider instance for facebook");
+            fbAccountProvider.Should().BeOfType<FacebookAccountProvider>("we asked account provider instance for facebook");
         }
 
         [Test]

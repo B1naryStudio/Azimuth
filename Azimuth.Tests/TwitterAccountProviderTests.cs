@@ -1,6 +1,8 @@
 ﻿
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using FluentAssertions;
 using NSubstitute;
@@ -45,8 +47,14 @@ namespace Azimuth.Tests
             // Arrange
             User expectedUser = (User) _user;
             // Act
-            IAccountProvider provider = new TwitterAccountProvider(_webClient, _userId, _accessToken, _accessSecret,
-                _consumerKey, _consumerSecret);
+            IAccountProvider provider = new TwitterAccountProvider(_webClient, new UserCredential
+            {
+                AccessToken = _accessToken,
+                AccessTokenSecret = _accessSecret,
+                ConsumerKey = _consumerKey,
+                ConsumerSecret = _consumerSecret,
+                SocialNetworkId = _userId
+            });
             User currentUser = await provider.GetUserInfoAsync();
             //Assert
             currentUser.ToString().Should().Be(expectedUser.ToString());

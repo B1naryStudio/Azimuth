@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Interfaces;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.DataProviders.Concrete
 {
     public abstract class AccountProvider : IAccountProvider
     {

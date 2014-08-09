@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -70,19 +72,15 @@ namespace Azimuth.Controllers
             }
 
             var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
-            var login = new UserLoginInfo(identity.SocialNetworkName, identity.SocialNetworkID);
 
-            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.SocialNetworkName, identity.SocialNetworkID, identity.AccessToken, identity.AccessTokenSecret, identity.ConsumerKey, identity.ConsumerSecret);
+            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
 
-            var currentUser = await provider.GetUserInfoAsync(identity.Email);
-            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.SocialNetworkID, identity.SocialNetworkName, identity.AccessToken, identity.AccessTokenExpiresIn);
+            var currentUser = await provider.GetUserInfoAsync(identity.UserCredential.Email);
+            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.UserCredential);
 
             if (storeResult)
             {
-                if (_accountService.CheckUserInDB(login.ProviderKey))
-                {
-                    await SignInAsync(currentUser, login.LoginProvider);
-                }
+                await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
             }
             return RedirectToLocal(returnUrl);
         }

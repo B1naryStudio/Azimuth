@@ -25,6 +25,11 @@ namespace Azimuth.DataAccess.Infrastructure
             return _session.Query<T>().Where(filter);
         }
 
+        public T GetOne(Func<T, Boolean> filter)
+        {
+            return _session.Query<T>().Where(filter).FirstOrDefault();
+        }
+
         public IEnumerable<T> GetAll()
         {
             return _session.Query<T>();

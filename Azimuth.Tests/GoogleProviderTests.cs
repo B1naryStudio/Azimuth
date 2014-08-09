@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using FluentAssertions;
@@ -118,7 +120,11 @@ namespace Azimuth.Tests
             var expectedUser = (User) _googleUserData;
             expectedUser.Timezone = _googleTimeZone.rawOffset/3600;
             // Act
-            var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
+            var provider = new GoogleAccountProvider(_webRequest, new UserCredential
+            {
+                SocialNetworkId = _userId,
+                AccessToken = _accessToken
+            });
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
@@ -148,7 +154,11 @@ namespace Azimuth.Tests
             var expectedUser = (User)_googleUserData;
             expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
             // Act
-            var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
+            var provider = new GoogleAccountProvider(_webRequest, new UserCredential
+            {
+                SocialNetworkId = _userId,
+                AccessToken = _accessToken
+            });
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
