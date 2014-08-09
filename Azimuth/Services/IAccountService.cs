@@ -1,7 +1,7 @@
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
 
-namespace Azimuth.DataProviders.Interfaces
+namespace Azimuth.Services
 {
     public interface IAccountService
     {

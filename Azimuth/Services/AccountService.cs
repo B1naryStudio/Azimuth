@@ -5,7 +5,7 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 
-namespace Azimuth.DataProviders.Concrete
+namespace Azimuth.Services
 {
     public class AccountService : IAccountService
     {

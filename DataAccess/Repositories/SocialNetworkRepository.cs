@@ -12,11 +12,8 @@ namespace Azimuth.DataAccess.Repositories
 {
     public class SocialNetworkRepository:BaseRepository<SocialNetwork>
     {
-        private ISession _session;
-
         public SocialNetworkRepository(ISession session) : base(session)
         {
-            _session = session;
         }
 
         public SocialNetwork GetSN(string name)

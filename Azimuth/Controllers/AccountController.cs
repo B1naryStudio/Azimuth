@@ -13,6 +13,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Azimuth.Services;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Claim = System.Security.Claims.Claim;
