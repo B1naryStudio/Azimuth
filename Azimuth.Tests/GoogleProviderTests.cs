@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
@@ -41,6 +42,7 @@ namespace Azimuth.Tests
 
             // Object that we will make Json
             const string livePlace = "Donetsk, Ukraine";
+            const string liveCity = "Donetsk";
             const string liveCoord = "40,30";
             _googleUserData = new GoogleUserData
             {
@@ -91,14 +93,21 @@ namespace Azimuth.Tests
             _userToJson = JsonConvert.SerializeObject(_googleUserData);
             var locatioToJson = JsonConvert.SerializeObject(coordinates);
             var timezoneToJson = JsonConvert.SerializeObject(_googleTimeZone);
-            var userCoordUrl = String.Format(
+            var userCoordUrl1 = String.Format(
                     @"https://maps.googleapis.com/maps/api/geocode/json?address={0}", livePlace);
+            var userCoordUrl2 = String.Format(
+                    @"https://maps.googleapis.com/maps/api/geocode/json?address={0}", liveCity);
             var userTimezoneUrl = String.Format(
                         @"https://maps.googleapis.com/maps/api/timezone/json?location={0}&timestamp=1331161200",
                         liveCoord);
             _webRequest = Substitute.For<IWebClient>();
-            _webRequest.GetWebData(UserInfoUrl).Returns(Task.FromResult(_userToJson));
-            _webRequest.GetWebData(userCoordUrl).Returns(Task.FromResult(locatioToJson));
+            _webRequest.GetWebData(UserInfoUrl).Returns(x =>
+            {
+                _userToJson = JsonConvert.SerializeObject(_googleUserData);
+                return Task.FromResult(_userToJson);
+            });
+            _webRequest.GetWebData(userCoordUrl1).Returns(Task.FromResult(locatioToJson));
+            _webRequest.GetWebData(userCoordUrl2).Returns(Task.FromResult(locatioToJson));
             _webRequest.GetWebData(userTimezoneUrl).Returns(Task.FromResult(timezoneToJson));
         }
 
@@ -119,21 +128,31 @@ namespace Azimuth.Tests
         public async void GetGoogleUserWithoutLocation()
         {
             // Arrange
-
-            
-            var emails = _googleUserData.emails;
+            var placesLived = _googleUserData.placesLived;
             _googleUserData.placesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
-            
             var expectedUser = (User)_googleUserData;
-            expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
-            expectedUser.Location.City = String.Empty;//Delete location from expected user
-            expectedUser.Location.Country = String.Empty;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString(), "");
-            _googleUserData.emails = emails;
+            _googleUserData.placesLived = placesLived;
+        }
+
+        [Test]
+        public async void GetGoogleUserWithOnlyCity()
+        {
+            // Arrange
+            var placesLived = _googleUserData.placesLived;
+            _googleUserData.placesLived[0].value = _googleUserData.placesLived[0].value.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+            var expectedUser = (User)_googleUserData;
+            expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
+            // Act
+            var provider = new GoogleAccountProvider(_webRequest, _userId, _accessToken);
+            var user = await provider.GetUserInfoAsync();
+            // Assert
+            user.ToString().Should().Be(expectedUser.ToString(), "");
+            _googleUserData.placesLived = placesLived;
         }
     }
 }
