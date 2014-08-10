@@ -24,7 +24,7 @@ namespace Azimuth.ApiControllers
 
         public async Task<HttpResponseMessage> Get()
         {
-            List<VKTrackData> tracks;
+            IList<VKTrackData> tracks;
             using (_unitOfWork)
             {
                 IRepository<UserSocialNetwork> userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Azimuth.Shared.Dto.VKTrackData>
+
+@{
+    ViewBag.Title = "UserTracks";
+}
+
+<h2>UserTracks:</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Artist)</th>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.Duration)</th>
+                <th>Import</th>
+            </tr>
+        </thead>
+        <tbody id="tracks"></tbody>
+    </table>
+</div>
+<a class="btn btn-primary" id="apply">Apply &raquo;</a>
+
+@section scripts
+{
+    <script>
+        $.ajax({
+            url: '/api/usertracks',
+            success: function(tracks) {
+                var list = $('#tracks');
+                for (var i = 0; i < tracks.length; i++) {
+                    var track = tracks[i];
+                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td></tr>');
+                }
+            }
+        });
+    </script>
+}

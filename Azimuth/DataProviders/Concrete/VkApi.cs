@@ -36,7 +36,7 @@ namespace Azimuth.DataProviders.Concrete
                                     "&offset=" + (MaxCntTracksPerReq*i) +
                                     "&access_token=" + Uri.EscapeDataString(accessToken);
 
-                var json = JObject.Parse(await FetchData(userTracksUrl));
+                var json = JObject.Parse(await _webClient.GetWebData(userTracksUrl));
                 count = json["response"]["count"].Value<int>();
                 tracks.AddRange(JsonConvert.DeserializeObject<List<VKTrackData>>(CorrectData(json)));
 
@@ -46,15 +46,7 @@ namespace Azimuth.DataProviders.Concrete
             return tracks;
         }
 
-        private async Task<string> FetchData(string uri)
-        {
-            //var client = new System.Net.WebClient { Encoding = Encoding.UTF8 };
-            //var json = client.DownloadString(uri);
-            var json = await _webClient.GetWebData(uri);
-            return json;
-        }
-
-        private string CorrectData(JObject json)
+        private static string CorrectData(JObject json)
         {
             return JArray.Parse(json["response"]["items"].ToString()).ToString();
         }
