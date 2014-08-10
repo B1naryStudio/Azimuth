@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
 {
-    public static class VkApi
+    public class VkApi : IVkApi
     {
+        private readonly IWebClient _webClient;
         private const string BaseUri = "https://api.vk.com/method/";
         private const int MaxCntTracksPerReq = 6000;
 
-        public static List<VKTrackData> GetUserTracks(string userId, string accessToken)
+        public VkApi(IWebClient webClient)
+        {
+            _webClient = webClient;
+        }
+
+        public async Task<List<VKTrackData>> GetUserTracks(string userId, string accessToken)
         {
             var tracks = new List<VKTrackData>();
             int i = 0;
@@ -29,7 +36,7 @@ namespace Azimuth.DataProviders.Concrete
                                     "&offset=" + (MaxCntTracksPerReq*i) +
                                     "&access_token=" + Uri.EscapeDataString(accessToken);
 
-                var json = JObject.Parse(FetchData(userTracksUrl));
+                var json = JObject.Parse(await FetchData(userTracksUrl));
                 count = json["response"]["count"].Value<int>();
                 tracks.AddRange(JsonConvert.DeserializeObject<List<VKTrackData>>(CorrectData(json)));
 
@@ -39,14 +46,15 @@ namespace Azimuth.DataProviders.Concrete
             return tracks;
         }
 
-        private static string FetchData(string uri)
+        private async Task<string> FetchData(string uri)
         {
-            var client = new System.Net.WebClient { Encoding = Encoding.UTF8 };
-            var json = client.DownloadString(uri);
+            //var client = new System.Net.WebClient { Encoding = Encoding.UTF8 };
+            //var json = client.DownloadString(uri);
+            var json = await _webClient.GetWebData(uri);
             return json;
         }
 
-        private static string CorrectData(JObject json)
+        private string CorrectData(JObject json)
         {
             return JArray.Parse(json["response"]["items"].ToString()).ToString();
         }
