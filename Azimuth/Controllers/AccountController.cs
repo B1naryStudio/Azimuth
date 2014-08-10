@@ -141,9 +141,11 @@ namespace Azimuth.Controllers
 
         private async Task SignInAsync(User currentUser, string socialNetwork)
         {
+            var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
+
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, currentUser.Name.FirstName + " " + currentUser.Name.LastName));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, currentUser.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, identity.UserCredential.SocialNetworkId));
             Claim claim = new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", socialNetwork, Rights.PossessProperty);
             claims.Add(claim);
             var id = new ClaimsIdentity(claims,
