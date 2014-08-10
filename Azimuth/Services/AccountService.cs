@@ -2,9 +2,10 @@
 using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 
-namespace Azimuth.DataProviders.Concrete
+namespace Azimuth.Services
 {
     public class AccountService : IAccountService
     {
@@ -71,10 +72,5 @@ namespace Azimuth.DataProviders.Concrete
             }
             return true;
         }
-    }
-
-    public interface IAccountService
-    {
-        bool SaveOrUpdateUserData(User user, UserCredential userCredential);
     }
 }

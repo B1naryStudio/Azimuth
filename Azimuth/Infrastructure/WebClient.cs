@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Azimuth.DataProviders.Interfaces;
 using TweetSharp;
 
-namespace Azimuth.DataProviders.Concrete
+namespace Azimuth.Infrastructure
 {
     public class WebClient : IWebClient
     {

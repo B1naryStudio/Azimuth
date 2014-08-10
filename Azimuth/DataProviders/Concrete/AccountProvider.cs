@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 
 namespace Azimuth.DataProviders.Concrete
 {

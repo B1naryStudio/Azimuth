@@ -8,7 +8,7 @@ namespace Azimuth.DataAccess.Infrastructure
 {
     public abstract class BaseRepository<T> : IRepository<T> where T : IEntity
     {
-        private readonly ISession _session;
+        protected readonly ISession _session;
 
         protected BaseRepository(ISession session)
         {
