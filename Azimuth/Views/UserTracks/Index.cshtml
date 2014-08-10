@@ -7,7 +7,7 @@
 <h2>UserTracks:</h2>
 
 <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped" id="tracksTable">
         <thead>
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Artist)</th>
@@ -19,7 +19,7 @@
         <tbody id="tracks"></tbody>
     </table>
 </div>
-<a class="btn btn-primary" id="apply">Apply &raquo;</a>
+<a class="btn btn-primary" id="applyBtn">Apply &raquo;</a>
 
 @section scripts
 {
@@ -30,9 +30,20 @@
                 var list = $('#tracks');
                 for (var i = 0; i < tracks.length; i++) {
                     var track = tracks[i];
-                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td></tr>');
+                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td>' + '<td style = "display:none">' + track.id + '</td></tr>');
                 }
             }
         });
+    </script>
+    
+    <script>
+        $('#applyBtn').click(function () {
+            var tableControl = document.getElementById('tracksTable');
+            var arrayOfValues = [];
+            $('input:checkbox:checked', tableControl).each(function () {
+                arrayOfValues.push($(this).closest('tr').find('td:last').text());
+            }).get();
+            console.log(arrayOfValues);
+        });         
     </script>
 }
