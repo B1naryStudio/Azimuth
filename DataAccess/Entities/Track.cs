@@ -9,6 +9,7 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual string Duration { get; set; }
 
+        // TODO: Create reference to Genre's Table
         public virtual string Genre { get; set; }
 
         public virtual Artist Artist { get; set; }
@@ -16,5 +17,10 @@ namespace Azimuth.DataAccess.Entities
         public virtual Album Album { get; set; }
 
         public virtual ISet<Playlist> Playlists { get; set; }
+
+        public Track()
+        {
+            Playlists = new HashedSet<Playlist>();
+        }
     }
 }

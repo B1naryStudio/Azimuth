@@ -25,6 +25,10 @@ namespace Azimuth.DataAccess.Infrastructure
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
+            Bind<IRepository<Artist>, BaseRepository<Artist>>().To<ArtistRepository>();
+            Bind<IRepository<Album>, BaseRepository<Album>>().To<AlbumRepository>();
+            Bind<IRepository<Track>, BaseRepository<Track>>().To<TrackRepository>();
+            Bind<IRepository<Playlist>, BaseRepository<Playlist>>().To<PlaylistRepository>();
             Bind<IRepository<SocialNetwork>, BaseRepository<SocialNetwork>>().To<SocialNetworkRepository>();
             Bind<IRepository<UserSocialNetwork>, BaseRepository<UserSocialNetwork>>().To<UserSocialNetworkRepository>();
         }

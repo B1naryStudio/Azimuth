@@ -13,5 +13,10 @@ namespace Azimuth.DataAccess.Entities
         public virtual User Creator { get; set; }
 
         public virtual ISet<Track> Tracks { get; set; }
+
+        public Playlist()
+        {
+            Tracks = new HashedSet<Track>();
+        }
     }
 }

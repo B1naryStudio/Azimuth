@@ -5,7 +5,7 @@ namespace Azimuth.DataAccess.Entities
 {
     public class Artist : BaseEntity
     {
-        public virtual Name Name { get; set; }
+        public virtual string Name { get; set; }
 
         public virtual string Site { get; set; }
 
@@ -14,5 +14,11 @@ namespace Azimuth.DataAccess.Entities
         public virtual ISet<Album> Albums { get; set; }
 
         public virtual ISet<Track> Tracks { get; set; }
+
+        public Artist()
+        {
+            Albums = new HashedSet<Album>();
+            Tracks = new HashedSet<Track>();
+        }
     }
 }
