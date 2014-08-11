@@ -14,7 +14,11 @@ namespace Azimuth.DataAccess.Repositories
 
         public User GetUserByEmail(string email)
         {
-            return _session.Query<User>().FirstOrDefault(x => x.Email == email);
+            return _session.Query<User>()
+                .Where(x => x.Email == email)
+                .Fetch(x => x.SocialNetworks)
+                .AsEnumerable()
+                .FirstOrDefault();
         }
     }
 }

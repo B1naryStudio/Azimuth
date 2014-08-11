@@ -17,6 +17,10 @@
       <property name="Country" />
       <property name="City" />
     </component>
+    <set name="SocialNetworks" cascade="all-delete-orphan" inverse="true">
+      <key column="UserId"/>
+      <one-to-many class="UserSocialNetwork"/>
+    </set>
     <property name="Email"/>
   </class>
 </hibernate-mapping>

@@ -51,11 +51,18 @@ namespace Azimuth.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
+        public ActionResult ConnectAccount(string provider, string returnUrl)
+        {
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl, AutoLogin = false }));
+        }
+
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl, bool autoLogin = true)
         {
+            var isAuthenticated = ClaimsPrincipal.Current.Identity.IsAuthenticated;
+            var loggedUser = HttpContext.User.Identity as AzimuthIdentity;
             var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
             
             if (result == null || result.Identity == null)
@@ -77,9 +84,9 @@ namespace Azimuth.Controllers
             IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
 
             var currentUser = await provider.GetUserInfoAsync(identity.UserCredential.Email);
-            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.UserCredential);
+            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.UserCredential, isAuthenticated);
 
-            if (storeResult)
+            if (storeResult && autoLogin)
             {
                 await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
             }
@@ -135,9 +142,7 @@ namespace Azimuth.Controllers
             var id = new ClaimsIdentity(claims,
                                         DefaultAuthenticationTypes.ApplicationCookie);
 
-            var ctx = Request.GetOwinContext();
-            var authenticationManager = ctx.Authentication;
-            authenticationManager.SignIn(id);
+            AuthenticationManager.SignIn(id);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

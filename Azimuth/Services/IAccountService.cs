@@ -5,6 +5,6 @@ namespace Azimuth.Services
 {
     public interface IAccountService
     {
-        bool SaveOrUpdateUserData(User user, UserCredential userCredential);
+        bool SaveOrUpdateUserData(User user, UserCredential userCredential, bool isAuthenticated);
     }
 }
