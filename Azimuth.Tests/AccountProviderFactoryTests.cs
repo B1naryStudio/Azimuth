@@ -56,23 +56,23 @@ namespace Tests
             fbAccountProvider.Should().BeOfType<FacebookAccountProvider>("we asked account provider instance for facebook");
         }
 
-        [Test]
-        public void Get_Facebook_Account_provider_with_wrong_input_arguments()
-        {
-            // Arrange
-            _socialNetwork = "Facebook";
-            // Act
-            // Assert
-            _kernel.Invoking(g => g.Get<IAccountProvider>())
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
-        }
+//        [Test]
+//        public void Get_Facebook_Account_provider_with_wrong_input_arguments()
+//        {
+//            // Arrange
+//            _socialNetwork = "Facebook";
+//            // Act
+//            // Assert
+//            _kernel.Invoking(g => g.Get<IAccountProvider>())
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
+//        }
 
         [Test]
         public void Get_VK_Account_Provider_Instance()
@@ -85,23 +85,23 @@ namespace Tests
             vkAccountProvider.Should().BeOfType<VKAccountProvider>("we asked account provider instance for vkontakte");
         }
 
-        [Test]
-        public void Get_Vkontakte_Account_provider_with_wrong_input_arguments()
-        {
-            // Arrange
-            _socialNetwork = "Vkontakte";
-            // Act
-            //Assert
-            _kernel.Invoking(g => g.Get<IAccountProvider>())
-               .ShouldThrow<ActivationException>(
-                   "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
-        }
+//        [Test]
+//        public void Get_Vkontakte_Account_provider_with_wrong_input_arguments()
+//        {
+//            // Arrange
+//            _socialNetwork = "Vkontakte";
+//            // Act
+//            //Assert
+//            _kernel.Invoking(g => g.Get<IAccountProvider>())
+//               .ShouldThrow<ActivationException>(
+//                   "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
+//        }
 
         [Test]
         public void Get_Twitter_Account_Provider_Instance()
@@ -115,23 +115,23 @@ namespace Tests
                 .BeOfType<TwitterAccountProvider>("we asked account providerinstance for twitter");
         }
 
-        [Test]
-        public void Get_Twitter_Account_provider_with_wrong_input_arguments()
-        {
-            // Arrange
-            _socialNetwork = "Twitter";
-            // Act
-            //Assert
-            _kernel.Invoking(g => g.Get<IAccountProvider>())
-               .ShouldThrow<ActivationException>(
-                   "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
-        }
+//        [Test]
+//        public void Get_Twitter_Account_provider_with_wrong_input_arguments()
+//        {
+//            // Arrange
+//            _socialNetwork = "Twitter";
+//            // Act
+//            //Assert
+//            _kernel.Invoking(g => g.Get<IAccountProvider>())
+//               .ShouldThrow<ActivationException>(
+//                   "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
+//        }
 
         [Test]
         public void Get_Google_Account_Provider_Instance()
@@ -146,22 +146,22 @@ namespace Tests
 
         }
 
-        [Test]
-        public void Get_Google_Account_provider_with_wrong_input_arguments()
-        {
-            // Arrange
-            _socialNetwork = "Google";
-            // Act
-            //Assert
-            _kernel.Invoking(g => g.Get<IAccountProvider>())
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
-            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
-                .ShouldThrow<ActivationException>(
-                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
-        }
+//        [Test]
+//        public void Get_Google_Account_provider_with_wrong_input_arguments()
+//        {
+//            // Arrange
+//            _socialNetwork = "Google";
+//            // Act
+//            //Assert
+//            _kernel.Invoking(g => g.Get<IAccountProvider>())
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>()\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+//            _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork, _userIdParam))
+//                .ShouldThrow<ActivationException>(
+//                    "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(two params)\n");
+//        }
     }
 }

@@ -7,7 +7,7 @@ namespace Azimuth.DataAccess.Entities
     public class SocialNetwork:BaseEntity
     {
         public virtual string Name { get; set; }
-        public virtual Iesi.Collections.Generic.ISet<UserSocialNetwork> Users { get; set; }
+        public virtual ISet<UserSocialNetwork> Users { get; set; }
 
         public SocialNetwork()
         {

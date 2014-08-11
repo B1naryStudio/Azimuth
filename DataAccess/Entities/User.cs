@@ -2,6 +2,7 @@
 using System.Linq;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Shared.Dto;
+using Iesi.Collections.Generic;
 using TweetSharp;
 
 namespace Azimuth.DataAccess.Entities
@@ -16,7 +17,12 @@ namespace Azimuth.DataAccess.Entities
         public virtual int Timezone { get; set; }
         public virtual Location Location { get; set; }
         public virtual string Email { get; set; }
-        public virtual Iesi.Collections.Generic.ISet<UserSocialNetwork> SocialNetworks { get; set; }
+        public virtual ISet<UserSocialNetwork> SocialNetworks { get; set; }
+
+        public User()
+        {
+            SocialNetworks = new HashedSet<UserSocialNetwork>();
+        }
 
         public override string ToString()
         {

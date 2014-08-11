@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 
 namespace Azimuth.Infrastructure
 {
@@ -40,8 +43,18 @@ namespace Azimuth.Infrastructure
             get { return _requiredClaims; }
         }
 
-        public AzimuthIdentity(IEnumerable<Claim> claims) : base(claims)
+        public AzimuthIdentity(IEnumerable<Claim> claims, string type) : base(claims, type)
         {
+        }
+
+        public static AzimuthIdentity Current
+        {
+            get
+            {
+                var authManager = HttpContext.Current.GetOwinContext().Authentication;
+                var logged = authManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ApplicationCookie).Result;
+                return logged != null ? new AzimuthIdentity(logged.Claims, DefaultAuthenticationTypes.ApplicationCookie) : null;
+            }
         }
 
         private string GetClaim(string claimType)

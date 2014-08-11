@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using Azimuth.DataAccess.Entities;
+﻿using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using NHibernate;
-using NHibernate.Linq;
 
 namespace Azimuth.DataAccess.Repositories
 {
@@ -12,9 +10,9 @@ namespace Azimuth.DataAccess.Repositories
         {
         }
 
-        public User GetUserByEmail(string email)
+        public void Remove(User user)
         {
-            return _session.Query<User>().FirstOrDefault(x => x.Email == email);
+            _session.Delete(user);
         }
     }
 }

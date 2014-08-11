@@ -32,16 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azimuth">
-      <HintPath>..\Azimuth\bin\Azimuth.dll</HintPath>
-    </Reference>
-    <Reference Include="Azimuth.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DataAccess\bin\Debug\Azimuth.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="Azimuth.Shared">
-      <HintPath>..\Azimuth.Shared\bin\Debug\Azimuth.Shared.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -91,9 +81,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Azimuth.AuthProviders\Azimuth.AuthProviders.csproj">
-      <Project>{0ab9917e-886d-43d5-b2ce-7dce3aeb5f11}</Project>
-      <Name>Azimuth.AuthProviders</Name>
+    <ProjectReference Include="..\Azimuth.Shared\Azimuth.Shared.csproj">
+      <Project>{9eabb5cb-d796-493e-804f-5e59f898e02f}</Project>
+      <Name>Azimuth.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Azimuth\Azimuth.csproj">
+      <Project>{69c19809-4178-4eb8-acd2-1f0d983fd336}</Project>
+      <Name>Azimuth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\Azimuth.DataAccess.csproj">
+      <Project>{46ed0dc9-403a-4b7c-992f-97c4f38d22d8}</Project>
+      <Name>Azimuth.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

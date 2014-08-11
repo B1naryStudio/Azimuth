@@ -8,5 +8,6 @@ namespace Azimuth.ViewModels
     {
         public UserModel User { get; set; }
         public List<SocialNetwork> AvailableNetworks { get; set; }
+        public List<SocialNetwork> ConnectedNetworks { get; set; }
     }
 }
