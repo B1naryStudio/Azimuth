@@ -31,6 +31,9 @@ namespace Azimuth.Tester
                 IRepository<Playlist> playRepository = unitOfWork.GetRepository<Playlist>();
                 var pl = playRepository.GetAll();
 
+                var userRepo = unitOfWork.GetRepository<User>();
+                var users = userRepo.GetAll();
+
                 var trackRepo = unitOfWork.GetRepository<Track>();
                 var tracks = trackRepo.GetAll();
                 unitOfWork.Commit();

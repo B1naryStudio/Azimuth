@@ -84,6 +84,35 @@ namespace Azimuth.DataGenerator
                 tracks[2].Playlists.Add(playlists[2]);
                 tracks[2].Playlists.Add(playlists[3]);
 
+                var snRepo = unitOfWork.GetRepository<SocialNetwork>();
+                foreach (var socialNetwork in sn)
+                {
+                    snRepo.AddItem(socialNetwork);
+                }
+
+                var userRepo = unitOfWork.GetRepository<User>();
+                foreach (var user in users)
+                {
+                    userRepo.AddItem(user);
+                }
+
+                var userSnRepo = unitOfWork.GetRepository<UserSocialNetwork>();
+                foreach (var userSocialNetwork in userSNs)
+                {
+                    userSnRepo.AddItem(userSocialNetwork);
+                }
+
+                var playlistRepo = unitOfWork.GetRepository<Playlist>();
+                foreach (var playlist in playlists)
+                {
+                    playlistRepo.AddItem(playlist);
+                }
+
+                var artistRepo = unitOfWork.GetRepository<Artist>();
+                foreach (var artist in artists)
+                {
+                    artistRepo.AddItem(artist);
+                }
 
                 unitOfWork.Commit();
             }
@@ -108,12 +137,21 @@ namespace Azimuth.DataGenerator
                     playlistRepo.DeleteItem(playlist);
                 }
 
+                var snRepo = unitOfWork.GetRepository<SocialNetwork>();
+                var sns = snRepo.GetAll();
+                foreach (var socialNetwork in sns)
+                {
+                    snRepo.DeleteItem(socialNetwork);
+                }
+
                 var userRepo = unitOfWork.GetRepository<User>();
                 var users = userRepo.GetAll();
                 foreach (var user in users)
                 {
                     userRepo.DeleteItem(user);
                 }
+
+                
 
                 unitOfWork.Commit();
             }
