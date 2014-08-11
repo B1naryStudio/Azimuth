@@ -39,5 +39,10 @@ namespace Azimuth.DataAccess.Infrastructure
         {
             _session.Save(item);
         }
+
+        public void DeleteItem(T item)
+        {
+            _session.Delete(item);
+        }
     }
 }

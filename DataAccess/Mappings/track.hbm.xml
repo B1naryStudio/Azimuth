@@ -7,6 +7,8 @@
     <property name="Lyrics" />
     <property name="Genre" />
     <property name="Duration" />
+    <property name="Name" />
+    <property name="Url" />
     <many-to-one name="Album" column="AlbumId" />
     <set name="Playlists" table="PlaylistTracks" inverse="true" cascade="all-delete-orphan">
       <key column="TrackId" />

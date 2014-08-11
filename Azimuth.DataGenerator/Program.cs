@@ -11,8 +11,13 @@ namespace Azimuth.Tester
     {
         static void Main(string[] args)
         {
+            
+
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
+            var dg = new DataGenerator(kernel);
+            dg.GenerateData();
+            //dg.ClearDatabase();
             using (var unitOfWork = kernel.Get<IUnitOfWork>())
             {
                 IRepository<Artist> artistRepository = unitOfWork.GetRepository<Artist>();
