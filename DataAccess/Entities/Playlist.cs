@@ -1,4 +1,5 @@
-﻿using Azimuth.DataAccess.Infrastructure;
+﻿using System.Collections.Generic;
+using Azimuth.DataAccess.Infrastructure;
 using Iesi.Collections.Generic;
 using TweetSharp;
 
@@ -12,11 +13,11 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual User Creator { get; set; }
 
-        public virtual ISet<Track> Tracks { get; set; }
+        public virtual ICollection<Track> Tracks { get; set; }
 
         public Playlist()
         {
-            Tracks = new HashedSet<Track>();
+            Tracks = new List<Track>();
         }
     }
 }

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Migrations\Migration_201408092015_FillUpSocialNetworkTable.cs" />
     <Compile Include="Migrations\Migration_201408111008_UpdateTracks.cs" />
+    <Compile Include="Migrations\Migration_201408111122_UpdateTracks.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

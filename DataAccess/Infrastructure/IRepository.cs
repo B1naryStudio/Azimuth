@@ -10,5 +10,7 @@ namespace Azimuth.DataAccess.Infrastructure
         T GetOne(Func<T, Boolean> filter);
         IEnumerable<T> GetAll();
         void AddItem(T item);
+
+        void DeleteItem(T item);
     }
 }

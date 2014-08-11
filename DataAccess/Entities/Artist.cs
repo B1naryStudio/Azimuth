@@ -1,4 +1,6 @@
-﻿using Azimuth.DataAccess.Infrastructure;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Azimuth.DataAccess.Infrastructure;
 using Iesi.Collections.Generic;
 
 namespace Azimuth.DataAccess.Entities
@@ -11,11 +13,11 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual string Description { get; set; }
 
-        public virtual ISet<Album> Albums { get; set; }
+        public virtual ICollection<Album> Albums { get; set; }
 
         public Artist()
         {
-            Albums = new HashedSet<Album>();
+            Albums = new List<Album>();
         }
     }
 }
