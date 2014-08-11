@@ -24,16 +24,17 @@ namespace Azimuth.Services
 
         public SettingsViewModel GetUserSettings()
         {
-            using (_unitOfWork)
-            {
-                var identity = ClaimsIdentity as AzimuthIdentity;
+            //using (_unitOfWork)
+            //{
+            //    var identity = ClaimsIdentity as AzimuthIdentity;
                 
-                var viewModel = new SettingsViewModel
-                {
-                    User = UserModel.From(_userRepository.GetUserByEmail(identity.UserCredential.Email))
-                };
-                return viewModel;
-            }
+            //    var viewModel = new SettingsViewModel
+            //    {
+            //        User = UserModel.From(_userRepository.GetUserByEmail(identity.UserCredential.Email))
+            //    };
+            //    return viewModel;
+            //}
+            return null;
         }
     }
 }
