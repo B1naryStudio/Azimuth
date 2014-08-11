@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,19 +27,19 @@ namespace Azimuth.DataProviders.Concrete
             int count = 0;
 
             //if user have more than 6000 tracks we must execute several req
-            while ((i == 0) || (count > (i * MaxCntTracksPerReq))) 
+            while ((i == 0) || (count > (i * MaxCntTracksPerReq)))
             {
-                var userTracksUrl = BaseUri + "audio.get" +
-                                    "?owner_id=" + Uri.EscapeDataString(userId) +
-                                    "&need_user=0" + //without user_info
-                                    "&v=5.24" +
-                                    "&count=" + MaxCntTracksPerReq + //max count tracks for 1 req
-                                    "&offset=" + (MaxCntTracksPerReq*i) +
-                                    "&access_token=" + Uri.EscapeDataString(accessToken);
+                var url = BaseUri + "audio.get" +
+                          "?owner_id=" + Uri.EscapeDataString(userId) +
+                          "&need_user=0" + //without user_info
+                          "&v=5.24" +
+                          "&count=" + MaxCntTracksPerReq + //max count tracks for 1 req
+                          "&offset=" + (MaxCntTracksPerReq*i) +
+                          "&access_token=" + Uri.EscapeDataString(accessToken);
 
-                var json = JObject.Parse(await _webClient.GetWebData(userTracksUrl));
+                var json = JObject.Parse(await _webClient.GetWebData(url));
                 count = json["response"]["count"].Value<int>();
-                tracks.AddRange(JsonConvert.DeserializeObject<List<VKTrackData>>(CorrectData(json)));
+                tracks.AddRange(JsonConvert.DeserializeObject<List<VKTrackData>>(JArray.Parse(json["response"]["items"].ToString()).ToString()));
 
                 i++;
             } 
@@ -46,9 +47,36 @@ namespace Azimuth.DataProviders.Concrete
             return tracks;
         }
 
-        private static string CorrectData(JObject json)
+        public async Task<VKTrackData> GetTrackById(string userId, string trackId, string accessToken)
         {
-            return JArray.Parse(json["response"]["items"].ToString()).ToString();
+            var url = BaseUri + "audio.getById" +
+                      "?audios=" + Uri.EscapeDataString(userId + "_" + trackId) +
+                      "&v=5.24" +
+                      "&access_token=" + Uri.EscapeDataString(accessToken);
+
+            var json = JObject.Parse(await _webClient.GetWebData(url));
+            return JsonConvert.DeserializeObject<VKTrackData>(JArray.Parse(json["response"].ToString()).ToString());
+        }
+
+        public async Task<List<VKTrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
+        {
+            var tracks = new List<VKTrackData>();
+            foreach (var trackId in trackIds)
+            {
+                tracks.Add(await GetTrackById(userId, trackId, accessToken));
+            }
+            return tracks;
+        }
+
+        public async Task<string> GetLyricsById(string userId, long lyricsId, string accessToken)
+        {
+            var url = BaseUri + "audio.getLyrics" +
+                      "?lyrics_id=" + Uri.EscapeDataString(lyricsId.ToString()) +
+                      "&v=5.24" +
+                      "&access_token=" + Uri.EscapeDataString(accessToken);
+
+            var json = JObject.Parse(await _webClient.GetWebData(url));
+            return JArray.Parse(json["response"]["text"].ToString()).ToString();
         }
     }
 }

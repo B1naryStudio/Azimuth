@@ -30,20 +30,32 @@
                 var list = $('#tracks');
                 for (var i = 0; i < tracks.length; i++) {
                     var track = tracks[i];
-                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td>' + '<td style = "display:none">' + track.id + '</td></tr>');
+                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td><td style = "display:none" id = "trackId">' + track.id + '</td></tr>');
                 }
             }
         });
     </script>
     
     <script>
-        $('#applyBtn').click(function () {
+        $('#applyBtn').click(function() {
             var tableControl = document.getElementById('tracksTable');
-            var arrayOfValues = [];
-            $('input:checkbox:checked', tableControl).each(function () {
-                arrayOfValues.push($(this).closest('tr').find('td:last').text());
+            var tracks = [];
+            $('input:checkbox:checked', tableControl).each(function() {
+                tracks.push($(this).closest('tr').find('#trackId').text());
             }).get();
-            console.log(arrayOfValues);
-        });         
+            console.log(tracks);
+
+            $.ajax({
+                url: '/api/usertracks',
+                type: 'POST',
+                data: JSON.stringify({
+                    "Name": "Default",
+                    "TrackIds": tracks
+                }),
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false
+            });
+        });
     </script>
 }
