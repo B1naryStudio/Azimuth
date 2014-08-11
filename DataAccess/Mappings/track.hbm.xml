@@ -5,8 +5,8 @@
       <generator class="native"/>
     </id>
     <property name="Lyrics" />
+    <property name="Genre" />
     <property name="Duration" />
-    <many-to-one name="Artist" column="ArtistId" />
     <many-to-one name="Album" column="AlbumId" />
     <set name="Playlists" table="PlaylistTracks" inverse="true" cascade="all-delete-orphan">
       <key column="TrackId" />

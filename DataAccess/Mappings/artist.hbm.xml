@@ -11,9 +11,5 @@
       <key column="ArtistId" />
       <one-to-many class="Album" />
     </set>
-    <set name="Tracks" table="Tracks" inverse="true" cascade="all-delete-orphan">
-      <key column="ArtistId" />
-      <one-to-many class="Track" />
-    </set>
   </class>
 </hibernate-mapping>

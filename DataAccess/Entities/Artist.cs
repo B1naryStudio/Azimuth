@@ -13,12 +13,9 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual ISet<Album> Albums { get; set; }
 
-        public virtual ISet<Track> Tracks { get; set; }
-
         public Artist()
         {
             Albums = new HashedSet<Album>();
-            Tracks = new HashedSet<Track>();
         }
     }
 }

@@ -9,10 +9,7 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual string Duration { get; set; }
 
-        // TODO: Create reference to Genre's Table
         public virtual string Genre { get; set; }
-
-        public virtual Artist Artist { get; set; }
 
         public virtual Album Album { get; set; }
 
