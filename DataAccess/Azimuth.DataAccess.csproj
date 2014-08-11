@@ -126,6 +126,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Mappings\playlist.hbm.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="hibernate-release.cfg.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

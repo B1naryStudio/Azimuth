@@ -1,11 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Repositories;
 using NHibernate;
 using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
 using Ninject.Extensions.Factory;
 using Ninject.Modules;
+using NHibernate.Tool.hbm2ddl;
 
 namespace Azimuth.DataAccess.Infrastructure
 {
@@ -18,10 +20,14 @@ namespace Azimuth.DataAccess.Infrastructure
             Bind<ISessionFactory>().ToMethod(ctx =>
             {
                 var cfg = new Configuration();
+#if DEBUG
                 cfg.Configure();
+#else
+                cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate-release.cfg.xml"));
+#endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
-//                var schemaExport = new SchemaExport(cfg);
-//                schemaExport.Create(false, true);
+                var schemaExport = new SchemaExport(cfg);
+                schemaExport.Create(false, true);
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
