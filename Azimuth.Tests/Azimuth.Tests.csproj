@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azimuth">
-      <HintPath>..\Azimuth\bin\Azimuth.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -87,6 +84,10 @@
     <ProjectReference Include="..\Azimuth.Shared\Azimuth.Shared.csproj">
       <Project>{9eabb5cb-d796-493e-804f-5e59f898e02f}</Project>
       <Name>Azimuth.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Azimuth\Azimuth.csproj">
+      <Project>{69c19809-4178-4eb8-acd2-1f0d983fd336}</Project>
+      <Name>Azimuth</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataAccess\Azimuth.DataAccess.csproj">
       <Project>{46ed0dc9-403a-4b7c-992f-97c4f38d22d8}</Project>
