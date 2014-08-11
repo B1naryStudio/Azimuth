@@ -6,8 +6,8 @@ using System.Web;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.Exceptions;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Models;
 using Azimuth.ViewModels;
 

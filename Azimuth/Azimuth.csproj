@@ -225,6 +225,7 @@
     <Compile Include="DataProviders\Concrete\AccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\GoogleAccountProvider.cs" />
     <Compile Include="DataProviders\Interfaces\IAccountProvider.cs" />
+    <Compile Include="Infrastructure\Exceptions\EndUserException.cs" />
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
@@ -280,7 +281,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-	<Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\UserTracks\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
