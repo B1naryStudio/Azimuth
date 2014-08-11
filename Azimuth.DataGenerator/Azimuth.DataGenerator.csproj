@@ -7,8 +7,8 @@
     <ProjectGuid>{9A6D9CDB-AE3D-41EB-9A35-52943988D20F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Azimuth.Tester</RootNamespace>
-    <AssemblyName>Azimuth.Tester</AssemblyName>
+    <RootNamespace>Azimuth.DataGenerator</RootNamespace>
+    <AssemblyName>Azimuth.DataGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
