@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Services;
-using System.Security.Authentication;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Services;
 using Microsoft.AspNet.Identity;
@@ -51,10 +46,15 @@ namespace Azimuth.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
+        public ActionResult ConnectAccount(string provider, string returnUrl)
+        {
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl, AutoLogin = false }));
+        }
+
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl, bool autoLogin = true)
         {
             var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
             
@@ -63,36 +63,29 @@ namespace Azimuth.Controllers
                 return RedirectToAction("Login");
             }
 
-            try
+            var principal = ClaimsAuthenticationManager.Authenticate(String.Empty, new ClaimsPrincipal(result.Identity));
+            var identity = principal.Identity as AzimuthIdentity;
+            var loggedIdentity = AzimuthIdentity.Current;
+
+            var provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
+
+            var userInfo = await provider.GetUserInfoAsync(identity.UserCredential.Email);
+            var storeResult = _accountService.SaveOrUpdateUserData(userInfo, identity.UserCredential, loggedIdentity);
+
+            if (storeResult && autoLogin)
             {
-                Authenticate(result.Identity);
-            }
-            catch(AuthenticationException)
-            {
-                return RedirectToAction("Login");
-            }
-
-            var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
-
-            IAccountProvider provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
-
-            var currentUser = await provider.GetUserInfoAsync(identity.UserCredential.Email);
-            var storeResult = _accountService.SaveOrUpdateUserData(currentUser, identity.UserCredential);
-
-            if (storeResult)
-            {
-                await SignInAsync(currentUser, identity.UserCredential.SocialNetworkName);
+                SignIn(identity, userInfo);
             }
             return RedirectToLocal(returnUrl);
         }
 
-        private void Authenticate(IIdentity identity)
+        private void SignIn(AzimuthIdentity identity, User userInfo)
         {
-            var authManger = FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager;
-            var principal = authManger.Authenticate(String.Empty, new ClaimsPrincipal(identity));
+            identity.AddClaim(new Claim(ClaimTypes.Name, userInfo.Name.FirstName + " " + userInfo.Name.LastName));
+            identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider",
+                identity.UserCredential.SocialNetworkName, Rights.PossessProperty));
 
-            Thread.CurrentPrincipal = principal;
-            HttpContext.User = principal;
+            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = true}, identity);
         }
 
         //
@@ -117,29 +110,20 @@ namespace Azimuth.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
+        private ClaimsAuthenticationManager ClaimsAuthenticationManager
+        {
+            get
+            {
+                return FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager;
+            }
+        }
+
         private IAuthenticationManager AuthenticationManager
         {
             get
             {
                 return HttpContext.GetOwinContext().Authentication;
             }
-        }
-
-        private async Task SignInAsync(User currentUser, string socialNetwork)
-        {
-            var identity = ClaimsPrincipal.Current.Identity as AzimuthIdentity;
-
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, currentUser.Name.FirstName + " " + currentUser.Name.LastName));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, identity.UserCredential.SocialNetworkId));
-            Claim claim = new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", socialNetwork, Rights.PossessProperty);
-            claims.Add(claim);
-            var id = new ClaimsIdentity(claims,
-                                        DefaultAuthenticationTypes.ApplicationCookie);
-
-            var ctx = Request.GetOwinContext();
-            var authenticationManager = ctx.Authentication;
-            authenticationManager.SignIn(id);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

@@ -16,10 +16,9 @@ namespace Azimuth.DataAccess.Repositories
         {
         }
 
-        public SocialNetwork GetSN(string name)
+        public SocialNetwork GetByName(string name)
         {
-            var sn = _session.Query<SocialNetwork>().Where(s => s.Name == name).ToList();
-            return sn[0];
+            return _session.Query<SocialNetwork>().FirstOrDefault(s => s.Name == name);
         }
     }
 }
