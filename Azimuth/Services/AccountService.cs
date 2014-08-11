@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Iesi.Collections.Generic;
 
 namespace Azimuth.Services
 {
@@ -25,41 +24,62 @@ namespace Azimuth.Services
             _snRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
         }
 
-        public bool SaveOrUpdateUserData(User user, UserCredential userCredential, bool isAuthenticated)
+        public bool SaveOrUpdateUserData(User user, UserCredential userCredential, AzimuthIdentity loggedIdentity)
         {
             using (_unitOfWork)
             {
                 try
                 {
+                    User loggedUser = null;
+                    if (loggedIdentity != null)
+                    {
+                        loggedUser = _userRepository.GetOne(x => x.Email == loggedIdentity.UserCredential.Email);
+                    }
                     var userSn = _userSNRepository.GetByThirdPartyId(userCredential.SocialNetworkId);
                     if (userSn != null)
                     {
-                        if (isAuthenticated)
+                        if (loggedUser != null)
                         {
-                            var loggedUser = _userRepository.GetUserByEmail(userCredential.Email);
-                            userSn.Identifier.User.Id = loggedUser.Id;
+//                            var userToDelete = userSn.Identifier.User;
+//                            userToDelete.SocialNetworks.Clear();
+                            userSn.Identifier.User = loggedUser; // TODO Resolve issue with composite update
+//                            _userRepository.Remove(userToDelete);
                         }
-                        // If user exists in database check his data fields for updating
-                        if (user.ToString() != userSn.Identifier.User.ToString())
+                        else
                         {
-                            userSn.Identifier.User.Name = new Name { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
-                            userSn.Identifier.User.ScreenName = user.ScreenName;
-                            userSn.Identifier.User.Gender = user.Gender;
-                            userSn.Identifier.User.Email = user.Email;
-                            userSn.Identifier.User.Birthday = user.Birthday;
-                            userSn.Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
-                            userSn.Identifier.User.Timezone = user.Timezone;
-                            userSn.Identifier.User.Photo = user.Photo;
+                            // If user exists in database check his data fields for updating
+                            if (user.ToString() != userSn.Identifier.User.ToString())
+                            {
+                                userSn.Identifier.User.Name = new Name
+                                {
+                                    FirstName = user.Name.FirstName,
+                                    LastName = user.Name.LastName
+                                };
+                                userSn.Identifier.User.ScreenName = user.ScreenName;
+                                userSn.Identifier.User.Gender = user.Gender;
+                                userSn.Identifier.User.Email = user.Email;
+                                userSn.Identifier.User.Birthday = user.Birthday;
+                                userSn.Identifier.User.Location = new Location
+                                {
+                                    Country = user.Location.Country,
+                                    City = user.Location.City
+                                };
+                                userSn.Identifier.User.Timezone = user.Timezone;
+                                userSn.Identifier.User.Photo = user.Photo;
+                            }
                         }
                     }
                     else
                     {
                         var currentSN = _snRepository.GetByName(userCredential.SocialNetworkName);
 
-                        _userRepository.AddItem(user);
+                        if (loggedIdentity == null)
+                        {
+                            _userRepository.AddItem(user);
+                        }
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
-                            Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN},
+                            Identifier = new UserSNIdentifier {User = loggedUser ?? user, SocialNetwork = currentSN},
                             ThirdPartId = userCredential.SocialNetworkId,
                             AccessToken = userCredential.AccessToken,
                             TokenExpires = userCredential.AccessTokenExpiresIn
@@ -67,12 +87,37 @@ namespace Azimuth.Services
                     }
 
                     _unitOfWork.Commit();
-                    }
-                    catch (Exception)
+                }
+                catch (Exception)
+                {
+                    _unitOfWork.Rollback();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool DisconnectUserAccount(string provider)
+        {
+            using (_unitOfWork)
+            {
+                try
+                {
+                    var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                    var socialNetwork = _snRepository.GetOne(x => x.Name == provider);
+                    if (user == null || socialNetwork == null)
                     {
-                        _unitOfWork.Rollback();
-                        return false;
+                        throw new ApplicationException(
+                            string.Format("Can't find user or social network (email: {0}, SN name: {1}",
+                                AzimuthIdentity.Current.UserCredential.Email, provider));
                     }
+                    _userSNRepository.Remove(user.Id, socialNetwork.Id);
+                }
+                catch (Exception)
+                {
+                    _unitOfWork.Rollback();
+                    return false;
+                }
             }
             return true;
         }

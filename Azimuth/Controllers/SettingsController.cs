@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
-using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
-using Azimuth.Infrastructure;
+﻿using System.Web.Mvc;
 using Azimuth.Services;
 
 namespace Azimuth.Controllers
 {
+    [Authorize]
     public class SettingsController : Controller
     {
-
-        private ISettingsService _settingsService;
-        private IAccountService _accountService;
+        private readonly ISettingsService _settingsService;
+        private readonly IAccountService _accountService;
 
         public SettingsController(ISettingsService settingsService, IAccountService accountService)
         {
@@ -32,7 +23,7 @@ namespace Azimuth.Controllers
 
         public ActionResult Disconnect(string provider)
         {
-            //_accountService.DisconnectUserAccount(provider, userId);
+            _accountService.DisconnectUserAccount(provider);
             return RedirectToAction("Index");
         }
     }

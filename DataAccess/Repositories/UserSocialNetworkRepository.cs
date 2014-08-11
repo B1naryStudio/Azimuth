@@ -20,5 +20,11 @@ namespace Azimuth.DataAccess.Repositories
         {
             return _session.Query<UserSocialNetwork>().FirstOrDefault(s => s.ThirdPartId == id);
         }
+
+        public void Remove(long userId, long socialNetworkId)
+        {
+            var entity = GetOne(x => x.Identifier.User.Id == userId && x.Identifier.SocialNetwork.Id == socialNetworkId);
+            _session.Delete(entity);
+        }
     }
 }

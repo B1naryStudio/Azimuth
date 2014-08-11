@@ -21,6 +21,6 @@
       <key column="UserId"/>
       <one-to-many class="UserSocialNetwork"/>
     </set>
-    <property name="Email"/>
+    <property name="Email" unique="true"/>
   </class>
 </hibernate-mapping>

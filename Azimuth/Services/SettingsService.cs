@@ -6,6 +6,8 @@ using System.Web;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.Exceptions;
+using Azimuth.Infrastructure;
 using Azimuth.Models;
 using Azimuth.ViewModels;
 
@@ -29,7 +31,11 @@ namespace Azimuth.Services
             using (_unitOfWork)
             {
                 var snList = _networkRepository.GetAll().ToList();
-                var user = _userRepository.GetUserByEmail("killer-korsar@yandex.ru");  // TODO Here should be logged user email
+                var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                if (user == null || snList.Count == 0)
+                {
+                    throw new EndUserException("Can't get current user info");
+                }
                 var connectedSn = user.SocialNetworks.Select(x => x.Identifier.SocialNetwork).ToList();
                 var availableSn = snList.Except(connectedSn).ToList();
                 var viewModel = new SettingsViewModel
