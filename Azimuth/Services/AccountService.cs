@@ -3,7 +3,6 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure;
-using Iesi.Collections.Generic;
 
 namespace Azimuth.Services
 {
@@ -30,48 +29,26 @@ namespace Azimuth.Services
             {
                 try
                 {
-                    User loggedUser = null;
-                    if (loggedIdentity != null)
+                    // Check wheter current user exists in database
+                    var getUserFromDB = _userSNRepository.GetOne(s => s.ThirdPartId == userCredential.SocialNetworkId);
+                    if (getUserFromDB != null)
                     {
-                        loggedUser = _userRepository.GetOne(x => x.Email == loggedIdentity.UserCredential.Email);
-                    }
-                    var userSn = _userSNRepository.GetByThirdPartyId(userCredential.SocialNetworkId);
-                    if (userSn != null)
-                    {
-                        if (loggedUser != null)
+                        // If user exists in database check his data fields for updating
+                        if (user.ToString() != getUserFromDB.Identifier.User.ToString())
                         {
-//                            var userToDelete = userSn.Identifier.User;
-//                            userToDelete.SocialNetworks.Clear();
-                            userSn.Identifier.User = loggedUser; // TODO Resolve issue with composite update
-//                            _userRepository.Remove(userToDelete);
-                        }
-                        else
-                        {
-                            // If user exists in database check his data fields for updating
-                            if (user.ToString() != userSn.Identifier.User.ToString())
-                            {
-                                userSn.Identifier.User.Name = new Name
-                                {
-                                    FirstName = user.Name.FirstName,
-                                    LastName = user.Name.LastName
-                                };
-                                userSn.Identifier.User.ScreenName = user.ScreenName;
-                                userSn.Identifier.User.Gender = user.Gender;
-                                userSn.Identifier.User.Email = user.Email;
-                                userSn.Identifier.User.Birthday = user.Birthday;
-                                userSn.Identifier.User.Location = new Location
-                                {
-                                    Country = user.Location.Country,
-                                    City = user.Location.City
-                                };
-                                userSn.Identifier.User.Timezone = user.Timezone;
-                                userSn.Identifier.User.Photo = user.Photo;
-                            }
+                            getUserFromDB.Identifier.User.Name = new Name { FirstName = user.Name.FirstName, LastName = user.Name.LastName };
+                            getUserFromDB.Identifier.User.ScreenName = user.ScreenName;
+                            getUserFromDB.Identifier.User.Gender = user.Gender;
+                            getUserFromDB.Identifier.User.Email = user.Email;
+                            getUserFromDB.Identifier.User.Birthday = user.Birthday;
+                            getUserFromDB.Identifier.User.Location = new Location { Country = user.Location.Country, City = user.Location.City };
+                            getUserFromDB.Identifier.User.Timezone = user.Timezone;
+                            getUserFromDB.Identifier.User.Photo = user.Photo;
                         }
                     }
                     else
                     {
-                        var currentSN = _snRepository.GetByName(userCredential.SocialNetworkName);
+                        var currentSN = _snRepository.GetOne(s => s.Name == userCredential.SocialNetworkName);
 
                         if (loggedIdentity == null)
                         {
@@ -79,7 +56,7 @@ namespace Azimuth.Services
                         }
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
-                            Identifier = new UserSNIdentifier {User = loggedUser ?? user, SocialNetwork = currentSN},
+                            Identifier = new UserSNIdentifier {User = user, SocialNetwork = currentSN},
                             ThirdPartId = userCredential.SocialNetworkId,
                             AccessToken = userCredential.AccessToken,
                             TokenExpires = userCredential.AccessTokenExpiresIn

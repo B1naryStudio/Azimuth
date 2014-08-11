@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Azimuth.DataAccess" namespace="Azimuth.DataAccess.Entities">
+  <class name="Artist" table="Artists">
+    <id name="Id" column="ArtistId">  
+      <generator class="native"/>
+    </id>
+    <property name="Name" />
+    <property name="Site" />
+    <property name="Description" />
+    <set name="Albums" table="Albums" inverse="true" cascade="all-delete-orphan">
+      <key column="ArtistId" />
+      <one-to-many class="Album" />
+    </set>
+  </class>
+</hibernate-mapping>
