@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
@@ -18,6 +17,11 @@ namespace Azimuth.DataProviders.Concrete
         public VKAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
+            if (userCredential.AccessToken == null)
+                throw new ArgumentException("VKAccountProvider didn't receive Accesstoken");
+            if (userCredential.SocialNetworkId == null)
+                throw new ArgumentException("VKAccountProvider didn't receive SocialNetworkId");
+
             _userId = userCredential.SocialNetworkId;
             _accessToken = userCredential.AccessToken;
 

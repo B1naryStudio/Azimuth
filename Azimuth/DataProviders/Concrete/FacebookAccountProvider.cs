@@ -11,15 +11,16 @@ namespace Azimuth.DataProviders.Concrete
     public class FacebookAccountProvider: AccountProvider
     {
         private readonly string _accessToken;
-        private readonly string _tokenExpiresIn;
 
         public string UserInfoUrl { get; private set; }
 
         public FacebookAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
+            if (userCredential.AccessToken == null)
+                throw new ArgumentException("FacebookAccountProvider didn't receive accessToken");
+
             this._accessToken = userCredential.AccessToken;
-            this._tokenExpiresIn = userCredential.AccessTokenExpiresIn;
 
             UserInfoUrl = String.Format(@"https://graph.facebook.com/v2.0/me?access_token={0}&fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)",
                     _accessToken);
