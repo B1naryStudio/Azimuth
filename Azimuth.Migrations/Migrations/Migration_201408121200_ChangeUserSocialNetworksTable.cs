@@ -9,8 +9,7 @@ namespace Azimuth.Migrations.Migrations
         public override void Up()
         {
             Delete.PrimaryKey("PK_UserSocialNetwork_1").FromTable("UserSocialNetworks");
-            //Delete.Column("UserId").FromTable("UserSocialNetworks");
-            Alter.Table("UserSocialNetworks").AddColumn("Id").AsInt64().NotNullable().PrimaryKey().Identity();
+            Alter.Table("UserSocialNetworks").AddColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_UserSocialNetwork_2").Identity();
             Create.PrimaryKey("PK_UserSocialNetwork_2").OnTable("UserSocialNetworks").Column("Id");
             Alter.Table("UserSocialNetworks").AddColumn("UserName").AsString().NotNullable();
             Alter.Table("UserSocialNetworks").AddColumn("Photo").AsString().Nullable();

@@ -65,7 +65,9 @@ namespace Azimuth.Services
                                     City = user.Location.City
                                 };
                                 userSn.User.Timezone = user.Timezone;
-                                userSn.User.Photo = user.Photo;
+                                userSn.User.Photo = userSn.Photo = user.Photo;
+                                userSn.UserName = (user.Name.FirstName ??
+                                    String.Empty) + "" + ((user.Name.LastName != null) ? (" " + user.Name.LastName) : String.Empty);
                             }
                         }
                     }
