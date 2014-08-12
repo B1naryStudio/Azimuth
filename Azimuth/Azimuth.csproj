@@ -210,7 +210,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="DataProviders\Concrete\FacebookApi.cs" />
+    <Compile Include="DataProviders\Concrete\GoogleApi.cs" />
     <Compile Include="DataProviders\Concrete\SocialNetworkApiFactory.cs" />
+    <Compile Include="DataProviders\Concrete\TwitterApi.cs" />
     <Compile Include="DataProviders\Interfaces\ISocialNetworkApi.cs" />
     <Compile Include="DataProviders\Concrete\VkApi.cs" />
     <Compile Include="Global.asax.cs">
