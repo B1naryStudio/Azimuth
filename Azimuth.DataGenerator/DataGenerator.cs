@@ -21,29 +21,41 @@ namespace Azimuth.DataGenerator
             {
                 var users = GetUsers();
                 var sn = GetSocialNetworks();
+                var userSNs = GetUserSocialNetworks();
                 var artists = GetArtists();
                 var albums = GetAlbums();
                 var tracks = GetTracks();
                 var playlists = GetPlaylists();
+
+                userSNs[0].User = users[0];
+                userSNs[0].UserName = users[0].ScreenName;
+                userSNs[0].Photo = users[0].Photo;
+                userSNs[0].SocialNetwork = sn[0];
+                userSNs[1].User = users[1];
+                userSNs[1].UserName = users[1].ScreenName;
+                userSNs[1].Photo = users[1].Photo;
+                userSNs[1].SocialNetwork = sn[1];
+                userSNs[2].User = users[2];
+                userSNs[2].UserName = users[2].ScreenName;
+                userSNs[2].Photo = users[2].Photo;
+                userSNs[2].SocialNetwork = sn[2];
+                userSNs[3].User = users[3];
+                userSNs[3].UserName = users[3].ScreenName;
+                userSNs[3].Photo = users[3].Photo;
+                userSNs[3].SocialNetwork = sn[3];
+                  
+                
+
+                users[0].SocialNetworks.Add(userSNs[0]);
+                users[1].SocialNetworks.Add(userSNs[1]);
+                users[2].SocialNetworks.Add(userSNs[2]);
+                users[3].SocialNetworks.Add(userSNs[3]);
 
                 playlists[0].Creator = users[0];
                 playlists[1].Creator = users[1];
                 playlists[2].Creator = users[2];
                 playlists[3].Creator = users[3];
 
-                var userRepo = unitOfWork.GetRepository<User>();
-
-                foreach (var user in users)
-                {
-                    userRepo.AddItem(user);
-                }
-
-                var playlistRepo = unitOfWork.GetRepository<Playlist>();
-
-                foreach (var playlist in playlists)
-                {
-                    playlistRepo.AddItem(playlist);
-                }
 
                 artists[0].Albums.Add(albums[0]);
                 artists[0].Albums.Add(albums[1]);
@@ -63,8 +75,38 @@ namespace Azimuth.DataGenerator
                 tracks[2].Album = albums[1];
                 tracks[3].Album = albums[1];
 
-                var artistRepo = unitOfWork.GetRepository<Artist>();
+                tracks[0].Playlists.Add(playlists[0]);
+                tracks[0].Playlists.Add(playlists[1]);
+                tracks[1].Playlists.Add(playlists[1]);
+                tracks[1].Playlists.Add(playlists[2]);
+                tracks[2].Playlists.Add(playlists[2]);
+                tracks[2].Playlists.Add(playlists[3]);
 
+                var snRepo = unitOfWork.GetRepository<SocialNetwork>();
+                foreach (var socialNetwork in sn)
+                {
+                    snRepo.AddItem(socialNetwork);
+                }
+
+                var userRepo = unitOfWork.GetRepository<User>();
+                foreach (var user in users)
+                {
+                    userRepo.AddItem(user);
+                }
+
+                var userSnRepo = unitOfWork.GetRepository<UserSocialNetwork>();
+                foreach (var userSocialNetwork in userSNs)
+                {
+                    userSnRepo.AddItem(userSocialNetwork);
+                }
+
+                var playlistRepo = unitOfWork.GetRepository<Playlist>();
+                foreach (var playlist in playlists)
+                {
+                    playlistRepo.AddItem(playlist);
+                }
+
+                var artistRepo = unitOfWork.GetRepository<Artist>();
                 foreach (var artist in artists)
                 {
                     artistRepo.AddItem(artist);
@@ -72,30 +114,6 @@ namespace Azimuth.DataGenerator
 
                 unitOfWork.Commit();
             }
-
-            using (var unitOfWork = _kernel.Get<IUnitOfWork>())
-            {
-                var playlistRepo = unitOfWork.GetRepository<Playlist>();
-                var pl = playlistRepo.GetAll().ToList();
-
-                var tracksRepo = unitOfWork.GetRepository<Track>();
-                var tracks = tracksRepo.GetAll().ToList();
-
-                tracks[0].Playlists.Add(pl[0]);
-                tracks[0].Playlists.Add(pl[1]);
-                tracks[1].Playlists.Add(pl[1]);
-                tracks[1].Playlists.Add(pl[2]);
-                tracks[2].Playlists.Add(pl[2]);
-                tracks[2].Playlists.Add(pl[3]);
-
-                foreach (var track in tracks)
-                {
-                    tracksRepo.AddItem(track);
-                }
-
-                unitOfWork.Commit();    
-            }
-            
         }
 
         public void ClearDatabase()
@@ -117,6 +135,13 @@ namespace Azimuth.DataGenerator
                     playlistRepo.DeleteItem(playlist);
                 }
 
+                var snRepo = unitOfWork.GetRepository<SocialNetwork>();
+                var sns = snRepo.GetAll();
+                foreach (var socialNetwork in sns)
+                {
+                    snRepo.DeleteItem(socialNetwork);
+                }
+
                 var userRepo = unitOfWork.GetRepository<User>();
                 var users = userRepo.GetAll();
                 foreach (var user in users)
@@ -124,9 +149,11 @@ namespace Azimuth.DataGenerator
                     userRepo.DeleteItem(user);
                 }
 
+                
+
                 unitOfWork.Commit();
             }
-        }
+        } 
 
         private List<Playlist> GetPlaylists()
         {
@@ -154,6 +181,38 @@ namespace Azimuth.DataGenerator
                 },
             };
             return playlists;
+        }
+
+        private List<UserSocialNetwork> GetUserSocialNetworks()
+        {
+            var userSN = new List<UserSocialNetwork>
+            {
+                new UserSocialNetwork
+                {
+                    AccessToken = "asdfghjk4567fghj",
+                    ThirdPartId = "drtfyguhj5678",
+                    TokenExpires = "100"
+                },
+                new UserSocialNetwork
+                {
+                    AccessToken = "qwertyui56789",
+                    ThirdPartId = "vbn3456vb",
+                    TokenExpires = "200"
+                },
+                new UserSocialNetwork
+                {
+                    AccessToken = "lkjhgfd23456",
+                    ThirdPartId = "dmnbv567",
+                    TokenExpires = "300"
+                },
+                new UserSocialNetwork
+                {
+                    AccessToken = "hjklgfd7891",
+                    ThirdPartId = "zxcmnbnm28",
+                    TokenExpires = "400"
+                },
+            };
+            return userSN;
         }
 
         private List<SocialNetwork> GetSocialNetworks()

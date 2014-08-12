@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using Azimuth.DataAccess.Entities;
+﻿using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.Shared.Dto;
 using Ninject;
 
-namespace Azimuth.Tester
+namespace Azimuth.DataGenerator
 {
     class Program
     {
@@ -15,9 +12,11 @@ namespace Azimuth.Tester
 
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
-            var dg = new DataGenerator.DataGenerator(kernel);
+            var dg = new DataGenerator(kernel);
+           
+            dg.ClearDatabase();
+
             dg.GenerateData();
-            //dg.ClearDatabase();
             using (var unitOfWork = kernel.Get<IUnitOfWork>())
             {
                 IRepository<Artist> artistRepository = unitOfWork.GetRepository<Artist>();
@@ -29,6 +28,9 @@ namespace Azimuth.Tester
 
                 IRepository<Playlist> playRepository = unitOfWork.GetRepository<Playlist>();
                 var pl = playRepository.GetAll();
+
+                var userRepo = unitOfWork.GetRepository<User>();
+                var users = userRepo.GetAll();
 
                 var trackRepo = unitOfWork.GetRepository<Track>();
                 var tracks = trackRepo.GetAll();

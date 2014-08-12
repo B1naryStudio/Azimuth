@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Shared.Dto;
@@ -17,13 +18,13 @@ namespace Azimuth.DataAccess.Entities
         public virtual int Timezone { get; set; }
         public virtual Location Location { get; set; }
         public virtual string Email { get; set; }
-        public virtual ISet<UserSocialNetwork> SocialNetworks { get; set; }
+
+        public virtual ICollection<UserSocialNetwork> SocialNetworks { get; set; }
 
         public User()
         {
-            SocialNetworks = new HashedSet<UserSocialNetwork>();
+            SocialNetworks = new List<UserSocialNetwork>();
         }
-
         public override string ToString()
         {
             return Name.FirstName + Name.LastName + ScreenName + Gender + Email + Birthday + Timezone + Location.City +
