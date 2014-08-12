@@ -23,7 +23,7 @@ namespace Azimuth.DataAccess.Repositories
 
         public void Remove(long userId, long socialNetworkId)
         {
-            var entity = GetOne(x => x.Identifier.User.Id == userId && x.Identifier.SocialNetwork.Id == socialNetworkId);
+            var entity = GetOne(x => x.User.Id == userId && x.SocialNetwork.Id == socialNetworkId);
             _session.Delete(entity);
         }
     }

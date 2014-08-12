@@ -42,30 +42,30 @@ namespace Azimuth.Services
                         {
 //                            var userToDelete = userSn.Identifier.User;
 //                            userToDelete.SocialNetworks.Clear();
-                            userSn.Identifier.User = loggedUser; // TODO Resolve issue with composite update
+                            userSn.User = loggedUser; // TODO Resolve issue with composite update
 //                            _userRepository.Remove(userToDelete);
                         }
                         else
                         {
                             // If user exists in database check his data fields for updating
-                            if (user.ToString() != userSn.Identifier.User.ToString())
+                            if (user.ToString() != userSn.User.ToString())
                             {
-                                userSn.Identifier.User.Name = new Name
+                                userSn.User.Name = new Name
                                 {
                                     FirstName = user.Name.FirstName,
                                     LastName = user.Name.LastName
                                 };
-                                userSn.Identifier.User.ScreenName = user.ScreenName;
-                                userSn.Identifier.User.Gender = user.Gender;
-                                userSn.Identifier.User.Email = user.Email;
-                                userSn.Identifier.User.Birthday = user.Birthday;
-                                userSn.Identifier.User.Location = new Location
+                                userSn.User.ScreenName = user.ScreenName;
+                                userSn.User.Gender = user.Gender;
+                                userSn.User.Email = user.Email;
+                                userSn.User.Birthday = user.Birthday;
+                                userSn.User.Location = new Location
                                 {
                                     Country = user.Location.Country,
                                     City = user.Location.City
                                 };
-                                userSn.Identifier.User.Timezone = user.Timezone;
-                                userSn.Identifier.User.Photo = user.Photo;
+                                userSn.User.Timezone = user.Timezone;
+                                userSn.User.Photo = user.Photo;
                             }
                         }
                     }
@@ -79,10 +79,13 @@ namespace Azimuth.Services
                         }
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
-                            Identifier = new UserSNIdentifier {User = loggedUser ?? user, SocialNetwork = currentSN},
+                            User = loggedUser ?? user, 
+                            SocialNetwork = currentSN,
                             ThirdPartId = userCredential.SocialNetworkId,
                             AccessToken = userCredential.AccessToken,
-                            TokenExpires = userCredential.AccessTokenExpiresIn
+                            TokenExpires = userCredential.AccessTokenExpiresIn,
+                            Photo = loggedUser.Photo,
+                            UserName = loggedUser.Name.FirstName ?? String.Empty + loggedUser.Name.LastName ?? String.Empty
                         });
                     }
 
