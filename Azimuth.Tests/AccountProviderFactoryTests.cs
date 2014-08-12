@@ -22,11 +22,7 @@ namespace Tests
         private string _consumerKey;
         private string _consumerSecret;
 
-        private ConstructorArgument _userIdParam;
-        private ConstructorArgument _accessTokenParam;
-        private ConstructorArgument _accessTokenSecretParam;
-        private ConstructorArgument _consumerKeyParam;
-        private ConstructorArgument _consumerKeySecretParam;
+        private ConstructorArgument _userCredentialsParam;
 
         private UserCredential _userCredentials;
 
@@ -41,12 +37,6 @@ namespace Tests
             _consumerKey = "some consumer key";
             _consumerSecret = "some consumer key secret";
 
-            _userIdParam = new ConstructorArgument("userId", _userId);
-            _accessTokenParam = new ConstructorArgument("accessToken", _accessToken);
-            _accessTokenSecretParam = new ConstructorArgument("accessTokenSecret", _accessTokenSecret);
-            _consumerKeyParam = new ConstructorArgument("consumerKey", _consumerKey);
-            _consumerKeySecretParam = new ConstructorArgument("consumerSecret", _consumerSecret);
-
             _userCredentials = new UserCredential
             {
                 Email = "some email",
@@ -58,6 +48,8 @@ namespace Tests
                 ConsumerKey = "some consumer key",
                 AccessTokenSecret = "some access token secret"
             };
+
+            _userCredentialsParam = new ConstructorArgument("userCredential", _userCredentials);
         }
 
         [Test]
@@ -65,9 +57,8 @@ namespace Tests
         {
             // Arrange
             _socialNetwork = "Facebook";
-            ConstructorArgument userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
             // Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
+            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
             // Assert
             provider.Should().BeOfType<FacebookAccountProvider>("we asked account provider instance for facebook");
         }
@@ -85,6 +76,7 @@ namespace Tests
             _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
                 .ShouldThrow<ArgumentException>(
                     "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+            _kernel.Invoking(g => g.Get<IAccountProvider>(_userCredentialsParam)).ShouldThrow<ActivationException>("wrong params order");
         }
 
         [Test]
@@ -92,9 +84,8 @@ namespace Tests
         {
             //Arange
             _socialNetwork = "Vkontakte";
-            ConstructorArgument userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
             //Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
+            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
             //Assert
             provider.Should().BeOfType<VKAccountProvider>("we asked account provider instance for vkontakte");
         }
@@ -112,6 +103,7 @@ namespace Tests
             _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
                 .ShouldThrow<ArgumentException>(
                     "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+            _kernel.Invoking(g => g.Get<IAccountProvider>(_userCredentialsParam)).ShouldThrow<ActivationException>("wrong params order");
         }
 
         [Test]
@@ -140,6 +132,7 @@ namespace Tests
             _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
                 .ShouldThrow<ArgumentException>(
                     "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+            _kernel.Invoking(g => g.Get<IAccountProvider>(_userCredentialsParam)).ShouldThrow<ActivationException>("wrong params order");
         }
 
         [Test]
@@ -169,6 +162,7 @@ namespace Tests
             _kernel.Invoking(g => g.Get<IAccountProvider>(_socialNetwork))
                 .ShouldThrow<ArgumentException>(
                     "need _kernel.Get<IAccountProvider>(three input params)  but was _kernel.Get<IAccountProvider>(one param)\n");
+            _kernel.Invoking(g => g.Get<IAccountProvider>(_userCredentialsParam)).ShouldThrow<ActivationException>("wrong params order");
         }
     }
 }
