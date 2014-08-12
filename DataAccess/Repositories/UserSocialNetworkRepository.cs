@@ -26,5 +26,12 @@ namespace Azimuth.DataAccess.Repositories
             var entity = GetOne(x => x.User.Id == userId && x.SocialNetwork.Id == socialNetworkId);
             _session.Delete(entity);
         }
+
+        public void ChangeUserId(UserSocialNetwork userSn)
+        {
+            _session.Evict(userSn);
+            _session.Save(userSn);
+        }
+
     }
 }

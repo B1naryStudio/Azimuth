@@ -4,6 +4,7 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure;
 using Iesi.Collections.Generic;
+using NHibernate.Criterion;
 
 namespace Azimuth.Services
 {
@@ -40,10 +41,10 @@ namespace Azimuth.Services
                     {
                         if (loggedUser != null)
                         {
-//                            var userToDelete = userSn.Identifier.User;
-//                            userToDelete.SocialNetworks.Clear();
+                            var userToDelete = userSn.User;
                             userSn.User = loggedUser; // TODO Resolve issue with composite update
-//                            _userRepository.Remove(userToDelete);
+                            _userSNRepository.ChangeUserId(userSn);
+                            _userRepository.DeleteItem(userToDelete);
                         }
                         else
                         {
