@@ -35,6 +35,18 @@
 
 @section scripts
 {
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    
+    <script id="trackTemplate" type="text/x-jQuery-tmpl">
+        <tr>
+            <td>${artist}</td>
+            <td>${title}</td>
+            <td>${duration}</td>
+            <td><input type="checkbox"></td>
+            <td style="display:none" id="trackId">id</td>
+        </tr>
+    </script>
+
     <script>
         $.ajax({
             url: '/api/usertracks',
@@ -42,7 +54,8 @@
                 var list = $('#tracks');
                 for (var i = 0; i < tracks.length; i++) {
                     var track = tracks[i];
-                    list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td><td style = "display:none" id = "trackId">' + track.id + '</td></tr>');
+                    list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                    //list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td><td style = "display:none" id = "trackId">' + track.id + '</td></tr>');
                 }
             }
         });
