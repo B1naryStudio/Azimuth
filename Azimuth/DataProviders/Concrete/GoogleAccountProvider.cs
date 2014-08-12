@@ -18,6 +18,11 @@ namespace Azimuth.DataProviders.Concrete
         public GoogleAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
+            if(userCredential.SocialNetworkId == null)
+                throw new ArgumentException("GoogleAccountProvider didn't receive SocialNetworkId");
+            if (userCredential.AccessToken == null)
+                throw new ArgumentException("GoogleAccountProvider didn't receive AccessToken");
+
             _userId = userCredential.SocialNetworkId;
             _accessToken = userCredential.AccessToken;
             UserInfoUrl =

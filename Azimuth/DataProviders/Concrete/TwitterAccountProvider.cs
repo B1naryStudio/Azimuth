@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
@@ -17,6 +18,16 @@ namespace Azimuth.DataProviders.Concrete
         public TwitterAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
         {
+            if (userCredential.AccessToken == null)
+                throw new ArgumentException("TwitterAccountProvider didn't receive AccessToken");
+            if (userCredential.AccessTokenSecret == null)
+                throw new ArgumentException("TwitterAccountProvider didn't receive AccessTokenSecret");
+            if (userCredential.ConsumerKey == null)
+                throw new ArgumentException("TwitterAccountProvider didn't receive ConsumerKey");
+            if (userCredential.ConsumerSecret == null)
+                throw new ArgumentException("TwitterAccountProvider didn't receive ConsumerSecret");
+
+
             this._accessToken = userCredential.AccessToken;
             this._userId = userCredential.SocialNetworkId;
             this._accessTokenSecret = userCredential.AccessTokenSecret;
