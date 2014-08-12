@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
+﻿using System.Web.Mvc;
 using Azimuth.Services;
 
 namespace Azimuth.Controllers
 {
+    [Authorize]
     public class SettingsController : Controller
     {
+        private readonly ISettingsService _settingsService;
+        private readonly IAccountService _accountService;
 
-        private ISettingsService _settingsService;
-
-        public SettingsController(ISettingsService settingsService)
+        public SettingsController(ISettingsService settingsService, IAccountService accountService)
         {
             _settingsService = settingsService;
+            _accountService = accountService;
         }
 
         public ActionResult Index()
@@ -25,5 +20,11 @@ namespace Azimuth.Controllers
             var data = _settingsService.GetUserSettings();
             return View(data);
         }
-	}
+
+        public ActionResult Disconnect(string provider)
+        {
+            _accountService.DisconnectUserAccount(provider);
+            return RedirectToAction("Index");
+        }
+    }
 }
