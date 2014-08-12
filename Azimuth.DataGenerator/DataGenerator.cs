@@ -27,26 +27,24 @@ namespace Azimuth.DataGenerator
                 var tracks = GetTracks();
                 var playlists = GetPlaylists();
 
-                userSNs[0].Identifier = new UserSNIdentifier
-                {
-                    SocialNetwork = sn[0],
-                    User = users[0]
-                };
-                userSNs[1].Identifier = new UserSNIdentifier
-                {
-                    SocialNetwork = sn[1],
-                    User = users[1]
-                };
-                userSNs[2].Identifier = new UserSNIdentifier
-                {
-                    SocialNetwork = sn[2],
-                    User = users[2]
-                };
-                userSNs[3].Identifier = new UserSNIdentifier
-                {
-                    SocialNetwork = sn[3],
-                    User = users[3]
-                };
+                userSNs[0].User = users[0];
+                userSNs[0].UserName = users[0].ScreenName;
+                userSNs[0].Photo = users[0].Photo;
+                userSNs[0].SocialNetwork = sn[0];
+                userSNs[1].User = users[1];
+                userSNs[1].UserName = users[1].ScreenName;
+                userSNs[1].Photo = users[1].Photo;
+                userSNs[1].SocialNetwork = sn[1];
+                userSNs[2].User = users[2];
+                userSNs[2].UserName = users[2].ScreenName;
+                userSNs[2].Photo = users[2].Photo;
+                userSNs[2].SocialNetwork = sn[2];
+                userSNs[3].User = users[3];
+                userSNs[3].UserName = users[3].ScreenName;
+                userSNs[3].Photo = users[3].Photo;
+                userSNs[3].SocialNetwork = sn[3];
+                  
+                
 
                 users[0].SocialNetworks.Add(userSNs[0]);
                 users[1].SocialNetworks.Add(userSNs[1]);
@@ -155,7 +153,7 @@ namespace Azimuth.DataGenerator
 
                 unitOfWork.Commit();
             }
-        }
+        } 
 
         private List<Playlist> GetPlaylists()
         {
