@@ -84,8 +84,8 @@ namespace Azimuth.Services
                             ThirdPartId = userCredential.SocialNetworkId,
                             AccessToken = userCredential.AccessToken,
                             TokenExpires = userCredential.AccessTokenExpiresIn,
-                            Photo = loggedUser.Photo,
-                            UserName = loggedUser.Name.FirstName ?? String.Empty + loggedUser.Name.LastName ?? String.Empty
+                            Photo = user.Photo,
+                            UserName = user.Name.FirstName ?? String.Empty + user.Name.LastName ?? String.Empty
                         });
                     }
 

@@ -8,10 +8,10 @@ namespace Azimuth.Migrations.Migrations
     {
         public override void Up()
         {
-            Delete.PrimaryKey("PK__UserSoci__47534F08CD395008").FromTable("UserSocialNetworks");
+            Delete.PrimaryKey("PK_UserSocialNetwork_1").FromTable("UserSocialNetworks");
             //Delete.Column("UserId").FromTable("UserSocialNetworks");
             Alter.Table("UserSocialNetworks").AddColumn("Id").AsInt64().NotNullable().PrimaryKey().Identity();
-            Create.PrimaryKey("PK_UserSoci_12345").OnTable("UserSocialNetworks").Column("Id");
+            Create.PrimaryKey("PK_UserSocialNetwork_2").OnTable("UserSocialNetworks").Column("Id");
             Alter.Table("UserSocialNetworks").AddColumn("UserName").AsString().NotNullable();
             Alter.Table("UserSocialNetworks").AddColumn("Photo").AsString().Nullable();
         }
@@ -21,8 +21,8 @@ namespace Azimuth.Migrations.Migrations
             Delete.Column("Id").FromTable("UserSocialNetworks");
             Delete.Column("UserName").FromTable("UserSocialNetworks");
             Delete.Column("Photo").FromTable("UserSocialNetworks");
-            Delete.PrimaryKey("PK_UserSoci_12345").FromTable("UserSocialNetworks");
-            Create.PrimaryKey("PK_UserSoci_1234")
+            Delete.PrimaryKey("PK_UserSocialNetwork_2").FromTable("UserSocialNetworks");
+            Create.PrimaryKey("PK_UserSocialNetwork_1")
                 .OnTable("UserSocialNetworks")
                 .Columns(new string[] {"UserId", "SocialNetworkId"});
         }
