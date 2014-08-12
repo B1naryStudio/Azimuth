@@ -1,7 +1,6 @@
 ﻿using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Services;
-using Ninject.Extensions.Factory;
 using Ninject.Modules;
 
 namespace Azimuth.Infrastructure
@@ -13,7 +12,6 @@ namespace Azimuth.Infrastructure
             Bind<IAccountService>().To<AccountService>();
             Bind<ISettingsService>().To<SettingsService>();
             Bind<IWebClient>().To<WebClient>();
-            Bind<IVkApi>().To<VkApi>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");

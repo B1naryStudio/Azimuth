@@ -1,0 +1,23 @@
+﻿
+@if (Model.provider == "Vkontakte")
+{
+    <div>
+        <h2>UserTracks:</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped col-md-offset-1" id="tracksTable">
+                <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Title</th>
+                        <th>Import</th>
+                    </tr>
+                </thead>
+                <tbody id="tracks"></tbody>
+            </table>
+        </div>
+        <a class="btn btn-primary col-md-offset-11" id="applyBtn">Apply &raquo;</a>
+    </div>
+}
+
+
