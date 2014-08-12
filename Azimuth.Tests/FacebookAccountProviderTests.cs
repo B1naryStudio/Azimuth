@@ -16,8 +16,8 @@ namespace Azimuth.Tests
     {
         // Fields for tests
         private string _userToJson;
-        private const string _accessToken = "some access token";
-        private const string _userId = "some user id";
+        private const string AccessToken = "some access token";
+        private const string UserId = "some user id";
 
         public string UserInfoUrl { get; set; }
 
@@ -30,7 +30,7 @@ namespace Azimuth.Tests
         {
             // Query to facebook api
             UserInfoUrl = String.Format(@"https://graph.facebook.com/v2.0/me?access_token={0}&fields=id,first_name,last_name,name,gender,email,birthday,timezone,location,picture.type(large)",
-                    _accessToken);
+                    AccessToken);
 
             // Object that we will make Json
             _fbUserData = new FacebookUserData
@@ -63,16 +63,16 @@ namespace Azimuth.Tests
         public async void Get_Facebook_User_Data()
         {
             // Arranage
-            User expectedUser = (User) _fbUserData;
+            var expectedUser = (User) _fbUserData;
             // Act
             var provider = new FacebookAccountProvider(_webRequest, new UserCredential
             {
-                SocialNetworkId = _userId,
-                AccessToken = _accessToken
+                SocialNetworkId = UserId,
+                AccessToken = AccessToken
             });
             var user = await provider.GetUserInfoAsync("besedadg@gmail.com");
             // Assert
-            user.ToString().Should().Be(expectedUser.ToString(), "");
+            user.ToString().Should().Be(expectedUser.ToString());
         }
     }
 }

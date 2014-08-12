@@ -19,9 +19,9 @@ namespace Azimuth.Tests
         // Fields for tests
         private string _userToJson;
 
-        private const string _accessToken = "some user id";
-        private const string _userId = "some access token";
-        private const string _email = "besedadg@gmail.com";
+        private const string AccessToken = "some user id";
+        private const string UserId = "some access token";
+        private const string Email = "besedadg@gmail.com";
 
         public string UserInfoUrl { get; set; }
 
@@ -35,8 +35,8 @@ namespace Azimuth.Tests
             // Query to VK api
             UserInfoUrl = String.Format(
                 @"https://api.vk.com/method/users.get?user_id={0}&fields=screen_name,bdate,sex,city,country,photo_max_orig,timezone&v=5.23&access_token={1}",
-                _userId,
-                _accessToken);
+                UserId,
+                AccessToken);
 
             // Object that we will make Json
             _vkUserData = new VKUserdata.Response
@@ -54,7 +54,7 @@ namespace Azimuth.Tests
                         country = new VKUserdata.Country {id = 1, title = "Ukraine"},
                         timezone = 2,
                         photo_max_orig = "photo.jpg",
-                        email = _email
+                        email = Email
                     }
                 }
             };
@@ -70,16 +70,16 @@ namespace Azimuth.Tests
         public async void Get_VK_User_Data()
         {
             // Arrange
-            User expectedUser = (User) _vkUserData;
+            var expectedUser = (User) _vkUserData;
             // Act
             var provider = new VKAccountProvider(_webRequest, new UserCredential
             {
-                SocialNetworkId = _userId,
-                AccessToken = _accessToken
+                SocialNetworkId = UserId,
+                AccessToken = AccessToken
             });
-            var user = await provider.GetUserInfoAsync(_email);
+            var user = await provider.GetUserInfoAsync(Email);
             // Assert
-            user.ToString().Should().Be(expectedUser.ToString(), "");
+            user.ToString().Should().Be(expectedUser.ToString());
         }
     }
 }

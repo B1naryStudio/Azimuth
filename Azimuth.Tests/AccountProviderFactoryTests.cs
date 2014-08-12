@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
@@ -8,7 +7,7 @@ using Ninject;
 using Ninject.Parameters;
 using NUnit.Framework;
 
-namespace Tests
+namespace Azimuth.Tests
 {
     [TestFixture]
     internal class AccountProviderFactoryTests
@@ -16,11 +15,7 @@ namespace Tests
         private IKernel _kernel;
 
         private string _socialNetwork;
-        private string _userId;
         private string _accessToken;
-        private string _accessTokenSecret;
-        private string _consumerKey;
-        private string _consumerSecret;
 
         private ConstructorArgument _userCredentialsParam;
 
@@ -31,11 +26,7 @@ namespace Tests
         {
             _kernel = new StandardKernel(new AccountProviderModule());
 
-            _userId = "some user id";
             _accessToken = "some access token";
-            _accessTokenSecret = "some access token secret";
-            _consumerKey = "some consumer key";
-            _consumerSecret = "some consumer key secret";
 
             _userCredentials = new UserCredential
             {
@@ -58,7 +49,7 @@ namespace Tests
             // Arrange
             _socialNetwork = "Facebook";
             // Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
+            var provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
             // Assert
             provider.Should().BeOfType<FacebookAccountProvider>("we asked account provider instance for facebook");
         }
@@ -85,7 +76,7 @@ namespace Tests
             //Arange
             _socialNetwork = "Vkontakte";
             //Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
+            var provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
             //Assert
             provider.Should().BeOfType<VKAccountProvider>("we asked account provider instance for vkontakte");
         }
@@ -111,9 +102,9 @@ namespace Tests
         {
             // Arrange
             _socialNetwork = "Twitter"; 
-            ConstructorArgument userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
+            var userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
             //Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
+            var provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
             // Assert
             provider.Should()
                 .BeOfType<TwitterAccountProvider>("we asked account providerinstance for twitter");
@@ -140,9 +131,9 @@ namespace Tests
         {
             // Arrange
             _socialNetwork = "Google";
-            ConstructorArgument userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
+            var userCredentialParam = new ConstructorArgument("userCredential", _userCredentials);
             //Act
-            IAccountProvider provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
+            var provider = _kernel.Get<IAccountProvider>(_socialNetwork, userCredentialParam);
             //Assert
             provider.Should()
                 .BeOfType<GoogleAccountProvider>("we asked account provider instance for google");

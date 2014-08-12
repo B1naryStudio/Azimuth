@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using FluentAssertions;
@@ -127,7 +125,7 @@ namespace Azimuth.Tests
             });
             var user = await provider.GetUserInfoAsync();
             // Assert
-            user.ToString().Should().Be(expectedUser.ToString(), "");
+            user.ToString().Should().Be(expectedUser.ToString());
         }
 
         [Test]
@@ -145,7 +143,7 @@ namespace Azimuth.Tests
             });
             var user = await provider.GetUserInfoAsync();
             // Assert
-            user.ToString().Should().Be(expectedUser.ToString(), "");
+            user.ToString().Should().Be(expectedUser.ToString());
             _googleUserData.placesLived = placesLived;
         }
 
@@ -165,7 +163,7 @@ namespace Azimuth.Tests
             });
             var user = await provider.GetUserInfoAsync();
             // Assert
-            user.ToString().Should().Be(expectedUser.ToString(), "");
+            user.ToString().Should().Be(expectedUser.ToString());
             _googleUserData.placesLived = placesLived;
         }
     }
