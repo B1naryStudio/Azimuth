@@ -26,8 +26,9 @@ namespace Azimuth.DataAccess.Infrastructure
                 cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate-release.cfg.xml"));
 #endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
-//                var schemaExport = new SchemaExport(cfg);
-//                schemaExport.Create(false, true);
+                var schemaExport = new SchemaExport(cfg);
+                schemaExport.Drop(false, true);
+                schemaExport.Create(false, true);
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
