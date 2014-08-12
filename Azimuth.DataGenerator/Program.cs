@@ -15,7 +15,7 @@ namespace Azimuth.Tester
 
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
-            var dg = new DataGenerator(kernel);
+            var dg = new DataGenerator.DataGenerator(kernel);
             dg.GenerateData();
             //dg.ClearDatabase();
             using (var unitOfWork = kernel.Get<IUnitOfWork>())

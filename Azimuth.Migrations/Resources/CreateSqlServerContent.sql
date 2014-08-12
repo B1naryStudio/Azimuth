@@ -162,7 +162,7 @@ CREATE TABLE [dbo].[UserSocialNetworks](
 	[ThirdPartId] [nvarchar](255) NULL,
 	[AccessToken] [nvarchar](255) NULL,
 	[TokenExpires] [nvarchar](255) NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_UserSocialNetwork_1] PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC,
 	[SocialNetworkId] ASC

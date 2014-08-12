@@ -32,7 +32,7 @@ namespace Azimuth.Services
                 {
                     throw new EndUserException("Can't get current user info");
                 }
-                var connectedSn = user.SocialNetworks.Select(x => x.Identifier.SocialNetwork).ToList();
+                var connectedSn = user.SocialNetworks.Select(x => x.SocialNetwork).ToList();
                 var availableSn = snList.Except(connectedSn).ToList();
                 var viewModel = new SettingsViewModel
                 {
