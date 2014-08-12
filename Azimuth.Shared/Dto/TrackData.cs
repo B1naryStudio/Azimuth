@@ -2,7 +2,7 @@
 
 namespace Azimuth.Shared.Dto
 {
-    public class VKTrackData
+    public class TrackData
     {
         [JsonProperty(PropertyName = "id")]
         public long Id { get; set; }

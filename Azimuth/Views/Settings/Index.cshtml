@@ -11,7 +11,7 @@
         <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
         @foreach (var sn in Model.ConnectedNetworks)
         {
-            <li><a href="#@sn.Name" data-toggle="tab">@sn.Name</a></li>
+            <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" id="providerBtn">@sn.Name</a></li>
         }
     </ul>
 
@@ -41,46 +41,52 @@
         <tr>
             <td>${artist}</td>
             <td>${title}</td>
-            <td>${duration}</td>
             <td><input type="checkbox"></td>
-            <td style="display:none" id="trackId">id</td>
+            <td style="display: none" id="trackId">id</td>
         </tr>
     </script>
 
     <script>
-        $.ajax({
-            url: '/api/usertracks',
-            success: function (tracks) {
-                var list = $('#tracks');
-                for (var i = 0; i < tracks.length; i++) {
-                    var track = tracks[i];
-                    list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
-                    //list.append('<tr><td>' + track.artist + '</td><td>' + track.title + '</td><td>' + track.duration + '</td><td><input type="checkbox"></td><td style = "display:none" id = "trackId">' + track.id + '</td></tr>');
-                }
-            }
-        });
+        $(document).ready(
+            $('#providerBtn').click(function(e) {
+                var provider = $(e.target).data('provider');
+                console.log(provider);
+                $.ajax({
+                    url: '/api/usertracks?provider=' + provider,
+                    success: function(tracks) {
+                        var list = $('#tracks');
+                        for (var i = 0; i < tracks.length; i++) {
+                            var track = tracks[i];
+                            list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                        }
+                    }
+                });
+            })
+        );
     </script>
 
     <script>
-        $('#applyBtn').click(function () {
-            var tableControl = document.getElementById('tracksTable');
-            var tracks = [];
-            $('input:checkbox:checked', tableControl).each(function () {
-                tracks.push($(this).closest('tr').find('#trackId').text());
-            }).get();
-            console.log(tracks);
+        $(document).ready(function() {
+            $('#applyBtn').click(function() {
+                var tableControl = document.getElementById('tracksTable');
+                var tracks = [];
+                $('input:checkbox:checked', tableControl).each(function() {
+                    tracks.push($(this).closest('tr').find('#trackId').text());
+                }).get();
+                console.log(tracks);
 
-            $.ajax({
-                url: '/api/usertracks',
-                type: 'POST',
-                data: JSON.stringify({
-                    "Name": "Default",
-                    "TrackIds": tracks
-                }),
-                dataType: 'json',
-                contentType: 'application/json',
-                async: false
+                $.ajax({
+                    url: '/api/usertracks',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        "Name": "Default",
+                        "TrackIds": tracks
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false
+                });
             });
-        });
+        })
     </script>
 }

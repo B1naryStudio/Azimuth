@@ -210,7 +210,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="DataProviders\Interfaces\IVkApi.cs" />
+    <Compile Include="DataProviders\Concrete\SocialNetworkApiFactory.cs" />
+    <Compile Include="DataProviders\Interfaces\ISocialNetworkApi.cs" />
     <Compile Include="DataProviders\Concrete\VkApi.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -226,6 +227,7 @@
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
+    <Compile Include="Infrastructure\SocialNetworkApiModule.cs" />
     <Compile Include="Infrastructure\UserCredential.cs" />
     <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
     <Compile Include="Infrastructure\WebClient.cs" />
@@ -234,7 +236,9 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\IAccountService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\IUserTracksService.cs" />
     <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\UserTracksService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>

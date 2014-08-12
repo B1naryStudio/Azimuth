@@ -3,81 +3,57 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataProviders.Interfaces;
+using Azimuth.Services;
 using Azimuth.Shared.Dto;
-using Iesi.Collections.Generic;
-using Microsoft.AspNet.Identity;
 
 namespace Azimuth.ApiControllers
 {
     public class UserTracksController : ApiController
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IVkApi _vkApi;
-        private string _userThirdPartId;
-        private string _userAccessToken;
-        private long _userId;
+        private readonly IUserTracksService _userTracksService;
 
-        public UserTracksController(IUnitOfWork unitOfWork, IVkApi vkApi)
+        public UserTracksController(IUnitOfWork unitOfWork, IUserTracksService userTracksService)
         {
             _unitOfWork = unitOfWork;
-            _vkApi = vkApi;
+            _userTracksService = userTracksService;
         }
 
-        public async Task<HttpResponseMessage> Get()
+        public async Task<HttpResponseMessage> Get(string provider)
         {
-            List<VKTrackData> tracks;
-            using (_unitOfWork)
-            {
-                GetUserData();
-                tracks =await _vkApi.GetUserTracks(_userThirdPartId, _userAccessToken);
-                
-                _unitOfWork.Commit();
-            }
-            return Request.CreateResponse(HttpStatusCode.OK, tracks);
+            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetTracks(provider));
         }
 
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData)
         {
-            using (_unitOfWork)
-            {
-                GetUserData();
-                //var tracks = new HashedSet<Track>();
-                var vkTracks =await _vkApi.GetTrackById(_userThirdPartId, playlistData.TrackIds[0], _userAccessToken);
-                var l =  _vkApi.GetLyricsById(_userThirdPartId, vkTracks.LyricsId, _userAccessToken);
-                //    foreach (var vkTrack in vkTracks)
-                //    {
-                //        tracks.Add(new Track
-                //        {
-                //            Duration = vkTrack.Duration,
-                //        };
-                //    }
+            //using (_unitOfWork)
+            //{
+            //    var tracks = new HashedSet<Track>();
+            //    var vkTracks =await _vkApi.GetTrackById(_userThirdPartId, playlistData.TrackIds[0], _userAccessToken);
+            //    var l =  _vkApi.GetLyricsById(_userThirdPartId, vkTracks.LyricsId, _userAccessToken);
+            //        foreach (var vkTrack in vkTracks)
+            //        {
+            //            tracks.Add(new Track
+            //            {
+            //                Duration = vkTrack.Duration,
+            //            };
+            //        }
 
-                //    var userRepo = _unitOfWork.GetRepository<User>();
-                //    var playlist = new Playlist
-                //    {
-                //        Name = playlistData.Name,
-                //        Creator = userRepo.GetOne(s => s.Id == _userId),
-                //        Tracks = tracks
-                //    };
+            //        var userRepo = _unitOfWork.GetRepository<User>();
+            //        var playlist = new Playlist
+            //        {
+            //            Name = playlistData.Name,
+            //            Creator = userRepo.GetOne(s => s.Id == _userId),
+            //            Tracks = tracks
+            //        };
 
-                //    var playlistRepo = _unitOfWork.GetRepository<Playlist>();
-                //    playlistRepo.AddItem(playlist);
+            //        var playlistRepo = _unitOfWork.GetRepository<Playlist>();
+            //        playlistRepo.AddItem(playlist);
 
-                //    _unitOfWork.Commit();
-            }
+            //        _unitOfWork.Commit();
+            //}
             return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
-        private void GetUserData()
-        {
-            var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
-            var userSocialNetwork = userSocialNetworkRepo.GetOne(s => s.ThirdPartId == User.Identity.GetUserId());
-            _userThirdPartId = userSocialNetwork.ThirdPartId;
-            _userAccessToken = userSocialNetwork.AccessToken;
-            _userId = userSocialNetwork.Id;
         }
     }
 }

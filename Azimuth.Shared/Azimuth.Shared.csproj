@@ -49,7 +49,7 @@
     <Compile Include="Dto\GoogleUserData.cs" />
     <Compile Include="Dto\PlaylistData.cs" />
     <Compile Include="Dto\UserBrief.cs" />
-    <Compile Include="Dto\VKTrackData.cs" />
+    <Compile Include="Dto\TrackData.cs" />
     <Compile Include="Dto\VKUserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

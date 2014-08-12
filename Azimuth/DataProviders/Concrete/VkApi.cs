@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
 {
-    public class VkApi : IVkApi
+    public class VkApi : ISocialNetworkApi
     {
         private readonly IWebClient _webClient;
         private const string BaseUri = "https://api.vk.com/method/";
@@ -20,9 +20,9 @@ namespace Azimuth.DataProviders.Concrete
             _webClient = webClient;
         }
 
-        public async Task<List<VKTrackData>> GetUserTracks(string userId, string accessToken)
+        public async Task<List<TrackData>> GetTracks(string userId, string accessToken)
         {
-            var tracks = new List<VKTrackData>();
+            var tracks = new List<TrackData>();
             int i = 0;
             int count = 0;
 
@@ -39,7 +39,7 @@ namespace Azimuth.DataProviders.Concrete
 
                 var json = JObject.Parse(await _webClient.GetWebData(url));
                 count = json["response"]["count"].Value<int>();
-                tracks.AddRange(JsonConvert.DeserializeObject<List<VKTrackData>>(JArray.Parse(json["response"]["items"].ToString()).ToString()));
+                tracks.AddRange(JsonConvert.DeserializeObject<List<TrackData>>(JArray.Parse(json["response"]["items"].ToString()).ToString()));
 
                 i++;
             } 
@@ -47,7 +47,7 @@ namespace Azimuth.DataProviders.Concrete
             return tracks;
         }
 
-        public async Task<VKTrackData> GetTrackById(string userId, string trackId, string accessToken)
+        public async Task<TrackData> GetTrackById(string userId, string trackId, string accessToken)
         {
             var url = BaseUri + "audio.getById" +
                       "?audios=" + Uri.EscapeDataString(userId + "_" + trackId) +
@@ -55,12 +55,12 @@ namespace Azimuth.DataProviders.Concrete
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
-            return JsonConvert.DeserializeObject<VKTrackData>(JArray.Parse(json["response"].ToString()).ToString());
+            return JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).ToString());
         }
 
-        public async Task<List<VKTrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
+        public async Task<List<TrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
         {
-            var tracks = new List<VKTrackData>();
+            var tracks = new List<TrackData>();
             foreach (var trackId in trackIds)
             {
                 tracks.Add(await GetTrackById(userId, trackId, accessToken));
