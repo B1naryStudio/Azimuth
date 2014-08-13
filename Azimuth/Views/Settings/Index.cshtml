@@ -72,17 +72,19 @@
                 var provider = $(e.target).data('provider');
                 var tableControl = document.getElementById('tracksTable');
                 var tracks = [];
+                var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
                 $('input:checkbox:checked', tableControl).each(function() {
                     tracks.push($(this).closest('tr').find('#trackId').text());
                 }).get();
                 console.log(tracks);
+                console.log($('#inputPlaylistName').val());
 
                 $.ajax({
                     url: '/api/usertracks?provider='+provider,
                     type: 'POST',
                     data: JSON.stringify({
-                        "Name": "Default",
-                        "Accessibilty": 0,
+                        "Name": $('#inputPlaylistName').val(),
+                        "Accessibilty": accessibilty,
                         "TrackIds": tracks
                     }) + JSON.stringify({ "Provider": provider }),
                     dataType: 'json',
