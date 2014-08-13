@@ -27,6 +27,7 @@ namespace Azimuth.DataAccess.Infrastructure
 #endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
 //                var schemaExport = new SchemaExport(cfg);
+//                schemaExport.Drop(false, true);
 //                schemaExport.Create(false, true);
                 return cfg.BuildSessionFactory();
             });

@@ -67,7 +67,7 @@ namespace Azimuth.App_Start
         {
             MvcApplication.Container = kernel;
             kernel.Bind<UserController>().ToSelf();
-            kernel.Load(new DataAccessModule(), new AccountProviderModule());
+            kernel.Load(new DataAccessModule(), new AccountProviderModule(), new SocialNetworkApiModule());
         }        
     }
 }
