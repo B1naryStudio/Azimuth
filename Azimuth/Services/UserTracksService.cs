@@ -5,6 +5,7 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
 
 namespace Azimuth.Services
@@ -32,6 +33,11 @@ namespace Azimuth.Services
                         (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
 
                 _unitOfWork.Commit();
+            }
+
+            if (user == null)
+            {
+                throw new EndUserException("Can't get user info with provider name = " + provider);
             }
 
             return await _socialNetworkApi.GetTracks(user.ThirdPartId, user.AccessToken);

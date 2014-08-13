@@ -38,7 +38,7 @@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <tr class="removable">
+        <tr>
             <td>${artist}</td>
             <td>${title}</td>
             <td><input type="checkbox"></td>
@@ -51,7 +51,7 @@
             $('.providerBtn').click(function(e) {
                 var provider = $(e.target).data('provider');
                 console.log(provider);
-                $("tr").remove(".removable");
+                $("#tracks>tr").remove();
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     success: function(tracks) {

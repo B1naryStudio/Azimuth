@@ -11,12 +11,10 @@ namespace Azimuth.ApiControllers
 {
     public class UserTracksController : ApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserTracksService _userTracksService;
 
-        public UserTracksController(IUnitOfWork unitOfWork, IUserTracksService userTracksService)
+        public UserTracksController(IUserTracksService userTracksService)
         {
-            _unitOfWork = unitOfWork;
             _userTracksService = userTracksService;
         }
 
