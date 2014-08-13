@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
@@ -34,17 +33,9 @@ namespace Azimuth.DataProviders.Concrete
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
             var response = await _webClient.GetWebData(UserInfoUrl);
-            var userData = JsonConvert.DeserializeObject<VKUserdata.Response>(response);
+            var userData = JsonConvert.DeserializeObject<VKUserData.Response>(response);
 
-            var city = userData.response.First().city.title;
-            var country = userData.response.First().country.title;
-
-            User currentUser = (User) userData;
-            currentUser.Location = new Location
-            {
-                City = city ?? String.Empty,
-                Country = country ?? String.Empty
-            };
+            User currentUser = Mapper.Map(userData, new User());
             currentUser.Email = email ?? String.Empty;
 
             return currentUser;

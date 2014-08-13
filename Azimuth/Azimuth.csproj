@@ -230,6 +230,7 @@
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
+    <Compile Include="Infrastructure\Mapper.cs" />
     <Compile Include="Infrastructure\SocialNetworkApiModule.cs" />
     <Compile Include="Infrastructure\UserCredential.cs" />
     <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
