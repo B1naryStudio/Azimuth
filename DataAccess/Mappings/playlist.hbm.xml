@@ -5,7 +5,7 @@
       <generator class="native"/>
     </id>
     <property name="Name" />
-    <property name="Accessibilty" />
+    <property name="Accessibilty" type="AccessibiltyType"/>
     <many-to-one name="Creator" column="CreatorId" />
     <set name="Tracks" table="PlaylistTracks" inverse="true" cascade="all-delete-orphan">
       <key column="PlaylistId" />
