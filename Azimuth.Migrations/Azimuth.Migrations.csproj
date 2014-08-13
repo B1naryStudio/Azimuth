@@ -48,6 +48,7 @@
     <Compile Include="Migrations\Migration_201408111008_UpdateTracks.cs" />
     <Compile Include="Migrations\Migration_201408111122_UpdateTracks.cs" />
     <Compile Include="Migrations\Migration_201408121200_ChangeUserSocialNetworksTable.cs" />
+    <Compile Include="Migrations\Migration_201408130949_AddConstraints.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
