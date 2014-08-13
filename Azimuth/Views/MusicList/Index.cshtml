@@ -1,0 +1,58 @@
+﻿
+<div>
+    <h2>UserTracks:</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped col-md-offset-1" id="tracksTable">
+            <thead>
+                <tr>
+                    <th>Artist</th>
+                    <th>Title</th>
+                    <th>Album</th>
+                    <th>Genre</th>
+                    <th>Duration</th>
+                    <th>Url</th>
+                </tr>
+            </thead>
+            <tbody id="tracks"></tbody>
+        </table>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    
+    <script id="trackTemplate" type="text/x-jQuery-tmpl">
+        <tr class="removable">
+            <td>${Artist}</td>
+            <td>${Name}</td>
+            <td>${Album}</td>
+            <td>${Genre}</td>
+            <td>${Duration}</td>
+            <td>${Url}</td>
+            <td style="display: none" id="trackId">id</td>
+        </tr>
+    </script>
+
+    <script>
+        $(document).ready(
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/api/usertracks",
+                dataType: "json",
+                async: true,
+                success: function(tracks) {
+                    var list = $('#tracks');
+                    for (var i = 0; i < tracks.length; i++) {
+                        var track = tracks[i];
+                        list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                    }
+                }
+            })
+        );
+
+    </script>
+}

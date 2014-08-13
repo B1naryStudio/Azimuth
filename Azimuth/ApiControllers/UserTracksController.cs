@@ -2,10 +2,13 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
+using Azimuth.ViewModels;
+using Microsoft.Ajax.Utilities;
 
 namespace Azimuth.ApiControllers
 {
@@ -55,5 +58,36 @@ namespace Azimuth.ApiControllers
             //}
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        public async Task<HttpResponseMessage> Get()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+
+            //using (_unitOfWork)
+            //{
+            //    var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
+            //    var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
+
+            //    var viewModel = new MusicViewModel
+            //    {
+            //        Track = playlists[0].Tracks
+            //    };
+
+            //    //var viewModel = new MusicViewModel
+            //    //{
+
+            //    //};
+
+            //    _unitOfWork.Commit();
+
+
+            //    return viewModel;
+            //}
+        }
+
+        //public async Task<HttpResponseMessage> Get()
+        //{
+        //    return Request.CreateResponse(HttpStatusCode.OK, _mu)
+        //}
     }
 }
