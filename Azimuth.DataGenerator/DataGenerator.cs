@@ -162,22 +162,22 @@ namespace Azimuth.DataGenerator
                 new Playlist
                 {
                     Name = "First playlist",
-                    Accessibilty = "Private",
+                    Accessibilty = Accessibilty.Private
                 },
                 new Playlist
                 {
                     Name = "Second playlist",
-                    Accessibilty = "Private",
+                    Accessibilty = Accessibilty.Private
                 },
                 new Playlist
                 {
                     Name = "Third playlist",
-                    Accessibilty = "Private",
+                    Accessibilty = Accessibilty.Public
                 },
                 new Playlist
                 {
                     Name = "Fourth playlist",
-                    Accessibilty = "Private",
+                    Accessibilty = Accessibilty.Public
                 },
             };
             return playlists;
