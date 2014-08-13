@@ -55,7 +55,7 @@ namespace Azimuth.DataProviders.Concrete
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
-            return JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).ToString());
+            return JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).First.ToString());
         }
 
         public async Task<List<TrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
@@ -76,7 +76,7 @@ namespace Azimuth.DataProviders.Concrete
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
-            return JArray.Parse(json["response"]["text"].ToString()).ToString();
+            return json["response"]["text"].ToString();
         }
     }
 }

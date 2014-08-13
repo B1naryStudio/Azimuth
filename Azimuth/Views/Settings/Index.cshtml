@@ -42,7 +42,7 @@
             <td>${artist}</td>
             <td>${title}</td>
             <td><input type="checkbox"></td>
-            <td style="display: none" id="trackId">id</td>
+            <td style="display: none" id="trackId">${id}</td>
         </tr>
     </script>
 
@@ -51,7 +51,7 @@
             $('.providerBtn').click(function(e) {
                 var provider = $(e.target).data('provider');
                 console.log(provider);
-                $("#tracks>tr").remove();
+                $("#tracks > tr").remove();
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     success: function(tracks) {
@@ -68,7 +68,8 @@
 
     <script>
         $(document).ready(function() {
-            $('#applyBtn').click(function() {
+            $('#applyBtn').click(function(e) {
+                var provider = $(e.target).data('provider');
                 var tableControl = document.getElementById('tracksTable');
                 var tracks = [];
                 $('input:checkbox:checked', tableControl).each(function() {
@@ -77,12 +78,13 @@
                 console.log(tracks);
 
                 $.ajax({
-                    url: '/api/usertracks',
+                    url: '/api/usertracks?provider='+provider,
                     type: 'POST',
                     data: JSON.stringify({
                         "Name": "Default",
+                        "Accessibilty": 0,
                         "TrackIds": tracks
-                    }),
+                    }) + JSON.stringify({ "Provider": provider }),
                     dataType: 'json',
                     contentType: 'application/json',
                     async: false
