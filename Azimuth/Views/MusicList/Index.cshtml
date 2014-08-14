@@ -54,24 +54,24 @@
             })
         );
 
-        $(document).ready(
-            $(".category").on("click", function () {
-                $.ajax({
-                    url: "api/usertracks?category=" + $(this).text(),
-                    type: "GET",
-                    dataType: "json",
-                    async: true,
-                }).done($(".removable").remove()).done(
-                    function(tracks) {
-                        var list = $('#tracks');
-                        for (var i = 0; i < tracks.length; i++) {
-                            var track = tracks[i];
-                            list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
-                        }
-                    }
-                );
-            })
-        );
+        //$(document).ready(
+        //    $(".category").on("click", function () {
+        //        $.ajax({
+        //            url: "api/usertracks?category=" + $(this).text(),
+        //            type: "GET",
+        //            dataType: "json",
+        //            async: true,
+        //        }).done($(".removable").remove()).done(
+        //            function(tracks) {
+        //                var list = $('#tracks');
+        //                for (var i = 0; i < tracks.length; i++) {
+        //                    var track = tracks[i];
+        //                    list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+        //                }
+        //            }
+        //        );
+        //    })
+        //);
 
     </script>
 }
