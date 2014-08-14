@@ -56,6 +56,10 @@ namespace Azimuth.Services
                                 _userSNRepository.ChangeUserId(userSn);
                                 _userRepository.DeleteItem(userToDelete);    
                             }
+                            else
+                            {
+                                userSn.AccessToken = userCredential.AccessToken;
+                            }
                         }
                         else
                         {

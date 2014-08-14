@@ -22,7 +22,6 @@ namespace Azimuth.ApiControllers
             try
             {
                 var data = await _userTracksService.GetTracks(provider);
-                //throw new UserAuthorizationException("", 0);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
 
             }
