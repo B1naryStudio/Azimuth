@@ -22,7 +22,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    @*<li>@Html.ActionLink("Settings", "Index", "Settings")</li>*@
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("My music", "Index", "MusicList");</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -39,5 +42,23 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    
+
+    <script type="text/javascript" src="../../Scripts/jquery.tablesorter.js"></script> 
+
+    <script>
+        $(document).ready(function () {
+            $(".tablesorter").tablesorter({
+                headers: {
+                    1: { sorter: false },
+                    4: { sorter: false },
+                    5: { sorter: false }
+                }
+            });
+        })
+    </script>
+    
+    
+
 </body>
 </html>

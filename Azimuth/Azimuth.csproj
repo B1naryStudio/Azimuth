@@ -209,6 +209,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MusicListController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="DataProviders\Concrete\FacebookApi.cs" />
     <Compile Include="DataProviders\Concrete\GoogleApi.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
+    <Compile Include="Infrastructure\Mapper.cs" />
     <Compile Include="Infrastructure\SocialNetworkApiModule.cs" />
     <Compile Include="Infrastructure\UserCredential.cs" />
     <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
@@ -265,6 +267,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -294,6 +297,7 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\Settings\_UserTracksPartial.cshtml" />
+    <Content Include="Views\MusicList\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

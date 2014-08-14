@@ -1,11 +1,14 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
+using Azimuth.ViewModels;
+using Microsoft.Ajax.Utilities;
 
 namespace Azimuth.ApiControllers
 {
@@ -63,6 +66,11 @@ namespace Azimuth.ApiControllers
             //        _unitOfWork.Commit();
             //}
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        public async Task<HttpResponseMessage> GetUserTracks()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
         }
     }
 }

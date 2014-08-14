@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
@@ -32,7 +31,7 @@ namespace Azimuth.DataProviders.Concrete
             var userDataJson = await _webClient.GetWebData(UserInfoUrl);
             var userData = JsonConvert.DeserializeObject<FacebookUserData>(userDataJson);
 
-            return (User) userData;
+            return Mapper.Map(userData, new User());
         }
     }
 }

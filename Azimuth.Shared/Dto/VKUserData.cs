@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Azimuth.Shared.Dto
 {
-    public class VKUserdata
+    public class VKUserData
     {
         public int id { get; set; }
         public string first_name { get; set; }
@@ -38,7 +38,7 @@ namespace Azimuth.Shared.Dto
 
         public class Response
         {
-            public List<VKUserdata> response { get; set; }
+            public List<VKUserData> response { get; set; }
         }
     }
 }
