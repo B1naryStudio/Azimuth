@@ -14,6 +14,7 @@ namespace Azimuth.Services
         private readonly UserRepository _userRepository;
         private readonly UserSocialNetworkRepository _userSNRepository;
         private readonly SocialNetworkRepository _snRepository;
+        private readonly PlaylistRepository _playlistRepository;
 
         public AccountService(IUnitOfWork unitOfWork)
         {
@@ -23,6 +24,7 @@ namespace Azimuth.Services
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>() as UserSocialNetworkRepository;
             _snRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
+            _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
         }
 
         public bool SaveOrUpdateUserData(User user, UserCredential userCredential, AzimuthIdentity loggedIdentity)
@@ -41,8 +43,15 @@ namespace Azimuth.Services
                     {
                         if (loggedUser != null)
                         {
+                            var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
+
+                            foreach (var userPlaylist in userPlaylists)
+                            {
+                                userPlaylist.Creator = loggedUser;
+                            }
+
                             var userToDelete = userSn.User;
-                            userSn.User = loggedUser; // TODO Resolve issue with composite update
+                            userSn.User = loggedUser;
                             _userSNRepository.ChangeUserId(userSn);
                             _userRepository.DeleteItem(userToDelete);
                         }
