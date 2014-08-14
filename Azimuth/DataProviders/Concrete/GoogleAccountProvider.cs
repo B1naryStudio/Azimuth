@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
@@ -73,7 +72,7 @@ namespace Azimuth.DataProviders.Concrete
                 country = places.Last();
             }
 
-            User currentUser = (User) userData;
+            User currentUser = Mapper.Map(userData, new User());
             currentUser.Location = new Location
             {
                 City = city ?? String.Empty,
