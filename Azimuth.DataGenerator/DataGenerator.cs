@@ -55,25 +55,32 @@ namespace Azimuth.DataGenerator
                 playlists[1].Creator = users[1];
                 playlists[2].Creator = users[2];
                 playlists[3].Creator = users[3];
+                playlists[4].Creator = users[0];
 
 
                 artists[0].Albums.Add(albums[0]);
                 artists[0].Albums.Add(albums[1]);
                 artists[1].Albums.Add(albums[2]);
                 artists[1].Albums.Add(albums[3]);
+                artists[4].Albums.Add(albums[4]);
                 albums[0].Artist = artists[0];
                 albums[1].Artist = artists[0];
                 albums[2].Artist = artists[1];
                 albums[3].Artist = artists[1];
+                albums[4].Artist = artists[4];
 
                 albums[0].Tracks.Add(tracks[0]);
                 albums[0].Tracks.Add(tracks[1]);
                 albums[1].Tracks.Add(tracks[2]);
                 albums[1].Tracks.Add(tracks[3]);
+                albums[4].Tracks.Add(tracks[4]);
+                albums[4].Tracks.Add(tracks[5]);
                 tracks[0].Album = albums[0];
                 tracks[1].Album = albums[0];
                 tracks[2].Album = albums[1];
                 tracks[3].Album = albums[1];
+                tracks[4].Album = albums[4];
+                tracks[5].Album = albums[4];
 
                 tracks[0].Playlists.Add(playlists[0]);
                 tracks[0].Playlists.Add(playlists[1]);
@@ -81,6 +88,8 @@ namespace Azimuth.DataGenerator
                 tracks[1].Playlists.Add(playlists[2]);
                 tracks[2].Playlists.Add(playlists[2]);
                 tracks[2].Playlists.Add(playlists[3]);
+                tracks[4].Playlists.Add(playlists[4]);
+                tracks[5].Playlists.Add(playlists[4]);
 
                 var snRepo = unitOfWork.GetRepository<SocialNetwork>();
                 foreach (var socialNetwork in sn)
@@ -179,6 +188,11 @@ namespace Azimuth.DataGenerator
                     Name = "Fourth playlist",
                     Accessibilty = Accessibilty.Public
                 },
+                new Playlist
+                {
+                    Name = "Fifth playlist",
+                    Accessibilty = Accessibilty.Public
+                }
             };
             return playlists;
         }
@@ -318,6 +332,12 @@ namespace Azimuth.DataGenerator
                     Description = "Fourth artist",
                     Name = "FourthArtist",
                     Site = "www.Fourth.com"
+                },
+                new Artist
+                {
+                    Description = "Fifth artist",
+                    Name = "FifthArtist",
+                    Site = "www.Fifth.com"
                 }
             };
             return artists;
@@ -346,6 +366,11 @@ namespace Azimuth.DataGenerator
                 {
                     Name = "FourthAlbum",
                     Description = "Fourth Album"
+                },
+                new Album
+                {
+                    Name = "FifthAlbum",
+                    Description = "Fifth Album"
                 }
             };
             return albums;
@@ -386,7 +411,24 @@ namespace Azimuth.DataGenerator
                     Genre = "Blues",
                     Name = "FourthTrack",
                     Url = "cs.fourth.mp3"
+                },
+                new Track
+                {
+                    Lyrics = "Fifth Track Lya lya",
+                    Duration = "40",
+                    Genre = "Pop",
+                    Name = "Fifth",
+                    Url = "cs.fifth.mp3"
+                },
+                new Track
+                {
+                    Lyrics = "Sixth Track Lya lya",
+                    Duration = "40",
+                    Genre = "Rock",
+                    Name = "Sixth",
+                    Url = "cs.sixth.mp3"
                 }
+
             };
             return tracks;
         }
