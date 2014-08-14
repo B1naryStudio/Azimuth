@@ -7,7 +7,6 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("My music", "Index", "MusicList");
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Settings", routeValues: null, htmlAttributes: new { title = "Settings" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

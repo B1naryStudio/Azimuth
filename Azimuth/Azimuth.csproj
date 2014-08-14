@@ -239,14 +239,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\IAccountService.cs" />
-    <Compile Include="Services\IMusicService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\IUserTracksService.cs" />
-    <Compile Include="Services\MusicService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\UserTracksService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\MusicViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

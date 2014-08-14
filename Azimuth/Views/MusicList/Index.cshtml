@@ -6,10 +6,10 @@
         <table class="table table-striped col-md-offset-1" id="tracksTable">
             <thead>
                 <tr>
-                    <th>Artist</th>
+                    <th class="category">Artist</th>
                     <th>Title</th>
-                    <th>Album</th>
-                    <th>Genre</th>
+                    <th class="category">Album</th>
+                    <th class="category">Genre</th>
                     <th>Duration</th>
                     <th>Url</th>
                 </tr>
@@ -41,7 +41,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "/api/usertracks",
+                url: "/api/usertracks?category=",
                 dataType: "json",
                 async: true,
                 success: function(tracks) {
@@ -51,6 +51,25 @@
                         list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
                     }
                 }
+            })
+        );
+
+        $(document).ready(
+            $(".category").on("click", function () {
+                $.ajax({
+                    url: "api/usertracks?category=" + $(this).text(),
+                    type: "GET",
+                    dataType: "json",
+                    async: true,
+                }).done($(".removable").remove()).done(
+                    function(tracks) {
+                        var list = $('#tracks');
+                        for (var i = 0; i < tracks.length; i++) {
+                            var track = tracks[i];
+                            list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                        }
+                    }
+                );
             })
         );
 

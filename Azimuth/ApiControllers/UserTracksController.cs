@@ -59,35 +59,9 @@ namespace Azimuth.ApiControllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public async Task<HttpResponseMessage> Get()
+        public async Task<HttpResponseMessage> GetUserTracks(string category)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
-
-            //using (_unitOfWork)
-            //{
-            //    var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
-            //    var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
-
-            //    var viewModel = new MusicViewModel
-            //    {
-            //        Track = playlists[0].Tracks
-            //    };
-
-            //    //var viewModel = new MusicViewModel
-            //    //{
-
-            //    //};
-
-            //    _unitOfWork.Commit();
-
-
-            //    return viewModel;
-            //}
+            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks(category));
         }
-
-        //public async Task<HttpResponseMessage> Get()
-        //{
-        //    return Request.CreateResponse(HttpStatusCode.OK, _mu)
-        //}
     }
 }
