@@ -59,9 +59,9 @@ namespace Azimuth.ApiControllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public async Task<HttpResponseMessage> GetUserTracks(string category)
+        public async Task<HttpResponseMessage> GetUserTracks()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks(category));
+            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
         }
     }
 }

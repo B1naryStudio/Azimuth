@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using Azimuth.Services;
 
 namespace Azimuth.Controllers
 {
@@ -7,9 +6,6 @@ namespace Azimuth.Controllers
     {
         public ActionResult Index()
         {
-            //var data = _musicService.GetUSerMusiclList();
-
-
             return View();
         }
 	}
