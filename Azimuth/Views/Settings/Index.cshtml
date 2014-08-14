@@ -61,6 +61,8 @@
                             list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
                         }
                     }
+                }).error(function(httpObj) {
+                    alert("asd");
                 });
             })
         );

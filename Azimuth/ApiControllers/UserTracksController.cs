@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Infrastructure;
+using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
 
@@ -22,7 +23,16 @@ namespace Azimuth.ApiControllers
 
         public async Task<HttpResponseMessage> Get(string provider)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetTracks(provider));
+            try
+            {
+                var data = await _userTracksService.GetTracks(provider);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+
+            }
+            catch (VkApiException exception)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Unauthorized);
+            }
         }
 
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData)

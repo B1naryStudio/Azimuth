@@ -226,7 +226,14 @@
     <Compile Include="DataProviders\Concrete\AccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\GoogleAccountProvider.cs" />
     <Compile Include="DataProviders\Interfaces\IAccountProvider.cs" />
+    <Compile Include="Infrastructure\Exceptions\ApplicationDisabledException.cs" />
+    <Compile Include="Infrastructure\Exceptions\BadParametersException.cs" />
     <Compile Include="Infrastructure\Exceptions\EndUserException.cs" />
+    <Compile Include="Infrastructure\Exceptions\IncorrectSignatureException.cs" />
+    <Compile Include="Infrastructure\Exceptions\ManyRequestException.cs" />
+    <Compile Include="Infrastructure\Exceptions\UnknownErrorException.cs" />
+    <Compile Include="Infrastructure\Exceptions\UserAuthorizationException.cs" />
+    <Compile Include="Infrastructure\Exceptions\VkApiException.cs" />
     <Compile Include="Infrastructure\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
     <Compile Include="Infrastructure\IWebClient.cs" />
