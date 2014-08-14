@@ -3,13 +3,13 @@
     <h2>UserTracks:</h2>
 
     <div class="table-responsive">
-        <table class="table table-striped col-md-offset-1" id="tracksTable">
+        <table id="tracksTable" class="tablesorter table table-striped col-md-offset-1">
             <thead>
                 <tr>
-                    <th class="category">Artist</th>
+                    <th>Artist</th>
                     <th>Title</th>
-                    <th class="category">Album</th>
-                    <th class="category">Genre</th>
+                    <th>Album</th>
+                    <th>Genre</th>
                     <th>Duration</th>
                     <th>Url</th>
                 </tr>
@@ -18,7 +18,6 @@
         </table>
     </div>
 </div>
-
 
 @section scripts
 {
@@ -37,41 +36,23 @@
     </script>
 
     <script>
+        var template = $("#trackTemplate");
         $(document).ready(
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "/api/usertracks?category=",
+                url: "/api/usertracks",
                 dataType: "json",
-                async: true,
+                async: false,
                 success: function(tracks) {
                     var list = $('#tracks');
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
-                        list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                        list.append(template.tmpl(track).appendTo("#tracks"));
                     }
                 }
             })
         );
-
-        //$(document).ready(
-        //    $(".category").on("click", function () {
-        //        $.ajax({
-        //            url: "api/usertracks?category=" + $(this).text(),
-        //            type: "GET",
-        //            dataType: "json",
-        //            async: true,
-        //        }).done($(".removable").remove()).done(
-        //            function(tracks) {
-        //                var list = $('#tracks');
-        //                for (var i = 0; i < tracks.length; i++) {
-        //                    var track = tracks[i];
-        //                    list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
-        //                }
-        //            }
-        //        );
-        //    })
-        //);
 
     </script>
 }
