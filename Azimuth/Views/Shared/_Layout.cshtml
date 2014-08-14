@@ -42,5 +42,23 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    
+
+    <script type="text/javascript" src="../../Scripts/jquery.tablesorter.js"></script> 
+
+    <script>
+        $(document).ready(function () {
+            $(".tablesorter").tablesorter({
+                headers: {
+                    1: { sorter: false },
+                    4: { sorter: false },
+                    5: { sorter: false }
+                }
+            });
+        })
+    </script>
+    
+    
+
 </body>
 </html>
