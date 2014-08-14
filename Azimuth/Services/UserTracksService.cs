@@ -5,6 +5,7 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
 
 namespace Azimuth.Services
@@ -34,7 +35,17 @@ namespace Azimuth.Services
                 _unitOfWork.Commit();
             }
 
-            return await _socialNetworkApi.GetTracks(user.ThirdPartId, user.AccessToken);
+            List<TrackData> tracks = null;
+            try
+            {
+                tracks = await _socialNetworkApi.GetTracks(user.ThirdPartId, user.AccessToken);
+            }
+            catch (UserAuthorizationException exception)
+            {
+
+            }
+
+            return tracks;
         }
     }
 }

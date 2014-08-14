@@ -31,59 +31,52 @@ namespace Azimuth.DataProviders.Concrete
             accessToken = "ya29.YQAKRRovnEhCox0AAAB72NFP3pVTQDg7ldLagdL3-VjAT2P4Wg_6rrhJi3Bcug";
 
             //if user have more than 6000 tracks we must execute several req
-            try
+            while ((i == 0) || (count > (i*MaxCntTracksPerReq)))
             {
-                while ((i == 0) || (count > (i*MaxCntTracksPerReq)))
+                var url = BaseUri + "audio.get" +
+                            "?owner_id=" + Uri.EscapeDataString(userId) +
+                            "&need_user=0" + //without user_info
+                            "&v=5.24" +
+                            "&count=" + MaxCntTracksPerReq + //max count tracks for 1 req
+                            "&offset=" + (MaxCntTracksPerReq*i) +
+                            "&access_token=" + Uri.EscapeDataString(accessToken);
+
+                var json = JObject.Parse(await _webClient.GetWebData(url));
+
+                var response = json["response"];
+
+                if (response != null)
                 {
-                    var url = BaseUri + "audio.get" +
-                              "?owner_id=" + Uri.EscapeDataString(userId) +
-                              "&need_user=0" + //without user_info
-                              "&v=5.24" +
-                              "&count=" + MaxCntTracksPerReq + //max count tracks for 1 req
-                              "&offset=" + (MaxCntTracksPerReq*i) +
-                              "&access_token=" + Uri.EscapeDataString(accessToken);
+                    count = response["count"].Value<int>();
+                    tracks.AddRange(
+                        JsonConvert.DeserializeObject<List<TrackData>>(
+                            JArray.Parse(json["response"]["items"].ToString()).ToString()));
 
-                    var json = JObject.Parse(await _webClient.GetWebData(url));
-
-                    var response = json["response"];
-
-                    if (response != null)
+                    i++;
+                }
+                else
+                {
+                    var error = json["error"];
+                    var code = error["error_code"].Value<int>();
+                    var message = error["error_msg"].ToString();
+                    switch (code)
                     {
-                        count = response["count"].Value<int>();
-                        tracks.AddRange(
-                            JsonConvert.DeserializeObject<List<TrackData>>(
-                                JArray.Parse(json["response"]["items"].ToString()).ToString()));
-
-                        i++;
-                    }
-                    else
-                    {
-                        var error = json["error"];
-                        var code = error["error_code"].Value<int>();
-                        var message = error["error_msg"].ToString();
-                        switch (code)
-                        {
-                            case 1:
-                                throw new UnknownErrorException(message, code);
-                            case 2:
-                                throw new ApplicationDisabledException(message, code);
-                            case 4:
-                                throw new IncorrectSignatureException(message, code);
-                            case 5:
-                                throw new UserAuthorizationException(message, code);
-                            case 6:
-                                throw new ManyRequestException(message, code);
-                            case 100:
-                                throw new BadParametersException(message, code);
-                            default:
-                                throw new VkApiException(message, code);
-                        }
+                        case 1:
+                            throw new UnknownErrorException(message, code);
+                        case 2:
+                            throw new ApplicationDisabledException(message, code);
+                        case 4:
+                            throw new IncorrectSignatureException(message, code);
+                        case 5:
+                            throw new UserAuthorizationException(message, code);
+                        case 6:
+                            throw new ManyRequestException(message, code);
+                        case 100:
+                            throw new BadParametersException(message, code);
+                        default:
+                            throw new VkApiException(message, code);
                     }
                 }
-            }
-            catch (UserAuthorizationException exception)
-            {
-                
             }
              
             return tracks;
