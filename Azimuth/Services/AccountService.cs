@@ -3,8 +3,6 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure;
-using Iesi.Collections.Generic;
-using NHibernate.Criterion;
 
 namespace Azimuth.Services
 {
@@ -43,17 +41,21 @@ namespace Azimuth.Services
                     {
                         if (loggedUser != null)
                         {
-                            var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
-
-                            foreach (var userPlaylist in userPlaylists)
+                            // If we login again with the same social network, skip updating
+                            if (loggedUser.Id != userSn.User.Id)
                             {
-                                userPlaylist.Creator = loggedUser;
-                            }
+                                var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
 
-                            var userToDelete = userSn.User;
-                            userSn.User = loggedUser;
-                            _userSNRepository.ChangeUserId(userSn);
-                            _userRepository.DeleteItem(userToDelete);
+                                foreach (var userPlaylist in userPlaylists)
+                                {
+                                    userPlaylist.Creator = loggedUser;
+                                }
+
+                                var userToDelete = userSn.User;
+                                userSn.User = loggedUser;
+                                _userSNRepository.ChangeUserId(userSn);
+                                _userRepository.DeleteItem(userToDelete);    
+                            }
                         }
                         else
                         {

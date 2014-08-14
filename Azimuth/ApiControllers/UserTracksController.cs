@@ -1,13 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
-using Azimuth.ViewModels;
-using Microsoft.Ajax.Utilities;
 
 namespace Azimuth.ApiControllers
 {
@@ -25,6 +22,7 @@ namespace Azimuth.ApiControllers
             try
             {
                 var data = await _userTracksService.GetTracks(provider);
+                //throw new UserAuthorizationException("", 0);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
 
             }
