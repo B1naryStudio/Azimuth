@@ -42,11 +42,11 @@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <tr class="removable">
+        <tr>
             <td>${artist}</td>
             <td>${title}</td>
             <td><input type="checkbox"></td>
-            <td style="display: none" id="trackId">id</td>
+            <td style="display: none" id="trackId">${id}</td>
         </tr>
     </script>
 
@@ -56,7 +56,7 @@
                 var provider = $(e.target).data('provider');
                 var reloginUrl = $(e.target).data('reloginurl');
                 console.log(provider);
-                $("tr").remove(".removable");
+                $("#tracks > tr").remove();
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     success: function(tracks) {
@@ -81,21 +81,25 @@
 
     <script>
         $(document).ready(function() {
-            $('#applyBtn').click(function() {
+            $('#applyBtn').click(function(e) {
+                var provider = $(e.target).data('provider');
                 var tableControl = document.getElementById('tracksTable');
                 var tracks = [];
+                var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
                 $('input:checkbox:checked', tableControl).each(function() {
                     tracks.push($(this).closest('tr').find('#trackId').text());
                 }).get();
                 console.log(tracks);
+                console.log($('#inputPlaylistName').val());
 
                 $.ajax({
-                    url: '/api/usertracks',
+                    url: '/api/usertracks?provider='+provider,
                     type: 'POST',
                     data: JSON.stringify({
-                        "Name": "Default",
+                        "Name": $('#inputPlaylistName').val(),
+                        "Accessibilty": accessibilty,
                         "TrackIds": tracks
-                    }),
+                    }) + JSON.stringify({ "Provider": provider }),
                     dataType: 'json',
                     contentType: 'application/json',
                     async: false

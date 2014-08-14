@@ -76,6 +76,10 @@ namespace Azimuth.DataProviders.Concrete
                             throw new VkApiException(message, code);
                     }
                 }
+				foreach (var track in tracks)
+                {
+                    track.Genre = GetGenreById(Convert.ToInt32(track.Genre));
+                }
             }
              
             return tracks;
@@ -89,7 +93,9 @@ namespace Azimuth.DataProviders.Concrete
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
-            return JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).ToString());
+            var track = JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).First.ToString());
+            track.Genre = GetGenreById(Convert.ToInt32(track.Genre));
+            return track;
         }
 
         public async Task<List<TrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
@@ -110,7 +116,38 @@ namespace Azimuth.DataProviders.Concrete
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
-            return JArray.Parse(json["response"]["text"].ToString()).ToString();
+            return json["response"]["text"].ToString();
+        }
+
+        private string GetGenreById(int id)
+        {
+            return Enum.GetName(typeof(Genres), id);
+        }
+
+        private enum Genres //https://vk.com/dev/audio_genres
+        {
+            Undefined = 0,
+            Rock,
+            Pop,
+            RapAndHipHop,
+            EasyListening,
+            DanceAndHouse,
+            Instrumental,
+            Metal,
+            Dubstep,
+            JazzAndBlues,
+            DrumAndBass,
+            Trance,
+            Chanson,
+            Ethnic,
+            AcousticAndVocal,
+            Reggae,
+            Classical,
+            IndiePop,
+            Other,
+            Speech,
+            Alternative = 21,
+            ElectropopAndDisco
         }
     }
 }

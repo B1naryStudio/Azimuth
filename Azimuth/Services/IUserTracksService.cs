@@ -8,6 +8,7 @@ namespace Azimuth.Services
     public interface IUserTracksService
     {
         Task<List<TrackData>> GetTracks(string provider);
+		void SetPlaylist(PlaylistData playlistData, string provider);
         Task<ICollection<TracksDto>> GetUserTracks();
     }
 }

@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
@@ -14,12 +13,10 @@ namespace Azimuth.ApiControllers
 {
     public class UserTracksController : ApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserTracksService _userTracksService;
 
-        public UserTracksController(IUnitOfWork unitOfWork, IUserTracksService userTracksService)
+        public UserTracksController(IUserTracksService userTracksService)
         {
-            _unitOfWork = unitOfWork;
             _userTracksService = userTracksService;
         }
 
@@ -37,35 +34,11 @@ namespace Azimuth.ApiControllers
             }
         }
 
-        public async Task<HttpResponseMessage> Post(PlaylistData playlistData)
+        public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider)
         {
-            //using (_unitOfWork)
-            //{
-            //    var tracks = new HashedSet<Track>();
-            //    var vkTracks =await _vkApi.GetTrackById(_userThirdPartId, playlistData.TrackIds[0], _userAccessToken);
-            //    var l =  _vkApi.GetLyricsById(_userThirdPartId, vkTracks.LyricsId, _userAccessToken);
-            //        foreach (var vkTrack in vkTracks)
-            //        {
-            //            tracks.Add(new Track
-            //            {
-            //                Duration = vkTrack.Duration,
-            //            };
-            //        }
-
-            //        var userRepo = _unitOfWork.GetRepository<User>();
-            //        var playlist = new Playlist
-            //        {
-            //            Name = playlistData.Name,
-            //            Creator = userRepo.GetOne(s => s.Id == _userId),
-            //            Tracks = tracks
-            //        };
-
-            //        var playlistRepo = _unitOfWork.GetRepository<Playlist>();
-            //        playlistRepo.AddItem(playlist);
-
-            //        _unitOfWork.Commit();
-            //}
+            _userTracksService.SetPlaylist(playlistData, provider);
             return Request.CreateResponse(HttpStatusCode.OK);
+            //return Request.CreateResponse(correct ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
         }
 
         public async Task<HttpResponseMessage> GetUserTracks()
