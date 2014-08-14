@@ -20,7 +20,7 @@ namespace Azimuth.Shared.Dto
         public long LyricsId { get; set; }
 
         [JsonProperty(PropertyName = "genre_id")]
-        public int GenreId { get; set; }
+        public string Genre { get; set; }
 
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; } 
