@@ -54,6 +54,8 @@ namespace Azimuth.DataProviders.Concrete
                 else
                 {
                     var error = json["error"];
+                    if (error == null) 
+                        return tracks;
                     var code = error["error_code"].Value<int>();
                     var message = error["error_msg"].ToString();
                     switch (code)

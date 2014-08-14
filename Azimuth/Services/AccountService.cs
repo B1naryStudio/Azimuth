@@ -94,7 +94,7 @@ namespace Azimuth.Services
 
                     _unitOfWork.Commit();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
                     _unitOfWork.Rollback();
                     return false;

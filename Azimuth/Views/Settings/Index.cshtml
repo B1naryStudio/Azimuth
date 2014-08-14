@@ -60,7 +60,8 @@
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     success: function(tracks) {
-                        if (typeof tracks.error !== 'undefined') {
+                        if (typeof tracks.Message === 'undefined') {
+                            console.log(tracks);
                             $("#relogin").hide();
                             var list = $('#tracks');
                             for (var i = 0; i < tracks.length; i++) {
