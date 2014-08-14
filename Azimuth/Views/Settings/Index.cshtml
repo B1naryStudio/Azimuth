@@ -32,6 +32,10 @@
         }
     </div>
 </div>
+<div id="relogin" style="display: none">
+    <p id="error"> Your time has expired, please login again. </p>
+    @Html.ActionLink("Vkontakte", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+</div>
 
 @section scripts
 {
@@ -55,14 +59,17 @@
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     success: function(tracks) {
-                        var list = $('#tracks');
-                        for (var i = 0; i < tracks.length; i++) {
-                            var track = tracks[i];
-                            list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                        if (typeof tracks.error !== 'undefined') {
+                            $("#relogin").hide();
+                            var list = $('#tracks');
+                            for (var i = 0; i < tracks.length; i++) {
+                                var track = tracks[i];
+                                list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                            }
+                        } else {
+                            $("#relogin").show();
                         }
                     }
-                }).error(function(httpObj) {
-                    alert("asd");
                 });
             })
         );
