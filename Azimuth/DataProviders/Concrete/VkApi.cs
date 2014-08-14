@@ -93,7 +93,8 @@ namespace Azimuth.DataProviders.Concrete
 
         private enum Genres //https://vk.com/dev/audio_genres
         {
-            Rock = 1,
+            Undefined = 0,
+            Rock,
             Pop,
             RapAndHipHop,
             EasyListening,

@@ -68,7 +68,6 @@ namespace Azimuth.Services
 
                 //create Track objects
                 var artistRepo = _unitOfWork.GetRepository<Artist>();
-                var albumRepo = _unitOfWork.GetRepository<Album>();
                 var tracks = new List<Track>();
                 foreach (var trackData in trackDatas)
                 {
@@ -91,7 +90,7 @@ namespace Azimuth.Services
                                     socialNetworkData.AccessToken),
                         Name = trackData.Title,
                         Url = trackData.Url,
-                        Genre = "",
+                        Genre = trackData.Genre,
                         Album = album
                     };
                     track.Playlists.Add(playlist);
