@@ -11,7 +11,7 @@
         <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
         @foreach (var sn in Model.ConnectedNetworks)
         {
-            <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" class="providerBtn">@sn.Name</a></li>
+            <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
         }
     </ul>
 
@@ -29,12 +29,12 @@
                 @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
                 @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
             </div>
-        }
+        } 
     </div>
 </div>
 <div id="relogin" style="display: none">
     <p id="error"> Your time has expired, please login again. </p>
-    @Html.ActionLink("Vkontakte", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+    @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
 </div>
 
 @section scripts
@@ -54,6 +54,7 @@
         $(document).ready(
             $('.providerBtn').click(function(e) {
                 var provider = $(e.target).data('provider');
+                var reloginUrl = $(e.target).data('reloginurl');
                 console.log(provider);
                 $("tr").remove(".removable");
                 $.ajax({
@@ -68,6 +69,8 @@
                             }
                         } else {
                             $("#relogin").show();
+                            var reloginContainer = $('#relogin');
+                            reloginContainer.find('a').attr('href', reloginUrl);
                         }
                     }
                 });

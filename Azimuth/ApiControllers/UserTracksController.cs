@@ -29,7 +29,7 @@ namespace Azimuth.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.OK, data);
 
             }
-            catch (VkApiException exception)
+            catch (UserAuthorizationException exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exception);
             }

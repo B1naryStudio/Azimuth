@@ -7,7 +7,6 @@ using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NHibernate.Cache.Entry;
 
 namespace Azimuth.DataProviders.Concrete
 {
@@ -27,8 +26,6 @@ namespace Azimuth.DataProviders.Concrete
             var tracks = new List<TrackData>();
             int i = 0;
             int count = 0;
-
-            accessToken = "ya29.YQAKRRovnEhCox0AAAB72NFP3pVTQDg7ldLagdL3-VjAT2P4Wg_6rrhJi3Bcug";
 
             //if user have more than 6000 tracks we must execute several req
             while ((i == 0) || (count > (i*MaxCntTracksPerReq)))
