@@ -115,7 +115,7 @@ namespace Azimuth.Tests
         public async void Get_Google_User_Data()
         {
             // Arrange
-            var expectedUser = (User) _googleUserData;
+            var expectedUser = Mapper.Map(_googleUserData, new User());
             expectedUser.Timezone = _googleTimeZone.rawOffset/3600;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential
@@ -134,7 +134,7 @@ namespace Azimuth.Tests
             // Arrange
             var placesLived = _googleUserData.placesLived;
             _googleUserData.placesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
-            var expectedUser = (User)_googleUserData;
+            var expectedUser = Mapper.Map(_googleUserData, new User());
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential
             {
@@ -153,7 +153,7 @@ namespace Azimuth.Tests
             // Arrange
             var placesLived = _googleUserData.placesLived;
             _googleUserData.placesLived[0].value = _googleUserData.placesLived[0].value.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-            var expectedUser = (User)_googleUserData;
+            var expectedUser = Mapper.Map(_googleUserData, new User());
             expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential

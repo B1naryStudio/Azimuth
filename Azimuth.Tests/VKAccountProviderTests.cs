@@ -70,7 +70,7 @@ namespace Azimuth.Tests
         public async void Get_VK_User_Data()
         {
             // Arrange
-            var expectedUser = (User) _vkUserData;
+            var expectedUser = Mapper.Map(_vkUserData, new User());
             // Act
             var provider = new VKAccountProvider(_webRequest, new UserCredential
             {

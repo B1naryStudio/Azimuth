@@ -42,7 +42,7 @@ namespace Azimuth.Tests
         public async void Get_Twitter_User_Data()
         {
             // Arrange
-            var expectedUser = (User) _user;
+            var expectedUser = Mapper.Map(_user, new User());
             // Act
             var provider = new TwitterAccountProvider(_webClient, new UserCredential
             {

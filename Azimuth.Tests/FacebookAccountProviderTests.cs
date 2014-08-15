@@ -63,7 +63,7 @@ namespace Azimuth.Tests
         public async void Get_Facebook_User_Data()
         {
             // Arranage
-            var expectedUser = (User) _fbUserData;
+            var expectedUser = Mapper.Map(_fbUserData, new User());
             // Act
             var provider = new FacebookAccountProvider(_webRequest, new UserCredential
             {
