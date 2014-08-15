@@ -11,6 +11,7 @@ namespace Azimuth.Infrastructure
         {
             Bind<IAccountService>().To<AccountService>();
             Bind<ISettingsService>().To<SettingsService>();
+            Bind<IPlaylistService>().To<PlaylistService>();
             Bind<IWebClient>().To<WebClient>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
