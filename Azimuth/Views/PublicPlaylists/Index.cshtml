@@ -1,11 +1,7 @@
 ﻿
 <div>
     <h2>Public Playlists</h2>
-    <div class="table-responsive">
-        <table>
-            <tbody class="playlists table table-striped col-md-offset-1"></tbody>
-        </table>
-    </div>
+    <div class="playlists"></div>
 </div>
 
 @section scripts
@@ -22,7 +18,7 @@
                 type: "GET",
                 url: "/api/playlists",
                 dataType: "json",
-                async: true,
+                async: false,
                 success: function(data) {
                     var playlists = data["Result"];
                     for (var i = 0; i < playlists.length; i++) {
@@ -30,7 +26,7 @@
 
                         $(".playlists").append(
                             "<h3>" + playlist.Name + "</h3>" +
-                            "<table>" +
+                            "<table class='tablesorter table table-striped col-md-offset-1'>" +
                                 "<thead>" +
                                     "<th>Artist</th>" +
                                     "<th>Title</th>" +
