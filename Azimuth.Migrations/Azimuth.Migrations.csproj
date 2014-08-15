@@ -35,6 +35,10 @@
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.2.1.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
+    <Reference Include="FluentMigrator.Runner, Version=1.2.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +61,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Runner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
