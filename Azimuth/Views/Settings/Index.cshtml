@@ -1,4 +1,5 @@
-﻿@model Azimuth.ViewModels.SettingsViewModel
+﻿@using Azimuth.Infrastructure
+@model Azimuth.ViewModels.SettingsViewModel
 
 @{
     ViewBag.Title = "Settings";
@@ -26,7 +27,10 @@
         {
             <div class="tab-pane fade" id="@sn.Name">
                 @Html.DisplayFor(x => sn.Name)
-                @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                {
+                    @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                }
                 @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
             </div>
         } 
