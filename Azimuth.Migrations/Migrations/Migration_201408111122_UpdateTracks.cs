@@ -8,8 +8,8 @@ namespace Azimuth.Migrations
     {
         public override void Up()
         {
-            Alter.Table("Tracks").AddColumn("Url").AsString().NotNullable();
-            Alter.Table("Tracks").AddColumn("Name").AsString().NotNullable();
+            Alter.Table("Tracks").AddColumn("Url").AsString().NotNullable();//.WithDefaultValue("");
+            Alter.Table("Tracks").AddColumn("Name").AsString().NotNullable();//.WithDefaultValue("");
         }
 
         public override void Down()

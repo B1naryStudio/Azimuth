@@ -12,8 +12,8 @@ namespace Azimuth.Migrations
             Delete.PrimaryKey("PK_UserSocialNetwork_1").FromTable("UserSocialNetworks");
             Alter.Table("UserSocialNetworks").AddColumn("Id").AsInt64().NotNullable().PrimaryKey("PK_UserSocialNetwork_2").Identity();
             Create.PrimaryKey("PK_UserSocialNetwork_2").OnTable("UserSocialNetworks").Column("Id");
-            Alter.Table("UserSocialNetworks").AddColumn("UserName").AsString().NotNullable();
-            Alter.Table("UserSocialNetworks").AddColumn("Photo").AsString().Nullable();
+            Alter.Table("UserSocialNetworks").AddColumn("UserName").AsString().NotNullable();//.WithDefaultValue("");
+            Alter.Table("UserSocialNetworks").AddColumn("Photo").AsString().Nullable().WithDefaultValue("");
         }
 
         public override void Down()
