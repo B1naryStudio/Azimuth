@@ -9,7 +9,11 @@ namespace Azimuth.Migrations
     {
         public override void Up()
         {
+#if DEBUG
             var scripts = Resources.CreateSqlServerContent.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+#else
+            var scripts = Resources.CreateReleaseSqlServerContent.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+#endif
             scripts.ForEach(Execute.Sql);
         }
 

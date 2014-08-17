@@ -76,6 +76,7 @@
       <Link>Migrate.exe</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\CreateReleaseSqlServerContent.sql" />
     <Content Include="Resources\CreateSqlServerContent.sql" />
     <Content Include="Resources\DropSqlServerContent.sql" />
   </ItemGroup>

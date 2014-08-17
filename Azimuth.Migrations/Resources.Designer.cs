@@ -61,6 +61,29 @@ namespace Azimuth.Migrations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to USE [dbb3b51a6bd6c542a4bacaa3840159ce32]
+        ///GO
+        ///CREATE TABLE [dbo].[Albums](
+        ///	[AlbumId] [bigint] IDENTITY(1,1) NOT NULL,
+        ///	[Name] [nvarchar](50) NOT NULL,
+        ///	[Description] [nvarchar](500) NULL,
+        ///	[ArtistId] [bigint] NOT NULL,
+        /// CONSTRAINT [PK_Albums] PRIMARY KEY CLUSTERED 
+        ///(
+        ///	[AlbumId] ASC
+        ///)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+        ///) ON [PRIMARY]
+        ///
+        ///GO
+        ////****** Object:  Table [dbo].[Artists]    Script Date: 09.08.20 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CreateReleaseSqlServerContent {
+            get {
+                return ResourceManager.GetString("CreateReleaseSqlServerContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to USE [Azimuth]
         ///GO
         ///CREATE TABLE [dbo].[Albums](

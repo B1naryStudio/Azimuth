@@ -1,4 +1,4 @@
-﻿USE [Azimuth]
+﻿USE [dbb3b51a6bd6c542a4bacaa3840159ce32]
 GO
 CREATE TABLE [dbo].[Albums](
 	[AlbumId] [bigint] IDENTITY(1,1) NOT NULL,
