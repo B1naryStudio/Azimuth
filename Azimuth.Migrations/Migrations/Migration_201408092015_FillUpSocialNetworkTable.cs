@@ -1,6 +1,7 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
+//namespace Azimuth.Migrations.Migrations
 {
     [Migration(201408092015)]
     public class Migration_201408092015_FillUpSocialNetworkTable : Migration

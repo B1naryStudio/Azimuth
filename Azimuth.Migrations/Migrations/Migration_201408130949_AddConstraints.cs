@@ -1,7 +1,8 @@
 ﻿using System.Data;
 using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
+//namespace Azimuth.Migrations.Migrations
 {
     [Migration(201408130949)]
     public class Migration_201408130949_AddConstraints : Migration

@@ -1,7 +1,8 @@
 ﻿
 using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
+//namespace Azimuth.Migrations.Migrations
 {
     [Migration(201408121200)]
     public class Migration_201408121200_ChangeUserSocialNetworksTable: Migration
@@ -17,13 +18,13 @@ namespace Azimuth.Migrations.Migrations
 
         public override void Down()
         {
-            Delete.Column("Id").FromTable("UserSocialNetworks");
             Delete.Column("UserName").FromTable("UserSocialNetworks");
             Delete.Column("Photo").FromTable("UserSocialNetworks");
             Delete.PrimaryKey("PK_UserSocialNetwork_2").FromTable("UserSocialNetworks");
             Create.PrimaryKey("PK_UserSocialNetwork_1")
                 .OnTable("UserSocialNetworks")
                 .Columns(new string[] {"UserId", "SocialNetworkId"});
+            Delete.Column("Id").FromTable("UserSocialNetworks");
         }
     }
 }

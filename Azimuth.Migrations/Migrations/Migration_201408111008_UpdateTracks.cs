@@ -1,6 +1,7 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
+//namespace Azimuth.Migrations.Migrations
 {
     [Migration(201408111008)]
     public class Migration_201408111008_UpdateTracks : Migration

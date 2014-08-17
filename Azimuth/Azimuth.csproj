@@ -311,6 +311,8 @@
     <Content Include="Views\MusicList\Index.cshtml" />
     <Content Include="Views\PublicPlaylists\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\RunMigrator.cshtml" />
+    <Content Include="Views\Test\Drop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
