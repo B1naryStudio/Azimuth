@@ -1,8 +1,4 @@
-﻿
-using System.Collections.Generic;
-using Azimuth.DataAccess.Entities;
-
-namespace Azimuth.Shared.Dto
+﻿namespace Azimuth.Shared.Dto
 {
     public class TracksDto
     {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Azimuth.DataAccess.Infrastructure;
-using Iesi.Collections.Generic;
+using Azimuth.Shared.Enums;
 using NHibernate.Type;
-using TweetSharp;
 
 namespace Azimuth.DataAccess.Entities
 {
@@ -20,12 +19,6 @@ namespace Azimuth.DataAccess.Entities
         {
             Tracks = new List<Track>();
         }
-    }
-
-    public enum Accessibilty
-    {
-        Private,
-        Public
     }
 
     public class AccessibiltyType : EnumStringType<Accessibilty>

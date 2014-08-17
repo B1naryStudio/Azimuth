@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Azimuth.DataAccess.Entities;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Shared.Dto
 {

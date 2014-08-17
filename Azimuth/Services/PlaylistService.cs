@@ -6,6 +6,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Shared.Dto;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Services
 {

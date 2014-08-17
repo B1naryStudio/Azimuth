@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azimuth.DataAccess">
-      <HintPath>..\DataAccess\bin\Debug\Azimuth.DataAccess.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -55,6 +52,7 @@
     <Compile Include="Dto\UserBrief.cs" />
     <Compile Include="Dto\TrackData.cs" />
     <Compile Include="Dto\VKUserData.cs" />
+    <Compile Include="Enums\Accessibilty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
