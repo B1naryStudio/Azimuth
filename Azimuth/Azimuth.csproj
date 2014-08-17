@@ -44,9 +44,6 @@
     <Reference Include="Azimuth.DataGenerator">
       <HintPath>..\Azimuth.DataGenerator\bin\Debug\Azimuth.DataGenerator.dll</HintPath>
     </Reference>
-    <Reference Include="Azimuth.Migrations">
-      <HintPath>..\Azimuth.Migrations\bin\Debug\Azimuth.Migrations.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
@@ -328,6 +325,10 @@
     <ProjectReference Include="..\Azimuth.AuthProviders\Azimuth.AuthProviders.csproj">
       <Project>{0ab9917e-886d-43d5-b2ce-7dce3aeb5f11}</Project>
       <Name>Azimuth.AuthProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Azimuth.Migrations\Azimuth.Migrations.csproj">
+      <Project>{ce7216bd-6419-4fc4-94ac-476acc50ad00}</Project>
+      <Name>Azimuth.Migrations</Name>
     </ProjectReference>
     <ProjectReference Include="..\Azimuth.Shared\Azimuth.Shared.csproj">
       <Project>{9eabb5cb-d796-493e-804f-5e59f898e02f}</Project>
