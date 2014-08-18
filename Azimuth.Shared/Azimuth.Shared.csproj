@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto\ErrorData.cs" />
     <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\GoogleUserData.cs" />
     <Compile Include="Dto\PlaylistData.cs" />

@@ -35,20 +35,20 @@ namespace Azimuth.Tests
             // Object that we will make Json
             _fbUserData = new FacebookUserData
             {
-                id = "12345",
-                first_name = "Beseda",
-                last_name = "Dmitrij",
-                name = "Beseda Dmitrij",
-                gender = "male",
-                email = "besedadg@gmail.com",
-                birthday = "12/1/1992",
-                timezone = 2,
-                location = new FacebookUserData.Location {id = "1", name = "Donetsk, Ukraine"},
-                picture = new FacebookUserData.Picture
+                Id = "12345",
+                FirstName = "Beseda",
+                LastName = "Dmitrij",
+                Name = "Beseda Dmitrij",
+                Gender = "male",
+                Email = "besedadg@gmail.com",
+                Birthday = "12/1/1992",
+                Timqzone = 2,
+                Location = new FacebookUserData.FBLocation() {Id = "1", Name = "Donetsk, Ukraine"},
+                Picture = new FacebookUserData.FBPicture()
                 {
-                    data = new FacebookUserData.Data
+                    Data = new FacebookUserData.Data
                     {
-                        url = "photo.jpg"
+                        Url = "photo.jpg"
                     }
                 },
             };

@@ -103,7 +103,8 @@ namespace Azimuth.Services
                             AccessToken = userCredential.AccessToken,
                             TokenExpires = userCredential.AccessTokenExpiresIn,
                             Photo = user.Photo,
-                            UserName = user.Name.FirstName ?? String.Empty + user.Name.LastName ?? String.Empty
+                            UserName = (user.Name.FirstName ??
+                                    String.Empty) + ((user.Name.LastName != null) ? (" " + user.Name.LastName) : String.Empty)
                         });
                     }
 

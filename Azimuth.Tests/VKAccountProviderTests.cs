@@ -27,7 +27,7 @@ namespace Azimuth.Tests
 
         private IWebClient _webRequest;
 
-        private VKUserData.Response _vkUserData;
+        private VKUserData.VKResponse _vkUserData;
 
         [SetUp]
         public void SetUp()
@@ -39,22 +39,22 @@ namespace Azimuth.Tests
                 AccessToken);
 
             // Object that we will make Json
-            _vkUserData = new VKUserData.Response
+            _vkUserData = new VKUserData.VKResponse()
             {
-                response = new List<VKUserData>
+                Response = new List<VKUserData>
                 {
                     new VKUserData
                     {
-                        first_name = "Beseda",
-                        last_name = "Dmitrij",
-                        screen_name = "Beseda Dmitrij",
-                        sex = VKUserData.Sex.male,
-                        bdate = "12/1/1992",
-                        city = new VKUserData.City{id = 1, title = "Donetsk"},
-                        country = new VKUserData.Country {id = 1, title = "Ukraine"},
-                        timezone = 2,
-                        photo_max_orig = "photo.jpg",
-                        email = Email
+                        FirstName = "Beseda",
+                        LastName = "Dmitrij",
+                        ScreenName = "Beseda Dmitrij",
+                        Sex = VKUserData.VKSex.male,
+                        Birthday = "12/1/1992",
+                        City = new VKUserData.VKCity(){Id = 1, Title = "Donetsk"},
+                        Country = new VKUserData.VKCountry() {Id = 1, Title = "Ukraine"},
+                        Timezone = 2,
+                        Photo = "photo.jpg",
+                        Email = Email
                     }
                 }
             };

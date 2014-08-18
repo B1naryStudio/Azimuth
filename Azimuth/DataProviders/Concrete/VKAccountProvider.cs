@@ -33,7 +33,7 @@ namespace Azimuth.DataProviders.Concrete
         public override async Task<User> GetUserInfoAsync(string email = "")
         {
             var response = await _webClient.GetWebData(UserInfoUrl);
-            var userData = JsonConvert.DeserializeObject<VKUserData.Response>(response);
+            var userData = JsonConvert.DeserializeObject<VKUserData.VKResponse>(response);
 
             User currentUser = Mapper.Map(userData, new User());
             currentUser.Email = email ?? String.Empty;

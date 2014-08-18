@@ -14,7 +14,7 @@ namespace Azimuth.Infrastructure
         static Mapper()
         {
             AddMapp<FacebookUserData, User>(FacebookUserDataMap);
-            AddMapp<VKUserData.Response, User>(VKUserDataMap);
+            AddMapp<VKUserData.VKResponse, User>(VKUserDataMap);
             AddMapp<GoogleUserData, User>(GoogleUserDataMap);
             AddMapp<TweetSharp.TwitterUser, User>(TWitterUserDataMap);
         }
@@ -44,32 +44,32 @@ namespace Azimuth.Infrastructure
         private static void FacebookUserDataMap(FacebookUserData snData, User user)
         {
                 string city = "", country = "";
-                if (snData.location != null && snData.location.name != null)
+                if (snData.Location != null && snData.Location.Name != null)
                 {
-                    city = snData.location.name.Split(',').First();
-                    country = snData.location.name.Split(' ').Last();
+                    city = snData.Location.Name.Split(',').First();
+                    country = snData.Location.Name.Split(' ').Last();
                 }
 
-                user.Name = new Name {FirstName = snData.first_name, LastName = snData.last_name};
-                user.ScreenName = snData.name ?? String.Empty;
-                user.Gender = snData.gender ?? String.Empty;
-                user.Birthday = snData.birthday ?? String.Empty;
-                user.Email = snData.email ?? String.Empty;
+                user.Name = new Name {FirstName = snData.FirstName, LastName = snData.LastName};
+                user.ScreenName = snData.Name ?? String.Empty;
+                user.Gender = snData.Gender ?? String.Empty;
+                user.Birthday = snData.Birthday ?? String.Empty;
+                user.Email = snData.Email ?? String.Empty;
                 user.Location =
                     new Location
                     {
                         City = city,
                         Country = country
                     };
-                user.Timezone = snData.timezone;
-                user.Photo = snData.picture.data.url;
+                user.Timezone = snData.Timqzone;
+                user.Photo = snData.Picture.Data.Url;
         }
 
         private static void GoogleUserDataMap(GoogleUserData snData, User user)
         {
             string city = null;
             string country = null;
-            var myPlace = ((snData.placesLived ?? new GoogleUserData.GoogleLocation[] { }).FirstOrDefault(p => p.primary) ?? new GoogleUserData.GoogleLocation { value = String.Empty }).value;
+            var myPlace = ((snData.PlacesLived ?? new GoogleUserData.GoogleLocation[] { }).FirstOrDefault(p => p.Primary) ?? new GoogleUserData.GoogleLocation { Value = String.Empty }).Value;
             var places = myPlace.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (places.Length == 1)
             {
@@ -82,13 +82,13 @@ namespace Azimuth.Infrastructure
             }
             user.Name = new Name
             {
-                FirstName = snData.name.givenName ?? String.Empty,
-                LastName = snData.name.familyName ?? String.Empty
+                FirstName = snData.Name.GivenName ?? String.Empty,
+                LastName = snData.Name.FamilyName ?? String.Empty
             };
-            user.ScreenName = snData.displayName ?? String.Empty;
-            user.Gender = snData.gender ?? String.Empty;
-            user.Birthday = snData.birthday ?? String.Empty;
-            user.Email = snData.emails.FirstOrDefault(e => e.type.Equals("account")).value ?? String.Empty;
+            user.ScreenName = snData.DisplayName ?? String.Empty;
+            user.Gender = snData.Gender ?? String.Empty;
+            user.Birthday = snData.Birthday ?? String.Empty;
+            user.Email = snData.Emails.FirstOrDefault(e => e.Type.Equals("account")).Value ?? String.Empty;
             user.Location =
                 new Location
                 {
@@ -96,29 +96,29 @@ namespace Azimuth.Infrastructure
                     Country = country ?? String.Empty
                 };
             user.Timezone = -100;
-            user.Photo = snData.image.url ?? String.Empty;
+            user.Photo = snData.Image.Url ?? String.Empty;
         }
 
-        private static void VKUserDataMap(VKUserData.Response snData, User user)
+        private static void VKUserDataMap(VKUserData.VKResponse snData, User user)
         {
             user.Name =
                 new Name
                 {
-                    FirstName = snData.response.First().first_name ?? String.Empty,
-                    LastName = snData.response.First().last_name ?? String.Empty
+                    FirstName = snData.Response.First().FirstName ?? String.Empty,
+                    LastName = snData.Response.First().LastName ?? String.Empty
                 };
-            user.ScreenName = snData.response.First().screen_name ?? String.Empty;
-            user.Gender = (snData.response.First().sex != 0) ? snData.response.First().sex.ToString() : String.Empty;
-            user.Birthday = snData.response.First().bdate ?? String.Empty;
-            user.Email = snData.response.First().email ?? String.Empty;
+            user.ScreenName = snData.Response.First().ScreenName ?? String.Empty;
+            user.Gender = (snData.Response.First().Sex != 0) ? snData.Response.First().Sex.ToString() : String.Empty;
+            user.Birthday = snData.Response.First().Birthday ?? String.Empty;
+            user.Email = snData.Response.First().Email ?? String.Empty;
             user.Location =
                 new Location
                 {
-                    City = snData.response.First().city.title ?? String.Empty,
-                    Country = snData.response.First().country.title ?? String.Empty
+                    City = snData.Response.First().City.Title ?? String.Empty,
+                    Country = snData.Response.First().Country.Title ?? String.Empty
                 };
-            user.Timezone = snData.response.First().timezone;
-            user.Photo = snData.response.First().photo_max_orig;
+            user.Timezone = snData.Response.First().Timezone;
+            user.Photo = snData.Response.First().Photo;
         }
 
         private static void TWitterUserDataMap(TweetSharp.TwitterUser snData, User user)

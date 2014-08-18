@@ -1,44 +1,61 @@
 ﻿
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Azimuth.Shared.Dto
 {
     public class VKUserData
     {
-        public int id { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
-        public Sex sex { get; set; }
-        public string screen_name { get; set; }
-        public string bdate { get; set; }
-        public City city { get; set; }
-        public Country country { get; set; }
-        public int timezone { get; set; }
-        public string photo_max_orig { get; set; }
-        public string email { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public int Id{ get; set; }
+        [JsonProperty(PropertyName = "first_name")]
+        public string FirstName { get; set; }
+        [JsonProperty(PropertyName = "last_name")]
+        public string LastName { get; set; }
+        [JsonProperty(PropertyName = "sex")]
+        public VKSex Sex { get; set; }
+        [JsonProperty(PropertyName = "screen_name")]
+        public string ScreenName { get; set; }
+        [JsonProperty(PropertyName = "bdate")]
+        public string Birthday { get; set; }
+        [JsonProperty(PropertyName = "city")]
+        public VKCity City { get; set; }
+        [JsonProperty(PropertyName = "country")]
+        public VKCountry Country { get; set; }
+        [JsonProperty(PropertyName = "timezone")]
+        public int Timezone { get; set; }
+        [JsonProperty(PropertyName = "photo_max_orig")]
+        public string Photo { get; set; }
+        [JsonProperty(PropertyName = "email")]
+        public string Email { get; set; }
 
-        public enum Sex
+        public enum VKSex
         {
             none = 0,
             female = 1,
             male = 2
         }
 
-        public class Country
+        public class VKCountry
         {
-            public int id { get; set; }
-            public string title { get; set; }
+            [JsonProperty(PropertyName = "id")]
+            public int Id { get; set; }
+            [JsonProperty(PropertyName = "title")]
+            public string Title { get; set; }
         }
 
-        public class City
+        public class VKCity
         {
-            public int id { get; set; }
-            public string title { get; set; }
+            [JsonProperty(PropertyName = "id")]
+            public int Id { get; set; }
+            [JsonProperty(PropertyName = "title")]
+            public string Title { get; set; }
         }
 
-        public class Response
+        public class VKResponse
         {
-            public List<VKUserData> response { get; set; }
+            [JsonProperty(PropertyName = "response")]
+            public List<VKUserData> Response { get; set; }
         }
     }
 }

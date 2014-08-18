@@ -43,30 +43,31 @@ namespace Azimuth.Tests
             // Object that we will make Json
             const string livePlace = "Donetsk, Ukraine";
             const string liveCity = "Donetsk";
-            const string liveCoord = "40,30";
+            const string liveCoord = "40,40";
+            //const string liveCoord = "40,30";
             _googleUserData = new GoogleUserData
             {
-                name = new GoogleUserData.GoogleName
+                Name = new GoogleUserData.GoogleName
                 {
-                    givenName = "Ivan",
-                    familyName = "Bakun"
+                    GivenName = "Ivan",
+                    FamilyName = "Bakun"
                 },
-                displayName = "Ivan Bakun",
-                gender = "male",
-                emails = new []{new GoogleUserData.Email
+                DisplayName = "Ivan Bakun",
+                Gender = "male",
+                Emails = new []{new GoogleUserData.Email
                 {
-                    type = "account",
-                    value = "ivanbakun@gmail.com"
+                    Type = "account",
+                    Value = "ivanbakun@gmail.com"
                 }},
-                birthday = "26/1/1994",
-                placesLived = new []{new GoogleUserData.GoogleLocation
+                Birthday = "26/1/1994",
+                PlacesLived = new []{new GoogleUserData.GoogleLocation
                 {
-                    primary = true,
-                    value = "Donetsk, Ukraine" 
+                    Primary = true,
+                    Value = "Donetsk, Ukraine" 
                 } },
-                image = new GoogleUserData.Photo
+                Image = new GoogleUserData.Photo
                 {
-                    url = "photo.jpg"
+                    Url = "photo.jpg"
                 }
             };
             var coordinates = new
@@ -88,7 +89,7 @@ namespace Azimuth.Tests
             };
             _googleTimeZone = new GoogleUserData.Timezone
             {
-                rawOffset = 3600
+                RawOffset = 3600
             };
             _userToJson = JsonConvert.SerializeObject(_googleUserData);
             var locatioToJson = JsonConvert.SerializeObject(coordinates);
@@ -116,7 +117,7 @@ namespace Azimuth.Tests
         {
             // Arrange
             var expectedUser = Mapper.Map(_googleUserData, new User());
-            expectedUser.Timezone = _googleTimeZone.rawOffset/3600;
+            expectedUser.Timezone = _googleTimeZone.RawOffset/3600;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential
             {
@@ -132,8 +133,8 @@ namespace Azimuth.Tests
         public async void GetGoogleUserWithoutLocation()
         {
             // Arrange
-            var placesLived = _googleUserData.placesLived;
-            _googleUserData.placesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
+            var placesLived = _googleUserData.PlacesLived;
+            _googleUserData.PlacesLived = new GoogleUserData.GoogleLocation[]{ };//Delete location from googleacc
             var expectedUser = Mapper.Map(_googleUserData, new User());
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential
@@ -144,17 +145,17 @@ namespace Azimuth.Tests
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString());
-            _googleUserData.placesLived = placesLived;
+            _googleUserData.PlacesLived = placesLived;
         }
 
         [Test]
         public async void GetGoogleUserWithOnlyCity()
         {
             // Arrange
-            var placesLived = _googleUserData.placesLived;
-            _googleUserData.placesLived[0].value = _googleUserData.placesLived[0].value.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+            var placesLived = _googleUserData.PlacesLived;
+            _googleUserData.PlacesLived[0].Value = _googleUserData.PlacesLived[0].Value.Split(", ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
             var expectedUser = Mapper.Map(_googleUserData, new User());
-            expectedUser.Timezone = _googleTimeZone.rawOffset / 3600;
+            expectedUser.Timezone = _googleTimeZone.RawOffset / 3600;
             // Act
             var provider = new GoogleAccountProvider(_webRequest, new UserCredential
             {
@@ -164,7 +165,7 @@ namespace Azimuth.Tests
             var user = await provider.GetUserInfoAsync();
             // Assert
             user.ToString().Should().Be(expectedUser.ToString());
-            _googleUserData.placesLived = placesLived;
+            _googleUserData.PlacesLived = placesLived;
         }
     }
 }
