@@ -6,9 +6,8 @@ namespace Azimuth.DataProviders.Interfaces
 {
     public interface ISocialNetworkApi
     {
-        Task<List<TrackData>> GetTracks(string userId, string accessToken);
-        Task<TrackData> GetTrackById(string userId, string trackId, string accessToken);
-        Task<List<TrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken);
+        Task<List<TrackData.Audio>> GetTracks(string userId, string accessToken);
+        Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken);
         Task<string> GetLyricsById(string userId, long lyricsId, string accessToken);
     }
 }

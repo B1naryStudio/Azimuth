@@ -21,9 +21,9 @@ namespace Azimuth.DataProviders.Concrete
             _webClient = webClient;
         }
 
-        public async Task<List<TrackData>> GetTracks(string userId, string accessToken)
+        public async Task<List<TrackData.Audio>> GetTracks(string userId, string accessToken)
         {
-            var tracks = new List<TrackData>();
+            TrackData tracks = new TrackData();
             int i = 0;
             int count = 0;
 
@@ -38,26 +38,21 @@ namespace Azimuth.DataProviders.Concrete
                             "&offset=" + (MaxCntTracksPerReq*i) +
                             "&access_token=" + Uri.EscapeDataString(accessToken);
 
-                var json = JObject.Parse(await _webClient.GetWebData(url));
+                var json = await _webClient.GetWebData(url);
+                tracks = JsonConvert.DeserializeObject<TrackData>(json);
 
-                var response = json["response"];
-
-                if (response != null)
+                if (tracks.Response != null)
                 {
-                    count = response["count"].Value<int>();
-                    tracks.AddRange(
-                        JsonConvert.DeserializeObject<List<TrackData>>(
-                            JArray.Parse(json["response"]["items"].ToString()).ToString()));
-
+                    count = tracks.Response.Count;
                     i++;
                 }
                 else
                 {
-                    var error = json["error"];
-                    if (error == null) 
-                        return tracks;
-                    var code = error["error_code"].Value<int>();
-                    var message = error["error_msg"].ToString();
+                    ErrorData error = JsonConvert.DeserializeObject<ErrorData>(json);
+                    if (error.Error == null) 
+                        return tracks.Response.Audios;
+                    int code = error.Error.ErrorCode;
+                    string message = error.Error.ErrorMessage;
                     switch (code)
                     {
                         case 1:
@@ -76,36 +71,57 @@ namespace Azimuth.DataProviders.Concrete
                             throw new VkApiException(message, code);
                     }
                 }
-				foreach (var track in tracks)
-                {
-                    track.Genre = GetGenreById(Convert.ToInt32(track.Genre));
-                }
             }
              
-            return tracks;
+            return tracks.Response.Audios;
         }
 
-        public async Task<TrackData> GetTrackById(string userId, string trackId, string accessToken)
+        public async Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken)
         {
-            var url = BaseUri + "audio.getById" +
-                      "?audios=" + Uri.EscapeDataString(userId + "_" + trackId) +
-                      "&v=5.24" +
-                      "&access_token=" + Uri.EscapeDataString(accessToken);
+            var url = BaseUri + "audio.get" +
+                      "?owner_id=" + userId +
+                      "&audio_ids=";
 
-            var json = JObject.Parse(await _webClient.GetWebData(url));
-            var track = JsonConvert.DeserializeObject<TrackData>(JArray.Parse(json["response"].ToString()).First.ToString());
-            track.Genre = GetGenreById(Convert.ToInt32(track.Genre));
-            return track;
-        }
-
-        public async Task<List<TrackData>> GetTracksById(string userId, List<string> trackIds, string accessToken)
-        {
-            var tracks = new List<TrackData>();
             foreach (var trackId in trackIds)
             {
-                tracks.Add(await GetTrackById(userId, trackId, accessToken));
+                url += trackId + ",";
             }
-            return tracks;
+            url = url.Remove(url.Length - 1);
+            url += "&need_user=0" +
+                   "&count=" + MaxCntTracksPerReq +
+                   "&v=5.24" +
+                   "&access_token=" + accessToken;
+
+            var json = await _webClient.GetWebData(url);
+            TrackData tracks = JsonConvert.DeserializeObject<TrackData>(json);
+
+            if (tracks.Response == null)
+            {
+                ErrorData error = JsonConvert.DeserializeObject<ErrorData>(json);
+                if (error.Error == null)
+                    return tracks.Response.Audios;
+                int code = error.Error.ErrorCode;
+                string message = error.Error.ErrorMessage;
+                switch (code)
+                {
+                    case 1:
+                        throw new UnknownErrorException(message, code);
+                    case 2:
+                        throw new ApplicationDisabledException(message, code);
+                    case 4:
+                        throw new IncorrectSignatureException(message, code);
+                    case 5:
+                        throw new UserAuthorizationException(message, code);
+                    case 6:
+                        throw new ManyRequestException(message, code);
+                    case 100:
+                        throw new BadParametersException(message, code);
+                    default:
+                        throw new VkApiException(message, code);
+                }
+            }
+
+            return tracks.Response.Audios;
         }
 
         public async Task<string> GetLyricsById(string userId, long lyricsId, string accessToken)
@@ -117,37 +133,6 @@ namespace Azimuth.DataProviders.Concrete
 
             var json = JObject.Parse(await _webClient.GetWebData(url));
             return json["response"]["text"].ToString();
-        }
-
-        private string GetGenreById(int id)
-        {
-            return Enum.GetName(typeof(Genres), id);
-        }
-
-        private enum Genres //https://vk.com/dev/audio_genres
-        {
-            Undefined = 0,
-            Rock,
-            Pop,
-            RapAndHipHop,
-            EasyListening,
-            DanceAndHouse,
-            Instrumental,
-            Metal,
-            Dubstep,
-            JazzAndBlues,
-            DrumAndBass,
-            Trance,
-            Chanson,
-            Ethnic,
-            AcousticAndVocal,
-            Reggae,
-            Classical,
-            IndiePop,
-            Other,
-            Speech,
-            Alternative = 21,
-            ElectropopAndDisco
         }
     }
 }

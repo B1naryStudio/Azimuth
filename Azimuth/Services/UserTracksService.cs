@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
@@ -11,7 +9,6 @@ using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
-using Azimuth.ViewModels;
 
 namespace Azimuth.Services
 {
@@ -30,7 +27,7 @@ namespace Azimuth.Services
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
         }
 
-        public async Task<List<TrackData>> GetTracks(string provider)
+        public async Task<List<TrackData.Audio>> GetTracks(string provider)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             UserSocialNetwork socialNetworkData;
@@ -82,7 +79,7 @@ namespace Azimuth.Services
 
                 //get checked tracks
                 var socialNetworkData = GetSocialNetworkData(provider);
-                var trackDatas =await _socialNetworkApi.GetTracksById(socialNetworkData.ThirdPartId,
+                var trackDatas =await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
                     playlistData.TrackIds,
                     socialNetworkData.AccessToken);
 
@@ -114,12 +111,12 @@ namespace Azimuth.Services
                     var track = new Track
                     {
                         Duration = trackData.Duration.ToString(),
-                        Lyrics =
-                            await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
-                                    socialNetworkData.AccessToken),
+                        //Lyrics =
+                        //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
+                        //            socialNetworkData.AccessToken),
                         Name = trackData.Title,
                         Url = trackData.Url,
-                        Genre = trackData.Genre,
+                        Genre = trackData.GenreId.ToString(),
                         Album = album
                     };
                     track.Playlists.Add(playlist);

@@ -49,7 +49,7 @@
         <tr>
             <td>${artist}</td>
             <td>${title}</td>
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" checked="checked"></td>
             <td style="display: none" id="trackId">${id}</td>
         </tr>
     </script>
@@ -97,7 +97,7 @@
                 console.log($('#inputPlaylistName').val());
 
                 $.ajax({
-                    url: '/api/usertracks?provider='+provider,
+                    url: '/api/usertracks?provider=' + provider,
                     type: 'POST',
                     data: JSON.stringify({
                         "Name": $('#inputPlaylistName').val(),
@@ -109,6 +109,15 @@
                     async: false
                 });
             });
-        })
+        });
+
+        $(document).ready(function() {
+            $('#checkall').click(function() {
+                if ($(this).prop('checked'))
+                    $('input:checkbox').prop('checked', true);
+                else
+                    $('input:checkbox').prop('checked', false);
+            });
+        });
     </script>
 }
