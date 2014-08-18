@@ -1,29 +1,40 @@
-﻿
+﻿using System.IdentityModel;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
-using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Services;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.ApiControllers
 {
     public class PlaylistsController : ApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private IPlaylistService _playlistService;
+        private readonly IPlaylistService _playlistService;
 
-        public PlaylistsController(IUnitOfWork unitOfWork, IPlaylistService playlistService)
+        public PlaylistsController(IPlaylistService playlistService)
         {
-            _unitOfWork = unitOfWork;
-
             _playlistService = playlistService;
         }
 
-        public async Task<HttpResponseMessage> GetPublicPlaylists()
+        [HttpGet]
+        public HttpResponseMessage GetPublicPlaylists()
         {
 
             return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPublicPlaylists());
+        }
+
+        [HttpPut]
+        public HttpResponseMessage SetPlaylistAccessibilty(int playlistId, Accessibilty accessibilty)
+        {
+            try
+            {
+                _playlistService.SetAccessibilty(playlistId, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
     }
 }

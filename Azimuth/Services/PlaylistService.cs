@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
@@ -13,7 +15,7 @@ namespace Azimuth.Services
     public class PlaylistService : IPlaylistService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private PlaylistRepository _playlistRepository;
+        private readonly PlaylistRepository _playlistRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork)
         {
@@ -40,6 +42,26 @@ namespace Azimuth.Services
             }).ToList();
 
             return playlists;
+        }
+
+        public void SetAccessibilty(int id, Accessibilty accessibilty)
+        {
+            if (!Enum.IsDefined(typeof(Accessibilty), accessibilty))
+            {
+                throw new BadRequestException("Accessibilty not correct");
+            }
+
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(s => s.Id == id);
+                if (playlist == null)
+                {
+                    throw new BadRequestException("playlist with specified id does not exist");
+                }
+                playlist.Accessibilty = accessibilty;
+
+                _unitOfWork.Commit();
+            }
         }
     }
 }
