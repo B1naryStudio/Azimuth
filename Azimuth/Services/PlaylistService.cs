@@ -72,5 +72,21 @@ namespace Azimuth.Services
                 };
             }
         }
+
+        public async Task<List<PlaylistData>> GetUsersPlaylists()
+        {
+            using (_unitOfWork)
+            {
+                var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
+                var userId = userRepo.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                var playlists = _playlistRepository.GetByCreatorId(userId).Select(playlist => new PlaylistData
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
+                }).ToList();
+                return playlists;
+            }
+        }
     }
 }
