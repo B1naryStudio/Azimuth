@@ -10,5 +10,6 @@ namespace Azimuth.Services
     {
         Task<List<PlaylistData>> GetPublicPlaylists();
         void SetAccessibilty(int id, Accessibilty accessibilty);
+        Task<PlaylistData> GetPlaylistById(int id);
     }
 }
