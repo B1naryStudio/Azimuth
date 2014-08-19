@@ -1,7 +1,10 @@
-﻿
-<div>
+﻿<div>
     <h2>Public Playlists</h2>
     <div class="playlists"></div>
+</div>
+<div>
+    @Html.TextBox("playlistId")
+    <button id="RemovePlaylist" onclick="removePlaylist()" class="btn">Remove playlist</button>
 </div>
 
 @section scripts
@@ -27,27 +30,27 @@
                         $(".playlists").append(
                             "<h3>" + playlist.Name + "</h3>" +
                             "<table class='tablesorter table table-striped col-md-offset-1'>" +
-                                "<thead>" +
-                                    "<th>Artist</th>" +
-                                    "<th>Title</th>" +
-                                    "<th>Album</th>" +
-                                    "<th>Genre</th>" +
-                                    "<th>Duration</th>" +
-                                    "<th>Url</th>" +
-                                "</thead>" +
-                                "<tbody id='playlist" + playlist.Id + "'></tbody>" +
+                            "<thead>" +
+                            "<th>Artist</th>" +
+                            "<th>Title</th>" +
+                            "<th>Album</th>" +
+                            "<th>Genre</th>" +
+                            "<th>Duration</th>" +
+                            "<th>Url</th>" +
+                            "</thead>" +
+                            "<tbody id='playlist" + playlist.Id + "'></tbody>" +
                             "</table>"
                         );
                         for (var j = 0; j < playlist.Tracks.length; j++) {
                             var track = playlist.Tracks[j];
                             $("#playlist" + playlist.Id).append(
                                 "<tr class='removable'>" +
-                                    "<td>" + track.Artist + "</td>" +
-                                    "<td>" + track.Name + "</td>" +
-                                    "<td>" + track.Album + "</td>" +
-                                    "<td>" + track.Genre + "</td>" +
-                                    "<td>" + track.Duration + "</td>" +
-                                    "<td>" + track.Url + "</td>" +
+                                "<td>" + track.Artist + "</td>" +
+                                "<td>" + track.Name + "</td>" +
+                                "<td>" + track.Album + "</td>" +
+                                "<td>" + track.Genre + "</td>" +
+                                "<td>" + track.Duration + "</td>" +
+                                "<td>" + track.Url + "</td>" +
                                 "</tr>"
                             );
                         }
@@ -55,5 +58,17 @@
                 }
             });
         });
+
+        function removePlaylist() {
+            $.ajax({
+                cache: false,
+                type: "DELETE",
+                url: "/api/playlists/" + $('#playlistId').val(),
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                }
+            });
+        }
     </script>
 }

@@ -11,7 +11,6 @@ using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
-using NHibernate;
 
 namespace Azimuth.Services
 {
@@ -70,6 +69,21 @@ namespace Azimuth.Services
                     Name = playlist.Name,
                     Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
                 };
+            }
+        }
+
+        public void RemovePlaylistById(int id)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
+
+                if (playlist == null)
+                {
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+                }
+
+                _playlistRepository.DeleteItem(playlist);
             }
         }
     }

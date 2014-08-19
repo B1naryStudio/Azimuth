@@ -1,9 +1,6 @@
 ﻿﻿using System.IdentityModel;
-﻿
 using System;
-using System.Data.SqlClient;
-using System.IdentityModel;
-using System.Management.Instrumentation;
+﻿using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
@@ -13,6 +10,7 @@ using Azimuth.Shared.Enums;
 
 namespace Azimuth.ApiControllers
 {
+    [RoutePrefix("api/playlists")]
     public class PlaylistsController : ApiController
     {
         private readonly IPlaylistService _playlistService;
@@ -49,6 +47,25 @@ namespace Azimuth.ApiControllers
             try
             {
                 return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPlaylistById(id));
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public HttpResponseMessage DeletePlaylistById(int id)
+        {
+            try
+            {
+                _playlistService.RemovePlaylistById(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (InstanceNotFoundException ex)
             {
