@@ -1,8 +1,5 @@
-﻿﻿using System.IdentityModel;
-﻿
+﻿﻿using System.IdentityModel;﻿
 using System;
-using System.Data.SqlClient;
-using System.IdentityModel;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
@@ -30,11 +27,12 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPut]
-        public HttpResponseMessage SetPlaylistAccessibilty(int playlistId, Accessibilty accessibilty)
+        [Route("api/playlists/put/")]
+        public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
         {
             try
             {
-                _playlistService.SetAccessibilty(playlistId, accessibilty);
+                _playlistService.SetAccessibilty(id, accessibilty);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)
