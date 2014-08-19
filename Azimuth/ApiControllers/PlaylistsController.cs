@@ -1,6 +1,9 @@
 ﻿﻿using System.IdentityModel;﻿
 using System;
 using System.Management.Instrumentation;
+﻿﻿using System.IdentityModel;
+using System;
+﻿using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
@@ -85,6 +88,44 @@ namespace Azimuth.ApiControllers
             catch (BadRequestException ex)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete/{id:int}")]
+        public HttpResponseMessage DeletePlaylistById(int id)
+        {
+            try
+            {
+                _playlistService.RemovePlaylistById(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public HttpResponseMessage DeleteTrackFromPlaylistById(int trackId, int playlistId)
+        {
+            try
+            {
+                _playlistService.RemoveTrackFromPlaylist(trackId, playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }

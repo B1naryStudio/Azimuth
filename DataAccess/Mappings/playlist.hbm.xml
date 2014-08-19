@@ -9,6 +9,7 @@
     <many-to-one name="Creator" column="CreatorId" />
     <!--<set name="Tracks" table="PlaylistTracks" inverse="true" cascade="all-delete-orphan">-->
     <set name="Tracks" table="PlaylistTracks" inverse="true" cascade="delete">
+    <!--<set name="Tracks" table="PlaylistTracks" cascade="delete">-->
       <key column="PlaylistId" />
       <many-to-many column="TrackId" class="Track" />
     </set>
