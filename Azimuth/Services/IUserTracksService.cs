@@ -10,6 +10,7 @@ namespace Azimuth.Services
         Task<List<TrackData.Audio>> GetTracks(string provider);
 		void SetPlaylist(PlaylistData playlistData, string provider);
         Task<ICollection<TracksDto>> GetUserTracks();
-        void PutTrackToPlaylist(long trackId, long playlistId);
+        void PutTrackToPlaylist(long playlistId, long trackId);
+        void MoveTrackBetweenPlaylists(long playlistId, long trackId);
     }
 }

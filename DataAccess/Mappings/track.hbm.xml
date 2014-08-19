@@ -10,7 +10,8 @@
     <property name="Name" />
     <property name="Url" />
     <many-to-one name="Album" column="AlbumId" />
-    <set name="Playlists" table="PlaylistTracks" cascade="all-delete-orphan">
+    <!--<set name="Playlists" table="PlaylistTracks" cascade="all-delete-orphan">-->
+    <set name="Playlists" table="PlaylistTracks" cascade="delete">
       <key column="TrackId" />
       <many-to-many column="PlaylistId" class="Playlist" />
     </set>

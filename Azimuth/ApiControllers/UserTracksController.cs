@@ -1,4 +1,5 @@
-﻿using System.IdentityModel;
+﻿using System;
+using System.IdentityModel;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,17 +48,33 @@ namespace Azimuth.ApiControllers
 
         [HttpPut]
         [Route("put")]
-        public HttpResponseMessage PutTrackToPlaylist(int playlistId, int trackId)
+        public HttpResponseMessage PutTrackToPlaylist(long playlistId, long trackId)
         {
             try
             {
-                _userTracksService.PutTrackToPlaylist(trackId, playlistId);
+                _userTracksService.PutTrackToPlaylist(playlistId, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+        }
+
+        [HttpPut]
+        [Route("move")]
+        public HttpResponseMessage MoveTracksBetweenPlaylists(long playlistId, long trackId)
+        {
+            try
+            {
+                _userTracksService.MoveTrackBetweenPlaylists(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            
         }
     }
 }
