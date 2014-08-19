@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IdentityModel;
+using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
@@ -74,7 +76,26 @@ namespace Azimuth.ApiControllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
-            
+        }
+
+        // /api/usertracks/put?id=1
+        [HttpPut]
+        [Route("put")]
+        public HttpResponseMessage PutTrack(int id, [FromBody] Track track)
+        {
+            try
+            {
+                _userTracksService.PutTrackToPlaylist(id, track);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
     }
 }

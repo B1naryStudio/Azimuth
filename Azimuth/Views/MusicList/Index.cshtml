@@ -19,6 +19,12 @@
     </div>
 </div>
 
+
+<div>
+    @Html.TextBox("playlistId")
+    <button onclick="addFakeTrack()" class="btn">Add fake track</button>
+</div>
+
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
@@ -53,6 +59,25 @@
                 }
             })
         );
+
+
+        function addFakeTrack() {
+            $.ajax({
+                cache: false,
+                type: "PUT",
+                url: "/api/usertracks/put?id=" + $("#playlistId").val(),
+                dataType: "json",
+                data: {
+                    Name: "Faketrack",
+                    Genre: "Pop",
+                    Url: "www.fake.com",
+                },
+                async: false,
+                success: function (data) {
+                    alert("Track has been added");
+                }
+            });
+        }
 
     </script>
 }
