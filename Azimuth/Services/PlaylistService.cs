@@ -19,12 +19,14 @@ namespace Azimuth.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PlaylistRepository _playlistRepository;
+        private TrackRepository _trackRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+            _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
         }
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -98,17 +100,14 @@ namespace Azimuth.Services
                     throw new InstanceNotFoundException("Playlist with specified id does not exist");
                 }
 
-                var tracks = playlist.Tracks.ToList();
+                var trackToDelete = _trackRepository.GetOne(t => t.Id == trackId);
 
-                var trackToDelete = tracks.FirstOrDefault(t => t.Id == trackId);
                 if (trackToDelete == null)
                 {
                     throw new InstanceNotFoundException("Track with specified id does not exist");
                 }
 
-                tracks.Remove(trackToDelete);
-
-                playlist.Tracks = tracks;
+                playlist.Tracks.Remove(trackToDelete);
                 _unitOfWork.Commit();
             }
         }
