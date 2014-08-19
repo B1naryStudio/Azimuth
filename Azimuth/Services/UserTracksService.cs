@@ -98,8 +98,6 @@ namespace Azimuth.Services
                     throw new InstanceNotFoundException("Playlist with specified id does not exist");
 
                 playlist.Tracks.Add(track);
-
-                _unitOfWork.Commit();
             }
         }
 
