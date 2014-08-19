@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -83,6 +84,20 @@ namespace Azimuth.Services
                     throw new BadRequestException("There is no playlist with current Id in database");                
 
                 track.Playlists.Add(playlist);
+
+                _unitOfWork.Commit();
+            }
+        }
+
+        public void PutTrackToPlaylist(int id, Track track)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
+                if (playlist == null)
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+
+                playlist.Tracks.Add(track);
 
                 _unitOfWork.Commit();
             }

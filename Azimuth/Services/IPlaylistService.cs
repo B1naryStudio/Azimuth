@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
 
