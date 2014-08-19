@@ -1,12 +1,16 @@
 ﻿
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.Infrastructure;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
+using NHibernate;
 
 namespace Azimuth.Services
 {
@@ -28,18 +32,28 @@ namespace Azimuth.Services
             {
                 Id = playlist.Id,
                 Name = playlist.Name,
-                Tracks = playlist.Tracks.Select(track => new TracksDto
-                {
-                    Name = track.Name,
-                    Album = track.Album.Name,
-                    Artist = track.Album.Artist.Name,
-                    Duration = track.Duration,
-                    Genre = track.Genre,
-                    Url = track.Url
-                }).ToList()
+                Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
             }).ToList();
 
             return playlists;
+        }
+
+        public async Task<PlaylistData> GetPlaylistById(int id)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(s => s.Id == id);
+                if (playlist == null)
+                {
+                    throw new InstanceNotFoundException("playlist with specified id does not exist");
+                }
+                return new PlaylistData
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
+                };
+            }
         }
     }
 }

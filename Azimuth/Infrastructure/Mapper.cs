@@ -17,6 +17,7 @@ namespace Azimuth.Infrastructure
             AddMapp<VKUserData.VKResponse, User>(VKUserDataMap);
             AddMapp<GoogleUserData, User>(GoogleUserDataMap);
             AddMapp<TweetSharp.TwitterUser, User>(TWitterUserDataMap);
+            AddMapp<Track, TracksDto>(TrackMap);
         }
 
         public static void AddMapp<TSource, TDestination>(Action<TSource, TDestination> map)
@@ -131,6 +132,16 @@ namespace Azimuth.Infrastructure
             user.Timezone = -100;
             user.ScreenName = snData.ScreenName ?? String.Empty;
             user.Photo = snData.ProfileImageUrl ?? String.Empty;
+        }
+
+        private static void TrackMap(Track track, TracksDto tracksDto)
+        {
+            tracksDto.Name = track.Name;
+            tracksDto.Album = track.Album.Name;
+            tracksDto.Artist = track.Album.Artist.Name;
+            tracksDto.Duration = track.Duration;
+            tracksDto.Genre = track.Genre;
+            tracksDto.Url = track.Url;
         }
     }
 }

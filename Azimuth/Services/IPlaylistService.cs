@@ -9,5 +9,6 @@ namespace Azimuth.Services
     public interface IPlaylistService
     {
         Task<List<PlaylistData>> GetPublicPlaylists();
+        Task<PlaylistData> GetPlaylistById(int id);
     }
 }
