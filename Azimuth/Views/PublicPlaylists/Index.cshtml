@@ -5,6 +5,8 @@
 <div>
     @Html.TextBox("playlistId")
     <button id="RemovePlaylist" onclick="removePlaylist()" class="btn">Remove playlist</button>
+    @Html.TextBox("trackId")
+    <button id="RemoveTrack" onclick="removeTrack()" class="btn">Remove Track</button>
 </div>
 
 @section scripts
@@ -63,10 +65,24 @@
             $.ajax({
                 cache: false,
                 type: "DELETE",
-                url: "/api/playlists/" + $('#playlistId').val(),
+                url: "/api/playlists/delete/" + $('#playlistId').val(),
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    alert("Playlist has been removed");
+                }
+            });
+        }
+
+        function removeTrack() {
+            $.ajax({
+                cache: false,
+                type: "DELETE",
+                url: "/api/playlists/delete?trackId=" + $("#trackId").val() + "&playlistId=" + $("#playlistId").val(),
                 dataType: "json",
                 async: false,
                 success: function(data) {
+                    alert("Track has been removed");
                 }
             });
         }

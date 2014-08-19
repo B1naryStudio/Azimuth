@@ -12,5 +12,6 @@ namespace Azimuth.Services
         void SetAccessibilty(int id, Accessibilty accessibilty);
         Task<PlaylistData> GetPlaylistById(int id);
         void RemovePlaylistById(int id);
+        void RemoveTrackFromPlaylist(int trackId, int playlistId);
     }
 }

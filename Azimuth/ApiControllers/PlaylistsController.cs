@@ -59,12 +59,31 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("delete/{id:int}")]
         public HttpResponseMessage DeletePlaylistById(int id)
         {
             try
             {
                 _playlistService.RemovePlaylistById(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public HttpResponseMessage DeleteTrackFromPlaylistById(int trackId, int playlistId)
+        {
+            try
+            {
+                _playlistService.RemoveTrackFromPlaylist(trackId, playlistId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (InstanceNotFoundException ex)

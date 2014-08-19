@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Reflection;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -84,6 +85,31 @@ namespace Azimuth.Services
                 }
 
                 _playlistRepository.DeleteItem(playlist);
+            }
+        }
+
+        public void RemoveTrackFromPlaylist(int trackId, int playlistId)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                if (playlist == null)
+                {
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+                }
+
+                var tracks = playlist.Tracks.ToList();
+
+                var trackToDelete = tracks.FirstOrDefault(t => t.Id == trackId);
+                if (trackToDelete == null)
+                {
+                    throw new InstanceNotFoundException("Track with specified id does not exist");
+                }
+
+                tracks.Remove(trackToDelete);
+
+                playlist.Tracks = tracks;
+                _unitOfWork.Commit();
             }
         }
     }
