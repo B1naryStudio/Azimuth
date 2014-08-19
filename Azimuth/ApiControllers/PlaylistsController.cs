@@ -23,7 +23,7 @@ namespace Azimuth.ApiControllers
         
         
         [HttpPut]
-        [Route("api/playlists/put/")]
+        [Route("put")]
         public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
         {
             try
