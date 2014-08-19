@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
@@ -18,6 +19,7 @@ namespace Azimuth.Services
         private readonly IUnitOfWork _unitOfWork;
         private UserRepository _userRepository;
         private PlaylistRepository _playlistRepository;
+        private TrackRepository _trackRepository;
 
         public UserTracksService(IUnitOfWork unitOfWork)
         {
@@ -25,6 +27,7 @@ namespace Azimuth.Services
 
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+            _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)
@@ -64,6 +67,24 @@ namespace Azimuth.Services
                     }).ToList();
 
                 return tracks;
+            }
+        }
+
+        public void PutTrackToPlaylist(long trackId, long playlistId)
+        {
+            using (_unitOfWork)
+            {
+                var track = _trackRepository.GetOne(t => t.Id == trackId);
+                if (track == null)
+                    throw new BadRequestException("There is no track with current Id in database");
+
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                if (playlist == null)
+                    throw new BadRequestException("There is no playlist with current Id in database");                
+
+                track.Playlists.Add(playlist);
+
+                _unitOfWork.Commit();
             }
         }
 

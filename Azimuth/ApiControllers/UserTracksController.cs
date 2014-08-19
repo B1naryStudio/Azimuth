@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IdentityModel;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using Azimuth.Shared.Dto;
 
 namespace Azimuth.ApiControllers
 {
+    [RoutePrefix("api/usertracks")]
     public class UserTracksController : ApiController
     {
         private readonly IUserTracksService _userTracksService;
@@ -41,6 +43,21 @@ namespace Azimuth.ApiControllers
         public async Task<HttpResponseMessage> GetUserTracks()
         {
             return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+        }
+
+        [HttpPut]
+        [Route("put")]
+        public HttpResponseMessage PutTrackToPlaylist(int playlistId, int trackId)
+        {
+            try
+            {
+                _userTracksService.PutTrackToPlaylist(trackId, playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
     }
 }
