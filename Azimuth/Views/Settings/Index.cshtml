@@ -7,40 +7,56 @@
 }
 
 <h2>Settings</h2>
-<div class="tabbable tabs-left">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
-        @foreach (var sn in Model.ConnectedNetworks)
-        {
-            <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
-        }
-    </ul>
-
-    <div class="tab-content">
-        <div class="tab-pane fade active in" id="user-accounts">
-            @foreach (var sn in Model.AvailableNetworks)
-            {
-                @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
-            }
-        </div>
-        @foreach (var sn in Model.ConnectedNetworks)
-        {
-            <div class="tab-pane fade" id="@sn.Name">
-                @Html.DisplayFor(x => sn.Name)
-                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+<div id="MyMain">
+    <section id="playlists" class="main-areas">
+        <h3>Playlists</h3>        
+        <table class="table table-striped col-md-offset-1" id="playlistsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>accessibilty</th>
+                </tr>
+            </thead>
+            <tbody id="playlists"></tbody>
+        </table>
+    </section>
+    <section id="tracks" class="main-areas">
+        <h3>Tracks</h3>
+        <div class="tabbable tabs-left">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
+                @foreach (var sn in Model.ConnectedNetworks)
                 {
-                    @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                    <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
                 }
-                @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
-            </div>
-        } 
-    </div>
-</div>
-<div id="relogin" style="display: none">
-    <p id="error"> Your time has expired, please login again. </p>
-    @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
-</div>
+            </ul>
 
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="user-accounts">
+                    @foreach (var sn in Model.AvailableNetworks)
+                    {
+                        @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                    }
+                </div>
+                @foreach (var sn in Model.ConnectedNetworks)
+                {
+                    <div class="tab-pane fade" id="@sn.Name">
+                        @Html.DisplayFor(x => sn.Name)
+                        @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                        {
+                            @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                        }
+                        @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="relogin" style="display: none">
+            <p id="error"> Your time has expired, please login again. </p>
+            @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+        </div>
+    </section>
+</div>
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
@@ -53,9 +69,41 @@
             <td style="display: none" id="trackId">${id}</td>
         </tr>
     </script>
-
+    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
+        <tr>
+            <td>${Name}</td>
+            <td>${Accessibilty}</td>
+        </tr>
+    </script>
     <script>
-        $(document).ready(
+        var showPlaylists = function() {
+            $('#playlistsTable').find("tr:gt(0)").remove();
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
+                success: function(playlists) {
+                    if (typeof playlists.Message === 'undefined') {
+                        $("#relogin").hide();
+                        playlists = playlists.Result;
+                        var list = $('#playlistsTable');
+                        for (var i = 0; i < playlists.length; i++) {
+                            var playlist = playlists[i];
+                            list.append($("#playlistTemplate").tmpl(playlist));
+                        }
+                    } else {
+                        $("#relogin").show();
+                        var reloginContainer = $('#relogin');
+                        reloginContainer.find('a').attr('href', reloginUrl);
+                    }
+                }
+            });
+        };
+        $(document).on('PlaylistAdded', function(playlist) {
+            console.log(playlist);
+            $('#playlistsTable').append($("#playlistTemplate").tmpl(playlist));
+        });
+
+        $(document).ready(function() {
+            showPlaylists();
             $('.providerBtn').click(function(e) {
                 var provider = $(e.target).data('provider');
                 var reloginUrl = $(e.target).data('reloginurl');
@@ -67,10 +115,10 @@
                         if (typeof tracks.Message === 'undefined') {
                             console.log(tracks);
                             $("#relogin").hide();
-                            var list = $('#tracks');
+                            var list = $('#tracksTable');
                             for (var i = 0; i < tracks.length; i++) {
                                 var track = tracks[i];
-                                list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
+                                $("#trackTemplate").tmpl(track).appendTo(list);
                             }
                         } else {
                             $("#relogin").show();
@@ -79,13 +127,14 @@
                         }
                     }
                 });
-            })
-        );
+            });
+        });
     </script>
 
     <script>
         $(document).ready(function() {
             $('#applyBtn').click(function(e) {
+
                 var provider = $(e.target).data('provider');
                 var tableControl = document.getElementById('tracksTable');
                 var tracks = [];
@@ -94,13 +143,14 @@
                     tracks.push($(this).closest('tr').find('#trackId').text());
                 }).get();
                 console.log(tracks);
-                console.log($('#inputPlaylistName').val());
+                var playlistName = $('#inputPlaylistName').val();
+                console.log(playlistName);
 
                 $.ajax({
                     url: '/api/usertracks?provider=' + provider,
                     type: 'POST',
                     data: JSON.stringify({
-                        "Name": $('#inputPlaylistName').val(),
+                        "Name": playlistName,
                         "Accessibilty": accessibilty,
                         "TrackIds": tracks
                     }) + JSON.stringify({ "Provider": provider }),
@@ -108,8 +158,9 @@
                     contentType: 'application/json',
                     async: false
                 });
-            });
+                $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: accessibilty});
         });
+    });
 
         $(document).ready(function() {
             $('#checkall').click(function() {
@@ -118,6 +169,19 @@
                 else
                     $('input:checkbox').prop('checked', false);
             });
+        });
+        $('#MyMain').css({
+            'min-height': '300px',
+            'width': 'auto',
+            'display': 'inline-flex'
+
+        });
+        $('.main-areas').css({
+            'padding-right': '8%',
+            'display': 'block',
+            'float': 'left',
+            'width': '600px',
+            'min-height': '400px'
         });
     </script>
 }
