@@ -9,7 +9,8 @@
 <h2>Settings</h2>
 <div id="MyMain">
     <section id="playlists" class="main-areas">
-        <h3>Playlists</h3>        
+        <h3>Playlists</h3>      
+        <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">  
         <table class="table table-striped col-md-offset-1" id="playlistsTable">
             <thead>
                 <tr>
@@ -19,6 +20,7 @@
             </thead>
             <tbody id="playlists"></tbody>
         </table>
+        <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
     </section>
     <section id="tracks" class="main-areas">
         <h3>Tracks</h3>
@@ -76,10 +78,13 @@
         </tr>
     </script>
     <script>
-        var showPlaylists = function() {
+        var playlists_global = [];
+        var stringForCreateBtn = "Create new playlist ";
+        var showPlaylists = function(playlists) {
             $('#playlistsTable').find("tr:gt(0)").remove();
-            $.ajax({
-                url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
+            if (typeof (playlists) == 'undefined') //Initial run to get playlists from db
+                $.ajax({
+                    url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
                 success: function(playlists) {
                     if (typeof playlists.Message === 'undefined') {
                         $("#relogin").hide();
@@ -87,6 +92,7 @@
                         var list = $('#playlistsTable');
                         for (var i = 0; i < playlists.length; i++) {
                             var playlist = playlists[i];
+                            playlists_global.push(playlist);
                             list.append($("#playlistTemplate").tmpl(playlist));
                         }
                     } else {
@@ -96,10 +102,24 @@
                     }
                 }
             });
+            else { //using to print playlists after using filter
+                if (playlists.length != 0) {
+                    var list = $('#playlistsTable');
+                    for (var i = 0; i < playlists.length; i++) {
+                        var playlist = playlists[i];
+                        list.append($("#playlistTemplate").tmpl(playlist));
+                    }
+                } else {
+                    var $createBtn = $('#createNewPlaylistBtn');
+                    $createBtn.show();
+                    $createBtn.text(stringForCreateBtn + $('#searchPlaylistName').val());
+                }
+            }
         };
         $(document).on('PlaylistAdded', function(playlist) {
             console.log(playlist);
-            $('#playlistsTable').append($("#playlistTemplate").tmpl(playlist));
+            playlists_global.push({Name:playlist.Name, Accessibilty:playlist.Accessibilty});
+            $('#searchPlaylistName').trigger('input');
         });
 
         $(document).ready(function() {
@@ -133,12 +153,25 @@
 
     <script>
         $(document).ready(function() {
+            $('#createNewPlaylistBtn').hide();
+            $('#createNewPlaylistBtn').click(function() {
+                var playlistName = $('#searchPlaylistName').val();
+                $.ajax({
+                    url: '/api/playlists?name=' + playlistName + '&accessibilty=Public',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false
+                });
+                $('#createNewPlaylistBtn').hide();
+                $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
+            });
             $('#applyBtn').click(function(e) {
-
                 var provider = $(e.target).data('provider');
                 var tableControl = document.getElementById('tracksTable');
                 var tracks = [];
                 var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
+                console.log(accessibilty);
                 $('input:checkbox:checked', tableControl).each(function() {
                     tracks.push($(this).closest('tr').find('#trackId').text());
                 }).get();
@@ -158,9 +191,9 @@
                     contentType: 'application/json',
                     async: false
                 });
-                $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: accessibilty});
+                $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: accessibilty });
+            });
         });
-    });
 
         $(document).ready(function() {
             $('#checkall').click(function() {
@@ -168,6 +201,15 @@
                     $('input:checkbox').prop('checked', true);
                 else
                     $('input:checkbox').prop('checked', false);
+            });
+        });
+        $(document).ready(function() {
+            $('#searchPlaylistName').on('input', function (e) {
+                $('#createNewPlaylistBtn').hide();
+                var searchParam = $(this).val().toLocaleLowerCase();
+                showPlaylists(playlists_global.filter(function(index) {
+                    return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+                }));
             });
         });
         $('#MyMain').css({

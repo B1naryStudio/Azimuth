@@ -59,7 +59,6 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPost]
-        [Route("post")]
         public HttpResponseMessage CreatePlaylist(string name, Accessibilty accessibilty)
         {
             try
@@ -74,7 +73,6 @@ namespace Azimuth.ApiControllers
         }
         
         [HttpPut]
-        [Route("put")]
         public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
         {
             try
