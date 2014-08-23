@@ -7,8 +7,8 @@
 }
 
 <div class="container">
-    <div id="MainRow" class="row" style="display: table;">
-        <div id="playlists" class="col-md-4" style="display: table-cell; float: none; vertical-align: top; " >
+    <div id="MainRow" class="row" >
+        <div id="playlists" class="col-md-3 stuck">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <table class="table table-striped" id="playlistsTable">
@@ -22,11 +22,10 @@
             </table>
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
-        <div class="col-md-1" style="background-color: #222222; display: table-cell; float: none; vertical-align: top;">
+        <div class="col-md-1 stuck col-md-offset-3" style="background-color: #222222;">
             <img  src="~/Images/play-button.png" class="img-rounded" height="50" style="position: absolute; top: 50%; left: 50%; margin-left: -25px"/>
-            
         </div>
-        <div id="tracks" class="col-md-7" style="display: table-cell; float: none; vertical-align: top;">
+        <div id="tracks" class="col-md-7 col-md-offset-5">
             <h3>Tracks</h3>
             <div class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
@@ -217,12 +216,5 @@
                 }));
             });
         });
-        //$('#MainRow').css({
-        //    'overflow': 'hidden'
-        //});
-        //$('#MainRow .panel').css({
-        //    'margin-bottom': '-99999px',
-        //    'padding-bottom': '99999px'
-        //});
     </script>
 }
