@@ -6,58 +6,63 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Settings</h2>
-<div id="MyMain">
-    <section id="playlists" class="main-areas">
-        <h3>Playlists</h3>      
-        <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">  
-        <table class="table table-striped col-md-offset-1" id="playlistsTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>accessibilty</th>
-                </tr>
-            </thead>
-            <tbody id="playlists"></tbody>
-        </table>
-        <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
-    </section>
-    <section id="tracks" class="main-areas">
-        <h3>Tracks</h3>
-        <div class="tabbable tabs-left">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
-                @foreach (var sn in Model.ConnectedNetworks)
-                {
-                    <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
-                }
-            </ul>
-
-            <div class="tab-content">
-                <div class="tab-pane fade active in" id="user-accounts">
-                    @foreach (var sn in Model.AvailableNetworks)
+<div class="container">
+    <div id="MainRow" class="row" style="display: table;">
+        <div id="playlists" class="col-md-4" style="display: table-cell; float: none; vertical-align: top; " >
+            <h3>Playlists</h3>
+            <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
+            <table class="table table-striped" id="playlistsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>accessibilty</th>
+                    </tr>
+                </thead>
+                <tbody id="playlists"></tbody>
+            </table>
+            <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
+        </div>
+        <div class="col-md-1" style="background-color: #222222; display: table-cell; float: none; vertical-align: top;">
+            <img  src="~/Images/play-button.png" class="img-rounded" height="50" style="position: absolute; top: 50%; left: 50%; margin-left: -25px"/>
+            
+        </div>
+        <div id="tracks" class="col-md-7" style="display: table-cell; float: none; vertical-align: top;">
+            <h3>Tracks</h3>
+            <div class="tabbable tabs-left">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
+                    @foreach (var sn in Model.ConnectedNetworks)
                     {
-                        @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                        <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
+                    }
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="user-accounts">
+                        @foreach (var sn in Model.AvailableNetworks)
+                        {
+                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                        }
+                    </div>
+                    @foreach (var sn in Model.ConnectedNetworks)
+                    {
+                        <div class="tab-pane fade" id="@sn.Name">
+                            @Html.DisplayFor(x => sn.Name)
+                            @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                            {
+                                @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                            }
+                            @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
+                        </div>
                     }
                 </div>
-                @foreach (var sn in Model.ConnectedNetworks)
-                {
-                    <div class="tab-pane fade" id="@sn.Name">
-                        @Html.DisplayFor(x => sn.Name)
-                        @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
-                        {
-                            @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
-                        }
-                        @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
-                    </div>
-                }
+            </div>
+            <div id="relogin" style="display: none">
+                <p id="error"> Your time has expired, please login again. </p>
+                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
             </div>
         </div>
-        <div id="relogin" style="display: none">
-            <p id="error"> Your time has expired, please login again. </p>
-            @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
-        </div>
-    </section>
+    </div>
 </div>
 @section scripts
 {
@@ -85,23 +90,23 @@
             if (typeof (playlists) == 'undefined') //Initial run to get playlists from db
                 $.ajax({
                     url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
-                success: function(playlists) {
-                    if (typeof playlists.Message === 'undefined') {
-                        $("#relogin").hide();
-                        playlists = playlists.Result;
-                        var list = $('#playlistsTable');
-                        for (var i = 0; i < playlists.length; i++) {
-                            var playlist = playlists[i];
-                            playlists_global.push(playlist);
-                            list.append($("#playlistTemplate").tmpl(playlist));
+                    success: function(playlists) {
+                        if (typeof playlists.Message === 'undefined') {
+                            $("#relogin").hide();
+                            playlists = playlists.Result;
+                            var list = $('#playlistsTable');
+                            for (var i = 0; i < playlists.length; i++) {
+                                var playlist = playlists[i];
+                                playlists_global.push(playlist);
+                                list.append($("#playlistTemplate").tmpl(playlist));
+                            }
+                        } else {
+                            $("#relogin").show();
+                            var reloginContainer = $('#relogin');
+                            reloginContainer.find('a').attr('href', reloginUrl);
                         }
-                    } else {
-                        $("#relogin").show();
-                        var reloginContainer = $('#relogin');
-                        reloginContainer.find('a').attr('href', reloginUrl);
                     }
-                }
-            });
+                });
             else { //using to print playlists after using filter
                 if (playlists.length != 0) {
                     var list = $('#playlistsTable');
@@ -212,18 +217,12 @@
                 }));
             });
         });
-        $('#MyMain').css({
-            'min-height': '300px',
-            'width': 'auto',
-            'display': 'inline-flex'
-
-        });
-        $('.main-areas').css({
-            'padding-right': '8%',
-            'display': 'block',
-            'float': 'left',
-            'width': '600px',
-            'min-height': '400px'
-        });
+        //$('#MainRow').css({
+        //    'overflow': 'hidden'
+        //});
+        //$('#MainRow .panel').css({
+        //    'margin-bottom': '-99999px',
+        //    'padding-bottom': '99999px'
+        //});
     </script>
 }
