@@ -8,7 +8,7 @@
 
 <div class="container">
     <div id="MainRow" class="row" >
-        <div id="playlists" class="col-md-3 stuck">
+        <div id="playlists" class="stuck" style="width: 24%">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <table class="table table-striped" id="playlistsTable">
@@ -22,10 +22,16 @@
             </table>
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
-        <div class="col-md-1 stuck col-md-offset-3" style="background-color: #222222;">
-            <img  src="~/Images/play-button.png" class="img-rounded" height="50" style="position: absolute; top: 50%; left: 50%; margin-left: -25px"/>
+        <div class="stuck" style="background-color: #222222; width: 60px; margin-left: 25%;">
+            <div id="buttons" style="position: absolute; background-color: #4a5acd; top: 50%; left: 50%; height: 200px; margin-left: -30px; margin-top: -100px; width: 100%; border: 2px solid white; -ms-border-radius: 10px; border-radius: 10px">
+                <img src="~/Images/media_prev.png" height="50" style="margin-left: 3px"/>
+                <div class="spacer"></div>
+                <img src="~/Images/media_play.png" height="50" style="margin-left: 3px" />
+                <div class="spacer"></div>
+                <img src="~/Images/media_next.png" height="50" style="margin-left: 3px" />
+            </div>
         </div>
-        <div id="tracks" class="col-md-7 col-md-offset-5">
+        <div id="tracks" style="margin-left: 35%; width: 60%">
             <h3>Tracks</h3>
             <div class="tabbable tabs-left">
                 <ul class="nav nav-tabs">
