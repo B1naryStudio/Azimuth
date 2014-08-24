@@ -8,7 +8,7 @@
 
 <div class="container">
     <div id="MainRow" class="row" >
-        <div id="playlists" class="stuck" style="width: 24%">
+        <div id="playlists" class="stuck" style="width: 24%; left: 5%">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <table class="table table-striped" id="playlistsTable">
@@ -22,18 +22,18 @@
             </table>
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
-        <div class="stuck" style="background-color: #222222; width: 60px; margin-left: 25%;">
-            <div id="buttons" style="position: absolute; background-color: #4a5acd; top: 50%; left: 50%; height: 200px; margin-left: -30px; margin-top: -100px; width: 100%; border: 2px solid white; -ms-border-radius: 10px; border-radius: 10px">
-                <img src="~/Images/media_prev.png" height="50" style="margin-left: 3px"/>
+        <div class="stuck" style="background-color: #222222; width: 5%; left: 30%;">
+            <div id="buttons" style="position: absolute; background-color: #4a5acd; top: 50%; height: 200px; margin-top: -100px; width: 100%; border: 2px solid white; -ms-border-radius: 10px; border-radius: 10px">
+                <img src="~/Images/media_prev.png" style="margin-left: 3px; width: 90%"/>
                 <div class="spacer"></div>
-                <img src="~/Images/media_play.png" height="50" style="margin-left: 3px" />
+                <img src="~/Images/media_play.png" style="margin-left: 3px; width: 90%" />
                 <div class="spacer"></div>
-                <img src="~/Images/media_next.png" height="50" style="margin-left: 3px" />
+                <img src="~/Images/media_next.png" style="margin-left: 3px; width: 90%" />
             </div>
         </div>
-        <div id="tracks" style="margin-left: 35%; width: 60%">
+        <div id="tracks" style="position: absolute; left: 37%; width: 70%;">
             <h3>Tracks</h3>
-            <div class="tabbable tabs-left">
+            <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
                     @foreach (var sn in Model.ConnectedNetworks)
@@ -42,7 +42,7 @@
                     }
                 </ul>
 
-                <div class="tab-content">
+                <div class="tab-content" style="margin-top: 10px">
                     <div class="tab-pane fade active in" id="user-accounts">
                         @foreach (var sn in Model.AvailableNetworks)
                         {
