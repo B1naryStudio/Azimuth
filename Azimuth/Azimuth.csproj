@@ -278,6 +278,7 @@
     <Content Include="Images\media_play.png" />
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
+    <Content Include="Images\media_volume.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

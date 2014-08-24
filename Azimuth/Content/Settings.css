@@ -9,9 +9,10 @@
     left: 30%;
 }
 
-#tracks {
+#SN {
     position: absolute; 
-    left: 37%; 
+    left: 30%;
+    margin-left: 80px; 
     width: 60%;
 }
 
@@ -46,10 +47,10 @@
 #buttons {
     position: absolute; 
     background-color: #4a5acd; 
-    top: 30%; 
+    top: 25%; 
     height: 210px; 
     width: 100%; 
-    border: 2px solid white; 
+    border: 3px solid white; 
     -ms-border-radius: 10px; 
     border-radius: 10px
 }
@@ -59,10 +60,22 @@
     width: 90%
 }
 
+#volumeImg {
+    content: "";
+    display: inline-block;
+    position: absolute; 
+    width: 40px;
+    height: 40px;
+    top: 68%; 
+    left: 50%;
+    margin-left: -16px;
+    background: url("../Images/media_volume.png") no-repeat 0 -40px;
+}
+
 #volume {
     height: 100px; 
     width: 14px;
-    top: 70%;
+    top: 75%;
     left: 50%;
     margin-left: -5px; 
     border-top: 2px solid white; 

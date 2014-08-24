@@ -30,11 +30,12 @@
                 <div class="spacer"></div>
                 <img src="~/Images/media_next.png" />
             </div>
+            <span id="volumeImg"></span>
             <div id="volume" class="dragdealer">
                 <div class="handle"></div>
             </div>
         </div>
-        <div id="tracks">
+        <div id="SN">
             <h3>Tracks</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
@@ -77,11 +78,25 @@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
     <script>
-        new Dragdealer('volume', {
+        var volume = new Dragdealer('volume', {
             vertical: true,
             horizontal: false,
-            bottom: 4
+            bottom: 4,
+            animationCallback: function(x, y) {
+                var t = Math.round(y * 100);
+                console.log(t);
+                if (t <= 33) {
+                    $('#volumeImg').css('background-position', '0 0');
+                } else if (t <= 66) {
+                    $('#volumeImg').css('background-position', '0 -40px');
+                } else if (t === 100) {
+                    $('#volumeImg').css('background-position', '0 -120px');
+                } else {
+                    $('#volumeImg').css('background-position', '0 -79px');
+                }
+            }
         });
+        volume.setValue(0, 0.5);
     </script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
