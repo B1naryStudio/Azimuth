@@ -7,8 +7,8 @@
 }
 
 <div>
-    <div id="MainRow" class="row" >
-        <div id="playlists" class="stuck" style="width: 24%; left: 5%">
+    <div id="mainRow" class="row">
+        <div id="playlists" class="stuck">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <table class="table table-striped" id="playlistsTable">
@@ -22,7 +22,7 @@
             </table>
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
-        <div class="stuck" style="background-color: #222222; width: 5%; left: 30%;">
+        <div id="separator" class="stuck">
             <div id="buttons">
                 <img src="~/Images/media_prev.png" />
                 <div class="spacer"></div>
@@ -34,7 +34,7 @@
                 <div class="handle"></div>
             </div>
         </div>
-        <div id="tracks" style="position: absolute; left: 37%; width: 60%;">
+        <div id="tracks">
             <h3>Tracks</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
