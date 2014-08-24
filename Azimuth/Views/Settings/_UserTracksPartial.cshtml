@@ -15,37 +15,25 @@
             </select>
             <a class="btn btn-primary col-md-offset-11" data-provider=@Model.provider id="applyBtn">Apply &raquo;</a>
         </div>
-
-        @*<h2>UserTracks:</h2>*@
         
         <input type="checkbox" checked="checked" id="checkall"/>SelectAll
+        
+        <div class="draggable">
+            <div id="tracksTable" class="generalPlaylist">
 
-        <div id="tracksTable">
-            
-            <div class="tableTitle">
-                User Tracks
-            </div>
+                <div class="tableTitle">
+                    User Tracks
+                </div>
 
-            <div class ="tableHeader">
-                <div class="cell">Artist</div>
-                <div class="cell">Title</div>
-                <div class="cell">Import</div>    
+                <div class="tableHeader">
+                    <div class="cell">Artist</div>
+                    <div class="cell">Title</div>
+                    <div class="cell">Import</div>
+                </div>
+
+                <div class="draggable-list"></div>
+
             </div>
-            
-            <div class="tableContent"></div> 
-            
-            
-            
-            @*<table class="table table-striped col-md-offset-1" id="tracksTable">
-                <thead>
-                    <tr>
-                        <th>Artist</th>
-                        <th>Title</th>
-                        <th>Import</th>
-                    </tr>
-                </thead>
-                <tbody id="tracks"></tbody>
-            </table>*@
         </div>
     </div>
 }

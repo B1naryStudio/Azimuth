@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+@*<div class="container">*@
     <div id="MainRow" class="row" >
         <div id="playlists" class="stuck" style="width: 24%; left: 5%">
             <h3>Playlists</h3>
@@ -68,13 +68,14 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="itemsContainer tableRow" id="itemsContainer"></div>
+@*</div>*@
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow">
+        <div class="tableRow draggable-item">
             <div class="cell">${artist}</div>
             <div class="cell">${title}</div>
             <div class="cell"><input type="checkbox" checked="checked"></div>
@@ -145,11 +146,13 @@
                         if (typeof tracks.Message === 'undefined') {
                             console.log(tracks);
                             $("#relogin").hide();
-                            var list = $('#tracksTable');
+                            //var list = $('#tracksTable');
+                            var list = $('.draggable-list');
                             for (var i = 0; i < tracks.length; i++) {
                                 var track = tracks[i];
                                 $("#trackTemplate").tmpl(track).appendTo(list);
                             }
+                            $('.draggable').makeDraggable();
                         } else {
                             $("#relogin").show();
                             var reloginContainer = $('#relogin');
@@ -223,4 +226,6 @@
             });
         });
     </script>
+    
+    <script src="../../Scripts/drag&drop.js" type=""></script>
 }

@@ -69,14 +69,110 @@ input[type="checkbox"].input-validation-error {
     box-shadow: 0 0 8px black;
 }
 
-.trackInfo {
-    float: left;
-    width: 33%;
-    height: 100%;
+#tracksTable {
+    display: table;
+}
+
+.tableTitle {
+    display: table-caption;
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.tableHeader {
+    display: table-row;
+    font-weight: bold;
+    text-align: left;
+}
+
+.tableContent {
+    display: table-row-group;
+}
+
+.tableRow {
+    display: table-row;
 }
 
 .cell {
     display: table-cell;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+
+
+
+
+.draggable-item {
+    top: 0;
+	left: 0;
+	height: 30px;
+	width: 100px;
+	border: 1px black solid;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+.draggable-btn {
+	height:30px;
+	cursor: pointer;
+}
+.draggable-btn.add {
+	width:40%;
+}
+.draggable-btn.sort {
+	width: 30%;
+}
+.draggable-item:hover {
+	background: gray;
+	cursor: pointer;
+}
+.draggable-item.dragging {
+	position: absolute;
+	z-index: 1000;
+}
+.draggable-list {
+	float: left;
+	border: 1px lightsteelblue solid;
+	min-height: 30px;
+	min-width: 150px;
+}
+.draggable-list-empty{
+	height: 30px;
+	width: 100px;
+	border: 1px lightsteelblue solid;
+}
+.draggable-item-selected {
+	background: aquamarine;
+}
+#itemsContainer {
+	position: absolute;
+    opacity: 0.5;
+	z-index: 1000;
+	border: 1px powderblue solid;
+    display: table-row;
+}
+#itemsContainer div {
+    /*width: 741px;*/
+    /*width: expression($('.draggable-item').width())*/
+    width: 20%;
+}
+.draggable{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	-moz-user-select:
+	-moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.delete-area{
+	width: 200px;
+	height: 200px;
+	border: solid black 1px;
+	//visibility: hidden;
+	float: left;
 }
