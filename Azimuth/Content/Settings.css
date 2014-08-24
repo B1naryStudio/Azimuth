@@ -42,3 +42,25 @@
     margin-left: 3px; 
     width: 90%
 }
+
+#volume {
+    height: 100px; 
+    width: 14px;
+    top: 70%;
+    left: 50%;
+    margin-left: -5px; 
+    border-top: 2px solid white; 
+    border-left: 2px solid white; 
+    border-right: 2px solid white; 
+    border-bottom: 10px solid white; 
+    -ms-border-radius: 3px; 
+    border-radius: 3px
+}
+
+#volume div {
+    height: 20px; 
+    width: 10px;
+    background-color: #4a5acd;
+    -ms-border-radius: 2px; 
+    border-radius: 2px
+}

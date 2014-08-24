@@ -30,6 +30,9 @@
                 <div class="spacer"></div>
                 <img src="~/Images/media_next.png" />
             </div>
+            <div id="volume" class="dragdealer">
+                <div class="handle"></div>
+            </div>
         </div>
         <div id="tracks" style="position: absolute; left: 37%; width: 60%;">
             <h3>Tracks</h3>
@@ -73,6 +76,14 @@
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
+    <script>
+        new Dragdealer('volume', {
+            vertical: true,
+            horizontal: false,
+            bottom: 4
+        });
+    </script>
+
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <tr>
             <td>${artist}</td>
