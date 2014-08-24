@@ -68,3 +68,15 @@ input[type="checkbox"].input-validation-error {
     -ms-box-shadow: 0 0 8px black;
     box-shadow: 0 0 8px black;
 }
+
+.trackInfo {
+    float: left;
+    width: 33%;
+    height: 100%;
+}
+
+.cell {
+    display: table-cell;
+    padding-left: 5px;
+    padding-right: 5px;
+}

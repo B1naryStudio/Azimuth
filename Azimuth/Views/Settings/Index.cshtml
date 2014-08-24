@@ -74,12 +74,12 @@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <tr>
-            <td>${artist}</td>
-            <td>${title}</td>
-            <td><input type="checkbox" checked="checked"></td>
-            <td style="display: none" id="trackId">${id}</td>
-        </tr>
+        <div class="tableRow">
+            <div class="cell">${artist}</div>
+            <div class="cell">${title}</div>
+            <div class="cell"><input type="checkbox" checked="checked"></div>
+            <div class="cell" style="display: none" id="trackId">${id}</div>
+        </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <tr>
