@@ -6,10 +6,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<<<<<<< HEAD
-@*<div class="container">*@
-    @*<div id="MainRow" class="row" >
-        <div id="playlists" class="stuck" style="width: 24%; left: 5%">*@
 <div>
     <div id="mainRow" class="row">
         <div id="playlists" class="stuck">
@@ -22,18 +18,9 @@
                     <div class="cell">Name</div>
                     <div class="cell">Accessibility</div>
                 </div>
-                <div class=""></div>
+                @*<div class=""></div>*@
             </div>
 
-            @*<table class="table table-striped" id="playlistsTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>accessibilty</th>
-                    </tr>
-                </thead>
-                <tbody id="playlists"></tbody>
-            </table>*@
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
         <div id="separator" class="stuck">
@@ -87,7 +74,7 @@
         </div>
     </div>
     <div class="itemsContainer tableRow" id="itemsContainer"></div>
-@*</div>*@
+</div>
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
@@ -122,47 +109,95 @@
             <div class="cell" style="display: none" id="trackId">${id}</div>
         </div>
     </script>
-    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow">
+    <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow draggable-item">
+            <div class="cell">${Artist}</div>
             <div class="cell">${Name}</div>
-            <div class="cell">${Accessibilty}</div>
+            <div class="cell">${Duration}</div>
+        </div>
+    </script>
+    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableHeader">
+            <div class="tableRow accordion">
+                <div class="cell">${Name}</div>
+                <div class="cell">${Accessibilty}</div>
+                <div class="cell" style="display: none" id="playlistId">${Id}</div>
+            </div>
+            @*<p>1234567890</p>*@
+
+            <div id="playlistTracksTable" class="table draggable-list"></div>
         </div>
     </script>
     <script>
         var playlists_global = [];
         var stringForCreateBtn = "Create new playlist ";
         var showPlaylists = function(playlists) {
-            $('#playlistsTable').find("tr:gt(0)").remove();
+            $('#playlistsTable').find(".tableRow").remove();
             if (typeof (playlists) == 'undefined') //Initial run to get playlists from db
                 $.ajax({
                     url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
-                    success: function(playlists) {
-                        if (typeof playlists.Message === 'undefined') {
-                            $("#relogin").hide();
-                            playlists = playlists.Result;
-                            var list = $('#playlistsTable');
-                            for (var i = 0; i < playlists.length; i++) {
-                                var playlist = playlists[i];
-                                if (playlist == 0)
-                                    playlist.Accessibilty = "public";
-                                else
-                                    playlist.Accessibilty = "private";
-                                playlists_global.push(playlist);
-                                list.append($("#playlistTemplate").tmpl(playlist));
-                            }
-                        } else {
-                            $("#relogin").show();
-                            var reloginContainer = $('#relogin');
-                            reloginContainer.find('a').attr('href', reloginUrl);
+                success: function(playlists) {
+                    if (typeof playlists.Message === 'undefined') {
+                        $("#relogin").hide();
+                        playlists = playlists.Result;
+                        var list = $('#playlistsTable');
+                        for (var i = 0; i < playlists.length; i++) {
+                            var playlist = playlists[i];
+                            if (playlist.Accessibilty == 1)
+                                playlist.Accessibilty = "public";
+                            else
+                                playlist.Accessibilty = "private";
+                            playlists_global.push(playlist);
+                            list.append($("#playlistTemplate").tmpl(playlist));
                         }
+                    } else {
+                        $("#relogin").show();
+                        var reloginContainer = $('#relogin');
+                        reloginContainer.find('a').attr('href', reloginUrl);
                     }
-                });
+
+                    //$('.tableRow.accordion').parent().children('p').hide();
+                    $('.tableRow.accordion').parent().children('.draggable-list').hide();
+
+                    $(".tableRow.accordion").on("click", function() {
+
+                        //var $this = $(this);
+                        var $dragList = $(this).parent().children('.draggable-list');
+
+                        if (!$(this).hasClass('active')) {
+                            $.ajax({
+                                url: "https://localhost:44300/api/playlists/" + $(this).find('#playlistId').text(),
+                                type: 'GET',
+                                async: false,
+                                success: function(playlistData) {
+                                    var tracks = playlistData.Result.Tracks;
+                                    //var list = $('.draggable-list');
+                                    var list = $dragList;
+                                    for (var i = 0; i < tracks.length; i++) {
+                                        var track = tracks[i];
+                                        $("#playlistTrackTemplate").tmpl(track).appendTo(list);
+                                    }
+                                    $('.draggable').makeDraggable();
+                                }
+                            });
+                        }
+
+
+                        //$(this).next(".tableRow.accordion").slideToggle("slow");
+                        $(this).next(".draggable-list").slideToggle("slow");
+                        $(this).toggleClass("active");
+                        //$(this).siblings("tableRow").removeClass("active"); // ?????????
+                    });
+
+
+                }
+            });
             else { //using to print playlists after using filter
                 if (playlists.length != 0) {
                     var list = $('#playlistsTable');
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
-                        if (playlist == 0)
+                        if (playlist.Accessibilty == 1)
                             playlist.Accessibilty = "public";
                         else
                             playlist.Accessibilty = "private";
@@ -177,7 +212,7 @@
         };
         $(document).on('PlaylistAdded', function(playlist) {
             console.log(playlist);
-            playlists_global.push({Name:playlist.Name, Accessibilty:playlist.Accessibilty});
+            playlists_global.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
             $('#searchPlaylistName').trigger('input');
         });
 
@@ -234,7 +269,7 @@
                 var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
                 console.log(accessibilty);
                 $('input:checkbox:checked', tableControl).each(function() {
-                    tracks.push($(this).closest('tr').find('#trackId').text());
+                    tracks.push($(this).closest('.tableRow').find('#trackId').text());
                 }).get();
                 console.log(tracks);
                 var playlistName = $('#inputPlaylistName').val();
@@ -265,7 +300,7 @@
             });
         });
         $(document).ready(function() {
-            $('#searchPlaylistName').on('input', function (e) {
+            $('#searchPlaylistName').on('input', function(e) {
                 $('#createNewPlaylistBtn').hide();
                 var searchParam = $(this).val().toLocaleLowerCase();
                 showPlaylists(playlists_global.filter(function(index) {
@@ -274,6 +309,6 @@
             });
         });
     </script>
-    
+
     <script src="../../Scripts/drag&drop.js" type=""></script>
 }

@@ -172,3 +172,30 @@ input[type="checkbox"].input-validation-error {
 	//visibility: hidden;
 	float: left;
 }
+
+.accordion {
+	width: 480px;
+	border-bottom: solid 1px #c4c4c4;
+}
+.tableRow.accordion {
+	background: #e9e7e7 url(images/arrow-square.gif) no-repeat right -51px;
+	padding: 7px 15px;
+	margin: 0;
+	font: bold 120%/100% Arial, Helvetica, sans-serif;
+	border: solid 1px #c4c4c4;
+	border-bottom: none;
+	cursor: pointer;
+}
+.accordion .tableRow:hover {
+	background-color: #e3e2e2;
+}
+.accordion .tableRow.active {
+	background-position: right 5px;
+}
+.accordion p {
+	background: #f7f7f7;
+	margin: 0;
+	padding:  10px 15px 20px;
+	border-left: solid 1px #c4c4c4;
+	border-right: solid 1px #c4c4c4;
+}
