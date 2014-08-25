@@ -125,7 +125,7 @@
             </div>
             @*<p>1234567890</p>*@
 
-            <div id="playlistTracksTable" class="table draggable-list"></div>
+            <div id="playlistTracksTable" class="table draggable-list" style="display: none"></div>
         </div>
     </script>
     <script>
@@ -160,7 +160,6 @@
                     $('.tableRow.accordion').parent().children('.draggable-list').hide();
 
                     $(".tableRow.accordion").on("click", function() {
-
                         //var $this = $(this);
                         var $dragList = $(this).parent().children('.draggable-list');
 
