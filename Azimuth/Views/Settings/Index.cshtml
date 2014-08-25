@@ -157,7 +157,6 @@
                         }
 
                         //$('.tableRow.accordion').parent().children('p').hide();
-                        $('.tableRow.accordion').parent().children('.draggable-list').hide();
                         $(".tableRow.accordion").on("click", _getTracks);
                     }
                 });
@@ -168,6 +167,9 @@
                         var playlist = playlists[i];
                         list.append($("#playlistTemplate").tmpl(playlist));
                     }
+
+                    $('.tableRow.accordion').parent().children('.draggable-list').hide();
+                    $(".tableRow.accordion").on("click", _getTracks);
                 } else {
                     var $createBtn = $('#createNewPlaylistBtn');
                     $createBtn.show();
