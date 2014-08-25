@@ -6,9 +6,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<<<<<<< HEAD
 @*<div class="container">*@
-    <div id="MainRow" class="row" >
-        <div id="playlists" class="stuck" style="width: 24%; left: 5%">
+    @*<div id="MainRow" class="row" >
+        <div id="playlists" class="stuck" style="width: 24%; left: 5%">*@
+<div>
+    <div id="mainRow" class="row">
+        <div id="playlists" class="stuck">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             
@@ -32,16 +36,20 @@
             </table>*@
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
-        <div class="stuck" style="background-color: #222222; width: 5%; left: 30%;">
-            <div id="buttons" style="position: absolute; background-color: #4a5acd; top: 50%; height: 200px; margin-top: -100px; width: 100%; border: 2px solid white; -ms-border-radius: 10px; border-radius: 10px">
-                <img src="~/Images/media_prev.png" style="margin-left: 3px; width: 90%"/>
+        <div id="separator" class="stuck">
+            <div id="buttons">
+                <img src="~/Images/media_prev.png" />
                 <div class="spacer"></div>
-                <img src="~/Images/media_play.png" style="margin-left: 3px; width: 90%" />
+                <img src="~/Images/media_play.png" />
                 <div class="spacer"></div>
-                <img src="~/Images/media_next.png" style="margin-left: 3px; width: 90%" />
+                <img src="~/Images/media_next.png" />
+            </div>
+            <span id="volumeImg"></span>
+            <div id="volume" class="dragdealer">
+                <div class="handle"></div>
             </div>
         </div>
-        <div id="tracks" style="position: absolute; left: 37%; width: 70%;">
+        <div id="SN">
             <h3>Tracks</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
@@ -84,6 +92,28 @@
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
+    <script>
+        var volume = new Dragdealer('volume', {
+            vertical: true,
+            horizontal: false,
+            bottom: 4,
+            animationCallback: function(x, y) {
+                var t = Math.round(y * 100);
+                console.log(t);
+                if (t <= 33) {
+                    $('#volumeImg').css('background-position', '0 0');
+                } else if (t <= 66) {
+                    $('#volumeImg').css('background-position', '0 -40px');
+                } else if (t === 100) {
+                    $('#volumeImg').css('background-position', '0 -120px');
+                } else {
+                    $('#volumeImg').css('background-position', '0 -79px');
+                }
+            }
+        });
+        volume.setValue(0, 0.5);
+    </script>
+
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item">
             <div class="cell">${artist}</div>
