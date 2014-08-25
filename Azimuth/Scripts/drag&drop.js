@@ -3,13 +3,7 @@
     $.fn.makeDraggable = function (options) {
         var $rootElement = this;
         var $currentItem = null;
-        //var $draggableStub = $('<li>').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
-        var $draggableStub = $('<div class="tableRow draggable-item">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);// +
-                                //    '<div class="cell"></div>' +
-                                //    '<div class="cell"></div>' +
-                                //    '<div class="cell"><input type="checkbox" checked="checked"></div>' +
-                                //    '<div class="cell" style="display: none" id="trackId">${id}</div>' +
-                                //'</div>').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
+        var $draggableStub = $('<div class="tableRow draggable-item">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
 
         var $container = $('#itemsContainer');
         var parentId = "";
