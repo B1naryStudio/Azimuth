@@ -133,65 +133,35 @@
         var stringForCreateBtn = "Create new playlist ";
         var showPlaylists = function(playlists) {
             $('#playlistsTable').find(".tableHeader").remove();
-            if (typeof (playlists) == 'undefined') //Initial run to get playlists from db
+            if (typeof (playlists) == 'undefined') { //Initial run to get playlists from db
                 $.ajax({
                     url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
-                success: function(playlists) {
-                    if (typeof playlists.Message === 'undefined') {
-                        $("#relogin").hide();
-                        playlists = playlists.Result;
-                        var list = $('#playlistsTable');
-                        for (var i = 0; i < playlists.length; i++) {
-                            var playlist = playlists[i];
-                            if (playlist.Accessibilty == 1)
-                                playlist.Accessibilty = "public";
-                            else
-                                playlist.Accessibilty = "private";
-                            playlists_global.push(playlist);
-                            list.append($("#playlistTemplate").tmpl(playlist));
+                    success: function(playlists) {
+                        if (typeof playlists.Message === 'undefined') {
+                            $("#relogin").hide();
+                            playlists = playlists.Result;
+                            var list = $('#playlistsTable');
+                            for (var i = 0; i < playlists.length; i++) {
+                                var playlist = playlists[i];
+                                if (playlist.Accessibilty == 1)
+                                    playlist.Accessibilty = "public";
+                                else
+                                    playlist.Accessibilty = "private";
+                                playlists_global.push(playlist);
+                                list.append($("#playlistTemplate").tmpl(playlist));
+                            }
+                        } else {
+                            $("#relogin").show();
+                            var reloginContainer = $('#relogin');
+                            reloginContainer.find('a').attr('href', reloginUrl);
                         }
-                    } else {
-                        $("#relogin").show();
-                        var reloginContainer = $('#relogin');
-                        reloginContainer.find('a').attr('href', reloginUrl);
+
+                        //$('.tableRow.accordion').parent().children('p').hide();
+                        $('.tableRow.accordion').parent().children('.draggable-list').hide();
+                        $(".tableRow.accordion").on("click", _getTracks);
                     }
-
-                    //$('.tableRow.accordion').parent().children('p').hide();
-                    $('.tableRow.accordion').parent().children('.draggable-list').hide();
-
-                    $(".tableRow.accordion").on("click", function() {
-                        //var $this = $(this);
-                        var $dragList = $(this).parent().children('.draggable-list');
-
-                        if (!$(this).hasClass('active')) {
-                            $.ajax({
-                                url: "https://localhost:44300/api/playlists/" + $(this).find('#playlistId').text(),
-                                type: 'GET',
-                                async: false,
-                                success: function(playlistData) {
-                                    var tracks = playlistData.Result.Tracks;
-                                    //var list = $('.draggable-list');
-                                    var list = $dragList;
-                                    for (var i = 0; i < tracks.length; i++) {
-                                        var track = tracks[i];
-                                        $("#playlistTrackTemplate").tmpl(track).appendTo(list);
-                                    }
-                                    $('.draggable').makeDraggable();
-                                }
-                            });
-                        }
-
-
-                        //$(this).next(".tableRow.accordion").slideToggle("slow");
-                        $(this).next(".draggable-list").slideToggle("slow");
-                        $(this).toggleClass("active");
-                        //$(this).siblings("tableRow").removeClass("active"); // ?????????
-                    });
-
-
-                }
-            });
-            else { //using to print playlists after using filter
+                });
+            } else { //using to print playlists after using filter
                 if (playlists.length != 0) {
                     var list = $('#playlistsTable');
                     for (var i = 0; i < playlists.length; i++) {
@@ -201,6 +171,9 @@
                         else
                             playlist.Accessibilty = "private";
                         list.append($("#playlistTemplate").tmpl(playlist));
+
+                        $('.tableRow.accordion').parent().children('.draggable-list').hide();
+                        $(".tableRow.accordion").on("click", _getTracks);
                     }
                 } else {
                     var $createBtn = $('#createNewPlaylistBtn');
@@ -209,6 +182,32 @@
                 }
             }
         };
+
+        function _getTracks() {
+            var $dragList = $(this).parent().children('.draggable-list');
+
+            if (!$(this).hasClass('active')) {
+                $.ajax({
+                    url: "https://localhost:44300/api/playlists/" + $(this).find('#playlistId').text(),
+                    type: 'GET',
+                    async: false,
+                    success: function(playlistData) {
+                        var tracks = playlistData.Result.Tracks;
+                        //var list = $('.draggable-list');
+                        var list = $dragList;
+                        for (var i = 0; i < tracks.length; i++) {
+                            var track = tracks[i];
+                            $("#playlistTrackTemplate").tmpl(track).appendTo(list);
+                        }
+                        $('.draggable').makeDraggable();
+                    }
+                });
+            }
+
+            $(this).next(".draggable-list").slideToggle("slow");
+            $(this).toggleClass("active");
+        };
+
         $(document).on('PlaylistAdded', function(playlist) {
             console.log(playlist);
             playlists_global.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
