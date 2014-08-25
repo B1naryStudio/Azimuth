@@ -11,7 +11,17 @@
         <div id="playlists" class="stuck" style="width: 24%; left: 5%">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
-            <table class="table table-striped" id="playlistsTable">
+            
+            <div class="table" id="playlistsTable">
+                <div class="tableTitle">My Playlists</div>
+                <div class="tableHeader">
+                    <div class="cell">Name</div>
+                    <div class="cell">Accessibility</div>
+                </div>
+                <div class=""></div>
+            </div>
+
+            @*<table class="table table-striped" id="playlistsTable">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -19,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody id="playlists"></tbody>
-            </table>
+            </table>*@
             <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
         </div>
         <div class="stuck" style="background-color: #222222; width: 5%; left: 30%;">
@@ -83,10 +93,10 @@
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-        <tr>
-            <td>${Name}</td>
-            <td>${Accessibilty}</td>
-        </tr>
+        <div class="tableRow">
+            <div class="cell">${Name}</div>
+            <div class="cell">${Accessibilty}</div>
+        </div>
     </script>
     <script>
         var playlists_global = [];
@@ -103,6 +113,10 @@
                             var list = $('#playlistsTable');
                             for (var i = 0; i < playlists.length; i++) {
                                 var playlist = playlists[i];
+                                if (playlist == 0)
+                                    playlist.Accessibilty = "public";
+                                else
+                                    playlist.Accessibilty = "private";
                                 playlists_global.push(playlist);
                                 list.append($("#playlistTemplate").tmpl(playlist));
                             }
@@ -118,6 +132,10 @@
                     var list = $('#playlistsTable');
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
+                        if (playlist == 0)
+                            playlist.Accessibilty = "public";
+                        else
+                            playlist.Accessibilty = "private";
                         list.append($("#playlistTemplate").tmpl(playlist));
                     }
                 } else {
