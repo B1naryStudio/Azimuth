@@ -271,6 +271,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\arrow-square.gif" />
     <Content Include="Images\media_add.png" />
     <Content Include="Images\media_next.png" />
     <Content Include="Images\media_noread.png" />

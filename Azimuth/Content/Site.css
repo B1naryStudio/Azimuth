@@ -69,43 +69,11 @@ input[type="checkbox"].input-validation-error {
     box-shadow: 0 0 8px black;
 }
 
-.table {
-    display: table;
-}
-
-.tableTitle {
-    display: table-caption;
-    text-align: center;
-    font-weight: bold;
-    font-size: larger;
-}
-
-.tableHeader {
-    display: table-row;
-    font-weight: bold;
-    text-align: left;
-}
-
-.tableContent {
-    display: table-row-group;
-}
-
-.tableRow {
-    display: table-row;
-}
-
-.cell {
-    display: table-cell;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
 .draggable-item {
     top: 0;
 	left: 0;
 	height: 30px;
 	width: 100px;
-	border: 1px black solid;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
@@ -169,19 +137,18 @@ input[type="checkbox"].input-validation-error {
 	width: 200px;
 	height: 200px;
 	border: solid black 1px;
-	//visibility: hidden;
+	/*visibility: hidden;*/
 	float: left;
 }
 
 .accordion {
-	width: 480px;
+	width: 100%;
 	border-bottom: solid 1px #c4c4c4;
 }
-.tableRow.accordion {
-	background: #e9e7e7 url(images/arrow-square.gif) no-repeat right -51px;
-	padding: 7px 15px;
+div.accordion > div.tableRow{
+	background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
 	margin: 0;
-	font: bold 120%/100% Arial, Helvetica, sans-serif;
+	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border: solid 1px #c4c4c4;
 	border-bottom: none;
 	cursor: pointer;
@@ -190,12 +157,41 @@ input[type="checkbox"].input-validation-error {
 	background-color: #e3e2e2;
 }
 .accordion .tableRow.active {
-	background-position: right 5px;
+	background-position: right 0px;
 }
-.accordion p {
-	background: #f7f7f7;
-	margin: 0;
-	padding:  10px 15px 20px;
-	border-left: solid 1px #c4c4c4;
-	border-right: solid 1px #c4c4c4;
+
+/*div.list{
+	width: 500px;
+}*/
+
+div.list span{
+	width: 50%;
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+div.tableHeader{
+	clear: left;
+}
+
+div.tableRow{
+	clear: left;
+	height: 18px;
+    width: 100%;
+}
+
+div.draggable-list{
+	width: 100%;
+	display: block;
+}
+
+div.draggable-list span{
+	width: 33%;
+}
+
+.tableTitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
 }

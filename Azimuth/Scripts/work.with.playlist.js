@@ -25,9 +25,7 @@
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
-
-                    //$('.tableRow.accordion').parent().children('p').hide();
-                    $(".tableRow.accordion").on("click", _getTracks);
+                    $('.accordion .tableRow').on("click", _getTracks);
                 }
             });
         } else { //using to print playlists after using filter
@@ -37,9 +35,6 @@
                     var playlist = playlists[i];
                     list.append($("#playlistTemplate").tmpl(playlist));
                 }
-
-                $('.tableRow.accordion').parent().children('.draggable-list').hide();
-                $(".tableRow.accordion").on("click", _getTracks);
             } else {
                 var $createBtn = $('#createNewPlaylistBtn');
                 $createBtn.show();
@@ -58,7 +53,6 @@
                 async: false,
                 success: function(playlistData) {
                     var tracks = playlistData.Result.Tracks;
-                    //var list = $('.draggable-list');
                     var list = $dragList;
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
@@ -69,8 +63,13 @@
                 }
             });
         }
-        $(this).next("#playlistTracksTable").slideToggle(100);
-        $(this).toggleClass("active");
+
+        $(".accordion > .tableRow").click(function () {
+
+            //$(this).next(".draggable-list").slideToggle("slow");
+            $(this).next("#playlistTracksTable").slideToggle(100);
+            $(this).toggleClass("active");
+        });
     };
 
     $(document).on('PlaylistAdded', function(playlist) {

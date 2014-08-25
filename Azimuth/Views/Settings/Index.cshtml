@@ -12,11 +12,11 @@
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             
-            <div class="table" id="playlistsTable">
+            <div class="list accordion" id="playlistsTable">
                 <div class="tableTitle">My Playlists</div>
                 <div class="tableHeader">
-                    <div class="cell">Name</div>
-                    <div class="cell">Accessibility</div>
+                    <span>Artist</span>
+                    <span>Accessibility</span>
                 </div>
             </div>
 
@@ -112,19 +112,17 @@
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item">
-            <div class="cell">${Artist}</div>
-            <div class="cell">${Name}</div>
-            <div class="cell">${Duration}</div>
+            <span>${Artist}</span>
+            <span class="cell">${Name}</span>
+            <span class="cell">${Duration}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableHeader">
-            <div class="tableRow accordion">
-                <div class="cell">${Name}</div>
-                <div class="cell">${Accessibilty}</div>
-                <div class="cell" style="display: none" id="playlistId">${Id}</div>
+            <div class="tableRow">
+                <span>${Name}</span>
+                <span class="cell">${Accessibilty}</span>
+                <span class="cell" style="display: none" id="playlistId">${Id}</span>
             </div>
-            <div id="playlistTracksTable" class="table draggable-list" style="display: none"></div>
-        </div>
+            <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
     </script>  
 }
