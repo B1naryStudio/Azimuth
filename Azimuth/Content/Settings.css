@@ -23,7 +23,7 @@
 }
 
 .spacer {
-    margin-top: 5px;
+    margin-top: 7px;
     margin-left: 5px;
     width: 80%;
     position: relative;
@@ -46,9 +46,9 @@
 
 #buttons {
     position: absolute; 
-    background-color: #4a5acd; 
+    background-color: #428bca; 
     top: 25%; 
-    height: 210px; 
+    height: 196px; 
     width: 100%; 
     border: 3px solid white; 
     -ms-border-radius: 10px; 
@@ -56,8 +56,9 @@
 }
 
 #buttons img {
-    margin-left: 3px; 
-    width: 90%
+    width: 100%; 
+    -ms-border-radius: 10px; 
+    border-radius: 10px
 }
 
 #volumeImg {
@@ -89,7 +90,7 @@
 #volume div {
     height: 20px; 
     width: 10px;
-    background-color: #4a5acd;
+    background-color: #428bca;
     -ms-border-radius: 2px; 
     border-radius: 2px
 }
