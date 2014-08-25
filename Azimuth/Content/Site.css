@@ -195,3 +195,22 @@ div.draggable-list span{
     font-weight: bold;
     font-size: larger;
 }
+
+div.vkMusicTable span{
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+span.vkArtist {
+    width: 30%;
+}
+
+span.vkTitle {
+    width: 60%;
+}
+.vkImport {
+    width: 10%;
+    horiz-align: right;
+
+}

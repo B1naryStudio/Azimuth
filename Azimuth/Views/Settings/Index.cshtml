@@ -104,10 +104,10 @@
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item">
-            <div class="cell">${artist}</div>
-            <div class="cell">${title}</div>
-            <div class="cell"><input type="checkbox" checked="checked"></div>
-            <div class="cell" style="display: none" id="trackId">${id}</div>
+            <span class="vkArtist">${artist}</span>
+            <span class="vkTitle">${title}</span>
+            <input type="checkbox" checked="checked" class="vkImport">
+            <span style="display: none" id="trackId">${id}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
