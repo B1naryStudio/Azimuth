@@ -132,7 +132,7 @@
         var playlists_global = [];
         var stringForCreateBtn = "Create new playlist ";
         var showPlaylists = function(playlists) {
-            $('#playlistsTable').find(".tableRow").remove();
+            $('#playlistsTable').find(".tableHeader").remove();
             if (typeof (playlists) == 'undefined') { //Initial run to get playlists from db
                 $.ajax({
                     url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
