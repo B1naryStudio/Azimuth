@@ -4,12 +4,12 @@
         var $rootElement = this;
         var $currentItem = null;
         //var $draggableStub = $('<li>').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
-        var $draggableStub = $('<div class="tableRow draggable-item">' +
-                                    '<div class="cell"></div>' +
-                                    '<div class="cell"></div>' +
-                                    '<div class="cell"><input type="checkbox" checked="checked"></div>' +
-                                    '<div class="cell" style="display: none" id="trackId">${id}</div>' +
-                                '</div>').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
+        var $draggableStub = $('<div class="tableRow draggable-item">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);// +
+                                //    '<div class="cell"></div>' +
+                                //    '<div class="cell"></div>' +
+                                //    '<div class="cell"><input type="checkbox" checked="checked"></div>' +
+                                //    '<div class="cell" style="display: none" id="trackId">${id}</div>' +
+                                //'</div>').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
 
         var $container = $('#itemsContainer');
         var parentId = "";
@@ -27,14 +27,18 @@
         });
 
 
-        this.mousemove(function (event) {
+        this.mousemove(function(event) {
             lastEvent = event;
             if ($currentItem && mousedown) {
                 var $elem = _getCurrentTarget(event);
                 var listCount = $currentItem.parent().children().length;
 
                 if ($currentItem.hasClass('draggable-item-selected')) {
+                    var width = $currentItem.width();
                     $currentItem = $container;
+                    $currentItem.css({
+                        'width': width + 'px'
+                });
                     $currentItem.append($('.draggable-item-selected'));
                 }
                 $currentItem.toggleClass('dragging', true);

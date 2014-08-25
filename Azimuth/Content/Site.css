@@ -114,8 +114,7 @@ input[type="checkbox"].input-validation-error {
 	position: absolute;
     opacity: 0.5;
 	z-index: 1000;
-	border: 1px powderblue solid;
-    display: table-row;
+    display: block;
 }
 #itemsContainer div {
     /*width: 741px;*/
@@ -202,15 +201,31 @@ div.vkMusicTable span{
   	text-align:left;
 }
 
-span.vkArtist {
+.vkArtist {
     width: 30%;
 }
 
-span.vkTitle {
+.vkTitle {
     width: 60%;
 }
 .vkImport {
     width: 10%;
-    horiz-align: right;
-
 }
+
+.right {
+    position: absolute;
+    right: 10px;
+    /*width: 300px;*/
+    /*background-color: #b0e0e6;*/
+}
+
+/*div.draggable-list span.vkArtist {
+    width: 30%;
+}
+
+div.draggable-list span.vkTitle {
+    width: 60%;
+}
+div.draggable-list span.vkImport {
+    width: 10%;
+}*/

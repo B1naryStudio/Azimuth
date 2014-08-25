@@ -8,7 +8,7 @@
 
 <div>
     <div id="mainRow" class="row">
-        <div id="playlists" class="stuck">
+        <div id="playlists" class="stuck draggable">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             
@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-    <div class="itemsContainer tableRow" id="itemsContainer"></div>
+    <div class="itemsContainer tableRow" id="itemsContainer" ></div>
 </div>
 @section scripts
 {
@@ -106,22 +106,22 @@
         <div class="tableRow draggable-item">
             <span class="vkArtist">${artist}</span>
             <span class="vkTitle">${title}</span>
-            <input type="checkbox" checked="checked" class="vkImport">
+            <input class="right" type="checkbox" checked="checked" class="vkImport">
             <span style="display: none" id="trackId">${id}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item">
             <span>${Artist}</span>
-            <span class="cell">${Name}</span>
-            <span class="cell">${Duration}</span>
+            <span>${Name}</span>
+            <span class="right">${Duration}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
             <div class="tableRow">
                 <span>${Name}</span>
-                <span class="cell">${Accessibilty}</span>
-                <span class="cell" style="display: none" id="playlistId">${Id}</span>
+                <span>${Accessibilty}</span>
+                <span style="display: none" id="playlistId">${Id}</span>
             </div>
             <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
     </script>  

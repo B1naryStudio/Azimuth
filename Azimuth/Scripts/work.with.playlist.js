@@ -44,8 +44,8 @@
     };
 
     function _getTracks() {
-        var $dragList = $(this).parent().children('.draggable-list');
-
+        //var $dragList = $(this).parent().children('.draggable-list');
+        var $dragList = $(this).next();
         if (!$(this).hasClass('active') && $dragList.children().length == 0) {
             $.ajax({
                 url: "/api/playlists/" + $(this).find('#playlistId').text(),
@@ -63,13 +63,8 @@
                 }
             });
         }
-
-        $(".accordion > .tableRow").click(function () {
-
-            //$(this).next(".draggable-list").slideToggle("slow");
             $(this).next("#playlistTracksTable").slideToggle(100);
             $(this).toggleClass("active");
-        });
     };
 
     $(document).on('PlaylistAdded', function(playlist) {
