@@ -132,7 +132,7 @@
         var playlists_global = [];
         var stringForCreateBtn = "Create new playlist ";
         var showPlaylists = function(playlists) {
-            $('#playlistsTable').find(".tableHeader").remove();
+            $('#playlistsTable').find(".tableRow").remove();
             if (typeof (playlists) == 'undefined') { //Initial run to get playlists from db
                 $.ajax({
                     url: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Playlists"})',
@@ -167,8 +167,6 @@
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
                         list.append($("#playlistTemplate").tmpl(playlist));
-
-                        $('.tableRow.accordion').parent().children('.draggable-list').hide();
                     }
                 } else {
                     var $createBtn = $('#createNewPlaylistBtn');
@@ -199,7 +197,7 @@
                     }
                 });
             }
-            $(this).next(".draggable-list").slideToggle(1000);
+            $(this).next("#playlistTracksTable").slideToggle(100);
             $(this).toggleClass("active");
         };
 
