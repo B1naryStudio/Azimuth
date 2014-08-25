@@ -166,14 +166,9 @@
                     var list = $('#playlistsTable');
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
-                        if (playlist.Accessibilty == 1)
-                            playlist.Accessibilty = "public";
-                        else
-                            playlist.Accessibilty = "private";
                         list.append($("#playlistTemplate").tmpl(playlist));
 
                         $('.tableRow.accordion').parent().children('.draggable-list').hide();
-                        $(".tableRow.accordion").on("click", _getTracks);
                     }
                 } else {
                     var $createBtn = $('#createNewPlaylistBtn');
@@ -186,7 +181,7 @@
         function _getTracks() {
             var $dragList = $(this).parent().children('.draggable-list');
 
-            if (!$(this).hasClass('active')) {
+            if (!$(this).hasClass('active') && $dragList.children().length == 0) {
                 $.ajax({
                     url: "https://localhost:44300/api/playlists/" + $(this).find('#playlistId').text(),
                     type: 'GET',
@@ -200,11 +195,11 @@
                             $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                         }
                         $('.draggable').makeDraggable();
+
                     }
                 });
             }
-
-            $(this).next(".draggable-list").slideToggle("slow");
+            $(this).next(".draggable-list").slideToggle(1000);
             $(this).toggleClass("active");
         };
 
