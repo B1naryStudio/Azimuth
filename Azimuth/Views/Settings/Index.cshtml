@@ -50,7 +50,7 @@
                     <div class="tab-pane fade active in" id="user-accounts">
                         @foreach (var sn in Model.AvailableNetworks)
                         {
-                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large", @style="margin-left: 5px"})
                         }
                     </div>
                     @foreach (var sn in Model.ConnectedNetworks)
@@ -66,20 +66,40 @@
                     }
                 </div>
             </div>
-            <div id="relogin" style="display: none">
+            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px">
                 <p id="error"> Your time has expired, please login again. </p>
                 @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
             </div>
         </div>
     </div>
     <div class="itemsContainer tableRow" id="itemsContainer" ></div>
-</div>
+    <div id="contextMenu"></div>
+    <div class="tableRow draggable-item track draggable-stub" id="draggableStub"></div></div>
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
     <script type="" src="../../Scripts/drag&drop.js"></script>
     
+    @*<script>
+        document.oncontextmenu = function () {
+            return false;
+        }
+    </script>*@   
+    <script>
+        var audio = new Audio();
+
+        function _playTrack() {
+            var url = $(this).parent().children('#url').text();
+            if (audio.paused || audio.src != url) {
+                audio.setAttribute('src', url);
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        };
+    </script>
+
     <script>
         var volume = new Dragdealer('volume', {
             vertical: true,
@@ -87,7 +107,9 @@
             bottom: 4,
             animationCallback: function(x, y) {
                 var t = Math.round(y * 100);
-                console.log(t);
+                if (y >= 0 && y <= 1) {
+                    audio.volume = 1 - y;
+                }
                 if (t <= 33) {
                     $('#volumeImg').css('background-position', '0 0');
                 } else if (t <= 66) {
@@ -103,26 +125,34 @@
     </script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
-            <span class="vkArtist">${artist}</span>
-            <span class="vkTitle">${title}</span>
-            <input class="right" type="checkbox" checked="checked" class="vkImport">
+        <div class="tableRow draggable-item track vk-item">
+            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
+            <span class="vkArtist nowrap">${artist}</span>
+            <span class="vkTitle nowrap">${title}</span>
+            <span class="vkDuration">${duration}</span>
             <span style="display: none" id="trackId">${id}</span>
+            <span style="display: none" id="url">${url}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
-            <span>${Artist}</span>
-            <span>${Name}</span>
-            <span class="right">${Duration}</span>
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
+            <span class="vkArtist nowrap">${Artist}</span>
+            <span class="vkTitle nowrap">${Name}</span>
+            <span class="vkDuration">${Duration}</span>
+            <span style="display: none" id="url">${Url}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-            <div class="tableRow">
-                <span>${Name}</span>
-                <span>${Accessibilty}</span>
-                <span style="display: none" id="playlistId">${Id}</span>
-            </div>
-            <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
-    </script>  
+        <div class="tableRow playlist">
+            <span>${Name}</span>
+            <span>${Accessibilty}</span>
+            <span style="display: none" id="playlistId">${Id}</span>
+        </div>
+        <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
+    </script>
+    
+    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div id="${id}" class="contextMenuActionName">${name}</div>
+    </script>
 }

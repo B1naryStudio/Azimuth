@@ -9,6 +9,7 @@
                 success: function(playlists) {
                     if (typeof playlists.Message === 'undefined') {
                         $("#relogin").hide();
+                        $("#vkontakteMusic").show();
                         playlists = playlists.Result;
                         var list = $('#playlistsTable');
                         for (var i = 0; i < playlists.length; i++) {
@@ -16,12 +17,13 @@
                             if (playlist.Accessibilty == 1)
                                 playlist.Accessibilty = "public";
                             else
-                                playlist.Accessibilty = "private";
+                            playlist.Accessibilty = "private";
                             playlists_global.push(playlist);
                             list.append($("#playlistTemplate").tmpl(playlist));
                         }
                     } else {
                         $("#relogin").show();
+                        $("#vkontakteMusic").hide();
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
@@ -56,10 +58,17 @@
                     var list = $dragList;
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
+                        track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                         $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                     }
-                    $('.draggable').makeDraggable();
-
+                    $('.draggable').makeDraggable({
+                        contextMenu:[
+                            {'id': '1', 'name': 'first action', "isNewSection": "false" },
+                            { 'id': '2', 'name': 'second action', "isNewSection": "false" },
+                            { 'id': '3', 'name': 'third action', "isNewSection": "true" },
+                            { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+                        ]
+                    });
                 }
             });
         }
@@ -68,7 +77,6 @@
     };
 
     $(document).on('PlaylistAdded', function(playlist) {
-        console.log(playlist);
         playlists_global.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         $('#searchPlaylistName').trigger('input');
     });
@@ -79,25 +87,33 @@
             var provider = $(e.target).data('provider');
             var reloginUrl = $(e.target).data('reloginurl');
             console.log(provider);
-            //$("#tracks > tr").remove();
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,
                 success: function(tracks) {
                     if (typeof tracks.Message === 'undefined') {
-                        console.log(tracks);
                         $("#relogin").hide();
-                        //var list = $('#tracksTable');
+                        $("#vkontakteMusic").show();
                         var list = $('.vkMusicList');
                         for (var i = 0; i < tracks.length; i++) {
                             var track = tracks[i];
+                            track.duration = Math.floor(track.duration / 60) + ":" + (track.duration % 60 < 10 ? "0" + track.duration % 60 : track.duration % 60);
                             $("#trackTemplate").tmpl(track).appendTo(list);
                         }
-                        $('.draggable').makeDraggable();
+                        $('.draggable').makeDraggable({
+                            contextMenu: [
+                                { 'id': '1', 'name': 'first action', "isNewSection": "false" },
+                                { 'id': '2', 'name': 'second action', "isNewSection": "false" },
+                                { 'id': '3', 'name': 'third action', "isNewSection": "true" },
+                                { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+                            ]
+                        });
                     } else {
                         $("#relogin").show();
+                        $("#vkontakteMusic").hide();
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
+                    $('.playBtn').on('click', _playTrack);
                 }
             });
         });
@@ -122,13 +138,10 @@
             var tableControl = document.getElementById('tracksTable');
             var tracks = [];
             var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
-            console.log(accessibilty);
             $('input:checkbox:checked', tableControl).each(function () {
                 tracks.push($(this).closest('.tableRow').find('#trackId').text());
             }).get();
-            console.log(tracks);
             var playlistName = $('#inputPlaylistName').val();
-            console.log(playlistName);
 
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,
@@ -159,7 +172,7 @@
             $('#createNewPlaylistBtn').hide();
             var searchParam = $(this).val().toLocaleLowerCase();
             showPlaylists(playlists_global.filter(function (index) {
-                $('#searchPlaylistName').next().children('.tableRow').remove();
+                $('#searchPlaylistName').next().children().remove();
                 return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
             }));
             $('.accordion .tableRow').on("click", _getTracks);
