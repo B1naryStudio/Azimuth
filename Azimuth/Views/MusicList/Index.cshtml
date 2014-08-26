@@ -42,7 +42,7 @@
             <div class="track-title">${Name}</div>
             <div class="track-genre">${Genre}</div>
             <div class="track-duration">${(Duration / 60).toFixed(2)}</div>
-            <div style="display: none">${Url}</div>
+            <div style="display: none" id="track-url">${Url}</div>
             <div style="display: none" id="trackId">${Id}</div>
         </div>
     </script>
@@ -71,7 +71,17 @@
             });
 
             $('.accordion .tableRow').on("click", _getTracks);
+            
         });
+
+        function _playMusic() {
+            var audio = new Audio();
+
+            var url = $(this).parent().children('#track-url')[0].innerHTML;
+
+            audio.src = 'http://cs7-1v4.vk.me/p11/944c62f324ebe3.mp3'; // test audio player
+            audio.autoplay = true;
+        }
 
         function _getTracks() {
             var $dragList = $(this).next();
@@ -87,7 +97,7 @@
                         var track = tracks[i];
                         $list.append($("#trackTemplate").tmpl(track));
                     }
-
+                    $('.track-play-btn').on('click', _playMusic);
                 }
             });
         }
