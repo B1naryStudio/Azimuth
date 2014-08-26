@@ -149,16 +149,18 @@ input[type="checkbox"].input-validation-error {
 }
 
 .accordion {
-	width: 100%;
+	width: 250px;
 	border-bottom: solid 1px #c4c4c4;
 }
 div.accordion > div.tableRow{
-	background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
-	margin: 0;
+	margin: 5px;
+    padding: 3px;
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
-	border: solid 1px #c4c4c4;
 	border-bottom: none;
 	cursor: pointer;
+}
+div.accordion > div.dropdown {
+    background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
 }
 .accordion .tableRow:hover {
 	background-color: #e3e2e2;
@@ -180,6 +182,7 @@ div.list span{
 
 div.tableHeader{
 	clear: left;
+    width: 100%;
 }
 
 div.playlist {
@@ -253,6 +256,50 @@ div.vkMusicTable span{
     /*background-color: #b0e0e6;*/
 }
 
+.playlistsContainer {
+    display: block;
+    float: left;
+    width: 20%;
+}
+
+.tracksContainer {
+    display: block;
+    float: left;
+    width: 80%;
+    vertical-align: top;
+}
+
+.track-info {
+    display: inline-block;
+    float: left;
+    margin: 2px;
+}
+
+.track-title {
+    display: inline-block;
+    float: left;
+    text-align: right;
+    margin: 2px 50px 2px 50px;
+}
+
+.track-genre {
+    display: inline-block;
+    float: left;
+    text-align: right;
+    margin: 2px 50px 2px 50px;
+}
+.track-duration {
+    display: inline-block;
+    float: left;
+    text-align: right;
+    margin: 2px;
+}
+
+.track-play-btn {
+    display: inline-block;
+    float: left;
+    vertical-align: middle;
+}
 /*div.draggable-list span.vkArtist {
     width: 30%;
 }

@@ -3,7 +3,21 @@
     <h2>UserTracks:</h2>
 
     <div class="table-responsive">
-        <table id="tracksTable" class="tablesorter table table-striped col-md-offset-1">
+        <div class="playlistsContainer">
+            <div class="list accordion" id="playlistsTable">
+                <div class="tableTitle">My Playlists</div>
+                <div class="tableHeader">
+                    <span>Artist</span>
+                    <span>Accessibility</span>
+                    <span style="display: none" id="playlistId">${Id}</span>
+                </div>
+            </div>
+        </div>
+        <div class="tracksContainer">
+            <div id="tracksTable">   
+            </div>
+        </div>
+        @*<table id="tracksTable" class="tablesorter table table-striped col-md-offset-1">
             <thead>
                 <tr>
                     <th>Artist</th>
@@ -15,69 +29,81 @@
                 </tr>
             </thead>
             <tbody id="tracks"></tbody>
-        </table>
+        </table>*@
     </div>
 </div>
 
-
-<div>
-    @Html.TextBox("playlistId")
-    <button onclick="addFakeTrack()" class="btn">Add fake track</button>
-</div>
 
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     
+
+    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow playlist">
+            <span>${Name}</span>
+            <span>${Accessibilty}</span>
+            <span style="display: none" id="playlistId">${Id}</span>
+        </div>
+    </script> 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <tr class="removable">
-            <td>${Artist}</td>
-            <td>${Name}</td>
-            <td>${Album}</td>
-            <td>${Genre}</td>
-            <td>${Duration}</td>
-            <td>${Url}</td>
-            <td style="display: none" id="trackId">id</td>
-        </tr>
+        <div class="tableRow draggable-item track">
+            <div class="glyphicon glyphicon-play btn track-play-btn"></div>
+            <div class="track-info">
+                <div>${Artist}</div>
+                <div>${Album}</div>
+            </div>
+            <div class="track-title">${Name}</div>
+            <div class="track-genre">${Genre}</div>
+            <div class="track-duration">${(Duration / 60).toFixed(2)}</div>
+            <div style="display: none">${Url}</div>
+            <div style="display: none" id="trackId">${Id}</div>
+        </div>
     </script>
 
+
     <script>
-        var template = $("#trackTemplate");
-        $(document).ready(
+        $(document).ready(function() {
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "/api/usertracks",
+                url: "/api/playlists/own",
                 dataType: "json",
                 async: false,
-                success: function(tracks) {
-                    var list = $('#tracks');
-                    for (var i = 0; i < tracks.length; i++) {
-                        var track = tracks[i];
-                        list.append(template.tmpl(track).appendTo("#tracks"));
+                success: function(playlists) {
+                    playlists = playlists.Result;
+                    var list = $('#playlistsTable');
+                    for (var i = 0; i < playlists.length; i++) {
+                        var playlist = playlists[i];
+                        if (playlist.Accessibilty == 1)
+                            playlist.Accessibilty = "public";
+                        else
+                            playlist.Accessibilty = "private";
+                        list.append($("#playlistTemplate").tmpl(playlist));
                     }
                 }
-            })
-        );
+            });
 
+            $('.accordion .tableRow').on("click", _getTracks);
+        });
 
-        function addFakeTrack() {
+        function _getTracks() {
+            var $dragList = $(this).next();
             $.ajax({
-                cache: false,
-                type: "PUT",
-                url: "/api/usertracks/put?id=" + $("#playlistId").val(),
-                dataType: "json",
-                data: {
-                    Name: "Faketrack",
-                    Genre: "Pop",
-                    Url: "www.fake.com",
-                },
+                url: "/api/playlists/" + $(this).find('#playlistId').text(),
+                type: 'GET',
                 async: false,
-                success: function (data) {
-                    alert("Track has been added");
+                success: function(playlistData) {
+                    var tracks = playlistData.Result.Tracks;
+                    var $list = $('#tracksTable');
+                    $list.find('.tableRow').remove();
+                    for (var i = 0; i < tracks.length; i++) {
+                        var track = tracks[i];
+                        $list.append($("#trackTemplate").tmpl(track));
+                    }
+
                 }
             });
         }
-
     </script>
 }

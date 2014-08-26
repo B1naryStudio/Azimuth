@@ -29,6 +29,24 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("own")]
+        public async Task<HttpResponseMessage> GetOwnPlaylists()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetUsersPlaylists());
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
             try
