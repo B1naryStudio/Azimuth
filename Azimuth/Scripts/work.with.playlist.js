@@ -85,7 +85,6 @@
             var provider = $(e.target).data('provider');
             var reloginUrl = $(e.target).data('reloginurl');
             console.log(provider);
-            //$("#tracks > tr").remove();
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,
                 success: function(tracks) {
@@ -93,7 +92,6 @@
                         console.log(tracks);
                         $("#relogin").hide();
                         $("#vkontakteMusic").show();
-                        //var list = $('#tracksTable');
                         var list = $('.vkMusicList');
                         for (var i = 0; i < tracks.length; i++) {
                             var track = tracks[i];

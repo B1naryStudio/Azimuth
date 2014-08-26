@@ -5,7 +5,7 @@
         var $currentItem = null;
         var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('#contextMenu');
+        var $contextMenuContainer = $('#contextMenu').empty();
         var $contextMenuTemplate = $('#contextmenuTemplate');
 
         var contextMenu = options.contextMenu;
@@ -108,10 +108,10 @@
         for (var i = 0; i < contextMenu.length; i++) {
             var object = $contextMenuTemplate.tmpl(contextMenu[i]);
             $contextMenuContainer.append(object);
-            object.click(function (e) {
-                var id = $(this).attr('id');
-                $rootElement.trigger(id);
-            });
+            //object.click(function (e) {
+            //    var id = $(this).attr('id');
+            //    $rootElement.trigger(id);
+            //});
         }
 
         $('.contextMenuActionName').on('1', function () {
