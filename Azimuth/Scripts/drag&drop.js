@@ -3,7 +3,8 @@
     $.fn.makeDraggable = function (options) {
         var $rootElement = this;
         var $currentItem = null;
-        var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
+        //var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
+        var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
         var $contextMenuContainer = $('#contextMenu').empty();
         var $contextMenuTemplate = $('#contextmenuTemplate');
@@ -38,6 +39,8 @@
                 }
                 $currentItem.toggleClass('dragging', true);
 
+                $draggableStub.show();
+
                 if (!$currentItem.hasClass('itemsContainer')) {
                     $draggableStub.insertAfter($currentItem.children().last());
                 }
@@ -50,7 +53,8 @@
                         var childPos = $currentItem.offset();
                         var parentPos = $draggableStub.parent().offset();
 
-                        if ($elem.length > 0) {
+                        if ($elem.length > 0 &&
+                            (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
                             clearTimeout(timerId);
                             var $savedItem = $currentItem;
                             timerId = setTimeout(function () {
@@ -86,6 +90,12 @@
                     }
                 } else {
 
+                    if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.hasClass('draggable-stub')) {
+                        $currentItem.children().toggleClass('vk-item', false);
+                    } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList')) {
+                            $currentItem.children().toggleClass('vk-item', false);
+                    }
+
                     if ($element.hasClass('delete-area')) {
                         $currentItem.trigger("delete");
                     }
@@ -102,7 +112,8 @@
                     }
                 }
             }
-            $draggableStub.detach();
+            //$draggableStub.detach();
+            $draggableStub.hide();
         });
 
 

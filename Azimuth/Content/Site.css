@@ -276,3 +276,7 @@ hr {
     margin: 0px;
     clear: left;
 }
+
+#draggableStub {
+    display: none;
+}
