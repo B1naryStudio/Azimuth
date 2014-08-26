@@ -6,7 +6,6 @@
         var $draggableStub = $('<div class="tableRow draggable-item">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
 
         var $container = $('#itemsContainer');
-        var parentId = "";
         var movingInfo = { "data": [] };
         var timerId = null;
         var lastEvent = null;
@@ -21,7 +20,6 @@
         });
 
 
-        //this.mousemove(function(event) {
         $(document).mousemove(function (event){
             lastEvent = event;
             if ($currentItem && mousedown) {
@@ -76,7 +74,7 @@
                 var $element = _getCurrentTarget(event);
                 if ($element.length == 0) {
                     if ($currentItem.hasClass('itemsContainer')) {
-                        $('#' + parentId).append($currentItem.children());
+                        $draggableStub.replaceWith($currentItem.children());
                         $currentItem = null;
                     } else {
                         $currentItem.removeAttr('style');
@@ -88,7 +86,6 @@
                         $currentItem.trigger("delete");
                     }
 
-                    //if ($currentItem != null && $currentItem.children().length > 0 && !$element.hasClass('delete-area')) {
                     if ($currentItem != null && ($currentItem.hasClass('itemsContainer') && $currentItem.children().length > 0) > 0 && !$element.hasClass('delete-area')) {
                         var $items = "Items ";
                         for (i = 0; i < $currentItem.children().length; i++) {
@@ -158,7 +155,6 @@
                 }
                 $currentItem.toggleClass('draggable-item-selected', true);
             }
-            parentId = $currentItem.parent().attr('id');
         };
 
         function _setRelativePosition(event) {
