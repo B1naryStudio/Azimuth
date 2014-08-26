@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Shared.Enums;
@@ -25,7 +26,7 @@ namespace Azimuth.DataGenerator
                 var artists = GetArtists();
                 var albums = GetAlbums();
                 var tracks = GetTracks();
-                var playlists = GetPlaylists();
+                var playlists = GetPlaylists();    
 
                 userSNs[0].User = users[0];
                 userSNs[0].UserName = users[0].ScreenName;
@@ -82,15 +83,6 @@ namespace Azimuth.DataGenerator
                 tracks[4].Album = albums[4];
                 tracks[5].Album = albums[4];
 
-                tracks[0].Playlists.Add(playlists[0]);
-                tracks[0].Playlists.Add(playlists[1]);
-                tracks[1].Playlists.Add(playlists[1]);
-                tracks[1].Playlists.Add(playlists[2]);
-                tracks[2].Playlists.Add(playlists[2]);
-                tracks[2].Playlists.Add(playlists[3]);
-                tracks[4].Playlists.Add(playlists[4]);
-                tracks[5].Playlists.Add(playlists[4]);
-
                 var snRepo = unitOfWork.GetRepository<SocialNetwork>();
                 foreach (var socialNetwork in sn)
                 {
@@ -109,20 +101,42 @@ namespace Azimuth.DataGenerator
                     userSnRepo.AddItem(userSocialNetwork);
                 }
 
-                var playlistRepo = unitOfWork.GetRepository<Playlist>();
-                foreach (var playlist in playlists)
-                {
-                    playlistRepo.AddItem(playlist);
-                }
-
                 var artistRepo = unitOfWork.GetRepository<Artist>();
                 foreach (var artist in artists)
                 {
                     artistRepo.AddItem(artist);
                 }
 
+                var playlistRepo = unitOfWork.GetRepository<Playlist>();
+                foreach (var playlist in playlists)
+                {
+                    playlistRepo.AddItem(playlist);
+                }
+
                 unitOfWork.Commit();
             }
+
+            using (var unitOfWork = _kernel.Get<IUnitOfWork>())
+            {
+                var trackRepo = unitOfWork.GetRepository<Track>();
+
+                var playlistRepo = unitOfWork.GetRepository<Playlist>();
+
+                var tracks = trackRepo.GetAll().ToList();
+                var playlists = playlistRepo.GetAll().ToList();
+
+                playlists[0].Tracks.Add(tracks[0]);
+                playlists[0].Tracks.Add(tracks[1]);
+                playlists[1].Tracks.Add(tracks[1]);
+                playlists[1].Tracks.Add(tracks[2]);
+                playlists[2].Tracks.Add(tracks[2]);
+                playlists[2].Tracks.Add(tracks[3]);
+                playlists[3].Tracks.Add(tracks[4]);
+                playlists[4].Tracks.Add(tracks[5]);
+    
+                unitOfWork.Commit();
+            }
+            
         }
 
         public void ClearDatabase()
