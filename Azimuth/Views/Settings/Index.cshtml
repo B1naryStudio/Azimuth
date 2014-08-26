@@ -6,118 +6,124 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Settings</h2>
-<div class="tabbable tabs-left">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
-        @foreach (var sn in Model.ConnectedNetworks)
-        {
-            <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
-        }
-    </ul>
-
-    <div class="tab-content">
-        <div class="tab-pane fade active in" id="user-accounts">
-            @foreach (var sn in Model.AvailableNetworks)
-            {
-                @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
-            }
-        </div>
-        @foreach (var sn in Model.ConnectedNetworks)
-        {
-            <div class="tab-pane fade" id="@sn.Name">
-                @Html.DisplayFor(x => sn.Name)
-                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
-                {
-                    @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
-                }
-                @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
+<div>
+    <div id="mainRow" class="row">
+        <div id="playlists" class="stuck draggable">
+            <h3>Playlists</h3>
+            <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
+            
+            <div class="list accordion" id="playlistsTable">
+                <div class="tableTitle">My Playlists</div>
+                <div class="tableHeader">
+                    <span>Artist</span>
+                    <span>Accessibility</span>
+                </div>
             </div>
-        } 
+
+            <a class="btn btn-primary" id="createNewPlaylistBtn"></a>
+        </div>
+        <div id="separator" class="stuck">
+            <div id="buttons">
+                <img class="btn btn-primary" src="~/Images/media_prev.png" />
+                <div class="spacer"></div>
+                <img class="btn btn-primary" src="~/Images/media_play.png" />
+                <div class="spacer"></div>
+                <img class="btn btn-primary" src="~/Images/media_next.png" />
+            </div>
+            <span id="volumeImg"></span>
+            <div id="volume" class="dragdealer">
+                <div class="handle"></div>
+            </div>
+        </div>
+        <div id="SN">
+            <h3>Tracks</h3>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
+                    @foreach (var sn in Model.ConnectedNetworks)
+                    {
+                        <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
+                    }
+                </ul>
+
+                <div class="tab-content" style="margin-top: 10px">
+                    <div class="tab-pane fade active in" id="user-accounts">
+                        @foreach (var sn in Model.AvailableNetworks)
+                        {
+                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                        }
+                    </div>
+                    @foreach (var sn in Model.ConnectedNetworks)
+                    {
+                        <div class="tab-pane fade" id="@sn.Name">
+                            @Html.DisplayFor(x => sn.Name)
+                            @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                            {
+                                @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                            }
+                            @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
+                        </div>
+                    }
+                </div>
+            </div>
+            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px">
+                <p id="error"> Your time has expired, please login again. </p>
+                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+            </div>
+        </div>
     </div>
 </div>
-<div id="relogin" style="display: none">
-    <p id="error"> Your time has expired, please login again. </p>
-    @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
-</div>
-
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
+    <script type="" src="../../Scripts/drag&drop.js"></script>
     
+    <script>
+        var volume = new Dragdealer('volume', {
+            vertical: true,
+            horizontal: false,
+            bottom: 4,
+            animationCallback: function(x, y) {
+                var t = Math.round(y * 100);
+                console.log(t);
+                if (t <= 33) {
+                    $('#volumeImg').css('background-position', '0 0');
+                } else if (t <= 66) {
+                    $('#volumeImg').css('background-position', '0 -40px');
+                } else if (t === 100) {
+                    $('#volumeImg').css('background-position', '0 -120px');
+                } else {
+                    $('#volumeImg').css('background-position', '0 -79px');
+                }
+            }
+        });
+        volume.setValue(0, 0.5);
+    </script>
+
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <tr>
-            <td>${artist}</td>
-            <td>${title}</td>
-            <td><input type="checkbox" checked="checked"></td>
-            <td style="display: none" id="trackId">${id}</td>
-        </tr>
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn playBtn"></span>
+            <span class="vkArtist">${artist}</span>
+            <span class="vkTitle">${title}</span>
+            <span class="vkDuration">${duration}</span>
+            <input class="vkImport" type="checkbox" checked="checked">
+            <span style="display: none" id="trackId">${id}</span>
+        </div>
     </script>
-
-    <script>
-        $(document).ready(
-            $('.providerBtn').click(function(e) {
-                var provider = $(e.target).data('provider');
-                var reloginUrl = $(e.target).data('reloginurl');
-                console.log(provider);
-                $("#tracks > tr").remove();
-                $.ajax({
-                    url: '/api/usertracks?provider=' + provider,
-                    success: function(tracks) {
-                        if (typeof tracks.Message === 'undefined') {
-                            console.log(tracks);
-                            $("#relogin").hide();
-                            var list = $('#tracks');
-                            for (var i = 0; i < tracks.length; i++) {
-                                var track = tracks[i];
-                                list.append($("#trackTemplate").tmpl(track).appendTo("#tracks"));
-                            }
-                        } else {
-                            $("#relogin").show();
-                            var reloginContainer = $('#relogin');
-                            reloginContainer.find('a').attr('href', reloginUrl);
-                        }
-                    }
-                });
-            })
-        );
+    <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow draggable-item">
+            <span>${Artist}</span>
+            <span>${Name}</span>
+            <span class="right">${Duration}</span>
+        </div>
     </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#applyBtn').click(function(e) {
-                var provider = $(e.target).data('provider');
-                var tableControl = document.getElementById('tracksTable');
-                var tracks = [];
-                var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
-                $('input:checkbox:checked', tableControl).each(function() {
-                    tracks.push($(this).closest('tr').find('#trackId').text());
-                }).get();
-                console.log(tracks);
-                console.log($('#inputPlaylistName').val());
-
-                $.ajax({
-                    url: '/api/usertracks?provider=' + provider,
-                    type: 'POST',
-                    data: JSON.stringify({
-                        "Name": $('#inputPlaylistName').val(),
-                        "Accessibilty": accessibilty,
-                        "TrackIds": tracks
-                    }) + JSON.stringify({ "Provider": provider }),
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    async: false
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('#checkall').click(function() {
-                if ($(this).prop('checked'))
-                    $('input:checkbox').prop('checked', true);
-                else
-                    $('input:checkbox').prop('checked', false);
-            });
-        });
-    </script>
+    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
+            <div class="tableRow playlist">
+                <span>${Name}</span>
+                <span>${Accessibilty}</span>
+                <span style="display: none" id="playlistId">${Id}</span>
+            </div>
+            <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
+    </script>  
 }

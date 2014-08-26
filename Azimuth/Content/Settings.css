@@ -1,0 +1,96 @@
+﻿#playlists {
+    width: 24%; 
+    left: 5%
+}
+
+#separator {
+    background-color: #222222; 
+    width: 70px; 
+    left: 30%;
+}
+
+#SN {
+    position: absolute; 
+    left: 30%;
+    margin-left: 80px; 
+    width: 60%;
+}
+
+.stuck {
+    position: fixed;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.spacer {
+    margin-top: 7px;
+    margin-left: 5px;
+    width: 80%;
+    position: relative;
+    overflow: hidden;
+    height: 10px;
+}
+
+.spacer:after {
+    content: "";
+    display: block;
+    width: 100%;
+    margin: -25px auto 0;
+    height: 25px;
+    -ms-border-radius: 125px/12px;
+    border-radius: 125px/12px;
+    -webkit-box-shadow: 0 0 8px black;
+    -ms-box-shadow: 0 0 8px black;
+    box-shadow: 0 0 8px black;
+}
+
+#buttons {
+    position: absolute; 
+    background-color: #428bca; 
+    top: 25%; 
+    height: 196px; 
+    width: 100%; 
+    border: 3px solid white; 
+    -ms-border-radius: 10px; 
+    border-radius: 10px
+}
+
+#buttons img {
+    width: 100%; 
+    -ms-border-radius: 10px; 
+    border-radius: 10px
+}
+
+#volumeImg {
+    content: "";
+    display: inline-block;
+    position: absolute; 
+    width: 40px;
+    height: 40px;
+    top: 68%; 
+    left: 50%;
+    margin-left: -16px;
+    background: url("../Images/media_volume.png") no-repeat 0 -40px;
+}
+
+#volume {
+    height: 100px; 
+    width: 14px;
+    top: 75%;
+    left: 50%;
+    margin-left: -5px; 
+    border-top: 2px solid white; 
+    border-left: 2px solid white; 
+    border-right: 2px solid white; 
+    border-bottom: 10px solid white; 
+    -ms-border-radius: 3px; 
+    border-radius: 3px
+}
+
+#volume div {
+    height: 20px; 
+    width: 10px;
+    background-color: #428bca;
+    -ms-border-radius: 2px; 
+    border-radius: 2px
+}

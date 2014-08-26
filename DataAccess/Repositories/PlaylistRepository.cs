@@ -13,9 +13,9 @@ namespace Azimuth.DataAccess.Repositories
         {
         }
 
-        public IEnumerable<Playlist> GetByCreatorId(long id)
-        {
-            return _session.Query<Playlist>().Where(pl => pl.Creator.Id == id);
-        }
+        //public IEnumerable<Playlist> GetByCreatorId(long id)
+        //{
+        //    return _session.Query<Playlist>().Where(pl => pl.Creator.Id == id);
+        //}
     }
 }

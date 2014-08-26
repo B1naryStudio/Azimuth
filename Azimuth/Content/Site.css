@@ -40,3 +40,226 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.stuck {
+    position: fixed;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.spacer {
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 45px;
+    position: relative;
+    overflow: hidden;
+    height: 10px;
+}
+
+.spacer:after {
+    content: "";
+    display: block;
+    width: 100%;
+    margin: -25px auto 0;
+    height: 25px;
+    -ms-border-radius: 125px/12px;
+    border-radius: 125px/12px;
+    -webkit-box-shadow: 0 0 8px black;
+    -ms-box-shadow: 0 0 8px black;
+    box-shadow: 0 0 8px black;
+}
+
+.track {
+    height: 50px;
+    background-color: #E0E0E0;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.draggable-item {
+    top: 0;
+	left: 0;
+	width: 100px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+.draggable-btn {
+	height:30px;
+	cursor: pointer;
+}
+.draggable-btn.add {
+	width:40%;
+}
+.draggable-btn.sort {
+	width: 30%;
+}
+.draggable-item:hover {
+	background: gray;
+	cursor: pointer;
+}
+.draggable-item.dragging {
+	position: absolute;
+	z-index: 1000;
+}
+.draggable-list {
+	float: left;
+	/*border: 1px lightsteelblue solid;*/
+	min-height: 30px;
+	min-width: 150px;
+}
+.draggable-list-empty{
+	height: 30px;
+	width: 100px;
+	border: 1px lightsteelblue solid;
+}
+.draggable-item-selected {
+	background: aquamarine;
+}
+#itemsContainer {
+	position: absolute;
+    opacity: 0.5;
+	z-index: 1000;
+    display: block;
+}
+#itemsContainer div {
+    /*width: 741px;*/
+    /*width: expression($('.draggable-item').width())*/
+    /*width: 20%;*/
+}
+.draggable{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	-moz-user-select:
+	-moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.delete-area{
+	width: 200px;
+	height: 200px;
+	border: solid black 1px;
+	/*visibility: hidden;*/
+	float: left;
+}
+
+.accordion {
+	width: 100%;
+	border-bottom: solid 1px #c4c4c4;
+}
+div.accordion > div.tableRow{
+	background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
+	margin: 0;
+	font: bold 100%/100% Arial, Helvetica, sans-serif;
+	border: solid 1px #c4c4c4;
+	border-bottom: none;
+	cursor: pointer;
+}
+.accordion .tableRow:hover {
+	background-color: #e3e2e2;
+}
+.accordion .tableRow.active {
+	background-position: right 0px;
+}
+
+/*div.list{
+	width: 500px;
+}*/
+
+div.list span{
+	width: 50%;
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+div.tableHeader{
+	clear: left;
+}
+
+div.playlist {
+    height: 18px;
+}
+
+div.tableRow{
+	clear: left;
+    width: 100%;
+}
+
+.playBtn {
+    position: relative;
+    top: 10px;
+    width: 40px;
+    height: 30px;
+    left: 20px;
+}
+
+div.draggable-list{
+	width: 100%;
+	display: block;
+}
+
+/*div.draggable-list span{
+	width: 33%;
+}*/
+
+.tableTitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+
+div.vkMusicTable span{
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+.vkArtist {
+    position: relative;
+    left: 70px;
+    top: 3px;
+    width: 40%;
+}
+
+.vkTitle {
+    position: relative;
+    left: 70px;
+    top: 7px;
+    width: 60%;
+}
+
+.vkDuration {
+    position: relative;
+    left: 25%;
+    bottom: 5px;
+}
+
+.vkImport {
+    position: relative;
+    left: 52%;
+    bottom: -15px;
+}
+
+.right {
+    position: absolute;
+    right: 10px;
+    /*width: 300px;*/
+    /*background-color: #b0e0e6;*/
+}
+
+/*div.draggable-list span.vkArtist {
+    width: 30%;
+}
+
+div.draggable-list span.vkTitle {
+    width: 60%;
+}
+div.draggable-list span.vkImport {
+    width: 10%;
+}*/
