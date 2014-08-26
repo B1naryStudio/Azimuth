@@ -21,6 +21,7 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("public")]
         public HttpResponseMessage GetPublicPlaylists()
         {
 
