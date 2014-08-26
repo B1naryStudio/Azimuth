@@ -50,7 +50,7 @@
                     <div class="tab-pane fade active in" id="user-accounts">
                         @foreach (var sn in Model.AvailableNetworks)
                         {
-                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large", @style="margin-left: 5px"})
                         }
                     </div>
                     @foreach (var sn in Model.ConnectedNetworks)
@@ -107,15 +107,15 @@
             <span class="vkArtist">${artist}</span>
             <span class="vkTitle">${title}</span>
             <span class="vkDuration">${duration}</span>
-            <input class="vkImport" type="checkbox" checked="checked">
             <span style="display: none" id="trackId">${id}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
-            <span>${Artist}</span>
-            <span>${Name}</span>
-            <span class="right">${Duration}</span>
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn playBtn"></span>
+            <span class="vkArtist">${Artist}</span>
+            <span class="vkTitle">${Name}</span>
+            <span class="vkDuration">${Duration}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">

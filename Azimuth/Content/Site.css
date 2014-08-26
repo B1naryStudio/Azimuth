@@ -172,7 +172,7 @@ div.accordion > div.tableRow{
 }*/
 
 div.list span{
-	width: 50%;
+	/*width: 50%;*/
   	display:block;
   	float:left;
   	text-align:left;
@@ -222,28 +222,22 @@ div.vkMusicTable span{
 
 .vkArtist {
     position: relative;
-    left: 70px;
+    left: 40px;
     top: 3px;
     width: 40%;
 }
 
 .vkTitle {
     position: relative;
-    left: 70px;
+    left: 40px;
     top: 7px;
     width: 60%;
 }
 
 .vkDuration {
-    position: relative;
-    left: 25%;
-    bottom: 5px;
-}
-
-.vkImport {
-    position: relative;
-    left: 52%;
-    bottom: -15px;
+    position: absolute;
+    margin-top: 15px;
+    right: 30px;
 }
 
 .right {
