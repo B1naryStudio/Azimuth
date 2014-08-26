@@ -62,7 +62,7 @@
                         $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                     }
                     $('.draggable').makeDraggable();
-
+                    $('.playBtn').on('click', _playTrack);
                 }
             });
         }
@@ -71,7 +71,6 @@
     };
 
     $(document).on('PlaylistAdded', function(playlist) {
-        console.log(playlist);
         playlists_global.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         $('#searchPlaylistName').trigger('input');
     });
@@ -81,13 +80,11 @@
         $('.providerBtn').click(function(e) {
             var provider = $(e.target).data('provider');
             var reloginUrl = $(e.target).data('reloginurl');
-            console.log(provider);
             //$("#tracks > tr").remove();
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,
                 success: function(tracks) {
                     if (typeof tracks.Message === 'undefined') {
-                        console.log(tracks);
                         $("#relogin").hide();
                         $("#vkontakteMusic").show();
                         //var list = $('#tracksTable');
@@ -104,6 +101,7 @@
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
+                    $('.playBtn').on('click', _playTrack);
                 }
             });
         });
@@ -128,13 +126,10 @@
             var tableControl = document.getElementById('tracksTable');
             var tracks = [];
             var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
-            console.log(accessibilty);
             $('input:checkbox:checked', tableControl).each(function () {
                 tracks.push($(this).closest('.tableRow').find('#trackId').text());
             }).get();
-            console.log(tracks);
             var playlistName = $('#inputPlaylistName').val();
-            console.log(playlistName);
 
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,

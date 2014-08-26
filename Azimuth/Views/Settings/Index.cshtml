@@ -80,13 +80,20 @@
     <script type="" src="../../Scripts/drag&drop.js"></script>
     
     <script>
+        var audio = new Audio();
+        function _playTrack() {
+            audio.setAttribute('src', $(this).parent().children('#url').text());
+            audio.play();
+        };
+    </script>
+
+    <script>
         var volume = new Dragdealer('volume', {
             vertical: true,
             horizontal: false,
             bottom: 4,
             animationCallback: function(x, y) {
                 var t = Math.round(y * 100);
-                console.log(t);
                 if (t <= 33) {
                     $('#volumeImg').css('background-position', '0 0');
                 } else if (t <= 66) {
@@ -108,7 +115,7 @@
             <span class="vkTitle nowrap">${title}</span>
             <span class="vkDuration">${duration}</span>
             <span style="display: none" id="trackId">${id}</span>
-            <span style="display: none">${url}</span>
+            <span style="display: none" id="url">${url}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
@@ -117,7 +124,7 @@
             <span class="vkArtist nowrap">${Artist}</span>
             <span class="vkTitle nowrap">${Name}</span>
             <span class="vkDuration">${Duration}</span>
-            <span style="display: none">${Url}</span>
+            <span style="display: none" id="url">${Url}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
