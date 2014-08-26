@@ -225,6 +225,7 @@ div.vkMusicTable span{
     left: 40px;
     top: 3px;
     width: 40%;
+    height: 20px;
 }
 
 .vkTitle {
@@ -232,12 +233,20 @@ div.vkMusicTable span{
     left: 40px;
     top: 7px;
     width: 60%;
+    height: 20px;
 }
 
 .vkDuration {
     position: absolute;
     margin-top: 15px;
     right: 30px;
+}
+
+.nowrap {
+    overflow: hidden; 
+    word-wrap: break-word;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 .right {
