@@ -58,6 +58,7 @@
                     var list = $dragList;
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
+                        track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                         $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                     }
                     $('.draggable').makeDraggable();
@@ -93,6 +94,7 @@
                         var list = $('.vkMusicList');
                         for (var i = 0; i < tracks.length; i++) {
                             var track = tracks[i];
+                            track.duration = Math.floor(track.duration / 60) + ":" + (track.duration % 60 < 10 ? "0" + track.duration % 60 : track.duration % 60);
                             $("#trackTemplate").tmpl(track).appendTo(list);
                         }
                         $('.draggable').makeDraggable();
