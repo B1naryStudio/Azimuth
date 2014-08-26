@@ -22,6 +22,7 @@ namespace Azimuth.ApiControllers
             _userTracksService = userTracksService;
         }
 
+        [HttpGet]
         public async Task<HttpResponseMessage> Get(string provider)
         {
             try
@@ -36,6 +37,7 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpPost]
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider)
         {
             _userTracksService.SetPlaylist(playlistData, provider);
@@ -43,6 +45,7 @@ namespace Azimuth.ApiControllers
             //return Request.CreateResponse(correct ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
         }
 
+        [HttpGet]
         public async Task<HttpResponseMessage> GetUserTracks()
         {
             return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());

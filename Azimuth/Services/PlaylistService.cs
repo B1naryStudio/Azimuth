@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Reflection;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -17,12 +18,14 @@ namespace Azimuth.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PlaylistRepository _playlistRepository;
+        private TrackRepository _trackRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
 
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+            _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
         }
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -110,13 +113,6 @@ namespace Azimuth.Services
             {
                 var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
                 var userId = userRepo.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                //var playlists = _playlistRepository.GetByCreatorId(userId).Select(playlist => new PlaylistData
-                //{
-                //    Id = playlist.Id,
-                //    Name = playlist.Name,
-                //    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList(),
-                //    Accessibilty = playlist.Accessibilty
-                //}).ToList();
 
                 var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => new PlaylistData
                 {
@@ -126,6 +122,43 @@ namespace Azimuth.Services
                     Accessibilty = playlist.Accessibilty
                 }).ToList();
                 return playlists;
+            }
+        }
+
+        public void RemovePlaylistById(int id)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
+
+                if (playlist == null)
+                {
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+                }
+
+                _playlistRepository.DeleteItem(playlist);
+            }
+        }
+
+        public void RemoveTrackFromPlaylist(int trackId, int playlistId)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                if (playlist == null)
+                {
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+                }
+
+                var trackToDelete = _trackRepository.GetOne(t => t.Id == trackId);
+
+                if (trackToDelete == null)
+                {
+                    throw new InstanceNotFoundException("Track with specified id does not exist");
+                }
+
+                playlist.Tracks.Remove(trackToDelete);
+                _unitOfWork.Commit();
             }
         }
     }
