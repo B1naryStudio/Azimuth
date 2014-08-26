@@ -49,6 +49,7 @@
 
 
     <script>
+        var audio = new Audio();
         $(document).ready(function() {
             $.ajax({
                 cache: false,
@@ -75,12 +76,12 @@
         });
 
         function _playMusic() {
-            var audio = new Audio();
 
+            audio.pause();
             var url = $(this).parent().children('#track-url')[0].innerHTML;
 
             audio.src = 'http://cs7-1v4.vk.me/p11/944c62f324ebe3.mp3'; // test audio player
-            audio.autoplay = true;
+            audio.play();
         }
 
         function _getTracks() {
