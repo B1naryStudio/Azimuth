@@ -10,7 +10,7 @@
     <property name="Name" />
     <property name="Url" />
     <many-to-one name="Album" column="AlbumId" />
-    <set name="Playlists" table="PlaylistTracks" cascade="delete">
+    <set name="Playlists" table="PlaylistTracks" lazy="true" inverse="true" cascade="save-update">
       <key column="TrackId" />
       <many-to-many column="PlaylistId" class="Playlist" />
     </set>
