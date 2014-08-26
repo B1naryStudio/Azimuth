@@ -127,11 +127,11 @@
                 var indexFirst = -1;
                 var indexLast = -1;
                 if ($('.draggable-item-selected').index() < $currentItem.index()) {
-                    indexFirst = $('.draggable-item-selected').index();
+                    indexFirst = $('.draggable-item-selected').last().index();
                     indexLast = $currentItem.index();
                 } else {
                     indexFirst = $currentItem.index();
-                    indexLast = $('.draggable-item-selected').index();
+                    indexLast = $('.draggable-item-selected').first().index();
                 }
 
                 var currentChildren = $currentItem.parent().children();
