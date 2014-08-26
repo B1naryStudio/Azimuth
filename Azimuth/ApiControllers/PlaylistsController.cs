@@ -21,6 +21,23 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        public async Task<HttpResponseMessage> GetAllUsersPlaylists()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetUsersPlaylists());
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         [Route("public")]
         public HttpResponseMessage GetPublicPlaylists()
         {
