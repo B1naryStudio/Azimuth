@@ -3,7 +3,7 @@
     $.fn.makeDraggable = function (options) {
         var $rootElement = this;
         var $currentItem = null;
-        var $draggableStub = $('<div class="tableRow draggable-item">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
+        var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
         var $container = $('#itemsContainer');
         var $contextMenuContainer = $('#contextMenu');
         var $contextMenuTemplate = $('#contextmenuTemplate');
@@ -142,17 +142,18 @@
         function _makeDraggable(event) {
 
             if (event.which == 3) {
-                document.oncontextmenu = function() {
-                    return false;
-                }
-                contextMenuSelected = true;
-                    var x = event.pageX;
-                    var y = event.pageY;
-                    $contextMenuContainer.css({
-                        'top': y + 'px',
-                        'left': x + 'px'
-                    });
-                    $contextMenuContainer.show();
+                // this work!!!!!!!!!!!!!!!
+                //document.oncontextmenu = function() {
+                //    return false;
+                //}
+                //contextMenuSelected = true;
+                //    var x = event.pageX;
+                //    var y = event.pageY;
+                //    $contextMenuContainer.css({
+                //        'top': y + 'px',
+                //        'left': x + 'px'
+                //    });
+                //    $contextMenuContainer.show();
             } else {
 
                 mousedown = true;
