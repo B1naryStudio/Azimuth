@@ -112,7 +112,7 @@ input[type="checkbox"].input-validation-error {
 }
 .draggable-list-empty{
 	height: 30px;
-	width: 100px;
+	width: 100%;
 	border: 1px lightsteelblue solid;
 }
 .draggable-item-selected {
@@ -149,7 +149,7 @@ input[type="checkbox"].input-validation-error {
 }
 
 .accordion {
-	width: 250px;
+	width: 100%;
 	border-bottom: solid 1px #c4c4c4;
 }
 div.accordion > div.tableRow{
@@ -259,13 +259,13 @@ div.vkMusicTable span{
 .playlistsContainer {
     display: block;
     float: left;
-    width: 20%;
+    width: 25%;
 }
 
 .tracksContainer {
     display: block;
     float: left;
-    width: 80%;
+    width: 75%;
     vertical-align: top;
 }
 
@@ -273,32 +273,36 @@ div.vkMusicTable span{
     display: inline-block;
     float: left;
     margin: 2px;
+    width: 30%;
 }
 
 .track-title {
     display: inline-block;
     float: left;
-    text-align: right;
-    margin: 2px 50px 2px 50px;
+    text-align: center;
+    width: 30%;
+    margin-top: 10px;
 }
 
 .track-genre {
-    display: inline-block;
+    display: block;
     float: left;
-    text-align: right;
-    margin: 2px 50px 2px 50px;
+    text-align: center;
+    width: 20%;
+    margin-top: 10px;
 }
 .track-duration {
-    display: inline-block;
+    display: block;
     float: left;
-    text-align: right;
-    margin: 2px;
+    text-align: center;
+    width: 5%;
+    margin-top: 10px;
 }
 
 .track-play-btn {
-    display: inline-block;
+    display: block;
     float: left;
-    vertical-align: middle;
+    width: 5%;
 }
 /*div.draggable-list span.vkArtist {
     width: 30%;
