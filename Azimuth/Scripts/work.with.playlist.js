@@ -62,8 +62,10 @@
                     }
                     $('.draggable').makeDraggable({
                         contextMenu:[
-                            {'id': '1', 'name': 'first action' },
-                            {'id': '2', 'name': 'second action' }
+                            {'id': '1', 'name': 'first action', "isNewSection": "false" },
+                            { 'id': '2', 'name': 'second action', "isNewSection": "false" },
+                            { 'id': '3', 'name': 'third action', "isNewSection": "true" },
+                            { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
                         ]
                     });
                 }
@@ -98,9 +100,11 @@
                             $("#trackTemplate").tmpl(track).appendTo(list);
                         }
                         $('.draggable').makeDraggable({
-                            contextMenu:[
-                                {'id': '1', 'name': 'first action' },
-                                {'id': '2', 'name': 'second action' }
+                            contextMenu: [
+                                { 'id': '1', 'name': 'first action', "isNewSection": "false" },
+                                { 'id': '2', 'name': 'second action', "isNewSection": "false" },
+                                { 'id': '3', 'name': 'third action', "isNewSection": "true" },
+                                { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
                             ]
                         });
                     } else {

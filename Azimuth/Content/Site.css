@@ -258,18 +258,21 @@ div.vkMusicTable span{
     display: none;
     position: absolute;
     border: 1px solid lightgray;
-    background: white
+    background: white;
 }
 
 .contextMenuActionName:hover {
-    background: skyblue;
+    background: #3399FF;
 	cursor: pointer;
 }
 .contextMenuActionName {
     font-family: "Arial";
-    font-size: 12pt;
+    font-size: 10pt;
     font-style: normal;
-    border-bottom: 1px solid lightblue;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 3px 10px 3px 10px;
+}
+hr {
+    padding: 0px;
+    margin: 0px;
+    clear: left;
 }

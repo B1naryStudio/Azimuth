@@ -107,12 +107,18 @@
 
         for (var i = 0; i < contextMenu.length; i++) {
             var object = $contextMenuTemplate.tmpl(contextMenu[i]);
+            if (contextMenu[i].isNewSection == "true") {
+                $contextMenuContainer.append("<hr/>");
+            }
             $contextMenuContainer.append(object);
+
             //object.click(function (e) {
             //    var id = $(this).attr('id');
             //    $rootElement.trigger(id);
             //});
         }
+
+
 
         $('.contextMenuActionName').on('1', function () {
             alert("1 action");
