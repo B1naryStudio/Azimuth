@@ -81,6 +81,7 @@
     
     <script>
         var audio = new Audio();
+
         function _playTrack() {
             audio.setAttribute('src', $(this).parent().children('#url').text());
             audio.play();
@@ -94,6 +95,9 @@
             bottom: 4,
             animationCallback: function(x, y) {
                 var t = Math.round(y * 100);
+                if (y>=0 && y<=1) {
+                    audio.volume = 1 - y;
+                }
                 if (t <= 33) {
                     $('#volumeImg').css('background-position', '0 0');
                 } else if (t <= 66) {
@@ -128,11 +132,11 @@
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-            <div class="tableRow playlist">
-                <span>${Name}</span>
-                <span>${Accessibilty}</span>
-                <span style="display: none" id="playlistId">${Id}</span>
-            </div>
-            <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
+        <div class="tableRow playlist">
+            <span>${Name}</span>
+            <span>${Accessibilty}</span>
+            <span style="display: none" id="playlistId">${Id}</span>
+        </div>
+        <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
     </script>  
 }
