@@ -83,8 +83,13 @@
         var audio = new Audio();
 
         function _playTrack() {
-            audio.setAttribute('src', $(this).parent().children('#url').text());
-            audio.play();
+            var url = $(this).parent().children('#url').text();
+            if (audio.paused || audio.src != url) {
+                audio.setAttribute('src', url);
+                audio.play();
+            } else {
+                audio.pause();
+            }
         };
     </script>
 
@@ -95,7 +100,7 @@
             bottom: 4,
             animationCallback: function(x, y) {
                 var t = Math.round(y * 100);
-                if (y>=0 && y<=1) {
+                if (y >= 0 && y <= 1) {
                     audio.volume = 1 - y;
                 }
                 if (t <= 33) {
