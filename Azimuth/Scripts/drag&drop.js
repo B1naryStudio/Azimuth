@@ -21,11 +21,11 @@
         });
 
 
-        this.mousemove(function(event) {
+        //this.mousemove(function(event) {
+        $(document).mousemove(function (event){
             lastEvent = event;
             if ($currentItem && mousedown) {
                 var $elem = _getCurrentTarget(event);
-                var listCount = $currentItem.parent().children().length;
 
                 if ($currentItem.hasClass('draggable-item-selected')) {
                     var width = $currentItem.width();
