@@ -58,6 +58,7 @@
                     var list = $dragList;
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
+                        track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                         $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                     }
                     $('.draggable').makeDraggable({
@@ -76,7 +77,6 @@
     };
 
     $(document).on('PlaylistAdded', function(playlist) {
-        console.log(playlist);
         playlists_global.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         $('#searchPlaylistName').trigger('input');
     });
@@ -91,12 +91,12 @@
                 url: '/api/usertracks?provider=' + provider,
                 success: function(tracks) {
                     if (typeof tracks.Message === 'undefined') {
-                        console.log(tracks);
                         $("#relogin").hide();
                         $("#vkontakteMusic").show();
                         var list = $('.vkMusicList');
                         for (var i = 0; i < tracks.length; i++) {
                             var track = tracks[i];
+                            track.duration = Math.floor(track.duration / 60) + ":" + (track.duration % 60 < 10 ? "0" + track.duration % 60 : track.duration % 60);
                             $("#trackTemplate").tmpl(track).appendTo(list);
                         }
                         $('.draggable').makeDraggable({
@@ -113,6 +113,7 @@
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
+                    $('.playBtn').on('click', _playTrack);
                 }
             });
         });
@@ -137,13 +138,10 @@
             var tableControl = document.getElementById('tracksTable');
             var tracks = [];
             var accessibilty = ($('#setAccessibilty').val() === "Private" ? 0 : 1);
-            console.log(accessibilty);
             $('input:checkbox:checked', tableControl).each(function () {
                 tracks.push($(this).closest('.tableRow').find('#trackId').text());
             }).get();
-            console.log(tracks);
             var playlistName = $('#inputPlaylistName').val();
-            console.log(playlistName);
 
             $.ajax({
                 url: '/api/usertracks?provider=' + provider,
