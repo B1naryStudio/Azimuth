@@ -41,7 +41,7 @@
             </div>
             <div class="track-title">${Name}</div>
             <div class="track-genre">${Genre}</div>
-            <div class="track-duration">${(Duration / 60).toFixed(2)}</div>
+            <div class="track-duration">${Duration}</div>
             <div style="display: none" id="track-url">${Url}</div>
             <div style="display: none" id="trackId">${Id}</div>
         </div>
@@ -96,6 +96,7 @@
                     $list.find('.tableRow').remove();
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
+                        track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                         $list.append($("#trackTemplate").tmpl(track));
                     }
                     $('.track-play-btn').on('click', _playMusic);
