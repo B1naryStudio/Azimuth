@@ -69,10 +69,18 @@ input[type="checkbox"].input-validation-error {
     box-shadow: 0 0 8px black;
 }
 
+.track {
+    height: 50px;
+    background-color: #E0E0E0;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
 .draggable-item {
     top: 0;
 	left: 0;
-	height: 30px;
 	width: 100px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -98,7 +106,7 @@ input[type="checkbox"].input-validation-error {
 }
 .draggable-list {
 	float: left;
-	border: 1px lightsteelblue solid;
+	/*border: 1px lightsteelblue solid;*/
 	min-height: 30px;
 	min-width: 150px;
 }
@@ -164,7 +172,7 @@ div.accordion > div.tableRow{
 }*/
 
 div.list span{
-	width: 50%;
+	/*width: 50%;*/
   	display:block;
   	float:left;
   	text-align:left;
@@ -174,10 +182,21 @@ div.tableHeader{
 	clear: left;
 }
 
+div.playlist {
+    height: 18px;
+}
+
 div.tableRow{
 	clear: left;
-	height: 18px;
     width: 100%;
+}
+
+.playBtn {
+    position: relative;
+    top: 10px;
+    width: 40px;
+    height: 30px;
+    left: 20px;
 }
 
 div.draggable-list{
@@ -185,9 +204,9 @@ div.draggable-list{
 	display: block;
 }
 
-div.draggable-list span{
+/*div.draggable-list span{
 	width: 33%;
-}
+}*/
 
 .tableTitle {
     text-align: center;
@@ -202,14 +221,32 @@ div.vkMusicTable span{
 }
 
 .vkArtist {
-    width: 30%;
+    position: relative;
+    left: 40px;
+    top: 3px;
+    width: 40%;
+    height: 20px;
 }
 
 .vkTitle {
+    position: relative;
+    left: 40px;
+    top: 7px;
     width: 60%;
+    height: 20px;
 }
-.vkImport {
-    width: 10%;
+
+.vkDuration {
+    position: absolute;
+    margin-top: 15px;
+    right: 30px;
+}
+
+.nowrap {
+    overflow: hidden; 
+    word-wrap: break-word;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 .right {

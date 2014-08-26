@@ -50,7 +50,7 @@
                     <div class="tab-pane fade active in" id="user-accounts">
                         @foreach (var sn in Model.AvailableNetworks)
                         {
-                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large" })
+                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large", @style="margin-left: 5px"})
                         }
                     </div>
                     @foreach (var sn in Model.ConnectedNetworks)
@@ -66,7 +66,7 @@
                     }
                 </div>
             </div>
-            <div id="relogin" style="display: none">
+            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px">
                 <p id="error"> Your time has expired, please login again. </p>
                 @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
             </div>
@@ -109,18 +109,22 @@
     </script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
-            <span class="vkArtist">${artist}</span>
-            <span class="vkTitle">${title}</span>
-            <input class="right" type="checkbox" checked="checked" class="vkImport">
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
+            <span class="vkArtist nowrap">${artist}</span>
+            <span class="vkTitle nowrap">${title}</span>
+            <span class="vkDuration">${duration}</span>
             <span style="display: none" id="trackId">${id}</span>
+            <span style="display: none">${url}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
-            <span>${Artist}</span>
-            <span>${Name}</span>
-            <span class="right">${Duration}</span>
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
+            <span class="vkArtist nowrap">${Artist}</span>
+            <span class="vkTitle nowrap">${Name}</span>
+            <span class="vkDuration">${Duration}</span>
+            <span style="display: none">${Url}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">

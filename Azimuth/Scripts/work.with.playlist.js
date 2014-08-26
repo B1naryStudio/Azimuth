@@ -9,6 +9,7 @@
                 success: function(playlists) {
                     if (typeof playlists.Message === 'undefined') {
                         $("#relogin").hide();
+                        $("#vkontakteMusic").show();
                         playlists = playlists.Result;
                         var list = $('#playlistsTable');
                         for (var i = 0; i < playlists.length; i++) {
@@ -22,6 +23,7 @@
                         }
                     } else {
                         $("#relogin").show();
+                        $("#vkontakteMusic").hide();
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }
@@ -90,6 +92,7 @@
                     if (typeof tracks.Message === 'undefined') {
                         console.log(tracks);
                         $("#relogin").hide();
+                        $("#vkontakteMusic").show();
                         //var list = $('#tracksTable');
                         var list = $('.vkMusicList');
                         for (var i = 0; i < tracks.length; i++) {
@@ -104,6 +107,7 @@
                         });
                     } else {
                         $("#relogin").show();
+                        $("#vkontakteMusic").hide();
                         var reloginContainer = $('#relogin');
                         reloginContainer.find('a').attr('href', reloginUrl);
                     }

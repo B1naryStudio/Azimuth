@@ -212,9 +212,8 @@
         };
 
         function _setRelativePosition(event) {
-            var parentOffet = $rootElement.offset();
-            var relX = event.pageX - elementOffset.x;// - parentOffet.left;
-            var relY = event.pageY - elementOffset.y;// - parentOffet.top;
+            var relX = event.pageX - elementOffset.x;
+            var relY = event.pageY - elementOffset.y;
             $currentItem.css({
                 'top': relY + 'px',
                 'left': relX + 'px'
@@ -235,9 +234,6 @@
                 _outDeleteArea();
             }
             $currentItem.show();
-            //if ($elem.hasClass('draggable-stub-empty')) {
-            //    return $elem;
-            //}
 
             if ($elem.hasClass('delete-area')) {
                 return $elem;
@@ -326,26 +322,4 @@
             $list.prepend(sorted);
         });
     };
-
-    //$('.draggable').makeDraggable();
-    //$('.draggable').on('OnDropped', function (e, info, to) {
-    //    for (i = 0; i < info.data.length; i++) {
-    //        console.log("Track " + info.data[i].item + " was moved from playlist with name: " + info.data[i].name + ", to playlist with name: " + to);
-    //    }
-    //});
-    //$('.draggable').on('OnCombined', function (e, combinedText) {
-    //    console.log(combinedText);
-    //});
-
-    //$('.draggable-btn.add').click(function () {
-    //    $(this).parent().trigger('add', ['Some text']);
-    //});
-
-    //$('.draggable-btn.sort').click(function () {
-    //    $(this).parent().trigger('sort', [-1]);
-    //});
-
-    //$('.draggable-btn.shuffle').click(function () {
-    //    $(this).parent().trigger('shuffle');
-    //});
 });
