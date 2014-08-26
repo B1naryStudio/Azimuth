@@ -97,7 +97,7 @@ input[type="checkbox"].input-validation-error {
 	width: 30%;
 }
 .draggable-item:hover {
-	background: gray;
+	background: aquamarine;
 	cursor: pointer;
 }
 .draggable-item.dragging {
@@ -153,8 +153,7 @@ input[type="checkbox"].input-validation-error {
 	border-bottom: solid 1px #c4c4c4;
 }
 div.accordion > div.tableRow{
-	margin: 5px;
-    padding: 3px;
+    padding-top: 5px;
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border-bottom: none;
 	cursor: pointer;
@@ -166,7 +165,7 @@ div.accordion > div.dropdown {
 	background-color: #e3e2e2;
 }
 .accordion .tableRow.active {
-	background-position: right 0px;
+	background-position: right 0;
 }
 
 /*div.list{
@@ -186,7 +185,7 @@ div.tableHeader{
 }
 
 div.playlist {
-    height: 18px;
+    height: 30px;
 }
 
 div.tableRow{
@@ -259,13 +258,14 @@ div.vkMusicTable span{
 .playlistsContainer {
     display: block;
     float: left;
-    width: 25%;
+    width: 23%;
 }
 
 .tracksContainer {
     display: block;
     float: left;
     width: 75%;
+    margin-left: 20px;
     vertical-align: top;
 }
 
@@ -303,6 +303,15 @@ div.vkMusicTable span{
     display: block;
     float: left;
     width: 5%;
+    height: 70%;
+    margin-left: 5px;
+    margin-right: 2px;
+    margin-top: 5px;
+}
+
+.track-play-btn:hover {
+
+    background: aqua;
 }
 /*div.draggable-list span.vkArtist {
     width: 30%;
