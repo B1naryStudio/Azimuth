@@ -104,18 +104,20 @@
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
             <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
-            <span class="vkArtist">${artist}</span>
-            <span class="vkTitle">${title}</span>
+            <span class="vkArtist nowrap">${artist}</span>
+            <span class="vkTitle nowrap">${title}</span>
             <span class="vkDuration">${duration}</span>
             <span style="display: none" id="trackId">${id}</span>
+            <span style="display: none">${url}</span>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
             <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
-            <span class="vkArtist">${Artist}</span>
+            <span class="vkArtist nowrap">${Artist}</span>
             <span class="vkTitle nowrap">${Name}</span>
             <span class="vkDuration">${Duration}</span>
+            <span style="display: none">${Url}</span>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
