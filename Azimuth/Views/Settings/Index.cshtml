@@ -102,10 +102,12 @@
     </script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item">
+        <div class="tableRow draggable-item track">
+            <span class="glyphicon glyphicon-play btn playBtn"></span>
             <span class="vkArtist">${artist}</span>
             <span class="vkTitle">${title}</span>
-            <input class="right" type="checkbox" checked="checked" class="vkImport">
+            <span class="vkDuration">${duration}</span>
+            <input class="vkImport" type="checkbox" checked="checked">
             <span style="display: none" id="trackId">${id}</span>
         </div>
     </script>
@@ -117,7 +119,7 @@
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-            <div class="tableRow">
+            <div class="tableRow playlist">
                 <span>${Name}</span>
                 <span>${Accessibilty}</span>
                 <span style="display: none" id="playlistId">${Id}</span>
