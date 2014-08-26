@@ -59,9 +59,10 @@
                                     $elem.trigger('MergeItems', [$elem, $savedItem, event.pageY]);
                                 }
                             }, 2000);
-                            if (childPos && parentPos && childPos.top - parentPos.top < $($currentItem.children[0]).outerHeight() / 2) {
+                            if (childPos && parentPos && childPos.top - parentPos.top < $($currentItem.children[0]).outerHeight() / 2 &&
+                                (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
                                 $draggableStub.insertBefore($elem);
-                            } else {
+                            } else if (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList'))) {
                                 $draggableStub.insertAfter($elem);
                             }
                         }
