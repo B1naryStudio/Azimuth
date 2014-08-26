@@ -72,10 +72,13 @@ input[type="checkbox"].input-validation-error {
 .draggable-item {
     top: 0;
 	left: 0;
-	height: 30px;
+	height: 50px;
 	width: 100px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
+    background-color: #D0D0D0;
+    margin-bottom: 5px;
+    margin-top: 5px;
 	user-select: none;
 }
 .draggable-btn {
@@ -176,7 +179,6 @@ div.tableHeader{
 
 div.tableRow{
 	clear: left;
-	height: 18px;
     width: 100%;
 }
 
