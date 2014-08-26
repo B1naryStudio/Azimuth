@@ -27,20 +27,6 @@ namespace Azimuth.ApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPublicPlaylists());
         }
 
-        [HttpPut]
-        public HttpResponseMessage SetPlaylistAccessibilty(int playlistId, Accessibilty accessibilty)
-        {
-            try
-            {
-                _playlistService.SetAccessibilty(playlistId, accessibilty);
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (BadRequestException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-        }
-
         [HttpGet]
         public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
@@ -93,6 +79,36 @@ namespace Azimuth.ApiControllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("post")]
+        public HttpResponseMessage CreatePlaylist(string name, Accessibilty accessibilty)
+        {
+            try
+            {
+                _playlistService.CreatePlaylist(name, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+        
+        [HttpPut]
+        [Route("put")]
+        public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
+        {
+            try
+            {
+                _playlistService.SetAccessibilty(id, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
     }

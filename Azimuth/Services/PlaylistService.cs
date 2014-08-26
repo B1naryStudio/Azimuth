@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
@@ -55,6 +54,39 @@ namespace Azimuth.Services
             playlist.Accessibilty = accessibilty;
 
             _unitOfWork.Commit();
+        }
+
+        public void CreatePlaylist(string name, Accessibilty accessibilty)
+        {
+            if (!Enum.IsDefined(typeof(Accessibilty), accessibilty))
+            {
+                throw new BadRequestException("Accessibilty not correct");
+            }
+
+            using (_unitOfWork)
+            {
+                var playlistRepo = _unitOfWork.GetRepository<Playlist>();
+                if (playlistRepo.GetOne(s => (s.Name == name) && 
+                                             (s.Creator.Email == AzimuthIdentity.Current.UserCredential.Email)) != null)
+                {
+                    throw new BadRequestException("Playlist with this name already exists");
+                }
+
+                //get current user
+                var userRepo = _unitOfWork.GetRepository<User>();
+                var user = userRepo.GetOne(s => (s.Email == AzimuthIdentity.Current.UserCredential.Email));
+
+                var playlist = new Playlist
+                {
+                    Accessibilty = accessibilty,
+                    Name = name,
+                    Creator = user
+                };
+
+                playlistRepo.AddItem(playlist);
+
+                _unitOfWork.Commit();
+            }
         }
 
         public async Task<PlaylistData> GetPlaylistById(int id)
