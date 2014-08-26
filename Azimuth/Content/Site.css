@@ -215,17 +215,24 @@ div.vkMusicTable span{
 .right {
     position: absolute;
     right: 10px;
-    /*width: 300px;*/
-    /*background-color: #b0e0e6;*/
 }
 
-/*div.draggable-list span.vkArtist {
-    width: 30%;
+#contextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    background: white
 }
 
-div.draggable-list span.vkTitle {
-    width: 60%;
+.contextMenuActionName:hover {
+    background: skyblue;
+	cursor: pointer;
 }
-div.draggable-list span.vkImport {
-    width: 10%;
-}*/
+.contextMenuActionName {
+    font-family: "Arial";
+    font-size: 10pt;
+    font-style: normal;
+    border-bottom: 1px solid lightblue;
+    padding-left: 10px;
+    padding-right: 10px;
+}

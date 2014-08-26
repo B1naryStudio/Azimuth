@@ -16,7 +16,7 @@
                             if (playlist.Accessibilty == 1)
                                 playlist.Accessibilty = "public";
                             else
-                                playlist.Accessibilty = "private";
+                            playlist.Accessibilty = "private";
                             playlists_global.push(playlist);
                             list.append($("#playlistTemplate").tmpl(playlist));
                         }
@@ -58,8 +58,12 @@
                         var track = tracks[i];
                         $("#playlistTrackTemplate").tmpl(track).appendTo(list);
                     }
-                    $('.draggable').makeDraggable();
-
+                    $('.draggable').makeDraggable({
+                        contextMenu:[
+                            {'id': '1', 'name': 'first action' },
+                            {'id': '2', 'name': 'second action' }
+                        ]
+                    });
                 }
             });
         }
@@ -92,7 +96,12 @@
                             var track = tracks[i];
                             $("#trackTemplate").tmpl(track).appendTo(list);
                         }
-                        $('.draggable').makeDraggable();
+                        $('.draggable').makeDraggable({
+                            contextMenu:[
+                                {'id': '1', 'name': 'first action' },
+                                {'id': '2', 'name': 'second action' }
+                            ]
+                        });
                     } else {
                         $("#relogin").show();
                         var reloginContainer = $('#relogin');

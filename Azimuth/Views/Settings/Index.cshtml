@@ -73,6 +73,7 @@
         </div>
     </div>
     <div class="itemsContainer tableRow" id="itemsContainer" ></div>
+    <div id="contextMenu"></div>
 </div>
 @section scripts
 {
@@ -80,6 +81,11 @@
     <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
     <script type="" src="../../Scripts/drag&drop.js"></script>
     
+    @*<script>
+        document.oncontextmenu = function () {
+            return false;
+        }
+    </script>*@   
     <script>
         var volume = new Dragdealer('volume', {
             vertical: true,
@@ -118,11 +124,15 @@
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-            <div class="tableRow">
-                <span>${Name}</span>
-                <span>${Accessibilty}</span>
-                <span style="display: none" id="playlistId">${Id}</span>
-            </div>
-            <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
-    </script>  
+        <div class="tableRow">
+            <span>${Name}</span>
+            <span>${Accessibilty}</span>
+            <span style="display: none" id="playlistId">${Id}</span>
+        </div>
+        <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
+    </script>
+    
+    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div id="${id}" class="contextMenuActionName">${name}</div>
+    </script>
 }
