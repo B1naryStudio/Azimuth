@@ -142,18 +142,17 @@
         function _makeDraggable(event) {
 
             if (event.which == 3) {
-                // this work!!!!!!!!!!!!!!!
-                //document.oncontextmenu = function() {
-                //    return false;
-                //}
-                //contextMenuSelected = true;
-                //    var x = event.pageX;
-                //    var y = event.pageY;
-                //    $contextMenuContainer.css({
-                //        'top': y + 'px',
-                //        'left': x + 'px'
-                //    });
-                //    $contextMenuContainer.show();
+                document.oncontextmenu = function() {
+                    return false;
+                }
+                contextMenuSelected = true;
+                    var x = event.pageX;
+                    var y = event.pageY;
+                    $contextMenuContainer.css({
+                        'top': y + 'px',
+                        'left': x + 'px'
+                    });
+                    $contextMenuContainer.show();
             } else {
 
                 mousedown = true;
