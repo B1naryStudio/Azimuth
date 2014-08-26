@@ -159,7 +159,7 @@
             $('#createNewPlaylistBtn').hide();
             var searchParam = $(this).val().toLocaleLowerCase();
             showPlaylists(playlists_global.filter(function (index) {
-                $('#searchPlaylistName').next().children('.tableRow').remove();
+                $('#searchPlaylistName').next().children().remove();
                 return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
             }));
             $('.accordion .tableRow').on("click", _getTracks);
