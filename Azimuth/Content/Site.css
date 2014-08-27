@@ -322,9 +322,9 @@ div.vkMusicTable span{
     background: aqua;
 }
 
-div.draggable-list span.vkArtist {
+/*div.draggable-list span.vkArtist {
     width: 30%;
-}
+}*/
 
 .contextMenuActionName:hover {
     background: #3399FF;
