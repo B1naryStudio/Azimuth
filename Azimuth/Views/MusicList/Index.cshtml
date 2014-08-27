@@ -87,11 +87,11 @@
         function _getTracks() {
             var $dragList = $(this).next();
             $.ajax({
-                url: "/api/playlists/" + $(this).find('#playlistId').text(),
+                url: "/api/usertracks?playlistId=" + $(this).find('#playlistId').text(),
                 type: 'GET',
                 async: false,
-                success: function(playlistData) {
-                    var tracks = playlistData.Result.Tracks;
+                success: function(tracksData) {
+                    var tracks = tracksData.Result;
                     var $list = $('#tracksTable');
                     $list.find('.tableRow').remove();
                     for (var i = 0; i < tracks.length; i++) {
