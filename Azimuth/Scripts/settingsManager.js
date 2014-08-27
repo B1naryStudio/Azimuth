@@ -15,11 +15,11 @@ var SettingsManager = function(manager) {
 		//var $dragList = $(this).next();
 		//if (!$(this).hasClass('active') && $dragList.children().length === 0) {
 		$.ajax({
-			url: "/api/playlists/" + $(this).find('#playlistId').text(), // TODO replace with class playlistID
+		    url: "/api/usertracks?playlistId=" + $(this).find('#playlistId').text(), // TODO replace with class playlistID
 			type: 'GET',
 			async: false,
 			success: function(playlistData) {
-				var tracks = playlistData.Result.Tracks;
+				var tracks = playlistData.Result;
 				for (var i = 0; i < tracks.length; i++) {
 					var track = tracks[i];
 					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
@@ -57,13 +57,13 @@ SettingsManager.prototype.showPlaylists = function() {
 					self.playlists = playlists.Result;
 					for (var i = 0; i < self.playlists.length; i++) {
 						var playlist = self.playlists[i];
-						if (playlist.Accessibilty === 1) {
-							playlist.Accessibilty = "public";
-						} else {
-							playlist.Accessibilty = "private";
-							self.playlistsGlobal.push(playlist);
+					    if (playlist.Accessibilty === 1) {
+					        playlist.Accessibilty = "public";
+					    } else {
+					        playlist.Accessibilty = "private";
+					    }
+					    self.playlistsGlobal.push(playlist);
 							self.$playlistsTable.append(self.playlistTemplate.tmpl(playlist));
-						}
 					}
 				} else {
 					self.$reloginForm.show();
