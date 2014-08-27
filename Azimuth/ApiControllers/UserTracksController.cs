@@ -51,13 +51,42 @@ namespace Azimuth.ApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
         }
 
-        [HttpPut]
-        [Route("put")]
-        public HttpResponseMessage PutTrackToPlaylist(int playlistId, int trackId)
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetTracksByPlaylistId(int playlistId)
         {
             try
             {
-                _userTracksService.PutTrackToPlaylist(trackId, playlistId);
+                var tracks = _userTracksService.GetTracksByPlaylistId(playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK, tracks);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("put")]
+        public HttpResponseMessage PutTrackToPlaylist(long playlistId, long trackId)
+        {
+            try
+            {
+                _userTracksService.PutTrackToPlaylist(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("move")]
+        public HttpResponseMessage MoveTracksBetweenPlaylists(long playlistId, long trackId)
+        {
+            try
+            {
+                _userTracksService.MoveTrackBetweenPlaylists(playlistId, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)

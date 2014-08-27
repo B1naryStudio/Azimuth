@@ -9,6 +9,8 @@ namespace Azimuth.Shared.Dto
         public string Name;
         public Accessibilty Accessibilty;
         public List<string> TrackIds;
-        public List<TracksDto> Tracks;
+        public List<string> Genres;
+        public int Duration;
+        public int ItemsCount;
     }
 }

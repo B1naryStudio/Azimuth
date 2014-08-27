@@ -23,6 +23,7 @@
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/myMusicManager.js"></script>
     
 
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
@@ -34,12 +35,14 @@
     </script> 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
-            <div class="glyphicon glyphicon-play btn track-play-btn"></div>
-            <div class="track-info">
-                <div>${Artist}</div>
-                <div>${Album}</div>
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description">
+                <div class="track-info">
+                    <span>${Artist}</span>
+                    <span>${Album}</span>
+                </div>
+                <div class="track-title">${Name}</div>
             </div>
-            <div class="track-title">${Name}</div>
             <div class="track-genre">${Genre}</div>
             <div class="track-duration">${Duration}</div>
             <div style="display: none" id="track-url">${Url}</div>
@@ -49,59 +52,10 @@
 
 
     <script>
-        var audio = new Audio();
         $(document).ready(function() {
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "/api/playlists/own",
-                dataType: "json",
-                async: false,
-                success: function(playlists) {
-                    playlists = playlists.Result;
-                    var list = $('#playlistsTable');
-                    for (var i = 0; i < playlists.length; i++) {
-                        var playlist = playlists[i];
-                        if (playlist.Accessibilty == 1)
-                            playlist.Accessibilty = "public";
-                        else
-                            playlist.Accessibilty = "private";
-                        list.append($("#playlistTemplate").tmpl(playlist));
-                    }
-                }
-            });
-
-            $('.accordion .tableRow').on("click", _getTracks);
-            
+            var manager = new MyMusicManager();
+            manager.showPlaylists();
+            manager.bindListeners();
         });
-
-        function _playMusic() {
-
-            audio.pause();
-            var url = $(this).parent().children('#track-url')[0].innerHTML;
-
-            audio.src = 'http://cs7-1v4.vk.me/p11/944c62f324ebe3.mp3'; // test audio player
-            audio.play();
-        }
-
-        function _getTracks() {
-            var $dragList = $(this).next();
-            $.ajax({
-                url: "/api/playlists/" + $(this).find('#playlistId').text(),
-                type: 'GET',
-                async: false,
-                success: function(playlistData) {
-                    var tracks = playlistData.Result.Tracks;
-                    var $list = $('#tracksTable');
-                    $list.find('.tableRow').remove();
-                    for (var i = 0; i < tracks.length; i++) {
-                        var track = tracks[i];
-                        track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
-                        $list.append($("#trackTemplate").tmpl(track));
-                    }
-                    $('.track-play-btn').on('click', _playMusic);
-                }
-            });
-        }
     </script>
 }
