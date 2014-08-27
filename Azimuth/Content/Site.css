@@ -144,7 +144,6 @@ input[type="checkbox"].input-validation-error {
 	border-bottom: solid 1px #c4c4c4;
 }
 div.accordion > div.tableRow{
-    padding-top: 5px;
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border-bottom: none;
 	cursor: pointer;
@@ -176,7 +175,7 @@ div.tableHeader{
 }
 
 div.playlist {
-    height: 30px;
+    height: 110px;
 }
 
 div.tableRow{
@@ -295,6 +294,31 @@ div.draggable-list{
     margin-right: 10px;
     margin-top: 10px;
     padding-left: 8px;
+}
+
+.playlist-info {
+    float: left;
+    font-size: 11px;
+}
+
+.playlist-genres {
+}
+
+.playlist-logo {
+    float: left;
+    margin: 5px;
+}
+.playlist-title {
+    padding-top: 5px;
+}
+
+.playlist-genres {
+    margin-top: 40px;
+}
+
+span.label {
+    padding: 3px;
+    margin: 3px;
 }
 
 /*div.draggable-list span.vkArtist {

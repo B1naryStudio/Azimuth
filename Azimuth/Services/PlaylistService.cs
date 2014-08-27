@@ -18,7 +18,7 @@ namespace Azimuth.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly PlaylistRepository _playlistRepository;
-        private TrackRepository _trackRepository;
+        private readonly TrackRepository _trackRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork)
         {
@@ -35,7 +35,12 @@ namespace Azimuth.Services
                 Id = playlist.Id,
                 Name = playlist.Name,
                 Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                Genres = playlist.Tracks.Select(x => x.Genre)
+                                            .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                                            .OrderByDescending(x => x.Count)
+                                            .Select(x => x.Name)
+                                            .Take(5)
+                                            .ToList(),
                 ItemsCount = playlist.Tracks.Count,
             }).ToList();
 
@@ -100,13 +105,19 @@ namespace Azimuth.Services
                 {
                     throw new InstanceNotFoundException("playlist with specified id does not exist");
                 }
+
                 return new PlaylistData
                 {
                     Id = playlist.Id,
                     Name = playlist.Name,
                     Accessibilty = playlist.Accessibilty,
                     Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                    Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                    Genres = playlist.Tracks.Select(x => x.Genre)
+                                            .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                                            .OrderByDescending(x => x.Count)
+                                            .Select(x => x.Name)
+                                            .Take(5)
+                                            .ToList(),
                     ItemsCount = playlist.Tracks.Count,
                 };
             }
@@ -124,7 +135,12 @@ namespace Azimuth.Services
                     Id = playlist.Id,
                     Name = playlist.Name,
                     Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                    Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                    Genres = playlist.Tracks.Select(x => x.Genre)
+                                            .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                                            .OrderByDescending(x => x.Count)
+                                            .Select(x => x.Name)
+                                            .Take(5)
+                                            .ToList(),
                     ItemsCount = playlist.Tracks.Count,
                     Accessibilty = playlist.Accessibilty
                 }).ToList();

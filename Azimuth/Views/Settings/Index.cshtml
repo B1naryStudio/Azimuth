@@ -161,8 +161,21 @@
 
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow playlist">
-            <span>${Name}</span>
-            <span>${Accessibilty}</span>
+            <div class="playlist-logo">
+                <img src="http://userserve-ak.last.fm/serve/500/210303/Coldplay.jpg" width="100" height="100"/>
+            </div>
+            <div class="playlist-title">${Name}</div>
+            <div class="playlist-info">
+                <span>Duration: ${Duration}</span>
+                <span>Songs: ${ItemsCount}</span>
+            </div>
+            <div class="playlist-genres">
+                <span class="label label-danger">${Genres[0]}</span>
+                <span class="label label-warning">${Genres[1]}</span>
+                <span class="label label-info">${Genres[2]}</span>
+                <span class="label label-success">${Genres[3]}</span>
+                <span class="label label-default">${Genres[4]}</span>
+            </div>
             <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
