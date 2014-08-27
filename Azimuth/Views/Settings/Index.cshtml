@@ -139,8 +139,8 @@
                 <div class="track-title">${title}</div>
             </div>
             <div class="track-duration">${duration}</div>
-            <div style="display: none" id="track-url">${url}</div>
-            <div style="display: none" id="trackId">${id}</div>
+            <div style="display: none" class="track-url">${url}</div>
+            <div style="display: none" class="trackId">${id}</div>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
@@ -153,7 +153,7 @@
                 <div class="track-title">${Name}</div>
             </div>
             <div class="track-duration">${Duration}</div>
-            <div style="display: none" id="track-url">${Url}</div>
+            <div style="display: none" class="track-url">${Url}</div>
             <div style="display: none" class="trackId">${Id}</div>
         </div>
     </script>
@@ -161,7 +161,7 @@
         <div class="tableRow playlist">
             <span>${Name}</span>
             <span>${Accessibilty}</span>
-            <span style="display: none" id="playlistId">${Id}</span>
+            <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
     </script>

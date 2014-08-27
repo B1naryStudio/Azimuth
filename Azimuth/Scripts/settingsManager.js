@@ -15,7 +15,7 @@ var SettingsManager = function(manager) {
 		//var $dragList = $(this).next();
 		//if (!$(this).hasClass('active') && $dragList.children().length === 0) {
 		$.ajax({
-		    url: "/api/usertracks?playlistId=" + $(this).find('#playlistId').text(), // TODO replace with class playlistID
+		    url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
 			type: 'GET',
 			async: false,
 			success: function(playlistData) {
