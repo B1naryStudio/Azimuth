@@ -127,21 +127,30 @@
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
-            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
-            <span class="vkArtist nowrap">${artist}</span>
-            <span class="vkTitle nowrap">${title}</span>
-            <span class="vkDuration">${duration}</span>
-            <span style="display: none" id="trackId">${id}</span>
-            <span style="display: none" id="url">${url}</span>
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description">
+                <div class="track-info">
+                    <span>${artist}</span>
+                </div>
+                <div class="track-title">${title}</div>
+            </div>
+            <div class="track-duration">${duration}</div>
+            <div style="display: none" id="track-url">${url}</div>
+            <div style="display: none" id="trackId">${id}</div>
         </div>
     </script>
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
-            <span class="glyphicon glyphicon-play btn btn-default playBtn"></span>
-            <span class="vkArtist nowrap">${Artist}</span>
-            <span class="vkTitle nowrap">${Name}</span>
-            <span class="vkDuration">${Duration}</span>
-            <span style="display: none" id="url">${Url}</span>
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description">
+                <div class="track-info">
+                    <span>${Artist}</span>
+                </div>
+                <div class="track-title">${Name}</div>
+            </div>
+            <div class="track-duration">${Duration}</div>
+            <div style="display: none" id="track-url">${Url}</div>
+            <div style="display: none" id="trackId">${Id}</div>
         </div>
     </script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">

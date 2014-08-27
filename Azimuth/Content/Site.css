@@ -207,34 +207,6 @@ div.draggable-list{
     font-size: larger;
 }
 
-div.vkMusicTable span{
-  	display:block;
-  	float:left;
-  	text-align:left;
-}
-
-.vkArtist {
-    position: relative;
-    left: 40px;
-    top: 3px;
-    width: 40%;
-    height: 20px;
-}
-
-.vkTitle {
-    position: relative;
-    left: 40px;
-    top: 7px;
-    width: 60%;
-    height: 20px;
-}
-
-.vkDuration {
-    position: absolute;
-    margin-top: 15px;
-    right: 30px;
-}
-
 .nowrap {
     overflow: hidden; 
     word-wrap: break-word;
@@ -305,7 +277,7 @@ div.vkMusicTable span{
     display: inline;
     float: left;
     margin-top: -12px;
-    width: 20%;
+    width: 15%;
 }
 .track-duration {
     display: block;
