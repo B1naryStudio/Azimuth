@@ -34,7 +34,9 @@ namespace Azimuth.Services
             {
                 Id = playlist.Id,
                 Name = playlist.Name,
-                Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
+                Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                ItemsCount = playlist.Tracks.Count,
             }).ToList();
 
             return playlists;
@@ -102,7 +104,10 @@ namespace Azimuth.Services
                 {
                     Id = playlist.Id,
                     Name = playlist.Name,
-                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
+                    Accessibilty = playlist.Accessibilty,
+                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                    Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                    ItemsCount = playlist.Tracks.Count,
                 };
             }
         }
@@ -118,7 +123,9 @@ namespace Azimuth.Services
                 {
                     Id = playlist.Id,
                     Name = playlist.Name,
-                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList(),
+                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                    Genres = playlist.Tracks.Select(x => x.Genre).ToList(),
+                    ItemsCount = playlist.Tracks.Count,
                     Accessibilty = playlist.Accessibilty
                 }).ToList();
                 return playlists;

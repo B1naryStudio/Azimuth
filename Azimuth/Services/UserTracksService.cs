@@ -19,9 +19,9 @@ namespace Azimuth.Services
     {
         private ISocialNetworkApi _socialNetworkApi;
         private readonly IUnitOfWork _unitOfWork;
-        private UserRepository _userRepository;
-        private PlaylistRepository _playlistRepository;
-        private TrackRepository _trackRepository;
+        private readonly UserRepository _userRepository;
+        private readonly PlaylistRepository _playlistRepository;
+        private readonly TrackRepository _trackRepository;
 
         public UserTracksService(IUnitOfWork unitOfWork)
         {
@@ -51,7 +51,27 @@ namespace Azimuth.Services
 
             return await _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
         }
-		public async Task<ICollection<TracksDto>> GetUserTracks()
+
+        public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
+        {
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(x => x.Id == id);
+                ICollection<TracksDto> tracks = playlist.Tracks.Select(track => new TracksDto
+                {
+                    Name = track.Name,
+                    Duration = track.Duration,
+                    Genre = track.Genre,
+                    Url = track.Url,
+                    Album = track.Album.Name,
+                    Artist = track.Album.Artist.Name
+                }).ToList();
+
+                return tracks;
+            }
+        }
+
+        public async Task<ICollection<TracksDto>> GetUserTracks()
         {
             using (_unitOfWork)
             {

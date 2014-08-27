@@ -51,6 +51,20 @@ namespace Azimuth.ApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
         }
 
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetTracksByPlaylistId(int playlistId)
+        {
+            try
+            {
+                var tracks = _userTracksService.GetTracksByPlaylistId(playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK, tracks);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
         [HttpPut]
         [Route("put")]
         public HttpResponseMessage PutTrackToPlaylist(long playlistId, long trackId)
