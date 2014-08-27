@@ -92,8 +92,43 @@
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.hasClass('draggable-stub')) {
                         $currentItem.children().toggleClass('vk-item', false);
+                        var provider = $('.tab-pane.active').attr('id');
+                        var tracks = [];
+                        var playlistId = $('.playlist.active').children('.playlistId').text();
+                        $('.draggable-item-selected').each(function () {
+                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
+                        }).get();
+                        $.ajax({
+                            url: '/api/usertracks?provider=' + provider,
+                            type: 'POST',
+                            data: JSON.stringify({
+                                "Id": playlistId,
+                                "TrackIds": tracks
+                            }) + JSON.stringify({ "Provider": provider }),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            async: false
+
+                        });
                     } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList')) {
-                            $currentItem.children().toggleClass('vk-item', false);
+                        $currentItem.children().toggleClass('vk-item', false);
+                        var provider = $('.tab-pane.active').attr('id');
+                        var tracks = [];
+                        $('.draggable-item-selected').each(function () {
+                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
+                        }).get();
+                        $.ajax({
+                            url: '/api/usertracks?provider=' + provider,
+                            type: 'POST',
+                            data: JSON.stringify({
+                                "Id": playlistId,
+                                "TrackIds": tracks
+                            }),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            async: false
+
+                        });
                     }
 
                     if ($element.hasClass('delete-area')) {
