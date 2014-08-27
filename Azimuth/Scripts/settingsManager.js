@@ -12,31 +12,34 @@ var SettingsManager = function(manager) {
 	this.$createNewPlaylistBtn = $('#createNewPlaylistBtn');
 
 	this._getTracks = function() {
-		var $dragList = $(this).next();
-		if (!$(this).hasClass('active') && $dragList.children().length === 0) {
-			$.ajax({
-				url: "/api/playlists/" + $(this).find('#playlistId').text(), // TODO replace with class playlistID
-				type: 'GET',
-				async: false,
-				success: function(playlistData) {
-					var tracks = playlistData.Result.Tracks;
-					for (var i = 0; i < tracks.length; i++) {
-						var track = tracks[i];
-						track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
-						self.playlistTrackTemplate.tmpl(track).appendTo($dragList);
-					}
-					$('.draggable').makeDraggable({
-						contextMenu:[
-							{ 'id': '1', 'name': 'first action', "isNewSection": "false" },
-							{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
-							{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
-							{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
-						]
-					});
+		//var $dragList = $(this).next();
+		//if (!$(this).hasClass('active') && $dragList.children().length === 0) {
+		$.ajax({
+			url: "/api/playlists/" + $(this).find('#playlistId').text(), // TODO replace with class playlistID
+			type: 'GET',
+			async: false,
+			success: function(playlistData) {
+				var tracks = playlistData.Result.Tracks;
+				for (var i = 0; i < tracks.length; i++) {
+					var track = tracks[i];
+					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
+					self.playlistTrackTemplate.tmpl(track).appendTo('#playlistTracks');
 				}
-			});
-		}
-		$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
+				$('.draggable').makeDraggable({
+					contextMenu:[
+						{ 'id': '1', 'name': 'first action', "isNewSection": "false" },
+						{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
+						{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
+						{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+					]
+				});
+			}
+		});
+		//}
+		//$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
+		$('#playlistsTable').hide();
+		$('#backToPlaylistsBtn').show();
+		$('#playlistTracks').show();
 		$(this).toggleClass("active");
 	};
 };
@@ -153,4 +156,11 @@ SettingsManager.prototype.bindListeners = function() {
 		}));
 		$('.accordion .tableRow').on("click", self._getTracks);
 	});
+
+	$('#backToPlaylistsBtn').click(function () {
+	    $('#backToPlaylistsBtn').hide();
+	    $('#playlistTracks').empty();
+	    $('#playlistTracks').hide();
+        $('#playlistsTable').show(); 
+    });
 };
