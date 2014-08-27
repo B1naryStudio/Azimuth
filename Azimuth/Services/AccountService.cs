@@ -44,7 +44,8 @@ namespace Azimuth.Services
                             // If we login again with the same social network, skip updating
                             if (loggedUser.Id != userSn.User.Id)
                             {
-                                var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
+                                //var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
+                                var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSn.User.Id);
 
                                 foreach (var userPlaylist in userPlaylists)
                                 {

@@ -113,18 +113,19 @@ namespace Azimuth.Services
             {
                 var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
                 var userId = userRepo.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                var playlists = _playlistRepository.GetByCreatorId(userId).Select(playlist => new PlaylistData
+
+                var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => new PlaylistData
                 {
                     Id = playlist.Id,
                     Name = playlist.Name,
-                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList()
+                    Tracks = playlist.Tracks.Select(track => Mapper.Map(track, new TracksDto())).ToList(),
+                    Accessibilty = playlist.Accessibilty
                 }).ToList();
                 return playlists;
             }
         }
 
-        public
-            void RemovePlaylistById(int id)
+        public void RemovePlaylistById(int id)
         {
             using (_unitOfWork)
             {

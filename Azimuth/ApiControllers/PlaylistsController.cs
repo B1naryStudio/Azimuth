@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
 ﻿using System.Web.Http;
-﻿using Azimuth.Services;
+using Azimuth.Services;
 using Azimuth.Shared.Enums;
 
 namespace Azimuth.ApiControllers
@@ -22,8 +22,8 @@ namespace Azimuth.ApiControllers
         {
             _playlistService = playlistService;
         }
-        
-        [HttpGet]        
+
+        [HttpGet]
         public async Task<HttpResponseMessage> GetAllUsersPlaylists()
         {
             try
@@ -44,16 +44,21 @@ namespace Azimuth.ApiControllers
         [Route("public")]
         public HttpResponseMessage GetPublicPlaylists()
         {
+
             return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPublicPlaylists());
         }
-        
+
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<HttpResponseMessage> GetPlayListById(int id)
+        [Route("own")]
+        public async Task<HttpResponseMessage> GetOwnPlaylists()
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPlaylistById(id));
+                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetUsersPlaylists());
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
             }
             catch (Exception ex)
             {
@@ -61,33 +66,20 @@ namespace Azimuth.ApiControllers
             }
         }
 
-        [HttpPost]
-        [Route("post")]
-        public HttpResponseMessage CreatePlaylist(string name, Accessibilty accessibilty)
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
             try
             {
-                _playlistService.CreatePlaylist(name, accessibilty);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPlaylistById(id));
             }
-            catch (BadRequestException ex)
+            catch (InstanceNotFoundException ex)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
             }
-        }
-        
-        [HttpPut]
-        [Route("put")]
-        public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
-        {
-            try
+            catch (Exception ex)
             {
-                _playlistService.SetAccessibilty(id, accessibilty);
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (BadRequestException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
 
@@ -126,6 +118,34 @@ namespace Azimuth.ApiControllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage CreatePlaylist(string name, Accessibilty accessibilty)
+        {
+            try
+            {
+                _playlistService.CreatePlaylist(name, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+        
+        [HttpPut]
+        public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
+        {
+            try
+            {
+                _playlistService.SetAccessibilty(id, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
     }

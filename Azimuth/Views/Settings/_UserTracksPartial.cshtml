@@ -3,7 +3,7 @@
 {
     <div>
         
-        <div class="form-group">
+        @*<div class="form-group">
             <label for="inputPlaylistName" class="col-md-2 col-md-offset-1 control-label">Playlist name:</label>
             <div class="col-md-2">
                 <input class="form-control" id="inputPlaylistName" placeholder="Playlist name">
@@ -14,23 +14,13 @@
                 <option>Public</option>
             </select>
             <a class="btn btn-primary col-md-offset-11" data-provider=@Model.provider id="applyBtn">Apply &raquo;</a>
-        </div>
-
-        <h2>UserTracks:</h2>
+        </div>*@
         
-        <input type="checkbox" checked="checked" id="checkall"/>SelectAll
-
-        <div class="table-responsive">
-            <table class="table table-striped col-md-offset-1" id="tracksTable">
-                <thead>
-                    <tr>
-                        <th>Artist</th>
-                        <th>Title</th>
-                        <th>Import</th>
-                    </tr>
-                </thead>
-                <tbody id="tracks"></tbody>
-            </table>
+        <div class="draggable">
+            <div id="vkMusicTable" class="vkMusicTable">
+                <div class="tableTitle">User Tracks</div>
+                <div class="draggable-list vkMusicList"></div>
+            </div>
         </div>
     </div>
 }

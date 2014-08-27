@@ -40,3 +40,308 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.stuck {
+    position: fixed;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.spacer {
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 45px;
+    position: relative;
+    overflow: hidden;
+    height: 10px;
+}
+
+.spacer:after {
+    content: "";
+    display: block;
+    width: 100%;
+    margin: -25px auto 0;
+    height: 25px;
+    -ms-border-radius: 125px/12px;
+    border-radius: 125px/12px;
+    -webkit-box-shadow: 0 0 8px black;
+    -ms-box-shadow: 0 0 8px black;
+    box-shadow: 0 0 8px black;
+}
+
+.track {
+    height: 50px;
+    background-color: #E0E0E0;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.draggable-item {
+    top: 0;
+	left: 0;
+	width: 100px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+.draggable-btn {
+	height:30px;
+	cursor: pointer;
+}
+.draggable-btn.add {
+	width:40%;
+}
+.draggable-btn.sort {
+	width: 30%;
+}
+.draggable-item:hover {
+	background: aquamarine;
+	cursor: pointer;
+}
+.draggable-item.dragging {
+	position: absolute;
+	z-index: 1000;
+}
+.draggable-list {
+	float: left;
+	/*border: 1px lightsteelblue solid;*/
+	min-height: 30px;
+	min-width: 150px;
+}
+.draggable-list-empty{
+	height: 30px;
+	width: 100%;
+	border: 1px lightsteelblue solid;
+}
+.draggable-item-selected {
+	background: aquamarine;
+}
+#itemsContainer {
+	position: absolute;
+    opacity: 0.5;
+	z-index: 1000;
+    display: block;
+}
+#itemsContainer div {
+    /*width: 741px;*/
+    /*width: expression($('.draggable-item').width())*/
+    /*width: 20%;*/
+}
+.draggable{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	-moz-user-select:
+	-moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.delete-area{
+	width: 200px;
+	height: 200px;
+	border: solid black 1px;
+	/*visibility: hidden;*/
+	float: left;
+}
+
+.accordion {
+	width: 100%;
+	border-bottom: solid 1px #c4c4c4;
+}
+div.accordion > div.tableRow{
+    padding-top: 5px;
+	font: bold 100%/100% Arial, Helvetica, sans-serif;
+	border-bottom: none;
+	cursor: pointer;
+}
+div.accordion > div.dropdown {
+    background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
+}
+.accordion .tableRow:hover {
+	background-color: #e3e2e2;
+}
+.accordion .tableRow.active {
+	background-position: right 0;
+}
+
+/*div.list{
+	width: 500px;
+}*/
+
+div.list span{
+	/*width: 50%;*/
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+div.tableHeader{
+	clear: left;
+    width: 100%;
+}
+
+div.playlist {
+    height: 30px;
+}
+
+div.tableRow{
+	clear: left;
+    width: 100%;
+}
+
+.playBtn {
+    position: relative;
+    top: 10px;
+    width: 40px;
+    height: 30px;
+    left: 20px;
+}
+
+div.draggable-list{
+	width: 100%;
+	display: block;
+}
+
+/*div.draggable-list span{
+	width: 33%;
+}*/
+
+.tableTitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+
+div.vkMusicTable span{
+  	display:block;
+  	float:left;
+  	text-align:left;
+}
+
+.vkArtist {
+    position: relative;
+    left: 40px;
+    top: 3px;
+    width: 40%;
+    height: 20px;
+}
+
+.vkTitle {
+    position: relative;
+    left: 40px;
+    top: 7px;
+    width: 60%;
+    height: 20px;
+}
+
+.vkDuration {
+    position: absolute;
+    margin-top: 15px;
+    right: 30px;
+}
+
+.nowrap {
+    overflow: hidden; 
+    word-wrap: break-word;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.right {
+    position: absolute;
+    right: 10px;
+}
+
+#contextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    background: white;
+}
+
+.playlistsContainer {
+    display: block;
+    float: left;
+    width: 23%;
+}
+
+.tracksContainer {
+    display: block;
+    float: left;
+    width: 75%;
+    margin-left: 20px;
+    vertical-align: top;
+}
+
+.track-info {
+    display: inline-block;
+    float: left;
+    margin: 2px;
+    width: 30%;
+}
+
+.track-title {
+    display: inline-block;
+    float: left;
+    text-align: center;
+    width: 30%;
+    margin-top: 10px;
+}
+
+.track-genre {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 20%;
+    margin-top: 10px;
+}
+.track-duration {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 5%;
+    margin-top: 10px;
+}
+
+.track-play-btn {
+    display: block;
+    float: left;
+    width: 5%;
+    height: 70%;
+    margin-left: 5px;
+    margin-right: 2px;
+    margin-top: 5px;
+}
+
+.track-play-btn:hover {
+
+    background: aqua;
+}
+
+/*div.draggable-list span.vkArtist {
+    width: 30%;
+}*/
+
+.contextMenuActionName:hover {
+    background: #3399FF;
+	cursor: pointer;
+}
+.contextMenuActionName {
+    font-family: "Arial";
+    font-size: 10pt;
+    font-style: normal;
+    padding: 3px 10px 3px 10px;
+}
+hr {
+    padding: 0px;
+    margin: 0px;
+    clear: left;
+}
+
+#draggableStub {
+    display: none;
+}
