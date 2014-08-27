@@ -34,12 +34,14 @@
     </script> 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
-            <div class="glyphicon glyphicon-play btn track-play-btn"></div>
-            <div class="track-info">
-                <div>${Artist}</div>
-                <div>${Album}</div>
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description">
+                <div class="track-info">
+                    <div>${Artist}</div>
+                    <div>${Album}</div>
+                </div>
+                <div class="track-title">${Name}</div>
             </div>
-            <div class="track-title">${Name}</div>
             <div class="track-genre">${Genre}</div>
             <div class="track-duration">${Duration}</div>
             <div style="display: none" id="track-url">${Url}</div>
