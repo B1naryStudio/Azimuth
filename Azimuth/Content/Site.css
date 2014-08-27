@@ -282,26 +282,19 @@ div.draggable-list{
 .track-duration {
     display: block;
     float: right;
-    text-align: center;
     margin-top: -12px;
-    margin-right: 10px;
-    width: 5%;
+    margin-right: 20px;
 }
 
 .track-play-btn {
     display: inline;
     float: left;
-    width: 5%;
-    height: 70%;
+    width: 30px;
+    height: 60%;
     margin-left: 5px;
     margin-right: 10px;
-    margin-top: 7px;
-    margin-bottom: 5px;
-}
-
-.track-play-btn:hover {
-
-    background: aqua;
+    margin-top: 10px;
+    padding-left: 8px;
 }
 
 /*div.draggable-list span.vkArtist {

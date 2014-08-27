@@ -33,17 +33,18 @@
             <span style="display: none" id="playlistId">${Id}</span>
         </div>
     </script> 
+
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description">
+            <div class="track-description"> 
                 <div class="track-info">
-                    <span>${Artist}</span>
-                    <span>${Album}</span>
+                    <span class="nowrap">${Artist}</span>
+                    <span class="nowrap">${Album}</span>
                 </div>
-                <div class="track-title">${Name}</div>
+                <div class="track-title nowrap">${Name}</div>
             </div>
-            <div class="track-genre">${Genre}</div>
+            <div class="track-genre nowrap">${Genre}</div>
             <div class="track-duration">${Duration}</div>
             <div style="display: none" id="track-url">${Url}</div>
             <div style="display: none" id="trackId">${Id}</div>

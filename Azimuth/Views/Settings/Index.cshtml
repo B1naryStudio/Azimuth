@@ -143,20 +143,22 @@
             <div style="display: none" class="trackId">${id}</div>
         </div>
     </script>
+
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
             <div class="track-description">
                 <div class="track-info">
-                    <span>${Artist}</span>
+                    <span class="nowrap">${Artist}</span>
                 </div>
-                <div class="track-title">${Name}</div>
+                <div class="track-title nowrap">${Name}</div>
             </div>
-            <div class="track-duration">${Duration}</div>
+            <div class="track-duration nowrap">${Duration}</div>
             <div style="display: none" class="track-url">${Url}</div>
             <div style="display: none" class="trackId">${Id}</div>
         </div>
     </script>
+
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow playlist">
             <span>${Name}</span>
