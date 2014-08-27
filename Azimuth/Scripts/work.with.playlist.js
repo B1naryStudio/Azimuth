@@ -1,8 +1,8 @@
 ﻿$(document).ready(function () {
     var audioManager = new AudioManager();
-    var manager = new SettingsManager();
+    var manager = new SettingsManager(audioManager);
     
     manager.showPlaylists();
-    manager.bindListeners(audioManager);
+    manager.bindListeners();
     audioManager.bindListeners();
 });

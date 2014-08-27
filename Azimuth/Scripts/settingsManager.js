@@ -1,5 +1,6 @@
 var SettingsManager = function(manager) {
     var self = this;
+    this.audioManager = manager;
 	this.playlistsGlobal = [];
 	this.stringForCreateBtn = "Create new playlist ";
 	this.playlistTrackTemplate = $("#playlistTrackTemplate");
@@ -40,6 +41,7 @@ var SettingsManager = function(manager) {
 		$('#playlistsTable').hide();
 		$('#backToPlaylistsBtn').show();
 		$('#playlistTracks').show();
+		self.audioManager.bindPlayBtnListeners();
 		$(this).toggleClass("active");
 	};
 };
@@ -85,9 +87,8 @@ SettingsManager.prototype.showPlaylists = function() {
 	}    	
 };
 
-SettingsManager.prototype.bindListeners = function(manager) {
+SettingsManager.prototype.bindListeners = function() {
     var self = this;
-    var audioManager = manager;
 
 	$(document).on('PlaylistAdded', function(playlist) { // TODO Remove event triggering on document object
 		self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
@@ -122,7 +123,7 @@ SettingsManager.prototype.bindListeners = function(manager) {
 					self.$reloginForm.find('a').attr('href', reloginUrl);
 					self.$vkMusic.hide();
 				}
-			    audioManager.bindPlayBtnListeners();
+			    self.audioManager.bindPlayBtnListeners();
 			}
 		});
 	});
