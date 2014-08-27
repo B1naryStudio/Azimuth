@@ -50,11 +50,11 @@
         var $dragList = $(this).next();
         if (!$(this).hasClass('active') && $dragList.children().length == 0) {
             $.ajax({
-                url: "/api/playlists/" + $(this).find('#playlistId').text(),
+                url: "/api/usertracks?playlistId=" + $(this).find('#playlistId').text(),
                 type: 'GET',
                 async: false,
-                success: function(playlistData) {
-                    var tracks = playlistData.Result.Tracks;
+                success: function(tracksData) {
+                    var tracks = tracksData.Result;
                     var list = $dragList;
                     for (var i = 0; i < tracks.length; i++) {
                         var track = tracks[i];
