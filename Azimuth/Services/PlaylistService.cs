@@ -4,6 +4,7 @@ using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -30,18 +31,28 @@ namespace Azimuth.Services
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
         {
-            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public).Select(playlist => new PlaylistData
+
+            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public).Select(playlist =>
             {
-                Id = playlist.Id,
-                Name = playlist.Name,
-                Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                Genres = playlist.Tracks.Select(x => x.Genre)
-                                            .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
-                                            .OrderByDescending(x => x.Count)
-                                            .Select(x => x.Name)
-                                            .Take(5)
-                                            .ToList(),
-                ItemsCount = playlist.Tracks.Count,
+                var creator = playlist.Creator;
+                return new PlaylistData
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                    Genres = playlist.Tracks.Select(x => x.Genre)
+                        .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
+                        .OrderByDescending(x => x.Count)
+                        .Select(x => x.Name)
+                        .Take(5)
+                        .ToList(),
+                    Creator = new UserBrief
+                    {
+                        Name = creator.Name.FirstName+' '+creator.Name.LastName,
+                        Email = creator.Email
+                    },
+                    ItemsCount = playlist.Tracks.Count,
+                };
             }).ToList();
 
             return playlists;
@@ -153,13 +164,29 @@ namespace Azimuth.Services
             using (_unitOfWork)
             {
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
-
+                
                 if (playlist == null)
                 {
                     throw new InstanceNotFoundException("Playlist with specified id does not exist");
                 }
-
-                _playlistRepository.DeleteItem(playlist);
+                var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
+                if (AzimuthIdentity.Current != null)
+                {
+                    var userId =
+                        userRepo.GetOne(user => user.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    if (userId == playlist.Creator.Id)
+                    {
+                        _playlistRepository.DeleteItem(playlist);
+                    }
+                    else
+                    {
+                        throw new PrivilegeNotHeldException("Only creator can delete public playlist id="+userId);
+                    }
+                }
+                else
+                {
+                    throw new PrivilegeNotHeldException("Only creator can delete public playlist");
+                }
             }
         }
 

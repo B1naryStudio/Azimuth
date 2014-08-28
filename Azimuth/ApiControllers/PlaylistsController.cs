@@ -90,7 +90,7 @@ namespace Azimuth.ApiControllers
             try
             {
                 _playlistService.RemovePlaylistById(id);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK,"it's ok");
             }
             catch (InstanceNotFoundException ex)
             {

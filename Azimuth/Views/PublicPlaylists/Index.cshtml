@@ -1,23 +1,39 @@
-﻿<div>
-    <h2>Public Playlists</h2>
+﻿@using Azimuth.Infrastructure
+<h2>Public Playlists</h2>
+<div id="barplaylistArea">
+    
     <div class="playlists"></div>
 </div>
-<div>
+<div id="editBarplaylistArea">
     @Html.TextBox("playlistId")
     <button id="RemovePlaylist" onclick="removePlaylist()" class="btn">Remove playlist</button>
-    @Html.TextBox("trackId")
-    <button id="RemoveTrack" onclick="removeTrack()" class="btn">Remove Track</button>
 </div>
 
 @section scripts
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
+        <div class="barPlaylist" style='background-image: url("http://www.jobaer.net/images/pageimages/f2/white_square_yellow.jpg")'>
+            <p>${Name}</p>
+            <p>${Duration}</p>
+            <p>Created by ${Creator}</p>
+            <p>${Genres}</p>
 
+        </div>
+        <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
+    </script>
     <script>
+        var playlists_global = null;
         var playlistTemplate = $("#playlistTemplate");
         var trackTemplate = $("#trackTemplate");
-        $(document).ready(function() {
+        $(document).ready(function () {
+            showPlaylists();
+            $(document).on('playlistsUpdated', showPlaylists);
+        });
+
+        function showPlaylists() {
+            $(".playlists").empty();
             $.ajax({
                 cache: false,
                 type: "GET",
@@ -26,52 +42,57 @@
                 async: false,
                 success: function(data) {
                     var playlists = data["Result"];
+                    playlists_global = playlists;
+                    console.log(playlists);
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
-
-                        $(".playlists").append(
-                            "<h3>" + playlist.Name + "</h3>" +
-                            "<table class='tablesorter table table-striped col-md-offset-1'>" +
-                            "<thead>" +
-                            "<th>Artist</th>" +
-                            "<th>Title</th>" +
-                            "<th>Album</th>" +
-                            "<th>Genre</th>" +
-                            "<th>Duration</th>" +
-                            "<th>Url</th>" +
-                            "</thead>" +
-                            "<tbody id='playlist" + playlist.Id + "'></tbody>" +
-                            "</table>"
+                        var mins = Math.floor(playlist.Duration / 60);
+                        var secs = ('0' + (playlist.Duration % 60)).slice(-2);
+                        playlist.Duration = mins + ':' + secs;
+                        console.log(playlist);
+                        playlist.Creator = playlist.Creator.Name;
+                        $(".playlists").append($('#playlistTemplate').tmpl(playlist)
+                            //"<h3>" + playlist.Name + "</h3>" +
+                            //"<table class='tablesorter table table-striped col-md-offset-1'>" +
+                            //"<thead>" +
+                            //"<th>Artist</th>" +
+                            //"<th>Title</th>" +
+                            //"<th>Album</th>" +
+                            //"<th>Genre</th>" +
+                            //"<th>Duration</th>" +
+                            //"<th>Url</th>" +
+                            //"</thead>" +
+                            //"<tbody id='playlist" + playlist.Id + "'></tbody>" +
+                            //"</table>"
                         );
-                        for (var j = 0; j < playlist.Tracks.length; j++) {
-                            var track = playlist.Tracks[j];
-                            $("#playlist" + playlist.Id).append(
-                                "<tr class='removable'>" +
-                                "<td>" + track.Artist + "</td>" +
-                                "<td>" + track.Name + "</td>" +
-                                "<td>" + track.Album + "</td>" +
-                                "<td>" + track.Genre + "</td>" +
-                                "<td>" + track.Duration + "</td>" +
-                                "<td>" + track.Url + "</td>" +
-                                "</tr>"
-                            );
-                        }
                     }
                 }
             });
-        });
+        }
 
         function removePlaylist() {
-            $.ajax({
-                cache: false,
-                type: "DELETE",
-                url: "/api/playlists/delete/" + $('#playlistId').val(),
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    alert("Playlist has been removed");
-                }
+            var searchedPlaylists = playlists_global.filter(function(index) {
+                console.log(index);
+                return index.Name.valueOf() == $('#playlistId').val().valueOf();
             });
+            console.log(searchedPlaylists);
+            if (searchedPlaylists.length != 0)
+                $.ajax({
+                    cache: false,
+                    type: "DELETE",
+                    url: "/api/playlists/delete/" + searchedPlaylists[0].Id,
+                    dataType: "json",
+                    async: false,
+                    success: function(data) {
+                        console.log('hi');
+                        $(document).trigger('playlistsUpdated');
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log(status);
+                        console.log(error);
+                    }
+                });
         }
 
         function removeTrack() {

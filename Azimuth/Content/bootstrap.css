@@ -6919,3 +6919,27 @@ td.visible-print {
     display: none !important;
   }
 }
+
+.barPlaylist {
+    width: 200px;
+    height: 200px;
+    display: block;
+    float: left;
+    background-image: url(http://userserve-ak.last.fm/serve/500/210303/Coldplay.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+#barplaylistArea,#editBarplaylistArea {
+    display: block;
+    float: left;
+}
+#barplaylistArea {
+    
+    width: 70%;
+}
+#editBarplaylistArea {
+    width: 20%;
+}
