@@ -98,8 +98,10 @@ namespace Azimuth.DataProviders.Concrete
             if (tracks.Response == null)
             {
                 ErrorData error = JsonConvert.DeserializeObject<ErrorData>(json);
-                if (error.Error == null)
+                if (error.Error == null && tracks.Response != null)
+                {
                     return tracks.Response.Audios;
+                }
                 int code = error.Error.ErrorCode;
                 string message = error.Error.ErrorMessage;
                 switch (code)
