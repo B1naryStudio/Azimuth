@@ -4,6 +4,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using NHibernate;
 using NHibernate.Linq;
+using TweetSharp;
 
 namespace Azimuth.DataAccess.Repositories
 {
@@ -12,10 +13,5 @@ namespace Azimuth.DataAccess.Repositories
         public PlaylistRepository(ISession session) : base(session)
         {
         }
-
-        //public IEnumerable<Playlist> GetByCreatorId(long id)
-        //{
-        //    return _session.Query<Playlist>().Where(pl => pl.Creator.Id == id);
-        //}
     }
 }
