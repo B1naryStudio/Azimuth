@@ -4,28 +4,6 @@
     this.tracksGlobal = [];
     this.$currentTrack = null;
 
-    //var volume = new Dragdealer('volume', {
-    //    vertical: true,
-    //    horizontal: false,
-    //    bottom: 4,
-    //    animationCallback: function (x, y) {
-    //        var t = Math.round(y * 100);
-    //        if (y >= 0 && y <= 1) {
-    //            self.audio.volume = 1 - y;
-    //        }
-    //        if (t <= 33) {
-    //            $('#volumeImg').css('background-position', '0 0');
-    //        } else if (t <= 66) {
-    //            $('#volumeImg').css('background-position', '0 -40px');
-    //        } else if (t === 100) {
-    //            $('#volumeImg').css('background-position', '0 -120px');
-    //        } else {
-    //            $('#volumeImg').css('background-position', '0 -79px');
-    //        }
-    //    }
-    //});
-    //volume.setValue(0, 0.5);
-
     self.audio.onended = function() {
         self._nextTrack();
     };
@@ -159,6 +137,17 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#nextTrackBtn').click(self._nextTrack);
     $('#prevTrackBtn').click(self._prevTrack);
+
+    $('#volumeImg').css('background-position', '0 0');
+    $('#volumeImg').click(function () {
+        if (self.audio.volume == 0) {
+            self.audio.volume = 1;
+            $('#volumeImg').css('background-position', '0 0');
+        } else {
+            self.audio.volume = 0;
+            $('#volumeImg').css('background-position', '0 -120px');
+        }
+    });
 
     $('.itemsContainer').on('AfterDropped', self._updateGlobalTracks);
 };
