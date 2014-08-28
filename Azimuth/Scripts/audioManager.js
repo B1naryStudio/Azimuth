@@ -9,7 +9,6 @@
     };
 
     this._nextTrack = function() {
-        $('.track-play-btn').removeClass('glyphicon-pause');
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next();
@@ -18,30 +17,13 @@
             trackItem = self.$currentTrack.parent().children().first();
         }
         self.$currentTrack = trackItem;
-        $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
-        trackItem.children('.glyphicon').removeClass('glyphicon-play');
-        trackItem.children('.glyphicon').addClass('glyphicon-pause');
 
-        $(self.tracksGlobal).each(function(index) {
-            if ($(this).text() === self.audio.src) {
-                var url = $($(self.tracksGlobal).get(index + 1)).text();
-                if (url === '') {
-                    url = $($(self.tracksGlobal).get(0)).text();
-                }
-                if (!self.audio.paused) {
-                    self._setAttribute(url);
-                    self.play();
-                } else {
-                    self._setAttribute(url);
-                }
-                return false;
-            }
-            return true;
-        });
+        self._setPauseImgButton(trackItem);
+
+        self._setTrackTo('next');
     };
 
     this._prevTrack = function() {
-        $('.track-play-btn').removeClass('glyphicon-pause');
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev();
@@ -50,23 +32,10 @@
             trackItem = self.$currentTrack.parent().children().last();
         }
         self.$currentTrack = trackItem;
-        $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
-        trackItem.children('.glyphicon').removeClass('glyphicon-play');
-        trackItem.children('.glyphicon').addClass('glyphicon-pause');
 
-        $(self.tracksGlobal).each(function(index) {
-            if ($(this).text() === self.audio.src) {
-                var url = $($(self.tracksGlobal).get(index - 1)).text();
-                if (!self.audio.paused) {
-                    self._setAttribute(url);
-                    self.play();
-                } else {
-                    self._setAttribute(url);
-                }
-                return false;
-            }
-            return true;
-        });
+        self._setPauseImgButton(trackItem);
+
+        self._setTrackTo('prev');
     };
 
     this._setPlayImgButton = function(t) {
@@ -85,8 +54,31 @@
         self.audio.setAttribute('src', src);
     };
 
-    this._updateGlobalTracks = function() {
-        self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    this._setTrackTo = function (dirrection) { //dirrection = 'next' or 'prev'
+        if (dirrection === 'next' || dirrection === 'prev') {
+            var url = null;
+
+            $(self.tracksGlobal).each(function(index) {
+                if ($(this).text() === self.audio.src) {
+                    if (dirrection === 'next') {
+                        url = $($(self.tracksGlobal).get(index + 1)).text();
+                        if (url === '') {
+                            url = $($(self.tracksGlobal).get(0)).text();
+                        }
+                    } else {
+                        url = $($(self.tracksGlobal).get(index - 1)).text();
+                    }
+                    if (!self.audio.paused) {
+                        self._setAttribute(url);
+                        self.play();
+                    } else {
+                        self._setAttribute(url);
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }
     };
 };
 
@@ -149,5 +141,7 @@ AudioManager.prototype.bindListeners = function() {
         }
     });
 
-    $('.itemsContainer').on('AfterDropped', self._updateGlobalTracks);
+    $('.itemsContainer').on('AfterDropped', function() {
+        self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    });
 };
