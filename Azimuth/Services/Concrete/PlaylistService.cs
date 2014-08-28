@@ -121,6 +121,9 @@ namespace Azimuth.Services.Concrete
                         throw new InstanceNotFoundException("playlist with specified id does not exist");
                     }
 
+                    _unitOfWork.Commit();
+
+
                     return new PlaylistData
                     {
                         Id = playlist.Id,

@@ -41,6 +41,8 @@ namespace Azimuth.Services.Concrete
                     AvailableNetworks = availableSn,
                     ConnectedNetworks = connectedSn
                 };
+
+                _unitOfWork.Commit();
                 return viewModel;
             }
         }

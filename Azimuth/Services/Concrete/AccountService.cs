@@ -137,6 +137,8 @@ namespace Azimuth.Services.Concrete
                                 AzimuthIdentity.Current.UserCredential.Email, provider));
                     }
                     _userSNRepository.Remove(user.Id, socialNetwork.Id);
+
+                    _unitOfWork.Commit();
                 }
                 catch (Exception)
                 {

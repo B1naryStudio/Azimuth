@@ -77,6 +77,7 @@ namespace Azimuth.Services.Concrete
                         Artist = s.Identifier.Track.Album.Artist.Name
                     }).ToList();
 
+                    _unitOfWork.Commit();
                     return tracks;
                 }
             });
@@ -101,6 +102,7 @@ namespace Azimuth.Services.Concrete
                             Artist = track.Album.Artist.Name
                         }).ToList();
 
+                    _unitOfWork.Commit();
                     return tracks;
                 }
             });
@@ -164,6 +166,7 @@ namespace Azimuth.Services.Concrete
                 }
 
                 playlist.Tracks.Add(track);
+                _unitOfWork.Commit();
             }
         }
 
