@@ -1,4 +1,4 @@
-﻿var AudioManager = function () {
+﻿var AudioManager = function() {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
@@ -28,9 +28,9 @@
 
     self.audio.onended = function() {
         self._nextTrack();
-    }
+    };
 
-    this._nextTrack = function () {
+    this._nextTrack = function() {
         $('.track-play-btn').removeClass('glyphicon-pause');
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
@@ -43,17 +43,12 @@
         $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
         trackItem.children('.glyphicon').removeClass('glyphicon-play');
         trackItem.children('.glyphicon').addClass('glyphicon-pause');
-        
+
         $(self.tracksGlobal).each(function(index) {
             if ($(this).text() === self.audio.src) {
                 var url = $($(self.tracksGlobal).get(index + 1)).text();
                 if (url === '') {
                     url = $($(self.tracksGlobal).get(0)).text();
-                    //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                    //$($('.vk-item').get(0)).addClass('draggable-item-selected');
-                } else {
-                    //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                    //$($('.vk-item').get($(this).parent().index() + 1)).addClass('draggable-item-selected');
                 }
                 if (!self.audio.paused) {
                     self._setAttribute(url);
@@ -63,10 +58,11 @@
                 }
                 return false;
             }
+            return true;
         });
-    }
+    };
 
-    this._prevTrack = function () {
+    this._prevTrack = function() {
         $('.track-play-btn').removeClass('glyphicon-pause');
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
@@ -80,55 +76,53 @@
         trackItem.children('.glyphicon').removeClass('glyphicon-play');
         trackItem.children('.glyphicon').addClass('glyphicon-pause');
 
-        $(self.tracksGlobal).each(function (index) {
+        $(self.tracksGlobal).each(function(index) {
             if ($(this).text() === self.audio.src) {
                 var url = $($(self.tracksGlobal).get(index - 1)).text();
-                //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                //$($('.vk-item').get($(this).parent().index() - 1)).addClass('draggable-item-selected');
                 if (!self.audio.paused) {
                     self._setAttribute(url);
-                    self.play();                   
+                    self.play();
                 } else {
                     self._setAttribute(url);
                 }
-
                 return false;
             }
+            return true;
         });
-    }
+    };
 
-    this._setPlayImgButton = function (t) {
+    this._setPlayImgButton = function(t) {
         t.children('.track-play-btn').removeClass('glyphicon-pause');
         t.children('.track-play-btn').addClass('glyphicon-play');
-    }
+    };
 
-    this._setPauseImgButton = function (t) {
+    this._setPauseImgButton = function(t) {
         $('.track-play-btn').removeClass('glyphicon-pause');
         $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
         t.children('.track-play-btn').removeClass('glyphicon-play');
         t.children('.track-play-btn').addClass('glyphicon-pause');
-    }
+    };
 
     this._setAttribute = function(src) {
         self.audio.setAttribute('src', src);
-    }
+    };
 
     this._updateGlobalTracks = function() {
         self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
-    }
-}
+    };
+};
 
-AudioManager.prototype.play = function () {
+AudioManager.prototype.play = function() {
     var self = this;
     self.audio.play();
-}
+};
 
-AudioManager.prototype.pause = function () {
+AudioManager.prototype.pause = function() {
     var self = this;
     self.audio.pause();
-}
+};
 
-AudioManager.prototype.bindPlayBtnListeners = function () {
+AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
@@ -145,15 +139,15 @@ AudioManager.prototype.bindPlayBtnListeners = function () {
             self.pause();
             self._setPlayImgButton($(this).parent());
         }
-    }
+    };
 
     $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
-}
+};
 
-AudioManager.prototype.bindListeners = function () {
+AudioManager.prototype.bindListeners = function() {
     var self = this;
 
-    $('#playTrackBtn').click(function () {
+    $('#playTrackBtn').click(function() {
         if (self.audio.paused) {
             self.play();
             self._setPauseImgButton(self.$currentTrack);
@@ -167,4 +161,4 @@ AudioManager.prototype.bindListeners = function () {
     $('#prevTrackBtn').click(self._prevTrack);
 
     $('.itemsContainer').on('AfterDropped', self._updateGlobalTracks);
-}
+};
