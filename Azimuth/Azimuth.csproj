@@ -277,6 +277,7 @@
     <Content Include="Images\media_noread.png" />
     <Content Include="Images\media_pause.png" />
     <Content Include="Images\media_play.png" />
+    <Content Include="Images\media_play_pause.png" />
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
     <Content Include="Images\media_volume.png" />

@@ -60,7 +60,7 @@
                 //$($('.vk-item').get($(this).parent().index() - 1)).addClass('draggable-item-selected');
                 if (!self.audio.paused) {
                     self._setAttribute(url);
-                    self.play();
+                    self.play();                   
                 } else {
                     self._setAttribute(url);
                 }
@@ -68,6 +68,16 @@
                 return false;
             }
         });
+    }
+
+    this._setPlayImgButton = function(t) {
+        t.parent().children('.track-play-btn').removeClass('glyphicon-pause');
+        t.parent().children('.track-play-btn').addClass('glyphicon-play');
+    }
+
+    this._setPauseImgButton = function(t) {
+        t.parent().children('.track-play-btn').removeClass('glyphicon-play');
+        t.parent().children('.track-play-btn').addClass('glyphicon-pause');
     }
 
     this._setAttribute = function(src) {
@@ -92,10 +102,14 @@ AudioManager.prototype.bindPlayBtnListeners = function () {
         self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
         var url = $(this).parent().children('.track-url').text();
         if (self.audio.paused || self.audio.src != url) {
-            self._setAttribute(url);
+            if (self.audio.src != url) {
+                self._setAttribute(url);
+            }
             self.play();
+            self._setPauseImgButton($(this));
         } else {
             self.pause();
+            self._setPlayImgButton($(this));
         }
     }
 
