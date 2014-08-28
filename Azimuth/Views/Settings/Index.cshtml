@@ -22,7 +22,6 @@
             </div>
             
             <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
-            @*<div id="playlistTracks"  style="display: none;" class="vkMusicTable"></div>*@
             <div id="playlistTracks"  style="display: none;" class="draggable-list"></div>
 
             <a class="btn btn-primary" id="createNewPlaylistBtn" style="display:none;"></a>
@@ -36,9 +35,6 @@
                 <img class="btn btn-primary" id="nextTrackBtn" src="~/Images/media_next.png" />
             </div>
             <span id="volumeImg"></span>
-            <div id="volume" class="dragdealer">
-                <div class="handle"></div>
-            </div>
         </div>
         <div id="SN">
             <h3>Tracks</h3>
@@ -87,12 +83,6 @@
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
     <script type="" src="../../Scripts/drag&drop.js"></script>
-    
-    @*<script>
-        document.oncontextmenu = function () {
-            return false;
-        }
-    </script>*@   
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
