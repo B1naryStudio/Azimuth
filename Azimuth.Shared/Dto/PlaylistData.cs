@@ -10,6 +10,7 @@ namespace Azimuth.Shared.Dto
         public Accessibilty Accessibilty;
         public List<string> TrackIds;
         public List<string> Genres;
+        public UserBrief Creator { get; set; }
         public int Duration;
         public int ItemsCount;
     }

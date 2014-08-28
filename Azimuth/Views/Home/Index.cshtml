@@ -1,31 +1,45 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Azimuth</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+    <body class="landing-page">
+        @{
+            var action = "ExternalLogin";
+            var returnUrl = "";
+        }
+        <div class="login-container">
+            @using (Html.BeginForm(action, "Account", new { ReturnUrl = returnUrl }, FormMethod.Post, new {id="form"}))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="provider" id="provider" />
+                <div class="login-form">
+                    <div class="logo">Azimuth</div>
+                    <div class="providers">
+                        <i class="sn-btn fa fa-vk" data-provider="Vkontakte"></i>
+                        <i class="sn-btn fa fa-google-plus" data-provider="Google"></i>
+                        <i class="sn-btn fa fa-facebook" data-provider="Facebook"></i>
+                        <i class="sn-btn fa fa-twitter" data-provider="Twitter"></i>
+                    </div>
+                </div>
+            }
+        </div>
+        @Scripts.Render("~/bundles/jquery")
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.sn-btn').click(function () {
+                    var provider = $(this).data('provider');
+                    $('#provider').val(provider);
+                    $('#form').submit();
+                });
+            });
+        </script>
+    </body>
+</html>
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>

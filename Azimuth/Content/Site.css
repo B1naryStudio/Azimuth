@@ -1,12 +1,20 @@
 ﻿body {
     padding-top: 50px;
-    padding-bottom: 20px;
+}
+
+body.landing-page{
+    padding: 0;
+}
+
+html, body, .body-content {
+    height: 100%;
+    width: 100%;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -115,11 +123,6 @@ input[type="checkbox"].input-validation-error {
 	z-index: 1000;
     display: block;
 }
-#itemsContainer div {
-    /*width: 741px;*/
-    /*width: expression($('.draggable-item').width())*/
-    /*width: 20%;*/
-}
 .draggable{
 	height: 100%;
 	width: 100%;
@@ -144,7 +147,6 @@ input[type="checkbox"].input-validation-error {
 	border-bottom: solid 1px #c4c4c4;
 }
 div.accordion > div.tableRow{
-    padding-top: 5px;
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border-bottom: none;
 	cursor: pointer;
@@ -176,7 +178,7 @@ div.tableHeader{
 }
 
 div.playlist {
-    height: 30px;
+    height: 110px;
 }
 
 div.tableRow{
@@ -196,10 +198,6 @@ div.draggable-list{
 	width: 100%;
 	display: block;
 }
-
-/*div.draggable-list span{
-	width: 33%;
-}*/
 
 .tableTitle {
     text-align: center;
@@ -297,9 +295,76 @@ div.draggable-list{
     padding-left: 8px;
 }
 
-/*div.draggable-list span.vkArtist {
+.playlist-info {
+    float: left;
+    font-size: 11px;
+}
+
+.playlist-genres {
+}
+
+.playlist-logo {
+    float: left;
+    margin: 5px;
+}
+.playlist-title {
+    padding-top: 5px;
+}
+
+.playlist-genres {
+    margin-top: 40px;
+}
+
+span.label {
+    padding: 3px;
+    margin: 3px;
+}
+
+.login-container {
+    background: url("../Images/login_bg.jpeg") 100% 100% no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.login-form {
     width: 30%;
-}*/
+    height: 40%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 400px;
+}
+
+.providers {
+    text-align: center;
+
+}
+
+.providers i.sn-btn {
+    border: none;
+    font-size: 30px;
+    background: transparent;
+    color: #555;
+    padding: 5px 20px;
+    box-sizing: border-box;
+}
+
+.providers i.sn-btn:hover {
+    color: #1f1f1f;
+    transition: color .512s linear;
+    cursor: pointer;
+}
+
+
+.logo {
+    text-align: center;
+    font-size: 90px;
+}
 
 .contextMenuActionName:hover {
     background: #3399FF;

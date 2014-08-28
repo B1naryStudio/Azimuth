@@ -44,19 +44,54 @@ var SettingsManager = function(manager) {
 		self.audioManager.bindPlayBtnListeners();
 		$(this).toggleClass("active");
 	};
+
+	this._toFormattedTime = function(input, roundSeconds)
+	{
+	    if (roundSeconds)
+	    {
+	        input = Math.ceil(input);
+	    }
+
+	    var withHours = false;
+
+        if (input >= 60 * 60) {
+            withHours = true;
+        }
+
+	    var hoursString = '00';
+	    var minutesString = '00';
+	    var secondsString = '00';
+	    var hours = 0;
+	    var minutes = 0;
+	    var seconds = 0;
+
+	    hours = Math.floor(input / (60 * 60));
+	    input = input % (60 * 60);
+
+	    minutes = Math.floor(input / 60);
+	    input = input % 60;
+
+	    seconds = input;
+
+	    hoursString = (hours >= 10) ? hours.toString() : '0' + hours.toString();
+	    minutesString = (minutes >= 10) ? minutes.toString() : '0' + minutes.toString();
+	    secondsString = (seconds >= 10) ? seconds.toString() : '0' + seconds.toString();
+
+	    return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
+	};
 };
 
-SettingsManager.prototype.showPlaylists = function() {
+SettingsManager.prototype.showPlaylists = function(playlists) {
 	var self = this;
-	this.$playlistsTable.find(".tableHeader").remove();
+	self.$playlistsTable.find(".tableHeader").remove();
 	if (typeof this.playlists === 'undefined') { //Initial run to get playlists from db
 		$.ajax({
 			url: '/api/playlists',
-			success: function(playlists) {
-				if (typeof playlists.Message === 'undefined') {
+			success: function(playlistsData) {
+				if (typeof playlistsData.Message === 'undefined') {
 					self.$reloginForm.hide();
 					self.$vkMusic.show();
-					self.playlists = playlists.Result;
+					self.playlists = playlistsData.Result;
 					for (var i = 0; i < self.playlists.length; i++) {
 						var playlist = self.playlists[i];
 					    if (playlist.Accessibilty === 1) {
@@ -64,8 +99,9 @@ SettingsManager.prototype.showPlaylists = function() {
 					    } else {
 					        playlist.Accessibilty = "private";
 					    }
+					    playlist.Duration = self._toFormattedTime(playlist.Duration, true);
 					    self.playlistsGlobal.push(playlist);
-							self.$playlistsTable.append(self.playlistTemplate.tmpl(playlist));
+						self.$playlistsTable.append(self.playlistTemplate.tmpl(playlist));
 					}
 				} else {
 					self.$reloginForm.show();
@@ -76,13 +112,13 @@ SettingsManager.prototype.showPlaylists = function() {
 			}
 		});
 	} else { //using to print playlists after using filter
-		if (this.playlists.length !== 0) {
+		if (self.playlists.length !== 0) {
 			for (var i = 0; i < this.playlists.length; i++) {
-				this.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
+				self.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
 			}
 		} else {
-			this.$createNewPlaylistBtn.show();
-			this.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchInput.val());
+		    self.$createNewPlaylistBtn.show();
+		    self.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchInput.val());
 		}
 	}    	
 };
@@ -107,7 +143,7 @@ SettingsManager.prototype.bindListeners = function() {
 					var list = $('.vkMusicList');
 					for (var i = 0; i < tracks.length; i++) {
 						var track = tracks[i];
-						track.duration = Math.floor(track.duration / 60) + ":" + (track.duration % 60 < 10 ? "0" + track.duration % 60 : track.duration % 60);
+						track.duration = self._toFormattedTime(track.duration, true);
 						self.trackTemplate.tmpl(track).appendTo(list);
 					}
 					$('.draggable').makeDraggable({
@@ -150,9 +186,10 @@ SettingsManager.prototype.bindListeners = function() {
 	});
 
 	this.$searchInput.on('input', function (e) {
-		self.$createNewPlaylistBtn.hide();
-		var searchParam = $(self).val().toLocaleLowerCase();
-		showPlaylists(self.playlistsGlobal.filter(function (index) {
+	    self.$createNewPlaylistBtn.hide();
+
+		var searchParam = $(this).val().toLocaleLowerCase();
+		self.showPlaylists(self.playlistsGlobal.filter(function (index) {
 			self.$searchInput.next().children().remove();
 			return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
 		}));

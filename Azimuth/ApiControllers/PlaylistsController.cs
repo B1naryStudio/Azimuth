@@ -1,10 +1,7 @@
 ﻿﻿using System.IdentityModel;﻿
 using System;
 using System.Management.Instrumentation;
-﻿﻿using System.IdentityModel;
-using System;
-﻿using System.Management.Instrumentation;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
 ﻿using System.Web.Http;
@@ -44,7 +41,6 @@ namespace Azimuth.ApiControllers
         [Route("public")]
         public HttpResponseMessage GetPublicPlaylists()
         {
-
             return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPublicPlaylists());
         }
 
@@ -90,7 +86,7 @@ namespace Azimuth.ApiControllers
             try
             {
                 _playlistService.RemovePlaylistById(id);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK,"it's ok");
             }
             catch (InstanceNotFoundException ex)
             {

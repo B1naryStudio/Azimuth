@@ -1,6 +1,5 @@
 ﻿using Azimuth.DataProviders.Interfaces;
 using Ninject;
-using Ninject.Parameters;
 
 namespace Azimuth.DataProviders.Concrete
 {

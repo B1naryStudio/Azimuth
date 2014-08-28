@@ -17,7 +17,9 @@ namespace Azimuth.DataProviders.Concrete
             :base(webClient)
         {
             if (userCredential.AccessToken == null)
+            {
                 throw new ArgumentException("FacebookAccountProvider didn't receive accessToken");
+            }
 
             this._accessToken = userCredential.AccessToken;
 

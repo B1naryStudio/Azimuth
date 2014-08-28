@@ -17,9 +17,13 @@ namespace Azimuth.DataProviders.Concrete
             :base(webClient)
         {
             if (userCredential.AccessToken == null)
+            {
                 throw new ArgumentException("VKAccountProvider didn't receive Accesstoken");
+            }
             if (userCredential.SocialNetworkId == null)
+            {
                 throw new ArgumentException("VKAccountProvider didn't receive SocialNetworkId");
+            }
 
             _userId = userCredential.SocialNetworkId;
             _accessToken = userCredential.AccessToken;

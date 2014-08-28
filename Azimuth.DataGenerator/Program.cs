@@ -1,5 +1,10 @@
-﻿using Azimuth.DataAccess.Entities;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
+using Azimuth.DataAccess.Repositories;
+using Azimuth.Shared.Enums;
 using Ninject;
 
 namespace Azimuth.DataGenerator
@@ -13,14 +18,39 @@ namespace Azimuth.DataGenerator
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
             var dg = new DataGenerator(kernel);
-           
-            dg.ClearDatabase();
 
-            dg.GenerateData();
+            //dg.GenerateData();
             using (var unitOfWork = kernel.Get<IUnitOfWork>())
             {
                 IRepository<Artist> artistRepository = unitOfWork.GetRepository<Artist>();
+                var playlistRepo = unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+                var trackRepo = unitOfWork.GetRepository<Track>();
+                var tracks = trackRepo.GetAll();
+                var userRepo = unitOfWork.GetRepository<User>();
+                var user = userRepo.Get(49);
+                playlistRepo.AddItem(new Playlist
+                {
+                    Accessibilty = Accessibilty.Public,
+                    Creator = user,
+                    Name = "First1",
+                    Tracks = tracks.Where(tr => tr.Id % 4 != 0).ToList()
+                });
 
+                playlistRepo.AddItem(new Playlist
+                {
+                    Accessibilty = Accessibilty.Public,
+                    Creator = user,
+                    Name = "Second1",
+                    Tracks = tracks.Where(tr => tr.Id % 2 != 0).ToList()
+                });
+
+                playlistRepo.AddItem(new Playlist
+                {
+                    Accessibilty = Accessibilty.Public,
+                    Creator = user,
+                    Name = "Third1",
+                    Tracks = tracks.Where(tr => tr.Id % 2 != 0).ToList()
+                });
                 var artist = artistRepository.GetAll();
 
                 IRepository<Album> albumRepository = unitOfWork.GetRepository<Album>();
@@ -29,11 +59,7 @@ namespace Azimuth.DataGenerator
                 IRepository<Playlist> playRepository = unitOfWork.GetRepository<Playlist>();
                 var pl = playRepository.GetAll();
 
-                var userRepo = unitOfWork.GetRepository<User>();
-                var users = userRepo.GetAll();
-
-                var trackRepo = unitOfWork.GetRepository<Track>();
-                var tracks = trackRepo.GetAll();
+                
                 unitOfWork.Commit();
             }
 
