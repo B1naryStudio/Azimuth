@@ -1,12 +1,11 @@
 ﻿body {
     padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -351,8 +350,8 @@ span.label {
 
 .logo {
     text-align: center;
-    font-size: 40px;
-    padding-top: 7%;
+    font-size: 35px;
+    padding-top: 5%;
 }
 
 .providers-container {
@@ -361,7 +360,7 @@ span.label {
     width: 40%;
     height: 40%;
     margin-left: 30%;
-    margin-bottom: 9%;
+    margin-bottom: 6.7%;
 }
 
 /*div.draggable-list span.vkArtist {
