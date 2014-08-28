@@ -26,7 +26,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetUsersPlaylists());
+                var data = await _playlistService.GetUsersPlaylists();
+                return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (InstanceNotFoundException ex)
             {
