@@ -364,6 +364,7 @@ span.label {
 .logo {
     text-align: center;
     font-size: 90px;
+    font: normal normal normal 156px/1 FontAwesome;
 }
 
 .contextMenuActionName:hover {
