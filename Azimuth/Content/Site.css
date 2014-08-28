@@ -2,6 +2,15 @@
     padding-top: 50px;
 }
 
+body.landing-page{
+    padding: 0;
+}
+
+html, body, .body-content {
+    height: 100%;
+    width: 100%;
+}
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 0px;
@@ -114,11 +123,6 @@ input[type="checkbox"].input-validation-error {
 	z-index: 1000;
     display: block;
 }
-#itemsContainer div {
-    /*width: 741px;*/
-    /*width: expression($('.draggable-item').width())*/
-    /*width: 20%;*/
-}
 .draggable{
 	height: 100%;
 	width: 100%;
@@ -194,10 +198,6 @@ div.draggable-list{
 	width: 100%;
 	display: block;
 }
-
-/*div.draggable-list span{
-	width: 33%;
-}*/
 
 .tableTitle {
     text-align: center;
@@ -321,51 +321,50 @@ span.label {
 }
 
 .login-container {
-    background: url("../Images/login_bg.jpeg") 40% 40% no-repeat;
+    background: url("../Images/login_bg.jpeg") 100% 100% no-repeat;
     background-size: cover;
     width: 100%;
     height: 100%;
+    position: relative;
+}
+
+.login-form {
+    width: 30%;
+    height: 40%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 400px;
 }
 
 .providers {
-    margin-top: 30%;
-    margin-bottom: 30%;
     text-align: center;
 
 }
 
-.sn-btn {
+.providers i.sn-btn {
     border: none;
-    margin: 5px;
-    width: 50px;
-    height: 50px; 
+    font-size: 30px;
+    background: transparent;
+    color: #555;
+    padding: 5px 20px;
+    box-sizing: border-box;
 }
 
-.sn-btn:hover {
-    margin: 0 3px 0 3px;
-    width: 54px;
-    height: 54px;
+.providers i.sn-btn:hover {
+    color: #1f1f1f;
+    transition: color .512s linear;
+    cursor: pointer;
 }
 
 
 .logo {
     text-align: center;
-    font-size: 35px;
-    padding-top: 5%;
+    font-size: 90px;
 }
-
-.providers-container {
-    border: black solid 5px;
-    border-radius: 20px;
-    width: 40%;
-    height: 40%;
-    margin-left: 30%;
-    margin-bottom: 6.7%;
-}
-
-/*div.draggable-list span.vkArtist {
-    width: 30%;
-}*/
 
 .contextMenuActionName:hover {
     background: #3399FF;
