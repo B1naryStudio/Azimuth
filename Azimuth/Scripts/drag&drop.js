@@ -108,12 +108,13 @@
                             dataType: 'json',
                             contentType: 'application/json',
                             async: false
-
                         });
+
                     } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList')) {
                         $currentItem.children().toggleClass('vk-item', false);
                         var provider = $('.tab-pane.active').attr('id');
                         var tracks = [];
+                        var playlistId = $('.playlist.active').children('.playlistId').text();
                         $('.draggable-item-selected').each(function () {
                             tracks.push($(this).closest('.tableRow').find('.trackId').text());
                         }).get();
@@ -127,7 +128,6 @@
                             dataType: 'json',
                             contentType: 'application/json',
                             async: false
-
                         });
                     }
 
