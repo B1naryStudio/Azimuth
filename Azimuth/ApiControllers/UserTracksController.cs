@@ -41,7 +41,6 @@ namespace Azimuth.ApiControllers
         {
             _userTracksService.SetPlaylist(playlistData, provider, index);
             return Request.CreateResponse(HttpStatusCode.OK);
-            //return Request.CreateResponse(correct ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
         }
 
         [HttpGet]

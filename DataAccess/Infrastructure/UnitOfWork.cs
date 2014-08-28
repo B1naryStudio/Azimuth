@@ -1,5 +1,4 @@
-﻿using System;
-using NHibernate;
+﻿using NHibernate;
 
 namespace Azimuth.DataAccess.Infrastructure
 {

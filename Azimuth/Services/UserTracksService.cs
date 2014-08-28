@@ -11,7 +11,7 @@ using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
-using NHibernate.Util;
+using WebGrease.Css.Extensions;
 
 namespace Azimuth.Services
 {
@@ -22,6 +22,7 @@ namespace Azimuth.Services
         private readonly UserRepository _userRepository;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
+        private readonly PlaylistTrackRepository _playlistTrackRepository;
 
         public UserTracksService(IUnitOfWork unitOfWork)
         {
@@ -30,6 +31,7 @@ namespace Azimuth.Services
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
+            _playlistTrackRepository = _unitOfWork.GetRepository<PlaylistTrack>() as PlaylistTrackRepository;
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)
@@ -56,15 +58,16 @@ namespace Azimuth.Services
         {
             using (_unitOfWork)
             {
-                var playlist = _playlistRepository.GetOne(x => x.Id == id);
-                ICollection<TracksDto> tracks = playlist.Tracks.Select(track => new TracksDto
+                var pt = _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id).OrderBy(o => o.TrackPosition).ToList();
+
+                ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
                 {
-                    Name = track.Name,
-                    Duration = track.Duration,
-                    Genre = track.Genre,
-                    Url = track.Url,
-                    Album = track.Album.Name,
-                    Artist = track.Album.Artist.Name
+                    Name = s.Identifier.Track.Name,
+                    Duration = s.Identifier.Track.Duration,
+                    Genre = s.Identifier.Track.Genre,
+                    Url = s.Identifier.Track.Url,
+                    Album = s.Identifier.Track.Album.Name,
+                    Artist = s.Identifier.Track.Album.Artist.Name
                 }).ToList();
 
                 return tracks;
@@ -151,10 +154,6 @@ namespace Azimuth.Services
 
             using (_unitOfWork)
             {
-                //get current user
-                var userRepo = _unitOfWork.GetRepository<User>();
-                var user = userRepo.GetOne(s => (s.Email == AzimuthIdentity.Current.UserCredential.Email));
-
                 //get checked tracks
                 var socialNetworkData = GetSocialNetworkData(provider);
                 var trackDatas = await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
@@ -162,10 +161,11 @@ namespace Azimuth.Services
                     socialNetworkData.AccessToken);
 
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistData.Id);
+                playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistData.Id).ToList();
 
+                int i = 0;
                 //create Track objects
                 var artistRepo = _unitOfWork.GetRepository<Artist>();
-                var tracks = new List<Track>();
                 foreach (var trackData in trackDatas)
                 {
                     var artist = new Artist
@@ -190,20 +190,37 @@ namespace Azimuth.Services
                         Genre = trackData.GenreId.ToString(),
                         Album = album
                     };
+
                     track.Playlists.Add(playlist);
                     album.Tracks.Add(track);
-                    tracks.Add(track);
+                    _trackRepository.AddItem(track);
+
+                    if (index == -1)
+                        index = (playlist.Tracks.Count() > 0) ? playlist.Tracks.Count() : 0;
+                    
+                    
+                    PlaylistTrack playlistTrack = new PlaylistTrack
+                    {
+                        Identifier = new PlaylistTracksIdentifier
+                        {
+                            Playlist = playlist,
+                            Track = track
+                        },
+                        TrackPosition = index + i++
+                    };
+
+                    _playlistTrackRepository.AddItem(playlistTrack);
+
+                    playlist.PlaylistTracks.Add(playlistTrack);
                 }
 
-                var some = playlist.Tracks.Cast<Track>().ToList();
-
-                foreach (var track in tracks)
+                playlist.PlaylistTracks.ForEach((item, n) =>
                 {
-                    //playlist.Tracks.Add(track);
-                    some.Insert(index, track);
-                }
-
-                playlist.Tracks = some;
+                    if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                    {
+                        item.TrackPosition += i;
+                    }
+                });
 
                 _unitOfWork.Commit();
             }

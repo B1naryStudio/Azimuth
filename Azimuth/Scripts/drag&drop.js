@@ -90,50 +90,22 @@
                     }
                 } else {
 
-                    if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.hasClass('draggable-stub')) {
-                        $currentItem.children().toggleClass('vk-item', false);
+                    if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
+                        var index = -1;
                         var provider = $('.tab-pane.active').attr('id');
                         var tracks = [];
-                        var playlis = -1;
+                        var playlistId = -1;
+                        $currentItem.children().toggleClass('vk-item', false);
                         if ($element.hasClass('playlist')) {
                             playlistId = $element.children('.playlistId').text();
                         } else {
                             playlistId = $('.playlist.active').children('.playlistId').text();
+                            index = $draggableStub.index();
                         }
-                        $('.draggable-item-selected').each(function () {
+                        $('.draggable-item-selected').each(function() {
                             tracks.push($(this).closest('.tableRow').find('.trackId').text());
                         }).get();
-                        $.ajax({
-                            url: '/api/usertracks?provider=' + provider + "&index=" + ($element.index() - 1),
-                            type: 'POST',
-                            data: JSON.stringify({
-                                "Id": playlistId,
-                                "TrackIds": tracks
-                            }) + JSON.stringify({ "Provider": provider }),
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            async: false
-                        });
-
-                    } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList') && $currentItem.hasClass('vk-item')) {
-                        $currentItem.children().toggleClass('vk-item', false);
-                        var provider = $('.tab-pane.active').attr('id');
-                        var tracks = [];
-                        var playlistId = $('.playlist.active').children('.playlistId').text();
-                        $('.draggable-item-selected').each(function () {
-                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
-                        }).get();
-                        $.ajax({
-                            url: '/api/usertracks?provider=' + provider + "&index=" + ($element.index() - 1),
-                            type: 'POST',
-                            data: JSON.stringify({
-                                "Id": playlistId,
-                                "TrackIds": tracks
-                            }),
-                            dataType: 'json',
-                            contentType: 'application/json',
-                            async: false
-                        });
+                        _trackPostQuery(provider, index, playlistId, tracks);
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -163,11 +135,6 @@
                 $contextMenuContainer.append("<hr/>");
             }
             $contextMenuContainer.append(object);
-
-            //object.click(function (e) {
-            //    var id = $(this).attr('id');
-            //    $rootElement.trigger(id);
-            //});
         }
 
 
@@ -196,6 +163,20 @@
             }
 
         });
+
+        function _trackPostQuery(provider, index, playlistId, tracks) {
+            $.ajax({
+                url: '/api/usertracks?provider=' + provider + "&index=" + index,
+                type: 'POST',
+                data: JSON.stringify({
+                    "Id": playlistId,
+                    "TrackIds": tracks
+                }),
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false
+            });
+        }
 
         function _makeDraggable(event) {
 
