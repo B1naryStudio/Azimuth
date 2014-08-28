@@ -94,7 +94,12 @@
                         $currentItem.children().toggleClass('vk-item', false);
                         var provider = $('.tab-pane.active').attr('id');
                         var tracks = [];
-                        var playlistId = $('.playlist.active').children('.playlistId').text();
+                        var playlis = -1;
+                        if ($element.hasClass('playlist')) {
+                            playlistId = $element.children('.playlistId').text();
+                        } else {
+                            playlistId = $('.playlist.active').children('.playlistId').text();
+                        }
                         $('.draggable-item-selected').each(function () {
                             tracks.push($(this).closest('.tableRow').find('.trackId').text());
                         }).get();
@@ -281,6 +286,9 @@
             }
             $currentItem.hide();
             var $elem = $(document.elementFromPoint(x, y));
+            if ($elem.parent().hasClass('playlist') && event.type == "mouseup") {
+                return $elem.parent();
+            }
             if ($elem.hasClass('delete-area'))
                 _onDeleteArea();
             else if (deleteFlag == true) {
