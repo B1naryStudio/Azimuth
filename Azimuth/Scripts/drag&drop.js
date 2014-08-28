@@ -90,6 +90,40 @@
                     }
                 } else {
 
+                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks') {
+                        var playlistId = $('.playlist.active').children('.playlistId').text();
+                        var tracksIds = [];
+                        //var trackId = $currentItem.children().children('.trackId').text();
+
+                        $currentItem.children().each(function() {
+                            tracksIds.push($(this).find('.trackId').text());
+                        }).get();
+
+
+                        //$('.draggable-item-selected').each(function () {
+                        //    tracks.push($(this).closest('.tableRow').find('.trackId').text());
+                        //}).get();
+
+                        //data: JSON.stringify({
+                        //    "Id": playlistId,
+                        //    "TrackIds": tracks
+                        //}),
+
+                        var index = $draggableStub.index();
+                        $.ajax({
+                            url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
+                            type: 'PUT',
+                            data: { 'trackId': tracksIds },
+                            //data: JSON.stringify({
+                            //"trackId": tracksIds
+                            //}),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            async: false
+                        });
+
+                    }
+
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
                         var index = -1;
                         var provider = $('.tab-pane.active').attr('id');
@@ -174,7 +208,7 @@
                 }),
                 dataType: 'json',
                 contentType: 'application/json',
-                async: false
+                async: true
             });
         }
 
@@ -316,12 +350,12 @@
             _setDeleteAreaCss();
         }
 
-        $('.draggable').on('MergeItems', function (e, mergeTo, mergeElem, pageY) {
+        $('.draggable').on('MergeItems', function(e, mergeTo, mergeElem, pageY) {
             mergeToPos = mergeTo.offset();
             if ((!mergeTo.hasClass('draggable-stub')) && (mergeToPos.top + 0.15 * $('.draggable-item').height() < pageY) && (mergeToPos.top + 0.85 * $('.draggable-item').height() > pageY)) {
                 if (mergeElem && mergeTo) {
                     if ($currentItem.hasClass('itemsContainer') && $('.draggable-item-selected').length > 0) {
-                        $currentItem.children().each(function (index, item) {
+                        $currentItem.children().each(function(index, item) {
                             mergeTo.text(mergeTo.html() + ' ' + $(item).html());
                         });
                         $currentItem.children().detach();
@@ -333,7 +367,7 @@
                     _clearContainer();
                 }
             }
-        })
+        });
 
         $('.container').on('delete', function (e) {
             $currentItem.empty();

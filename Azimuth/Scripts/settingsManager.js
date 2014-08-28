@@ -25,7 +25,8 @@ var SettingsManager = function(manager) {
 					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
 					self.playlistTrackTemplate.tmpl(track).appendTo('#playlistTracks');
 				}
-				$('.draggable').makeDraggable({
+			    //$('.draggable').makeDraggable({
+                $('.stuck.draggable').makeDraggable({
 					contextMenu:[
 						{ 'id': '1', 'name': 'first action', "isNewSection": "false" },
 						{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
@@ -144,7 +145,8 @@ SettingsManager.prototype.bindListeners = function() {
 						track.duration = self._toFormattedTime(track.duration, true);
 						self.trackTemplate.tmpl(track).appendTo(list);
 					}
-					$('.draggable').makeDraggable({
+					//$('.draggable').makeDraggable({
+                    list.parent().parent().makeDraggable({
 						contextMenu: [
 							{ 'id': '1', 'name': 'first action', "isNewSection": "false" },
 							{ 'id': '2', 'name': 'second action', "isNewSection": "false" },

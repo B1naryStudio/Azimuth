@@ -62,6 +62,7 @@ namespace Azimuth.Services
 
                 ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
                 {
+                    Id = s.Identifier.Track.Id,
                     Name = s.Identifier.Track.Name,
                     Duration = s.Identifier.Track.Duration,
                     Genre = s.Identifier.Track.Genre,
@@ -95,19 +96,46 @@ namespace Azimuth.Services
             }
         }
 
-        public void PutTrackToPlaylist(long playlistId, long trackId)
+        public void PutTrackToPlaylist(List<string> trackId, long playlistId, int newIndex)
         {
             using (_unitOfWork)
             {
-                var track = _trackRepository.GetOne(t => t.Id == trackId);
-                if (track == null)
-                    throw new BadRequestException("There is no track with current Id in database");
+                //var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+                //pt.Where(s => s.Identifier.Track.Id == trackId[0]).Select(v =>
+                //{
+                //    v.TrackPosition = newIndex;
+                //    return v;
+                //}).ToList();
 
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
-                if (playlist == null)
-                    throw new BadRequestException("There is no playlist with current Id in database");                
+                //pt.ForEach((item, n) =>
+                //{
+                //    if (item.Identifier.Track.Id != trackId[0] && item.TrackPosition <= newIndex)
+                //    {
+                //        item.TrackPosition += 1;
+                //    }
+                //});
 
-                track.Playlists.Add(playlist);
+
+                var some = 1;
+
+
+                //pt.PlaylistTracks.ForEach((item, n) =>
+                //{
+                //    if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                //    {
+                //        item.TrackPosition += i;
+                //    }
+                //});
+
+                //var track = _trackRepository.GetOne(t => t.Id == trackId);
+                //if (track == null)
+                //    throw new BadRequestException("There is no track with current Id in database");
+
+                //var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                //if (playlist == null)
+                //    throw new BadRequestException("There is no playlist with current Id in database");                
+
+                //track.Playlists.Add(playlist);
 
                 _unitOfWork.Commit();
             }

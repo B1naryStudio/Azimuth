@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel;
 using System.Management.Instrumentation;
 using System.Net;
@@ -9,6 +10,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services;
 using Azimuth.Shared.Dto;
+using NHibernate.Mapping;
 
 namespace Azimuth.ApiControllers
 {
@@ -65,11 +67,11 @@ namespace Azimuth.ApiControllers
 
         [HttpPut]
         [Route("put")]
-        public HttpResponseMessage PutTrackToPlaylist(long playlistId, long trackId)
+        public HttpResponseMessage PutTrackToPlaylist(List<string> trackId, long playlistId, int newIndex)
         {
             try
             {
-                _userTracksService.PutTrackToPlaylist(playlistId, trackId);
+                _userTracksService.PutTrackToPlaylist(trackId, playlistId, newIndex);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)
