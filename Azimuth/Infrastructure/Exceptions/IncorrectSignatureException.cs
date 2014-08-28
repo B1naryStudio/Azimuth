@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Azimuth.Infrastructure.Exceptions
+﻿namespace Azimuth.Infrastructure.Exceptions
 {
     public class IncorrectSignatureException : VkApiException
     {

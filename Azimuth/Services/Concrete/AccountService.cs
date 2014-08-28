@@ -2,9 +2,10 @@
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
+using Azimuth.Services.Interfaces;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Concrete
 {
     public class AccountService : IAccountService
     {
@@ -111,7 +112,7 @@ namespace Azimuth.Services
 
                     _unitOfWork.Commit();
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     _unitOfWork.Rollback();
                     return false;

@@ -1,11 +1,9 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Interfaces
 {
     public interface IPlaylistService
     {

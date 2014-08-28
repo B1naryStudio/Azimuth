@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace Azimuth
 {
@@ -9,8 +6,6 @@ namespace Azimuth
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -19,9 +14,6 @@ namespace Azimuth
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            // Return Json instead of xml
-            //var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
-            //config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
             // Serialize error
             var json = config.Formatters.JsonFormatter;

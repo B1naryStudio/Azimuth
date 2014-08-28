@@ -1,9 +1,12 @@
 ﻿using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
+using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Services;
+using Azimuth.Services.Concrete;
+using Azimuth.Services.Interfaces;
 using Ninject.Modules;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public class AccountProviderModule:NinjectModule
     {

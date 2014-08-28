@@ -18,8 +18,8 @@ namespace Azimuth.DataGenerator
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
             var dg = new DataGenerator(kernel);
-
-            //dg.GenerateData();
+            dg.ClearDatabase();
+            dg.GenerateData();
             using (var unitOfWork = kernel.Get<IUnitOfWork>())
             {
                 IRepository<Artist> artistRepository = unitOfWork.GetRepository<Artist>();
@@ -27,30 +27,7 @@ namespace Azimuth.DataGenerator
                 var trackRepo = unitOfWork.GetRepository<Track>();
                 var tracks = trackRepo.GetAll();
                 var userRepo = unitOfWork.GetRepository<User>();
-                var user = userRepo.Get(49);
-                playlistRepo.AddItem(new Playlist
-                {
-                    Accessibilty = Accessibilty.Public,
-                    Creator = user,
-                    Name = "First1",
-                    Tracks = tracks.Where(tr => tr.Id % 4 != 0).ToList()
-                });
-
-                playlistRepo.AddItem(new Playlist
-                {
-                    Accessibilty = Accessibilty.Public,
-                    Creator = user,
-                    Name = "Second1",
-                    Tracks = tracks.Where(tr => tr.Id % 2 != 0).ToList()
-                });
-
-                playlistRepo.AddItem(new Playlist
-                {
-                    Accessibilty = Accessibilty.Public,
-                    Creator = user,
-                    Name = "Third1",
-                    Tracks = tracks.Where(tr => tr.Id % 2 != 0).ToList()
-                });
+                
                 var artist = artistRepository.GetAll();
 
                 IRepository<Album> albumRepository = unitOfWork.GetRepository<Album>();

@@ -1,9 +1,10 @@
 ﻿using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Services;
+using Azimuth.Services.Concrete;
 using Ninject.Modules;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public class SocialNetworkApiModule : NinjectModule
     {

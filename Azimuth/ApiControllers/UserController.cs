@@ -22,13 +22,12 @@ namespace Azimuth.ApiControllers
             using (_unitOfWork)
             {
                 IRepository<User> userRepo = _unitOfWork.GetRepository<User>();
-
                 user = userRepo.Get(id);
-
+                
                 _unitOfWork.Commit();
             }
 
-            UserBrief dto = new UserBrief
+            var dto = new UserBrief
             {
                 Name = user.ScreenName,
                 Email = user.Email

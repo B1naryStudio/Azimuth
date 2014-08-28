@@ -23,16 +23,11 @@ namespace Azimuth
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
-
-            app.UseTwitterAuthentication(new TwitterAuthenticationOptions()
+            app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
                 ConsumerKey = "WUOz1dJWadM5NSUmgMrcPgiIa",
                 ConsumerSecret = "9tO77dgpGcQuve4MDf0ZTKuHY3TVw8QLpjRTCTxDXh9vJpQXyc",
-                Provider = new TwitterAuthenticationProvider()
+                Provider = new TwitterAuthenticationProvider
                 {
                     OnAuthenticated = async context =>
                     {
@@ -51,7 +46,7 @@ namespace Azimuth
             fb.Scope.Add("user_photos");
             fb.AppId = "609844869113324";
             fb.AppSecret = "399f367e79f11226d1522c00c72a6c6d";
-            fb.Provider = new FacebookAuthenticationProvider()
+            fb.Provider = new FacebookAuthenticationProvider
             {
                 OnAuthenticated = async context =>
                 {

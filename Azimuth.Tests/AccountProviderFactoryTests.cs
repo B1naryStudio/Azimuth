@@ -2,6 +2,7 @@
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
 using FluentAssertions;
 using Ninject;
 using Ninject.Parameters;

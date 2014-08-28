@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
@@ -8,12 +9,12 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
 using WebGrease.Css.Extensions;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Concrete
 {
     public class UserTracksService : IUserTracksService
     {
@@ -189,7 +190,7 @@ namespace Azimuth.Services
                     artistRepo.AddItem(artist);
                     var track = new Track
                     {
-                        Duration = trackData.Duration.ToString(),
+                        Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
                         //Lyrics =
                         //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
                         //            socialNetworkData.AccessToken),
@@ -204,10 +205,11 @@ namespace Azimuth.Services
                     _trackRepository.AddItem(track);
 
                     if (index == -1)
-                        index = (playlist.Tracks.Count() > 0) ? playlist.Tracks.Count() : 0;
+                    {
+                        index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
+                    }
                     
-                    
-                    PlaylistTrack playlistTrack = new PlaylistTrack
+                    var playlistTrack = new PlaylistTrack
                     {
                         Identifier = new PlaylistTracksIdentifier
                         {

@@ -227,8 +227,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="DataProviders\Concrete\AccountProviderFactory.cs" />
-    <Compile Include="Infrastructure\AccountProviderModule.cs" />
-    <Compile Include="Infrastructure\AzimuthIdentity.cs" />
+    <Compile Include="Infrastructure\Concrete\AccountProviderModule.cs" />
+    <Compile Include="Infrastructure\Concrete\AzimuthIdentity.cs" />
     <Compile Include="DataProviders\Concrete\FacebookAccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\AccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\GoogleAccountProvider.cs" />
@@ -241,24 +241,24 @@
     <Compile Include="Infrastructure\Exceptions\UnknownErrorException.cs" />
     <Compile Include="Infrastructure\Exceptions\UserAuthorizationException.cs" />
     <Compile Include="Infrastructure\Exceptions\VkApiException.cs" />
-    <Compile Include="Infrastructure\IdentityTransformer.cs" />
+    <Compile Include="Infrastructure\Concrete\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
-    <Compile Include="Infrastructure\IWebClient.cs" />
-    <Compile Include="Infrastructure\Mapper.cs" />
-    <Compile Include="Infrastructure\SocialNetworkApiModule.cs" />
-    <Compile Include="Infrastructure\UserCredential.cs" />
+    <Compile Include="Infrastructure\Interfaces\IWebClient.cs" />
+    <Compile Include="Infrastructure\Concrete\Mapper.cs" />
+    <Compile Include="Infrastructure\Concrete\SocialNetworkApiModule.cs" />
+    <Compile Include="Infrastructure\Concrete\UserCredential.cs" />
     <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
-    <Compile Include="Infrastructure\WebClient.cs" />
+    <Compile Include="Infrastructure\Concrete\WebClient.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\IAccountService.cs" />
-    <Compile Include="Services\IPlaylistService.cs" />
-    <Compile Include="Services\ISettingsService.cs" />
-    <Compile Include="Services\IUserTracksService.cs" />
-    <Compile Include="Services\PlaylistService.cs" />
-    <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="Services\UserTracksService.cs" />
+    <Compile Include="Services\Concrete\AccountService.cs" />
+    <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\IPlaylistService.cs" />
+    <Compile Include="Services\Interfaces\ISettingsService.cs" />
+    <Compile Include="Services\Interfaces\IUserTracksService.cs" />
+    <Compile Include="Services\Concrete\PlaylistService.cs" />
+    <Compile Include="Services\Concrete\SettingsService.cs" />
+    <Compile Include="Services\Concrete\UserTracksService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>

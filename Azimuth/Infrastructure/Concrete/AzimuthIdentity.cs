@@ -6,7 +6,7 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public class AzimuthIdentity : ClaimsIdentity
     {

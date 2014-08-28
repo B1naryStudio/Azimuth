@@ -2,6 +2,7 @@
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Interfaces;
 
 namespace Azimuth.DataProviders.Concrete
 {

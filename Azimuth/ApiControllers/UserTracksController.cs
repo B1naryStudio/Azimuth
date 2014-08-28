@@ -46,7 +46,14 @@ namespace Azimuth.ApiControllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetUserTracks()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         [HttpGet]

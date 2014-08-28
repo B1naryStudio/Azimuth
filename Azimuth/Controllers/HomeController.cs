@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
 
 namespace Azimuth.Controllers
 {

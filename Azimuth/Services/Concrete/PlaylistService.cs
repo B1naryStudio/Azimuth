@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
-using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
+using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Concrete
 {
     public class PlaylistService : IPlaylistService
     {
@@ -31,7 +31,6 @@ namespace Azimuth.Services
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
         {
-
             var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public).Select(playlist =>
             {
                 var creator = playlist.Creator;
@@ -48,7 +47,7 @@ namespace Azimuth.Services
                         .ToList(),
                     Creator = new UserBrief
                     {
-                        Name = creator.Name.FirstName+' '+creator.Name.LastName,
+                        Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
                         Email = creator.Email
                     },
                     ItemsCount = playlist.Tracks.Count,
@@ -139,6 +138,10 @@ namespace Azimuth.Services
             using (_unitOfWork)
             {
                 var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
+                if (userRepo == null)
+                {
+                    throw new NullReferenceException();
+                }
                 var userId = userRepo.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
 
                 var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => new PlaylistData
@@ -170,10 +173,14 @@ namespace Azimuth.Services
                     throw new InstanceNotFoundException("Playlist with specified id does not exist");
                 }
                 var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
+                if (userRepo == null)
+                {
+                    throw new NullReferenceException();
+                }
+
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        userRepo.GetOne(user => user.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = userRepo.GetOne(user => user.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     if (userId == playlist.Creator.Id)
                     {
                         _playlistRepository.DeleteItem(playlist);

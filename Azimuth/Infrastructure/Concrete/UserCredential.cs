@@ -1,4 +1,4 @@
-﻿namespace Azimuth.Infrastructure
+﻿namespace Azimuth.Infrastructure.Concrete
 {
     public class UserCredential
     {
