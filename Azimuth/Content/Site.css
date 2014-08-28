@@ -114,9 +114,9 @@ input[type="checkbox"].input-validation-error {
 	width: 100%;
 	border: 1px lightsteelblue solid;
 }
-.draggable-item-selected {
+/*.draggable-item-selected {
 	background: aquamarine;
-}
+}*/
 #itemsContainer {
 	position: absolute;
     opacity: 0.5;
@@ -364,6 +364,7 @@ span.label {
 .logo {
     text-align: center;
     font-size: 90px;
+    font: normal normal normal 156px/1 FontAwesome;
 }
 
 .contextMenuActionName:hover {
@@ -384,4 +385,8 @@ hr {
 
 #draggableStub {
     display: none;
+}
+
+.draggable-item-selected {
+	background: aquamarine;
 }

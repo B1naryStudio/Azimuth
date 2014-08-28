@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Azimuth.DataAccess.Infrastructure;
-using Iesi.Collections.Generic;
 
 namespace Azimuth.DataAccess.Entities
 {
@@ -19,10 +18,12 @@ namespace Azimuth.DataAccess.Entities
         public virtual Album Album { get; set; }
 
         public virtual ICollection<Playlist> Playlists { get; set; }
+        public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; }
 
         public Track()
         {
             Playlists = new List<Playlist>();
+            PlaylistTracks = new List<PlaylistTrack>();
         }
     }
 }

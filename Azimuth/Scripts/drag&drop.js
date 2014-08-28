@@ -90,10 +90,22 @@
                     }
                 } else {
 
-                    if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.hasClass('draggable-stub')) {
+                    if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
+                        var index = -1;
+                        var provider = $('.tab-pane.active').attr('id');
+                        var tracks = [];
+                        var playlistId = -1;
                         $currentItem.children().toggleClass('vk-item', false);
-                    } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList')) {
-                            $currentItem.children().toggleClass('vk-item', false);
+                        if ($element.hasClass('playlist')) {
+                            playlistId = $element.children('.playlistId').text();
+                        } else {
+                            playlistId = $('.playlist.active').children('.playlistId').text();
+                            index = $draggableStub.index();
+                        }
+                        $('.draggable-item-selected').each(function() {
+                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
+                        }).get();
+                        _trackPostQuery(provider, index, playlistId, tracks);
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -124,11 +136,6 @@
                 $contextMenuContainer.append("<hr/>");
             }
             $contextMenuContainer.append(object);
-
-            //object.click(function (e) {
-            //    var id = $(this).attr('id');
-            //    $rootElement.trigger(id);
-            //});
         }
 
 
@@ -157,6 +164,20 @@
             }
 
         });
+
+        function _trackPostQuery(provider, index, playlistId, tracks) {
+            $.ajax({
+                url: '/api/usertracks?provider=' + provider + "&index=" + index,
+                type: 'POST',
+                data: JSON.stringify({
+                    "Id": playlistId,
+                    "TrackIds": tracks
+                }),
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false
+            });
+        }
 
         function _makeDraggable(event) {
 
@@ -247,6 +268,9 @@
             }
             $currentItem.hide();
             var $elem = $(document.elementFromPoint(x, y));
+            if ($elem.parent().hasClass('playlist') && event.type == "mouseup") {
+                return $elem.parent();
+            }
             if ($elem.hasClass('delete-area'))
                 _onDeleteArea();
             else if (deleteFlag == true) {
