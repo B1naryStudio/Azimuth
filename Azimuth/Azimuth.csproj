@@ -265,7 +265,6 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\dragdealer.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -280,16 +279,17 @@
     <Content Include="Images\media_noread.png" />
     <Content Include="Images\media_pause.png" />
     <Content Include="Images\media_play.png" />
+    <Content Include="Images\media_play_pause.png" />
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
     <Content Include="Images\media_volume.png" />
+    <Content Include="Scripts\audioManager.js" />
     <Content Include="Images\twitter_logo.png" />
     <Content Include="Images\vkontakte_logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\drag&amp;drop.js" />
-    <Content Include="Scripts\dragdealer.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
