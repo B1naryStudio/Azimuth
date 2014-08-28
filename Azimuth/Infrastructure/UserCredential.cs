@@ -17,5 +17,7 @@
         public string ConsumerSecret { get; set; }
 
         public string Email { get; set; }
+
+        public string PhotoBig { get; set; }
     }
 }

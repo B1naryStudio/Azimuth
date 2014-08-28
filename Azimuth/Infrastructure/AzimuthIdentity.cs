@@ -33,6 +33,7 @@ namespace Azimuth.Infrastructure
                     ConsumerSecret = GetClaim(AzimuthClaims.CONSUMER_SECRET),
                     SocialNetworkId = GetSocialNetworkId(),
                     SocialNetworkName = GetSocialNetworkName(),
+                    PhotoBig = GetClaim(AzimuthClaims.PHOTO_BIG),
                     Email = GetClaim(ClaimTypes.Email)
                 };
             }
@@ -88,5 +89,7 @@ namespace Azimuth.Infrastructure
         public const string CONSUMER_KEY = "ConsumerKey";
 
         public const string CONSUMER_SECRET = "ConsumerSecret";
+
+        public const string PHOTO_BIG = "PhotoBig";
     }
 }

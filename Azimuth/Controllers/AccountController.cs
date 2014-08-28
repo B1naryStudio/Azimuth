@@ -82,16 +82,13 @@ namespace Azimuth.Controllers
         private void SignIn(AzimuthIdentity identity, User userInfo)
         {
             identity.AddClaim(new Claim(ClaimTypes.Name, userInfo.Name.FirstName + " " + userInfo.Name.LastName));
+            identity.AddClaim(new Claim(AzimuthClaims.PHOTO_BIG, userInfo.Photo));
             identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider",
                 identity.UserCredential.SocialNetworkName, Rights.PossessProperty));
 
             AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = true}, identity);
         }
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
