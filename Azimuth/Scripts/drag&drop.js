@@ -108,6 +108,7 @@
                         $currentItem.trigger('OnDropped', [movingInfo, $draggableStub.parent().attr("name")]);
                         movingInfo.data.length = 0;
                         $currentItem.children().insertAfter($draggableStub);
+                        $currentItem.trigger('AfterDropped', [movingInfo, $draggableStub.parent().attr("name")]);
                         _clearContainer();
                     }
                 }

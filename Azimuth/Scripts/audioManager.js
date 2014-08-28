@@ -37,7 +37,7 @@
             trackItem = trackItem.next();
         }
         if (trackItem.length == 0) {
-            trackItem = $('.track-play-btn:first').parent();
+            trackItem = self.$currentTrack.parent().children().first();
         }
         self.$currentTrack = trackItem;
         $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
@@ -73,7 +73,7 @@
             trackItem = trackItem.prev();
         }
         if (trackItem.length == 0) {
-            trackItem = $('.track-play-btn:last').parent();
+            trackItem = self.$currentTrack.parent().children().last();
         }
         self.$currentTrack = trackItem;
         $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
@@ -111,6 +111,10 @@
 
     this._setAttribute = function(src) {
         self.audio.setAttribute('src', src);
+    }
+
+    this._updateGlobalTracks = function() {
+        self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
     }
 }
 
@@ -161,4 +165,6 @@ AudioManager.prototype.bindListeners = function () {
 
     $('#nextTrackBtn').click(self._nextTrack);
     $('#prevTrackBtn').click(self._prevTrack);
+
+    $('.itemsContainer').on('AfterDropped', self._updateGlobalTracks);
 }
