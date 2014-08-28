@@ -272,6 +272,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\arrow-square.gif" />
+    <Content Include="Images\facebook_logo.png" />
+    <Content Include="Images\google_logo.png" />
+    <Content Include="Images\login_bg.jpeg" />
     <Content Include="Images\media_add.png" />
     <Content Include="Images\media_next.png" />
     <Content Include="Images\media_noread.png" />
@@ -280,6 +283,8 @@
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
     <Content Include="Images\media_volume.png" />
+    <Content Include="Images\twitter_logo.png" />
+    <Content Include="Images\vkontakte_logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
