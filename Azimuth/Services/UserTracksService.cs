@@ -145,71 +145,7 @@ namespace Azimuth.Services
             }
         }
 
-        //public async void SetPlaylist(PlaylistData playlistData, string provider)
-        //{
-        //    _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
-
-        //    using (_unitOfWork)
-        //    {
-        //        //get current user
-        //        var userRepo = _unitOfWork.GetRepository<User>();
-        //        var user = userRepo.GetOne(s => (s.Email == AzimuthIdentity.Current.UserCredential.Email));
-
-        //        //get checked tracks
-        //        var socialNetworkData = GetSocialNetworkData(provider);
-        //        var trackDatas =await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
-        //            playlistData.TrackIds,
-        //            socialNetworkData.AccessToken);
-
-        //        //set playlist
-        //        var playlistRepo = _unitOfWork.GetRepository<Playlist>();
-        //        var playlist = new Playlist
-        //        {
-        //            Accessibilty = playlistData.Accessibilty,
-        //            Creator = user,
-        //            Name = playlistData.Name
-        //        };
-
-        //        //create Track objects
-        //        var artistRepo = _unitOfWork.GetRepository<Artist>();
-        //        var tracks = new List<Track>();
-        //        foreach (var trackData in trackDatas)
-        //        {
-        //            var artist = new Artist
-        //            {
-        //                Name = trackData.Artist
-        //            };
-        //            var album = new Album
-        //            {
-        //                Name = "",
-        //                Artist = artist,
-        //            };
-        //            artist.Albums.Add(album);
-        //            artistRepo.AddItem(artist);
-        //            var track = new Track
-        //            {
-        //                Duration = trackData.Duration.ToString(),
-        //                //Lyrics =
-        //                //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
-        //                //            socialNetworkData.AccessToken),
-        //                Name = trackData.Title,
-        //                Url = trackData.Url,
-        //                Genre = trackData.GenreId.ToString(),
-        //                Album = album
-        //            };
-        //            track.Playlists.Add(playlist);
-        //            album.Tracks.Add(track);
-        //            tracks.Add(track);
-        //        }
-        //        playlist.Tracks = tracks;
-                
-        //        playlistRepo.AddItem(playlist);
-
-        //        _unitOfWork.Commit();
-        //    }
-        //}
-
-        public async void SetPlaylist(PlaylistData playlistData, string provider)
+        public async void SetPlaylist(PlaylistData playlistData, string provider, int index)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
@@ -224,15 +160,6 @@ namespace Azimuth.Services
                 var trackDatas = await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
                     playlistData.TrackIds,
                     socialNetworkData.AccessToken);
-
-                //set playlist
-                var playlistRepo = _unitOfWork.GetRepository<Playlist>();
-                //var playlist = new Playlist
-                //{
-                //    Accessibilty = playlistData.Accessibilty,
-                //    Creator = user,
-                //    Name = playlistData.Name
-                //};
 
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistData.Id);
 
@@ -268,14 +195,15 @@ namespace Azimuth.Services
                     tracks.Add(track);
                 }
 
+                var some = playlist.Tracks.Cast<Track>().ToList();
+
                 foreach (var track in tracks)
                 {
-                    playlist.Tracks.Add(track);
+                    //playlist.Tracks.Add(track);
+                    some.Insert(index, track);
                 }
 
-                //playlist.Tracks.AddRange(tracks);
-
-                //playlistRepo.AddItem(playlist);
+                playlist.Tracks = some;
 
                 _unitOfWork.Commit();
             }

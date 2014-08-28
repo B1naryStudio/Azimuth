@@ -29,7 +29,6 @@ namespace Azimuth.ApiControllers
             {
                 var data = await _userTracksService.GetTracks(provider);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
-
             }
             catch (UserAuthorizationException exception)
             {
@@ -38,9 +37,9 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider)
+        public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index)
         {
-            _userTracksService.SetPlaylist(playlistData, provider);
+            _userTracksService.SetPlaylist(playlistData, provider, index);
             return Request.CreateResponse(HttpStatusCode.OK);
             //return Request.CreateResponse(correct ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
         }

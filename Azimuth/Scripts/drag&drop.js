@@ -104,7 +104,7 @@
                             tracks.push($(this).closest('.tableRow').find('.trackId').text());
                         }).get();
                         $.ajax({
-                            url: '/api/usertracks?provider=' + provider,
+                            url: '/api/usertracks?provider=' + provider + "&index=" + ($element.index() - 1),
                             type: 'POST',
                             data: JSON.stringify({
                                 "Id": playlistId,
@@ -115,7 +115,7 @@
                             async: false
                         });
 
-                    } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList')) {
+                    } else if ($element.hasClass('draggable-stub') && !$element.parent().hasClass('vkMusicList') && $currentItem.hasClass('vk-item')) {
                         $currentItem.children().toggleClass('vk-item', false);
                         var provider = $('.tab-pane.active').attr('id');
                         var tracks = [];
@@ -124,7 +124,7 @@
                             tracks.push($(this).closest('.tableRow').find('.trackId').text());
                         }).get();
                         $.ajax({
-                            url: '/api/usertracks?provider=' + provider,
+                            url: '/api/usertracks?provider=' + provider + "&index=" + ($element.index() - 1),
                             type: 'POST',
                             data: JSON.stringify({
                                 "Id": playlistId,
