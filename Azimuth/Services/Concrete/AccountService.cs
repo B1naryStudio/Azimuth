@@ -42,6 +42,7 @@ namespace Azimuth.Services.Concrete
                     {
                         if (loggedUser != null)
                         {
+                            user.Id = loggedUser.Id;
                             // If we login again with the same social network, skip updating
                             if (loggedUser.Id != userSn.User.Id)
                             {
