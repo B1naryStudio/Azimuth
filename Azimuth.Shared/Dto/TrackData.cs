@@ -3,13 +3,10 @@ using Newtonsoft.Json;
 
 namespace Azimuth.Shared.Dto
 {
-    //public class TrackData
-    //{
-
     public class TrackData
     {
         [JsonProperty(PropertyName = "response")]
-        public VKAudioResponse Response { get; set; }
+        public VkAudioResponse Response { get; set; }
 
         public class Audio
         {
@@ -31,7 +28,7 @@ namespace Azimuth.Shared.Dto
             public Genres GenreId { get; set; }
         }
 
-        public class VKAudioResponse
+        public class VkAudioResponse
         {
             [JsonProperty(PropertyName = "count")]
             public int Count { get; set; }

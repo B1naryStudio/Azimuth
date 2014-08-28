@@ -247,7 +247,7 @@
     <Compile Include="Infrastructure\Concrete\Mapper.cs" />
     <Compile Include="Infrastructure\Concrete\SocialNetworkApiModule.cs" />
     <Compile Include="Infrastructure\Concrete\UserCredential.cs" />
-    <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
+    <Compile Include="DataProviders\Concrete\VkAccountProvider.cs" />
     <Compile Include="Infrastructure\Concrete\WebClient.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

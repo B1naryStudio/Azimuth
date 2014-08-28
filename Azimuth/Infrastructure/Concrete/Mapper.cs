@@ -13,7 +13,7 @@ namespace Azimuth.Infrastructure.Concrete
         static Mapper()
         {
             AddMapp<FacebookUserData, User>(FacebookUserDataMap);
-            AddMapp<VKUserData.VKResponse, User>(VKUserDataMap);
+            AddMapp<VkUserData.VkResponse, User>(VkUserDataMap);
             AddMapp<GoogleUserData, User>(GoogleUserDataMap);
             AddMapp<TweetSharp.TwitterUser, User>(TwitterUserDataMap);
             AddMapp<Track, TracksDto>(TrackMap);
@@ -105,7 +105,7 @@ namespace Azimuth.Infrastructure.Concrete
             user.Photo = snData.Image.Url ?? String.Empty;
         }
 
-        private static void VKUserDataMap(VKUserData.VKResponse snData, User user)
+        private static void VkUserDataMap(VkUserData.VkResponse snData, User user)
         {
             user.Name =
                 new Name

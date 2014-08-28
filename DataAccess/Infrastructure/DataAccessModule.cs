@@ -1,13 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Repositories;
 using NHibernate;
 using NHibernate.Cfg;
 using Ninject.Extensions.Factory;
 using Ninject.Modules;
-using NHibernate.Tool.hbm2ddl;
 
 namespace Azimuth.DataAccess.Infrastructure
 {

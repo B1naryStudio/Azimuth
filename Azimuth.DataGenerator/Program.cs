@@ -1,66 +1,17 @@
-﻿using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Azimuth.DataAccess.Entities;
-using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
-using Azimuth.Shared.Enums;
+﻿using Azimuth.DataAccess.Infrastructure;
 using Ninject;
 
 namespace Azimuth.DataGenerator
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            
-
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
             var dg = new DataGenerator(kernel);
             dg.ClearDatabase();
-            dg.GenerateData();
-            using (var unitOfWork = kernel.Get<IUnitOfWork>())
-            {
-                IRepository<Artist> artistRepository = unitOfWork.GetRepository<Artist>();
-                var playlistRepo = unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
-                var trackRepo = unitOfWork.GetRepository<Track>();
-                var tracks = trackRepo.GetAll();
-                var userRepo = unitOfWork.GetRepository<User>();
-                
-                var artist = artistRepository.GetAll();
-
-                IRepository<Album> albumRepository = unitOfWork.GetRepository<Album>();
-                var alb = albumRepository.Get(1);
-
-                IRepository<Playlist> playRepository = unitOfWork.GetRepository<Playlist>();
-                var pl = playRepository.GetAll();
-
-                
-                unitOfWork.Commit();
-            }
-
-           
-
-            //User user = null;
-            //using (var unitOfWork = kernel.Get<IUnitOfWork>())
-            //{
-            //    IRepository<User> userRepo = unitOfWork.GetRepository<User>();
-
-            //    user = userRepo.Get(1);
-            //    //user = userRepo.Get(x => x.Email.StartsWith("test")).First();
-            //    //user = userRepo.GetAll().First();
-
-            //    unitOfWork.Commit();
-            //}
-
-            //UserBrief dto = new UserBrief
-            //{
-            //    Name = user.ScreenName,
-            //    Email = user.Email
-            //};
-
-            //Console.WriteLine("{0} {1}", dto.Name, dto.Email);
+            dg.GenerateData();          
         }
     }
 }

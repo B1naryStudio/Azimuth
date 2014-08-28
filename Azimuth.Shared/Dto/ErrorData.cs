@@ -7,7 +7,7 @@ namespace Azimuth.Shared.Dto
     public class ErrorData
     {
         [JsonProperty(PropertyName = "error")]
-        public VKError Error { get; set; }
+        public VkError Error { get; set; }
 
         public class RequestParam
         {
@@ -17,7 +17,7 @@ namespace Azimuth.Shared.Dto
             public string Value { get; set; }
         }
 
-        public class VKError
+        public class VkError
         {
             [JsonProperty(PropertyName = "error_code")]
             public int ErrorCode { get; set; }

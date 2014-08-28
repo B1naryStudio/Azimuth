@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Azimuth.Shared.Dto
 {
@@ -26,9 +21,9 @@ namespace Azimuth.Shared.Dto
         [JsonProperty(PropertyName = "timezone")]
         public int Timqzone { get; set; }
         [JsonProperty(PropertyName = "location")]
-        public FBLocation Location { get; set; }
+        public FbLocation Location { get; set; }
         [JsonProperty(PropertyName = "picture")]
-        public FBPicture Picture { get; set; }
+        public FbPicture Picture { get; set; }
 
         public override string ToString()
         {
@@ -36,7 +31,7 @@ namespace Azimuth.Shared.Dto
                    Location.Name;
         }
 
-        public class FBLocation
+        public class FbLocation
         {
             [JsonProperty(PropertyName = "id")]
             public string Id { get; set; }
@@ -44,7 +39,7 @@ namespace Azimuth.Shared.Dto
             public string Name { get; set; }
         }
 
-        public class FBPicture
+        public class FbPicture
         {
             [JsonProperty(PropertyName = "data")]
             public Data Data { get; set; }

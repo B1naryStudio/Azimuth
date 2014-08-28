@@ -3,7 +3,6 @@ using System.Web;
 using Azimuth;
 using Azimuth.ApiControllers;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Concrete;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;

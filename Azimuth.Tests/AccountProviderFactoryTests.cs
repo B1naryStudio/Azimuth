@@ -1,7 +1,6 @@
 ﻿using System;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
-using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Concrete;
 using FluentAssertions;
 using Ninject;
@@ -79,7 +78,7 @@ namespace Azimuth.Tests
             //Act
             var provider = _kernel.Get<IAccountProvider>(_socialNetwork, _userCredentialsParam);
             //Assert
-            provider.Should().BeOfType<VKAccountProvider>("we asked account provider instance for vkontakte");
+            provider.Should().BeOfType<VkAccountProvider>("we asked account provider instance for vkontakte");
         }
 
         [Test]

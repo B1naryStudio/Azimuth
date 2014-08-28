@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
-using Azimuth.Services;
+using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 
 namespace Azimuth.ApiControllers
