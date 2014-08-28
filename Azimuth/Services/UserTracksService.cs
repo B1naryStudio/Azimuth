@@ -11,7 +11,6 @@ using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Shared.Dto;
-using NHibernate.Util;
 
 namespace Azimuth.Services
 {
@@ -116,15 +115,21 @@ namespace Azimuth.Services
             {
                 var track = _trackRepository.GetOne(tr => tr.Id == trackId);
                 if (track == null)
+                {
                     throw new BadRequestException("Track with current Id doesn't exist");
+                }
 
                 var playlistNext = _playlistRepository.GetOne(pl => pl.Id == playlistId);
                 if (playlistNext == null)
+                {
                     throw new BadRequestException("Playlist with current Id doesn't exist");
+                }
 
                 var playlistPrevious = _playlistRepository.GetOne(pl => pl.Id == track.Playlists.First().Id);
                 if (playlistPrevious == null)
+                {
                     throw new BadRequestException("Playlist with current Id doesn't exist");
+                }
 
                 track.Playlists.Remove(playlistPrevious);
                 track.Playlists.Add(playlistNext);
@@ -139,7 +144,9 @@ namespace Azimuth.Services
             {
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
                 if (playlist == null)
-                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
+                {
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");                    
+                }
 
                 playlist.Tracks.Add(track);
             }
