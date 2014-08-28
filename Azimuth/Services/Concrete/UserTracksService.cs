@@ -58,43 +58,52 @@ namespace Azimuth.Services.Concrete
 
         public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
         {
-            using (_unitOfWork)
+            return await Task.Run(() =>
             {
-                var pt = _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id).OrderBy(o => o.TrackPosition).ToList();
-
-                ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
+                using (_unitOfWork)
                 {
-                    Name = s.Identifier.Track.Name,
-                    Duration = s.Identifier.Track.Duration,
-                    Genre = s.Identifier.Track.Genre,
-                    Url = s.Identifier.Track.Url,
-                    Album = s.Identifier.Track.Album.Name,
-                    Artist = s.Identifier.Track.Album.Artist.Name
-                }).ToList();
+                    var pt =
+                        _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                            .OrderBy(o => o.TrackPosition)
+                            .ToList();
 
-                return tracks;
-            }
+                    ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
+                    {
+                        Name = s.Identifier.Track.Name,
+                        Duration = s.Identifier.Track.Duration,
+                        Genre = s.Identifier.Track.Genre,
+                        Url = s.Identifier.Track.Url,
+                        Album = s.Identifier.Track.Album.Name,
+                        Artist = s.Identifier.Track.Album.Artist.Name
+                    }).ToList();
+
+                    return tracks;
+                }
+            });
         }
 
         public async Task<ICollection<TracksDto>> GetUserTracks()
         {
-            using (_unitOfWork)
+            return await Task.Run(() =>
             {
-                var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
-                var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
-                ICollection<TracksDto> tracks =
-                    playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
-                    {
-                        Name = track.Name,
-                        Duration = track.Duration,
-                        Genre = track.Genre,
-                        Url = track.Url,
-                        Album = track.Album.Name,
-                        Artist = track.Album.Artist.Name
-                    }).ToList();
+                using (_unitOfWork)
+                {
+                    var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
+                    var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
+                    ICollection<TracksDto> tracks =
+                        playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
+                        {
+                            Name = track.Name,
+                            Duration = track.Duration,
+                            Genre = track.Genre,
+                            Url = track.Url,
+                            Album = track.Album.Name,
+                            Artist = track.Album.Artist.Name
+                        }).ToList();
 
-                return tracks;
-            }
+                    return tracks;
+                }
+            });
         }
 
         public void PutTrackToPlaylist(long playlistId, long trackId)
