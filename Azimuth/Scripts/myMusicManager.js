@@ -1,5 +1,6 @@
 ﻿var MyMusicManager = function (manager) {
     var self = this;
+    this.audioManager = manager;
     this.$tracksContainer = $('#tracksTable');
     this.$playlistContainer = $('#playlistsTable');
 
@@ -16,6 +17,7 @@
                     track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                     self.$tracksContainer.append($("#trackTemplate").tmpl(track));
                 }
+                self.audioManager.bindPlayBtnListeners();
             }
         });
     };
