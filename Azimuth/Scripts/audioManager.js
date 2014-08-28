@@ -2,6 +2,7 @@
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
+
     var volume = new Dragdealer('volume', {
         vertical: true,
         horizontal: false,
@@ -24,47 +25,12 @@
     });
     volume.setValue(0, 0.5);
 
-    this._play = function() {
-        self.audio.play();
+    self.audio.onended = function() {
+        self._nextTrack();
     }
 
-    this._pause = function () {
-        self.audio.pause();
-    }
-
-    this._setAttribute = function(src) {
-        self.audio.setAttribute('src', src);
-    }
-}
-
-AudioManager.prototype.bindPlayBtnListeners = function () {
-    var self = this;
-
-    $('.track-play-btn').click(function () {
-        self.tracksGlobal = $(this).parent().parent().children('.vk-item').children('.track-url');
-        var url = $(this).parent().children('.track-url').text();
-        if (self.audio.paused || self.audio.src != url) {
-            self._setAttribute(url);
-            self._play();
-        } else {
-            self._pause();
-        }
-    });
-}
-
-AudioManager.prototype.bindListeners = function () {
-    var self = this;
-
-    $('#playTrackBtn').click(function () {
-        if (self.audio.paused) {
-            self._play();
-        } else {
-            self._pause();
-        }
-    });
-
-    $('#nextTrackBtn').click(function () {
-        $(self.tracksGlobal).each(function (index) {
+    this._nextTrack = function() {
+        $(self.tracksGlobal).each(function(index) {
             if ($(this).text() === self.audio.src) {
                 var url = $($(self.tracksGlobal).get(index + 1)).text();
                 if (url === '') {
@@ -77,17 +43,16 @@ AudioManager.prototype.bindListeners = function () {
                 }
                 if (!self.audio.paused) {
                     self._setAttribute(url);
-                    self._play();
+                    self.play();
                 } else {
                     self._setAttribute(url);
                 }
-
                 return false;
             }
         });
-    });
+    }
 
-    $('#prevTrackBtn').click(function () {
+    this._prevTrack = function() {
         $(self.tracksGlobal).each(function (index) {
             if ($(this).text() === self.audio.src) {
                 var url = $($(self.tracksGlobal).get(index - 1)).text();
@@ -95,7 +60,7 @@ AudioManager.prototype.bindListeners = function () {
                 //$($('.vk-item').get($(this).parent().index() - 1)).addClass('draggable-item-selected');
                 if (!self.audio.paused) {
                     self._setAttribute(url);
-                    self._play();
+                    self.play();
                 } else {
                     self._setAttribute(url);
                 }
@@ -103,5 +68,51 @@ AudioManager.prototype.bindListeners = function () {
                 return false;
             }
         });
+    }
+
+    this._setAttribute = function(src) {
+        self.audio.setAttribute('src', src);
+    }
+}
+
+AudioManager.prototype.play = function () {
+    var self = this;
+    self.audio.play();
+}
+
+AudioManager.prototype.pause = function () {
+    var self = this;
+    self.audio.pause();
+}
+
+AudioManager.prototype.bindPlayBtnListeners = function () {
+    var self = this;
+
+    function onPlayBtnClick() {
+        self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
+        var url = $(this).parent().children('.track-url').text();
+        if (self.audio.paused || self.audio.src != url) {
+            self._setAttribute(url);
+            self.play();
+        } else {
+            self.pause();
+        }
+    }
+
+    $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
+}
+
+AudioManager.prototype.bindListeners = function () {
+    var self = this;
+
+    $('#playTrackBtn').click(function () {
+        if (self.audio.paused) {
+            self.play();
+        } else {
+            self.pause();
+        }
     });
+
+    $('#nextTrackBtn').click(self._nextTrack);
+    $('#prevTrackBtn').click(self._prevTrack);
 }
