@@ -1,8 +1,10 @@
 ﻿var MyMusicManager = function (manager) {
     var self = this;
+    this.tracksGlobal = [];
     this.audioManager = manager;
     this.$tracksContainer = $('#tracksTable');
     this.$playlistContainer = $('#playlistsTable');
+    this.$searchTrackInput = $('#searchTrackName');
 
     this._getTracks = function() {
         $.ajax({
@@ -13,14 +15,23 @@
                 var tracks = tracksData;
                 self.$tracksContainer.find('.tableRow').remove();
                 for (var i = 0; i < tracks.length; i++) {
-                    var track = tracks[i];
-                    track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
-                    self.$tracksContainer.append($("#trackTemplate").tmpl(track));
+                    tracks[i].Duration = Math.floor(tracks[i].Duration / 60) + ":" + (tracks[i].Duration % 60 < 10 ? "0" + tracks[i].Duration % 60 : tracks[i].Duration % 60);
                 }
+                self.tracksGlobal = tracks;
+                self.showTracks(tracks);
                 self.audioManager.bindPlayBtnListeners();
             }
         });
     };
+};
+
+MyMusicManager.prototype.showTracks = function (tracks) {
+    var self = this;
+
+    $('#tracksTable').find('.track').remove();
+    for (var i = 0; i < tracks.length; i++) {
+        self.$tracksContainer.append($("#trackTemplate").tmpl(tracks[i]));
+    }
 };
 
 MyMusicManager.prototype.showPlaylists = function () {
@@ -47,4 +58,13 @@ MyMusicManager.prototype.showPlaylists = function () {
 MyMusicManager.prototype.bindListeners = function () {
     var self = this;
     $('.accordion .tableRow').on("click", self._getTracks);
+
+    this.$searchTrackInput.keyup(function (e) {
+        var searchParam = $(this).val().toLocaleLowerCase();
+
+        self.showTracks(self.tracksGlobal.filter(function (index) {
+            self.$searchTrackInput.next().children().remove();
+            return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
+        }));
+    });
 };
