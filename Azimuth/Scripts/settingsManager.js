@@ -22,7 +22,7 @@ var SettingsManager = function(manager) {
 			success: function(tracksData) {
 			    var tracks = tracksData;
 				for (var i = 0; i < tracks.length; i++) {
-					var track = tracks[i];
+				    var track = tracks[i];
 					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
 					self.playlistTrackTemplate.tmpl(track).appendTo('#playlistTracks');
 				}
