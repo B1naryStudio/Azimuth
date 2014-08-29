@@ -11,8 +11,8 @@ var SettingsManager = function(manager) {
 	this.$vkMusic = $("#vkontakteMusic");
 	this.$playlistsTable = $('#playlistsTable');
 	this.$searchInput = $('#searchPlaylistName');
-	this.$createNewPlaylistBtn = $('#createNewPlaylistBtn');
     this.$vkMusicTable = $('#vkMusicTable').parent();
+	this.$createNewPlaylistLbl = $('#create-playlist-lbl');
 
 	this._getTracks = function() {
 		//var $dragList = $(this).next();
@@ -81,6 +81,8 @@ var SettingsManager = function(manager) {
 
 	    return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
 	};
+
+	
 };
 
 SettingsManager.prototype.showTracks = function (tracks) {
@@ -95,7 +97,7 @@ SettingsManager.prototype.showTracks = function (tracks) {
 SettingsManager.prototype.showPlaylists = function(playlists) {
 	var self = this;
 	self.$playlistsTable.find(".tableHeader").remove();
-	if (typeof this.playlists === 'undefined') { //Initial run to get playlists from db
+	if (typeof playlists === 'undefined') { //Initial run to get playlists from db
 		$.ajax({
 			url: '/api/playlists',
 			success: function(playlistsData) {
@@ -175,18 +177,7 @@ SettingsManager.prototype.bindListeners = function() {
 		});
 	});
 
-	this.$createNewPlaylistBtn.click(function () {
-		var playlistName = self.$searchInput.val();
-		$.ajax({
-			url: '/api/playlists?name=' + playlistName + '&accessibilty=Public',
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			async: false
-		});
-		self.$createNewPlaylistBtn.hide();
-		$(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
-	});
+
 
 	//$('#checkall').click(function () {
 	//	if ($(this).prop('checked')) {
@@ -196,18 +187,33 @@ SettingsManager.prototype.bindListeners = function() {
 	//	}
 	//});
 
-	this.$searchInput.on('input', function (e) {
-	    self.$createNewPlaylistBtn.hide();
+	this.$searchInput.keyup(function (e) {
+	    var searchParam = $(this).val().toLocaleLowerCase();
 
-		var searchParam = $(this).val().toLocaleLowerCase();
-		self.showPlaylists(self.playlistsGlobal.filter(function (index) {
-			self.$searchInput.next().children().remove();
-			return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
-		}));
+	    var foundedPlaylist = self.playlistsGlobal.filter(function(index) {
+	        self.$searchInput.next().children().remove();
+	        return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+	    });
+
+	    if (foundedPlaylist.length == 0) {
+	        self.$createNewPlaylistLbl.show();
+            if (e.keyCode == 13) {
+                console.log(e);
+                self._createPlaylist();
+                self.playlistsGlobal = [];
+                $(this).val("");
+                self.showPlaylists();
+            }
+	    } else {
+	        self.$createNewPlaylistLbl.hide();
+	    }
+
+	    self.showPlaylists(foundedPlaylist);
 		self.showTracks(self.playlistTracksGlobal.filter(function (index) {
 		    self.$searchInput.next().children().remove();
 		    return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
 		}));
+		
 		$('.accordion .tableRow').on("click", self._getTracks);
 	});
 
@@ -224,4 +230,17 @@ SettingsManager.prototype.bindListeners = function() {
         theme: 'dark-3',
         scrollButtons: {enable: true}
     });
+
+    this._createPlaylist = function () {
+        var playlistName = self.$searchInput.val();
+        $.ajax({
+            url: '/api/playlists?name=' + playlistName + '&accessibilty=Public',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            async: false
+        });
+        self.$createNewPlaylistLbl.hide();
+        $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
+    };
 };
