@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Repositories;
 using NHibernate;
@@ -25,9 +23,6 @@ namespace Azimuth.DataAccess.Infrastructure
                 cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate-release.cfg.xml"));
 #endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
-//                var schemaExport = new SchemaExport(cfg);
-//                schemaExport.Drop(false, true);
-//                schemaExport.Create(false, true);
                 return cfg.BuildSessionFactory();
             });
             Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();

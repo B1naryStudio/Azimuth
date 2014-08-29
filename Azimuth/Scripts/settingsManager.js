@@ -86,7 +86,7 @@ var SettingsManager = function(manager) {
 SettingsManager.prototype.showPlaylists = function(playlists) {
 	var self = this;
 	self.$playlistsTable.find(".tableHeader").remove();
-	if (typeof this.playlists === 'undefined') { //Initial run to get playlists from db
+	if (typeof playlists === 'undefined') { //Initial run to get playlists from db
 		$.ajax({
 			url: '/api/playlists',
 			success: function(playlistsData) {
@@ -189,6 +189,7 @@ SettingsManager.prototype.bindListeners = function() {
             if (e.keyCode == 13) {
                 console.log(e);
                 self._createPlaylist();
+                self.playlistsGlobal = [];
                 $(this).val("");
                 self.showPlaylists();
             }
