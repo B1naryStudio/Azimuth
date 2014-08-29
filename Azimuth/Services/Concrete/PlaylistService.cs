@@ -123,7 +123,6 @@ namespace Azimuth.Services.Concrete
 
                     _unitOfWork.Commit();
 
-
                     return new PlaylistData
                     {
                         Id = playlist.Id,
