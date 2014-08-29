@@ -235,6 +235,11 @@ SettingsManager.prototype.bindListeners = function() {
         scrollButtons: {enable: true}
     });
 
+    //$('#SN').mCustomScrollbar({
+    //    theme: 'dark-3',
+    //    scrollButtons: { enable: true }
+    //});
+
     this._createPlaylist = function () {
         var playlistName = self.$searchInput.val();
         $.ajax({
