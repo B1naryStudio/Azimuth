@@ -12,8 +12,8 @@
             success: function(tracksData) {
                 var tracks = tracksData;
                 self.$tracksContainer.find('.tableRow').remove();
-                for (var i = 0; i < tracks.length; i++) {
-                    var track = tracks[i];
+                for (var i = 0; i < tracks.Result.length; i++) {
+                    var track = tracks.Result[i];
                     track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                     self.$tracksContainer.append($("#trackTemplate").tmpl(track));
                 }
