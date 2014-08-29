@@ -201,5 +201,10 @@ SettingsManager.prototype.bindListeners = function() {
 	    $('#playlistTracks').empty();
 	    $('#playlistTracks').hide();
         $('#playlistsTable').show(); 
+	});
+
+    $('#playlists').mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: {enable: true}
     });
 };
