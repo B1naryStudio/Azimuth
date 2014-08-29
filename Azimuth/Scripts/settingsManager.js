@@ -190,31 +190,34 @@ SettingsManager.prototype.bindListeners = function() {
 	this.$searchInput.keyup(function (e) {
 	    var searchParam = $(this).val().toLocaleLowerCase();
 
-	    var foundedPlaylist = self.playlistsGlobal.filter(function(index) {
-	        self.$searchInput.next().children().remove();
-	        return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
-	    });
+	    if (self.$playlistsTable.css('visibility') != 'hidden' && self.$playlistsTable.css('display') != 'none') {
 
-	    if (foundedPlaylist.length == 0) {
-	        self.$createNewPlaylistLbl.show();
-            if (e.keyCode == 13) {
-                console.log(e);
-                self._createPlaylist();
-                self.playlistsGlobal = [];
-                $(this).val("");
-                self.showPlaylists();
-            }
+	        var foundedPlaylist = self.playlistsGlobal.filter(function(index) {
+	            self.$searchInput.next().children().remove();
+	            return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+	        });
+
+	        if (foundedPlaylist.length == 0) {
+	            self.$createNewPlaylistLbl.show();
+	            if (e.keyCode == 13) {
+	                console.log(e);
+	                self._createPlaylist();
+	                self.playlistsGlobal = [];
+	                $(this).val("");
+	                self.showPlaylists();
+	            }
+	        } else {
+	            self.$createNewPlaylistLbl.hide();
+	        }
+
+	        self.showPlaylists(foundedPlaylist);
+	        $('.accordion .tableRow').on("click", self._getTracks);
 	    } else {
-	        self.$createNewPlaylistLbl.hide();
+	        self.showTracks(self.playlistTracksGlobal.filter(function(index) {
+	            self.$searchInput.next().children().remove();
+	            return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+	        }));
 	    }
-
-	    self.showPlaylists(foundedPlaylist);
-		self.showTracks(self.playlistTracksGlobal.filter(function (index) {
-		    self.$searchInput.next().children().remove();
-		    return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
-		}));
-		
-		$('.accordion .tableRow').on("click", self._getTracks);
 	});
 
 	$('#backToPlaylistsBtn').click(function () {
@@ -224,6 +227,7 @@ SettingsManager.prototype.bindListeners = function() {
 	    self.showPlaylists(self.playlistsGlobal);
 	    self.$playlistsTable.show();
 	    self.$searchInput.val('');
+	    $('.accordion .tableRow').on("click", self._getTracks);
 	});
 
     $('#playlists').mCustomScrollbar({
