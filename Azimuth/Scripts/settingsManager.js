@@ -113,8 +113,8 @@ SettingsManager.prototype.showPlaylists = function(playlists) {
 		});
 	} else { //using to print playlists after using filter
 		if (self.playlists.length !== 0) {
-			for (var i = 0; i < this.playlists.length; i++) {
-				self.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
+			for (var i = 0; i < playlists.length; i++) {
+			    self.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
 			}
 		} else {
 		    self.$createNewPlaylistBtn.show();
