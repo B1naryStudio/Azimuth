@@ -46,7 +46,14 @@ namespace Azimuth.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl, bool autoLogin = true)
         {
             var result = await _accountService.LoginCallback(autoLogin);
-            return RedirectToAction(result ? returnUrl : "Login");
+            if (result)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
 
         public ActionResult LogOff()
@@ -61,6 +68,15 @@ namespace Azimuth.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
