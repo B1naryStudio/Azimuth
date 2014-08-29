@@ -61,7 +61,7 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                var tracks = _userTracksService.GetTracksByPlaylistId(playlistId);
+                var tracks = await _userTracksService.GetTracksByPlaylistId(playlistId);
                 return Request.CreateResponse(HttpStatusCode.OK, tracks);
             }
             catch (BadRequestException ex)

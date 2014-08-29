@@ -19,8 +19,8 @@ var SettingsManager = function(manager) {
 		    url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
 			type: 'GET',
 			async: false,
-			success: function(playlistData) {
-				var tracks = playlistData.Result;
+			success: function(tracksData) {
+			    var tracks = tracksData;
 				for (var i = 0; i < tracks.length; i++) {
 					var track = tracks[i];
 					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
@@ -91,7 +91,7 @@ SettingsManager.prototype.showPlaylists = function(playlists) {
 				if (typeof playlistsData.Message === 'undefined') {
 					self.$reloginForm.hide();
 					self.$vkMusic.show();
-					self.playlists = playlistsData.Result;
+					self.playlists = playlistsData;
 					for (var i = 0; i < self.playlists.length; i++) {
 						var playlist = self.playlists[i];
 					    if (playlist.Accessibilty === 1) {
