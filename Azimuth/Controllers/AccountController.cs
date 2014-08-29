@@ -1,18 +1,11 @@
 ﻿using System;
-using System.IdentityModel.Claims;
-using System.IdentityModel.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using Claim = System.Security.Claims.Claim;
-using ClaimTypes = System.Security.Claims.ClaimTypes;
 
 namespace Azimuth.Controllers
 {
@@ -56,14 +49,14 @@ namespace Azimuth.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl, bool autoLogin = true)
         {
-            var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+            var result = await _accountService.AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
             
             if (result == null || result.Identity == null)
             {
                 return RedirectToAction("Login");
             }
 
-            var principal = ClaimsAuthenticationManager.Authenticate(String.Empty, new ClaimsPrincipal(result.Identity));
+            var principal = _accountService.ClaimsAuthenticationManager.Authenticate(String.Empty, new ClaimsPrincipal(result.Identity));
             var identity = principal.Identity as AzimuthIdentity;
             var loggedIdentity = AzimuthIdentity.Current;
 
@@ -74,24 +67,14 @@ namespace Azimuth.Controllers
 
             if (storeResult && autoLogin)
             {
-                SignIn(identity, userInfo);
+                _accountService.SignIn(identity, userInfo);
             }
             return RedirectToLocal(returnUrl);
         }
 
-        private void SignIn(AzimuthIdentity identity, User userInfo)
-        {
-            identity.AddClaim(new Claim(ClaimTypes.Name, userInfo.Name.FirstName + " " + userInfo.Name.LastName));
-            identity.AddClaim(new Claim(AzimuthClaims.PHOTO_BIG, userInfo.Photo));
-            identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider",
-                identity.UserCredential.SocialNetworkName, Rights.PossessProperty));
-
-            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = true}, identity);
-        }
-
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            _accountService.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -104,25 +87,6 @@ namespace Azimuth.Controllers
         }
 
         #region Helpers
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
-
-        private ClaimsAuthenticationManager ClaimsAuthenticationManager
-        {
-            get
-            {
-                return FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager;
-            }
-        }
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -130,35 +94,6 @@ namespace Azimuth.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
-        }
-
-        // Go here sometimes
-        private class ChallengeResult : HttpUnauthorizedResult
-        {
-            public ChallengeResult(string provider, string redirectUri) : this(provider, redirectUri, null)
-            {
-            }
-
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
-                LoginProvider = provider;
-                RedirectUri = redirectUri;
-                UserId = userId;
-            }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
-
-            public override void ExecuteResult(ControllerContext context)
-            {
-                var properties = new AuthenticationProperties() { RedirectUri = RedirectUri };
-                if (UserId != null)
-                {
-                    properties.Dictionary[XsrfKey] = UserId;
-                }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-            }
         }
         #endregion
     }
