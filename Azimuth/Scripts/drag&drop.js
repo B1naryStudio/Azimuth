@@ -120,7 +120,8 @@
                             url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
                             type: 'PUT',
                             dataType: 'json',
-                            data: { trackId: JSON.stringify(tracksIds) }
+                            data: JSON.stringify(tracksIds),
+                            contentType: 'application/json; charset=utf-8'
                         });
 
                     }

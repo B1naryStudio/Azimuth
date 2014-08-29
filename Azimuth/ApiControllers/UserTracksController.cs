@@ -67,7 +67,7 @@ namespace Azimuth.ApiControllers
 
         [HttpPut]
         [Route("put")]
-        public HttpResponseMessage PutTrackToPlaylist(long playlistId, int newIndex, [FromBody] List<string> trackId)
+        public HttpResponseMessage PutTrackToPlaylist(long playlistId, int newIndex, List<string> trackId)
         {
             try
             {
