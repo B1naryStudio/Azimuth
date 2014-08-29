@@ -224,6 +224,7 @@ SettingsManager.prototype.bindListeners = function() {
 	    $('#backToPlaylistsBtn').hide();
 	    $('#playlistTracks').empty();
 	    $('#playlistTracks').hide();
+	    self.$playlistsTable.empty();
 	    self.showPlaylists(self.playlistsGlobal);
 	    self.$playlistsTable.show();
 	    self.$searchInput.val('');
