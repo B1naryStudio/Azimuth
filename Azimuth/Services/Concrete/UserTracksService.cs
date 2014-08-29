@@ -152,6 +152,16 @@ namespace Azimuth.Services.Concrete
                                         return item;
                                     }).ToList();
                     }
+                    var negativeTest = pt.OrderByDescending(s=> s.TrackPosition < 0).Where(s => s.TrackPosition < 0).ToList();
+                    if (negativeTest.Count > 0)
+                    {
+                        var neg = 0 - negativeTest[0].TrackPosition;
+                        pt.Select((item) =>
+                        {
+                            item.TrackPosition += neg;
+                            return item;
+                        }).ToList();
+                    }
                 }
                 _unitOfWork.Commit();
             }
