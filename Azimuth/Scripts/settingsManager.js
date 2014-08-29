@@ -224,6 +224,7 @@ SettingsManager.prototype.bindListeners = function() {
         }
     });
 
+
     $('#backToPlaylistsBtn').click(function() {
         $('#backToPlaylistsBtn').hide();
         $('#playlistTracks').empty();
@@ -237,10 +238,10 @@ SettingsManager.prototype.bindListeners = function() {
 
     $('#playlists').mCustomScrollbar({
         theme: 'dark-3',
-        scrollButtons: {enable: true}
+        scrollButtons: { enable: true }
     });
-
-    var moveTrackToNewPosition = function($currentItem, $draggableStub) {
+}
+var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
         var playlistId = $('.playlist.active').children('.playlistId').text();
         var tracksIds = [];
 
@@ -308,5 +309,3 @@ SettingsManager.prototype.bindListeners = function() {
             $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
         };
     };
-
-}
