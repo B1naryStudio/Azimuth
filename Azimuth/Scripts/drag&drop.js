@@ -9,7 +9,8 @@
         var $currentItem = null;
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('#contextMenu').empty();
+        var $contextMenuContainer = $('<div class="contextMenu"></div>');
+        var $subContextMenuContainer = $('<div class="subContextMenu"></div>');
         var $contextMenuTemplate = $('#contextmenuTemplate');
 
         var movingInfo = { "data": [] };
@@ -129,13 +130,6 @@
             $contextMenuContainer.append(object);
         }
 
-        $('.contextMenuActionName').on('1', function () {
-            alert("1 action");
-        });
-        $('.contextMenuActionName').on('2', function () {
-            alert("2 action");
-        });
-
         $(document).mousedown(function (e) {
             var $target = $(e.target);
              if (contextMenuSelected == true && e.which != 3) {
@@ -160,13 +154,34 @@
                     return false;
                 }
                 contextMenuSelected = true;
-                    var x = event.pageX;
-                    var y = event.pageY;
+                //var $target = $(event.target).parents('#playlistTracks');
+                var $target = $(event.target).parents('.draggable-list').parent();
+                var parentOffset = $target.parent().offset();
+                    var x = event.pageX - parentOffset.left;
+                    var y = event.pageY - parentOffset.top;
                     $contextMenuContainer.css({
                         'top': y + 'px',
                         'left': x + 'px'
                     });
+
+                    $target.append($contextMenuContainer);
                     $contextMenuContainer.show();
+
+                    //$('.contextMenuActionName').on('1', function () {
+                    //    alert("1 action");
+                    //});
+                    //$('.contextMenuActionName').on('2', function () {
+                    //    alert("2 action");
+                //});
+
+                    $contextMenuContainer.children('#1').off('1').on('1', function () {
+                        //$(this).parent().parent().children('#playlistTracks.draggable-list').children().toggleClass('draggable-item-selected', true);
+                        $(this).parent().parent().children('.draggable-list').children('.track').toggleClass('draggable-item-selected', true);
+                    });
+                    $contextMenuContainer.children('#2').off('2').on('2', function () {
+                        alert("2 action");
+                    });
+
             } else {
 
                 mousedown = true;
