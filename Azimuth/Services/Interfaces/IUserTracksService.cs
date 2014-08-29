@@ -11,7 +11,7 @@ namespace Azimuth.Services.Interfaces
         Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id);
 		void SetPlaylist(PlaylistData playlistData, string provider, int index);
         Task<ICollection<TracksDto>> GetUserTracks();
-        void PutTrackToPlaylist(long playlistId, long trackId);
+        void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId);
         void MoveTrackBetweenPlaylists(long playlistId, long trackId);
         void PutTrackToPlaylist(int id, Track track);
 
