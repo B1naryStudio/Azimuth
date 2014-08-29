@@ -227,12 +227,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="DataProviders\Concrete\AccountProviderFactory.cs" />
-    <Compile Include="Infrastructure\AccountProviderModule.cs" />
-    <Compile Include="Infrastructure\AzimuthIdentity.cs" />
+    <Compile Include="Infrastructure\Concrete\AccountProviderModule.cs" />
+    <Compile Include="Infrastructure\Concrete\AzimuthIdentity.cs" />
     <Compile Include="DataProviders\Concrete\FacebookAccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\AccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\GoogleAccountProvider.cs" />
     <Compile Include="DataProviders\Interfaces\IAccountProvider.cs" />
+    <Compile Include="Infrastructure\Concrete\ChallengeResult.cs" />
     <Compile Include="Infrastructure\Exceptions\ApplicationDisabledException.cs" />
     <Compile Include="Infrastructure\Exceptions\BadParametersException.cs" />
     <Compile Include="Infrastructure\Exceptions\EndUserException.cs" />
@@ -241,30 +242,31 @@
     <Compile Include="Infrastructure\Exceptions\UnknownErrorException.cs" />
     <Compile Include="Infrastructure\Exceptions\UserAuthorizationException.cs" />
     <Compile Include="Infrastructure\Exceptions\VkApiException.cs" />
-    <Compile Include="Infrastructure\IdentityTransformer.cs" />
+    <Compile Include="Infrastructure\Concrete\IdentityTransformer.cs" />
     <Compile Include="DataProviders\Concrete\TwitterAccountProvider.cs" />
-    <Compile Include="Infrastructure\IWebClient.cs" />
-    <Compile Include="Infrastructure\Mapper.cs" />
-    <Compile Include="Infrastructure\SocialNetworkApiModule.cs" />
-    <Compile Include="Infrastructure\UserCredential.cs" />
+    <Compile Include="Infrastructure\Interfaces\IWebClient.cs" />
+    <Compile Include="Infrastructure\Concrete\Mapper.cs" />
+    <Compile Include="Infrastructure\Concrete\SocialNetworkApiModule.cs" />
+    <Compile Include="Infrastructure\Concrete\UserCredential.cs" />
     <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
-    <Compile Include="Infrastructure\WebClient.cs" />
+    <Compile Include="Infrastructure\Concrete\WebClient.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\IAccountService.cs" />
-    <Compile Include="Services\IPlaylistService.cs" />
-    <Compile Include="Services\ISettingsService.cs" />
-    <Compile Include="Services\IUserTracksService.cs" />
-    <Compile Include="Services\PlaylistService.cs" />
-    <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="Services\UserTracksService.cs" />
+    <Compile Include="Services\Concrete\AccountService.cs" />
+    <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\IPlaylistService.cs" />
+    <Compile Include="Services\Interfaces\ISettingsService.cs" />
+    <Compile Include="Services\Interfaces\IUserTracksService.cs" />
+    <Compile Include="Services\Concrete\PlaylistService.cs" />
+    <Compile Include="Services\Concrete\SettingsService.cs" />
+    <Compile Include="Services\Concrete\UserTracksService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -274,6 +276,7 @@
     <Content Include="Images\facebook_logo.png" />
     <Content Include="Images\google_logo.png" />
     <Content Include="Images\login_bg.jpeg" />
+    <Content Include="Images\mCSB_buttons.png" />
     <Content Include="Images\media_add.png" />
     <Content Include="Images\media_next.png" />
     <Content Include="Images\media_noread.png" />
@@ -293,6 +296,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -322,7 +326,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\Settings\_UserTracksPartial.cshtml" />

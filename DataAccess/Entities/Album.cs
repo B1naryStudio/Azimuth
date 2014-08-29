@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Design;
 using Azimuth.DataAccess.Infrastructure;
-using Iesi.Collections;
-using Iesi.Collections.Generic;
 
 namespace Azimuth.DataAccess.Entities
 {

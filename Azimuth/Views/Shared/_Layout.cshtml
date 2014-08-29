@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Azimuth.Infrastructure.Concrete
+@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,7 +18,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -27,7 +28,17 @@
                     }
                     <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a id="user-settings" href="@Url.Action("Index", "Settings")">
+                            <img src="@AzimuthIdentity.Current.UserCredential.PhotoBig" />
+                        </a>
+                    </li>
+                    <li id="user-name-item">
+                        <div id="user-name">@User.Identity.GetUserName()</div>
+                        @Html.ActionLink("Log off", "LogOff", "Account", null, new { id = "log-off-link" })
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

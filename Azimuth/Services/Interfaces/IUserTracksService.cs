@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Interfaces
 {
     public interface IUserTracksService
     {

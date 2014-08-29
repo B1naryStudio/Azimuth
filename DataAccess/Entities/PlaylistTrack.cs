@@ -20,13 +20,15 @@ namespace Azimuth.DataAccess.Entities
             {
                 return false;
             }
-            PlaylistTracksIdentifier id;
-            id = (PlaylistTracksIdentifier)obj;
+            var id = (PlaylistTracksIdentifier)obj;
             if (Playlist == id.Playlist && Track == id.Track)
             {
                 return true;
             }
-            return false; ;
+            else
+            {
+                return false;
+            }
         }
 
         public override int GetHashCode()

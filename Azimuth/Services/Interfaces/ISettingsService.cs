@@ -1,6 +1,6 @@
 ﻿using Azimuth.ViewModels;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Interfaces
 {
     public interface ISettingsService
     {

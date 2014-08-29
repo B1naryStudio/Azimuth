@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Azimuth.Services;
+using Azimuth.Services.Interfaces;
 
 namespace Azimuth.Controllers
 {

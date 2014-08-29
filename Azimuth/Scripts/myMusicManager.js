@@ -10,10 +10,10 @@
             type: 'GET',
             async: false,
             success: function(tracksData) {
-                var tracks = tracksData.Result;
+                var tracks = tracksData;
                 self.$tracksContainer.find('.tableRow').remove();
-                for (var i = 0; i < tracks.length; i++) {
-                    var track = tracks[i];
+                for (var i = 0; i < tracks.Result.length; i++) {
+                    var track = tracks.Result[i];
                     track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
                     self.$tracksContainer.append($("#trackTemplate").tmpl(track));
                 }
@@ -32,7 +32,6 @@ MyMusicManager.prototype.showPlaylists = function () {
         dataType: "json",
         async: false,
         success: function (playlists) {
-            playlists = playlists.Result;
             for (var i = 0; i < playlists.length; i++) {
                 var playlist = playlists[i];
                 if (playlist.Accessibilty == 1)

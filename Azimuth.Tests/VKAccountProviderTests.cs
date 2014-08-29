@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
+using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -13,7 +14,7 @@ using NUnit.Framework;
 namespace Azimuth.Tests
 {
     [TestFixture]
-    class VKAccountProviderTests
+    class VkAccountProviderTests
     {
 
         // Fields for tests
@@ -27,7 +28,7 @@ namespace Azimuth.Tests
 
         private IWebClient _webRequest;
 
-        private VKUserData.VKResponse _vkUserData;
+        private VkUserData.VkResponse _vkUserData;
 
         [SetUp]
         public void SetUp()
@@ -39,19 +40,19 @@ namespace Azimuth.Tests
                 AccessToken);
 
             // Object that we will make Json
-            _vkUserData = new VKUserData.VKResponse()
+            _vkUserData = new VkUserData.VkResponse
             {
-                Response = new List<VKUserData>
+                Response = new List<VkUserData>
                 {
-                    new VKUserData
+                    new VkUserData
                     {
                         FirstName = "Beseda",
                         LastName = "Dmitrij",
                         ScreenName = "Beseda Dmitrij",
-                        Sex = VKUserData.VKSex.male,
+                        Sex = VkUserData.VkSex.Male,
                         Birthday = "12/1/1992",
-                        City = new VKUserData.VKCity(){Id = 1, Title = "Donetsk"},
-                        Country = new VKUserData.VKCountry() {Id = 1, Title = "Ukraine"},
+                        City = new VkUserData.VkCity {Id = 1, Title = "Donetsk"},
+                        Country = new VkUserData.VkCountry {Id = 1, Title = "Ukraine"},
                         Timezone = 2,
                         Photo = "photo.jpg",
                         Email = Email
@@ -67,12 +68,12 @@ namespace Azimuth.Tests
         }
 
         [Test]
-        public async void Get_VK_User_Data()
+        public async void Get_Vk_User_Data()
         {
             // Arrange
             var expectedUser = Mapper.Map(_vkUserData, new User());
             // Act
-            var provider = new VKAccountProvider(_webRequest, new UserCredential
+            var provider = new VkAccountProvider(_webRequest, new UserCredential
             {
                 SocialNetworkId = UserId,
                 AccessToken = AccessToken

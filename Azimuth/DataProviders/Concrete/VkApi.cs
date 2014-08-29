@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataProviders.Interfaces;
-using Azimuth.Infrastructure;
 using Azimuth.Infrastructure.Exceptions;
+using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,7 +25,7 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<List<TrackData.Audio>> GetTracks(string userId, string accessToken)
         {
-            TrackData tracks = new TrackData();
+            var tracks = new TrackData();
             int i = 0;
             int count = 0;
 
@@ -48,9 +50,11 @@ namespace Azimuth.DataProviders.Concrete
                 }
                 else
                 {
-                    ErrorData error = JsonConvert.DeserializeObject<ErrorData>(json);
-                    if (error.Error == null) 
+                    var error = JsonConvert.DeserializeObject<ErrorData>(json);
+                    if (error.Error == null)
+                    {
                         return tracks.Response.Audios;
+                    }
                     int code = error.Error.ErrorCode;
                     string message = error.Error.ErrorMessage;
                     switch (code)
@@ -82,10 +86,7 @@ namespace Azimuth.DataProviders.Concrete
                       "?owner_id=" + userId +
                       "&audio_ids=";
 
-            foreach (var trackId in trackIds)
-            {
-                url += trackId + ",";
-            }
+            url = trackIds.Aggregate(url, (current, trackId) => current + (trackId + ","));
             url = url.Remove(url.Length - 1);
             url += "&need_user=0" +
                    "&count=" + MaxCntTracksPerReq +
@@ -93,11 +94,11 @@ namespace Azimuth.DataProviders.Concrete
                    "&access_token=" + accessToken;
 
             var json = await _webClient.GetWebData(url);
-            TrackData tracks = JsonConvert.DeserializeObject<TrackData>(json);
+            var tracks = JsonConvert.DeserializeObject<TrackData>(json);
 
             if (tracks.Response == null)
             {
-                ErrorData error = JsonConvert.DeserializeObject<ErrorData>(json);
+                var error = JsonConvert.DeserializeObject<ErrorData>(json);
                 if (error.Error == null && tracks.Response != null)
                 {
                     return tracks.Response.Audios;
@@ -129,7 +130,7 @@ namespace Azimuth.DataProviders.Concrete
         public async Task<string> GetLyricsById(string userId, long lyricsId, string accessToken)
         {
             var url = BaseUri + "audio.getLyrics" +
-                      "?lyrics_id=" + Uri.EscapeDataString(lyricsId.ToString()) +
+                      "?lyrics_id=" + Uri.EscapeDataString(lyricsId.ToString(CultureInfo.InvariantCulture)) +
                       "&v=5.24" +
                       "&access_token=" + Uri.EscapeDataString(accessToken);
 

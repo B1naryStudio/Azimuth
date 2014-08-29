@@ -7,7 +7,6 @@ using NHibernate;
 using NHibernate.Cfg;
 using Ninject.Extensions.Factory;
 using Ninject.Modules;
-using NHibernate.Tool.hbm2ddl;
 
 namespace Azimuth.DataAccess.Infrastructure
 {

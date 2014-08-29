@@ -24,6 +24,25 @@ textarea {
     max-width: 280px;
 }
 
+#user-settings {
+    padding: 0;
+}
+
+#user-settings > img {
+    width: 50px;
+    height: 50px;
+    padding: 7px;
+}
+
+#user-name-item {
+    padding: 5px 0px;
+    color: white;
+}
+
+#log-off-link {
+    padding: 0;
+}
+
 /* styles for validation helpers */
 .field-validation-error {
     color: #b94a48;
@@ -363,8 +382,7 @@ span.label {
 
 .logo {
     text-align: center;
-    font-size: 90px;
-    font: normal normal normal 156px/1 FontAwesome;
+    font: normal normal normal 130px/1 FontAwesome;
 }
 
 .contextMenuActionName:hover {

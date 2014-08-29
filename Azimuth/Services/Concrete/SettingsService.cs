@@ -2,12 +2,13 @@
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Models;
+using Azimuth.Services.Interfaces;
 using Azimuth.ViewModels;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Concrete
 {
     public class SettingsService : ISettingsService
     {
@@ -40,6 +41,8 @@ namespace Azimuth.Services
                     AvailableNetworks = availableSn,
                     ConnectedNetworks = connectedSn
                 };
+
+                _unitOfWork.Commit();
                 return viewModel;
             }
         }

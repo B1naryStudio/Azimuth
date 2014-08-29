@@ -153,7 +153,6 @@
             }
 
         });
-
         function _makeDraggable(event) {
 
             if (event.which == 3) {

@@ -76,7 +76,7 @@
     <Compile Include="GoogleProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterAccountProviderTests.cs" />
-    <Compile Include="VKAccountProviderTests.cs" />
+    <Compile Include="VkAccountProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

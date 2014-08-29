@@ -5,8 +5,8 @@ using System.Management.Instrumentation;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
 ﻿using System.Web.Http;
-using Azimuth.Services;
-using Azimuth.Shared.Enums;
+﻿using Azimuth.Services.Interfaces;
+﻿using Azimuth.Shared.Enums;
 
 namespace Azimuth.ApiControllers
 {
@@ -25,7 +25,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetUsersPlaylists());
+                var data = await _playlistService.GetUsersPlaylists();
+                return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (InstanceNotFoundException ex)
             {
@@ -39,9 +40,20 @@ namespace Azimuth.ApiControllers
 
         [HttpGet]
         [Route("public")]
-        public HttpResponseMessage GetPublicPlaylists()
+        public async Task<HttpResponseMessage> GetPublicPlaylists()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPublicPlaylists());
+            try
+            {
+               return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPublicPlaylists());
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         [HttpGet]
@@ -50,7 +62,7 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetUsersPlaylists());
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetUsersPlaylists());
             }
             catch (InstanceNotFoundException ex)
             {
@@ -67,7 +79,7 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _playlistService.GetPlaylistById(id));
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPlaylistById(id));
             }
             catch (InstanceNotFoundException ex)
             {

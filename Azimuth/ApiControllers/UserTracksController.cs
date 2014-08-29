@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
-using Azimuth.Services;
+using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using NHibernate.Mapping;
 
@@ -49,7 +49,14 @@ namespace Azimuth.ApiControllers
         [HttpGet]
         public async Task<HttpResponseMessage> GetUserTracks()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetUserTracks());
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         [HttpGet]
@@ -57,7 +64,7 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                var tracks = _userTracksService.GetTracksByPlaylistId(playlistId);
+                var tracks = await _userTracksService.GetTracksByPlaylistId(playlistId);
                 return Request.CreateResponse(HttpStatusCode.OK, tracks);
             }
             catch (BadRequestException ex)

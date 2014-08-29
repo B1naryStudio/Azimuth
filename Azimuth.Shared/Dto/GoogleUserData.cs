@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Azimuth.Shared.Dto
@@ -172,7 +168,7 @@ namespace Azimuth.Shared.Dto
             [JsonProperty(PropertyName = "timeZoneId")]
             public string TimezoneId { get; set; }
             [JsonProperty(PropertyName = "timeZoneName")]
-            public string timezoneName { get; set; }
+            public string TimezoneName { get; set; }
         }
     }
 }

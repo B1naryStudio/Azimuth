@@ -1,22 +1,21 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public static class Mapper
     {
-        private static  Dictionary<Tuple<Type, Type>, object> _maps = new Dictionary<Tuple<Type, Type>, object>();
+        private static readonly Dictionary<Tuple<Type, Type>, object> _maps = new Dictionary<Tuple<Type, Type>, object>();
 
         static Mapper()
         {
             AddMapp<FacebookUserData, User>(FacebookUserDataMap);
-            AddMapp<VKUserData.VKResponse, User>(VKUserDataMap);
+            AddMapp<VkUserData.VkResponse, User>(VkUserDataMap);
             AddMapp<GoogleUserData, User>(GoogleUserDataMap);
-            AddMapp<TweetSharp.TwitterUser, User>(TWitterUserDataMap);
+            AddMapp<TweetSharp.TwitterUser, User>(TwitterUserDataMap);
             AddMapp<Track, TracksDto>(TrackMap);
         }
 
@@ -35,8 +34,10 @@ namespace Azimuth.Infrastructure
             var map = (Action<TSource, TDestination>) _maps[key];
 
             if (map == null)
+            {
                 throw new Exception(String.Format("No mapping defined for {0} => {1}", typeof (TSource).Name,
-                    typeof (TDestination).Name));
+                    typeof(TDestination).Name));
+            }
 
             map(source, destionation);
             return destionation;
@@ -89,7 +90,11 @@ namespace Azimuth.Infrastructure
             user.ScreenName = snData.DisplayName ?? String.Empty;
             user.Gender = snData.Gender ?? String.Empty;
             user.Birthday = snData.Birthday ?? String.Empty;
-            user.Email = snData.Emails.FirstOrDefault(e => e.Type.Equals("account")).Value ?? String.Empty;
+            
+            var email = snData.Emails.FirstOrDefault(e => e.Type.Equals("account"));
+            if (email != null)
+                user.Email = email.Value ?? String.Empty;
+            
             user.Location =
                 new Location
                 {
@@ -100,7 +105,7 @@ namespace Azimuth.Infrastructure
             user.Photo = snData.Image.Url ?? String.Empty;
         }
 
-        private static void VKUserDataMap(VKUserData.VKResponse snData, User user)
+        private static void VkUserDataMap(VkUserData.VkResponse snData, User user)
         {
             user.Name =
                 new Name
@@ -122,7 +127,7 @@ namespace Azimuth.Infrastructure
             user.Photo = snData.Response.First().Photo;
         }
 
-        private static void TWitterUserDataMap(TweetSharp.TwitterUser snData, User user)
+        private static void TwitterUserDataMap(TweetSharp.TwitterUser snData, User user)
         {
             user.Name = new Name {FirstName = snData.Name ?? String.Empty, LastName = String.Empty};
                 user.Birthday = String.Empty;

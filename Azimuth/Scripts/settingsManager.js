@@ -251,6 +251,9 @@ var saveTrackFromVkToPlaylist = function($currentItem, $draggableStub, $element)
         }),
         dataType: 'json',
         contentType: 'application/json',
-        async: true
+        async: true,
+        success: function() {
+            
+        }
     });
 }

@@ -1,4 +1,4 @@
-﻿namespace Azimuth.Infrastructure
+﻿namespace Azimuth.Infrastructure.Concrete
 {
     public class UserCredential
     {
@@ -17,5 +17,7 @@
         public string ConsumerSecret { get; set; }
 
         public string Email { get; set; }
+
+        public string PhotoBig { get; set; }
     }
 }

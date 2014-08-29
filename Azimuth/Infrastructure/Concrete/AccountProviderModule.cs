@@ -1,9 +1,11 @@
 ﻿using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
-using Azimuth.Services;
+using Azimuth.Infrastructure.Interfaces;
+using Azimuth.Services.Concrete;
+using Azimuth.Services.Interfaces;
 using Ninject.Modules;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public class AccountProviderModule:NinjectModule
     {
@@ -14,7 +16,7 @@ namespace Azimuth.Infrastructure
             Bind<IPlaylistService>().To<PlaylistService>();
             Bind<IWebClient>().To<WebClient>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
-            Bind<IAccountProvider>().To<VKAccountProvider>().Named("Vkontakte");
+            Bind<IAccountProvider>().To<VkAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");
             Bind<IAccountProvider>().To<GoogleAccountProvider>().Named("Google");
         }

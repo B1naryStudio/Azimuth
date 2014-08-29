@@ -3,7 +3,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 
-namespace Azimuth.Infrastructure
+namespace Azimuth.Infrastructure.Concrete
 {
     public class IdentityTransformer : ClaimsAuthenticationManager
     {

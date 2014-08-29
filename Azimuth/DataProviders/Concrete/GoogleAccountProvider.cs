@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
+using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,8 +14,6 @@ namespace Azimuth.DataProviders.Concrete
 {
     public class GoogleAccountProvider : AccountProvider
     {
-        private readonly string _userId;
-        private readonly string _accessToken;
         public string UserInfoUrl { get; private set; }
         public GoogleAccountProvider(IWebClient webClient, UserCredential userCredential)
             :base(webClient)
@@ -25,13 +26,14 @@ namespace Azimuth.DataProviders.Concrete
             {
                 throw new ArgumentException("GoogleAccountProvider didn't receive AccessToken");
             }
-            _userId = userCredential.SocialNetworkId;
-            _accessToken = userCredential.AccessToken;
+
+            var userId = userCredential.SocialNetworkId;
+            var accessToken = userCredential.AccessToken;
             UserInfoUrl =
                 String.Format(
                     @"https://www.googleapis.com/plus/v1/people/{0}?access_token={1}&fields=birthday%2CdisplayName%2Cemails%2Cgender%2Cimage%2Cname(familyName%2CgivenName)%2CplacesLived",
-                    _userId,
-                    _accessToken);
+                    userId,
+                    accessToken);
         }
 
         public override async Task<User> GetUserInfoAsync(string email = "")
@@ -54,7 +56,7 @@ namespace Azimuth.DataProviders.Concrete
                 {
                     var locData = JsonConvert.DeserializeObject<GoogleUserData.LocationData>(response);
                     var coordInfo = locData.Results.First().Geometry.Location;
-                    var coord = new Tuple<string, string>(coordInfo.Lat.ToString(), coordInfo.Lat.ToString());
+                    var coord = new Tuple<string, string>(coordInfo.Lat.ToString(CultureInfo.InvariantCulture), coordInfo.Lat.ToString(CultureInfo.InvariantCulture));
                     var userTimezoneUrl = String.Format(
                         @"https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp=1331161200",
                         coord.Item1.Replace(',', '.'), coord.Item2.Replace(',', '.'));

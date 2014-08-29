@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
@@ -8,12 +9,13 @@ using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
+using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using WebGrease.Css.Extensions;
 
-namespace Azimuth.Services
+namespace Azimuth.Services.Concrete
 {
     public class UserTracksService : IUserTracksService
     {
@@ -56,44 +58,54 @@ namespace Azimuth.Services
 
         public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
         {
-            using (_unitOfWork)
+            return await Task.Run(() =>
             {
-                var pt = _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id).OrderBy(o => o.TrackPosition).ToList();
-
-                ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
+                using (_unitOfWork)
                 {
-                    Id = s.Identifier.Track.Id,
-                    Name = s.Identifier.Track.Name,
-                    Duration = s.Identifier.Track.Duration,
-                    Genre = s.Identifier.Track.Genre,
-                    Url = s.Identifier.Track.Url,
-                    Album = s.Identifier.Track.Album.Name,
-                    Artist = s.Identifier.Track.Album.Artist.Name
-                }).ToList();
+                    var pt =
+                        _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                            .OrderBy(o => o.TrackPosition)
+                            .ToList();
 
-                return tracks;
-            }
+                    ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
+                    {
+                        Name = s.Identifier.Track.Name,
+                        Duration = s.Identifier.Track.Duration,
+                        Genre = s.Identifier.Track.Genre,
+                        Url = s.Identifier.Track.Url,
+                        Album = s.Identifier.Track.Album.Name,
+                        Artist = s.Identifier.Track.Album.Artist.Name
+                    }).ToList();
+
+                    _unitOfWork.Commit();
+                    return tracks;
+                }
+            });
         }
 
         public async Task<ICollection<TracksDto>> GetUserTracks()
         {
-            using (_unitOfWork)
+            return await Task.Run(() =>
             {
-                var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
-                var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
-                ICollection<TracksDto> tracks =
-                    playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
-                    {
-                        Name = track.Name,
-                        Duration = track.Duration,
-                        Genre = track.Genre,
-                        Url = track.Url,
-                        Album = track.Album.Name,
-                        Artist = track.Album.Artist.Name
-                    }).ToList();
+                using (_unitOfWork)
+                {
+                    var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
+                    var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
+                    ICollection<TracksDto> tracks =
+                        playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
+                        {
+                            Name = track.Name,
+                            Duration = track.Duration,
+                            Genre = track.Genre,
+                            Url = track.Url,
+                            Album = track.Album.Name,
+                            Artist = track.Album.Artist.Name
+                        }).ToList();
 
-                return tracks;
-            }
+                    _unitOfWork.Commit();
+                    return tracks;
+                }
+            });
         }
 
         public void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId)
@@ -159,6 +171,7 @@ namespace Azimuth.Services
                 }
 
                 playlist.Tracks.Add(track);
+                _unitOfWork.Commit();
             }
         }
 
@@ -195,7 +208,7 @@ namespace Azimuth.Services
                     artistRepo.AddItem(artist);
                     var track = new Track
                     {
-                        Duration = trackData.Duration.ToString(),
+                        Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
                         //Lyrics =
                         //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
                         //            socialNetworkData.AccessToken),
@@ -210,10 +223,11 @@ namespace Azimuth.Services
                     _trackRepository.AddItem(track);
 
                     if (index == -1)
-                        index = (playlist.Tracks.Count() > 0) ? playlist.Tracks.Count() : 0;
+                    {
+                        index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
+                    }
                     
-                    
-                    PlaylistTrack playlistTrack = new PlaylistTrack
+                    var playlistTrack = new PlaylistTrack
                     {
                         Identifier = new PlaylistTracksIdentifier
                         {

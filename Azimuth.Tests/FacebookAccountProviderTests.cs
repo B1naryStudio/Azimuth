@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Concrete;
-using Azimuth.Infrastructure;
+using Azimuth.Infrastructure.Concrete;
+using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -43,8 +44,8 @@ namespace Azimuth.Tests
                 Email = "besedadg@gmail.com",
                 Birthday = "12/1/1992",
                 Timqzone = 2,
-                Location = new FacebookUserData.FBLocation() {Id = "1", Name = "Donetsk, Ukraine"},
-                Picture = new FacebookUserData.FBPicture()
+                Location = new FacebookUserData.FbLocation() {Id = "1", Name = "Donetsk, Ukraine"},
+                Picture = new FacebookUserData.FbPicture()
                 {
                     Data = new FacebookUserData.Data
                     {

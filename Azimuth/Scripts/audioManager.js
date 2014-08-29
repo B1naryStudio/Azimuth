@@ -1,37 +1,14 @@
-﻿var AudioManager = function () {
+﻿var AudioManager = function() {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
 
-    //var volume = new Dragdealer('volume', {
-    //    vertical: true,
-    //    horizontal: false,
-    //    bottom: 4,
-    //    animationCallback: function (x, y) {
-    //        var t = Math.round(y * 100);
-    //        if (y >= 0 && y <= 1) {
-    //            self.audio.volume = 1 - y;
-    //        }
-    //        if (t <= 33) {
-    //            $('#volumeImg').css('background-position', '0 0');
-    //        } else if (t <= 66) {
-    //            $('#volumeImg').css('background-position', '0 -40px');
-    //        } else if (t === 100) {
-    //            $('#volumeImg').css('background-position', '0 -120px');
-    //        } else {
-    //            $('#volumeImg').css('background-position', '0 -79px');
-    //        }
-    //    }
-    //});
-    //volume.setValue(0, 0.5);
-
     self.audio.onended = function() {
         self._nextTrack();
-    }
+    };
 
-    this._nextTrack = function () {
-        $('.track-play-btn').removeClass('glyphicon-pause');
+    this._nextTrack = function() {
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next();
@@ -40,34 +17,13 @@
             trackItem = self.$currentTrack.parent().children().first();
         }
         self.$currentTrack = trackItem;
-        $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
-        trackItem.children('.glyphicon').removeClass('glyphicon-play');
-        trackItem.children('.glyphicon').addClass('glyphicon-pause');
-        
-        $(self.tracksGlobal).each(function(index) {
-            if ($(this).text() === self.audio.src) {
-                var url = $($(self.tracksGlobal).get(index + 1)).text();
-                if (url === '') {
-                    url = $($(self.tracksGlobal).get(0)).text();
-                    //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                    //$($('.vk-item').get(0)).addClass('draggable-item-selected');
-                } else {
-                    //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                    //$($('.vk-item').get($(this).parent().index() + 1)).addClass('draggable-item-selected');
-                }
-                if (!self.audio.paused) {
-                    self._setAttribute(url);
-                    self.play();
-                } else {
-                    self._setAttribute(url);
-                }
-                return false;
-            }
-        });
-    }
 
-    this._prevTrack = function () {
-        $('.track-play-btn').removeClass('glyphicon-pause');
+        self._setPauseImgButton(trackItem);
+
+        self._setTrackTo('next');
+    };
+
+    this._prevTrack = function() {
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev();
@@ -76,59 +32,67 @@
             trackItem = self.$currentTrack.parent().children().last();
         }
         self.$currentTrack = trackItem;
-        $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
-        trackItem.children('.glyphicon').removeClass('glyphicon-play');
-        trackItem.children('.glyphicon').addClass('glyphicon-pause');
 
-        $(self.tracksGlobal).each(function (index) {
-            if ($(this).text() === self.audio.src) {
-                var url = $($(self.tracksGlobal).get(index - 1)).text();
-                //$($('.vk-item').get($(this).parent().index())).removeClass('draggable-item-selected');
-                //$($('.vk-item').get($(this).parent().index() - 1)).addClass('draggable-item-selected');
-                if (!self.audio.paused) {
-                    self._setAttribute(url);
-                    self.play();                   
-                } else {
-                    self._setAttribute(url);
-                }
+        self._setPauseImgButton(trackItem);
 
-                return false;
-            }
-        });
-    }
+        self._setTrackTo('prev');
+    };
 
-    this._setPlayImgButton = function (t) {
+    this._setPlayImgButton = function(t) {
         t.children('.track-play-btn').removeClass('glyphicon-pause');
         t.children('.track-play-btn').addClass('glyphicon-play');
-    }
+    };
 
-    this._setPauseImgButton = function (t) {
+    this._setPauseImgButton = function(t) {
         $('.track-play-btn').removeClass('glyphicon-pause');
         $('.track-play-btn:not(.glyphicon-play)').addClass('glyphicon-play');
         t.children('.track-play-btn').removeClass('glyphicon-play');
         t.children('.track-play-btn').addClass('glyphicon-pause');
-    }
+    };
 
     this._setAttribute = function(src) {
         self.audio.setAttribute('src', src);
-    }
+    };
 
-    this._updateGlobalTracks = function() {
-        self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
-    }
-}
+    this._setTrackTo = function (dirrection) { //dirrection = 'next' or 'prev'
+        if (dirrection === 'next' || dirrection === 'prev') {
+            var url = null;
 
-AudioManager.prototype.play = function () {
+            $(self.tracksGlobal).each(function(index) {
+                if ($(this).text() === self.audio.src) {
+                    if (dirrection === 'next') {
+                        url = $($(self.tracksGlobal).get(index + 1)).text();
+                        if (url === '') {
+                            url = $($(self.tracksGlobal).get(0)).text();
+                        }
+                    } else {
+                        url = $($(self.tracksGlobal).get(index - 1)).text();
+                    }
+                    if (!self.audio.paused) {
+                        self._setAttribute(url);
+                        self.play();
+                    } else {
+                        self._setAttribute(url);
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }
+    };
+};
+
+AudioManager.prototype.play = function() {
     var self = this;
     self.audio.play();
-}
+};
 
-AudioManager.prototype.pause = function () {
+AudioManager.prototype.pause = function() {
     var self = this;
     self.audio.pause();
-}
+};
 
-AudioManager.prototype.bindPlayBtnListeners = function () {
+AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
@@ -141,30 +105,46 @@ AudioManager.prototype.bindPlayBtnListeners = function () {
             self.$currentTrack = $(this).parent();
             self.play();
             self._setPauseImgButton($(this).parent());
+            $('#playTrackBtn').css('background-position', '8px -50px');
         } else {
             self.pause();
             self._setPlayImgButton($(this).parent());
+            $('#playTrackBtn').css('background-position', '8px 0');
         }
-    }
+    };
 
     $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
-}
+};
 
-AudioManager.prototype.bindListeners = function () {
+AudioManager.prototype.bindListeners = function() {
     var self = this;
 
-    $('#playTrackBtn').click(function () {
+    $('#playTrackBtn').click(function() {
         if (self.audio.paused) {
             self.play();
             self._setPauseImgButton(self.$currentTrack);
+            $('#playTrackBtn').css('background-position', '8px -50px');
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
+            $('#playTrackBtn').css('background-position', '8px 0');
         }
     });
 
     $('#nextTrackBtn').click(self._nextTrack);
     $('#prevTrackBtn').click(self._prevTrack);
 
-    $('.itemsContainer').on('AfterDropped', self._updateGlobalTracks);
-}
+    $('#volumeImg').click(function () {
+        if (self.audio.volume == 0) {
+            self.audio.volume = 1;
+            $('#volumeImg').css('background-position', '0 0');
+        } else {
+            self.audio.volume = 0;
+            $('#volumeImg').css('background-position', '0 -120px');
+        }
+    });
+
+    $('.itemsContainer').on('AfterDropped', function() {
+        self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    });
+};
