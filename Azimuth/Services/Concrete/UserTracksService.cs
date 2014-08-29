@@ -114,20 +114,45 @@ namespace Azimuth.Services.Concrete
             using (_unitOfWork)
             {
                 var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
-
-                pt.Where(s => trackId.Contains(s.Identifier.Track.Id)).Select((item, i) =>
+                int i = 0;
+                foreach (var id in trackId)
                 {
-                    item.TrackPosition = newIndex + i;
-                    return item;
-                }).ToList();
-
-                pt.ForEach((item, i) =>
-                {
-                    if (!trackId.Contains(item.Identifier.Track.Id) && item.TrackPosition >= newIndex)
+                    int oldIndex = pt.Where(s => s.Identifier.Track.Id == id).Select(pos => pos.TrackPosition).First();
+                    pt.Where(s => s.Identifier.Track.Id == id).Select((item) =>
                     {
-                        item.TrackPosition += trackId.Count();
+                        item.TrackPosition = newIndex + i++;
+                        return item;
+                    }).ToList();
+
+
+                    if (oldIndex > newIndex)
+                    {
+                        // +
+                        pt.Where(
+                            s =>
+                                !trackId.Contains(s.Identifier.Track.Id) && s.TrackPosition >= newIndex &&
+                                s.TrackPosition < oldIndex).Select(
+                                    (item) =>
+                                    {
+                                        item.TrackPosition++;
+                                        return item;
+                                    }).ToList();
                     }
-                });
+                    else
+                    {
+                        // -
+                        pt.Where(
+                            s =>
+                                !trackId.Contains(s.Identifier.Track.Id) &&
+                                s.TrackPosition <= newIndex + trackId.Count() - 1 &&
+                                s.TrackPosition > oldIndex - i).Select(
+                                    (item) =>
+                                    {
+                                        item.TrackPosition--;
+                                        return item;
+                                    }).ToList();
+                    }
+                }
                 _unitOfWork.Commit();
             }
         }
