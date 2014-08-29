@@ -1,6 +1,8 @@
 ﻿#playlists {
-    width: 24%; 
-    left: 5%
+    width: 24%;
+    height: 85%;
+    top: 10%;
+    left: 5%;
 }
 
 #separator {
