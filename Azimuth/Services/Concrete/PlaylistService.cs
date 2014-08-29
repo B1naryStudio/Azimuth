@@ -143,6 +143,9 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<PlaylistData>> GetUsersPlaylists()
         {
+            var currentEmail = AzimuthIdentity.Current.UserCredential.Email;
+            return await Task.Run(() =>
+            {
                 using (_unitOfWork)
                 {
                     var userRepo = _unitOfWork.GetRepository<User>() as UserRepository;
@@ -150,8 +153,7 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new NullReferenceException();
                     }
-                    var az = AzimuthIdentity.Current;
-                    var userId = userRepo.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
 
                     var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => new PlaylistData
                     {
@@ -169,6 +171,8 @@ namespace Azimuth.Services.Concrete
                     }).ToList();
                     return playlists;
                 }
+            });
+                
         }
 
         public void RemovePlaylistById(int id)
