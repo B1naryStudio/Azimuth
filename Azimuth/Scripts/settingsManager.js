@@ -216,7 +216,7 @@ SettingsManager.prototype.bindListeners = function () {
         } else {
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function (index) {
                 self.$searchInput.next().children().remove();
-                return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+                return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
         }
     });
