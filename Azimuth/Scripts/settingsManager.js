@@ -21,13 +21,12 @@ var SettingsManager = function (manager) {
             url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
             type: 'GET',
             async: false,
-            success: function (playlistData) {
-                var tracks = playlistData;
-                for (var i = 0; i < tracks.length; i++) {
-                    var track = tracks[i];
-                    track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
-                    self.playlistTrackTemplate.tmpl(track).appendTo('#playlistTracks');
+            success: function (tracksData) {
+                for (var i = 0; i < tracksData.length; i++) {
+                    tracksData[i].Duration = Math.floor(tracksData[i].Duration / 60) + ":" + (tracksData[i].Duration % 60 < 10 ? "0" + tracksData[i].Duration % 60 : tracksData[i].Duration % 60);
                 }
+                self.playlistTracksGlobal = tracksData;
+                self.showPlaylistTracks(tracksData);
                 //$('.draggable').makeDraggable({
                 $('.stuck.draggable').makeDraggable({
                     contextMenu: [
@@ -86,7 +85,7 @@ var SettingsManager = function (manager) {
 
 };
 
-SettingsManager.prototype.showTracks = function (tracks) {
+SettingsManager.prototype.showPlaylistTracks = function (tracks) {
     var self = this;
 
     $('#playlistTracks').find('.track').remove();
@@ -215,7 +214,7 @@ SettingsManager.prototype.bindListeners = function () {
             self.showPlaylists(foundedPlaylist);
             $('.accordion .tableRow').on("click", self._getTracks);
         } else {
-            self.showTracks(self.playlistTracksGlobal.filter(function (index) {
+            self.showPlaylistTracks(self.playlistTracksGlobal.filter(function (index) {
                 self.$searchInput.next().children().remove();
                 return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
             }));
