@@ -70,7 +70,7 @@
     top: 68%; 
     left: 50%;
     margin-left: -16px;
-    background: url("../Images/media_volume.png") no-repeat 0 -40px;
+    background: url("../Images/media_volume.png") no-repeat 0 0;
 }
 
 #volume {
@@ -93,4 +93,14 @@
     background-color: #428bca;
     -ms-border-radius: 2px; 
     border-radius: 2px
+}
+
+#playTrackBtn {
+    content: "";
+    width: 100%;
+    height: 27%;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    display: block;
+    background: url("../Images/media_play_pause.png") no-repeat 8px 0;
 }

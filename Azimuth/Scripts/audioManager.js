@@ -105,9 +105,11 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             self.$currentTrack = $(this).parent();
             self.play();
             self._setPauseImgButton($(this).parent());
+            $('#playTrackBtn').css('background-position', '8px -50px');
         } else {
             self.pause();
             self._setPlayImgButton($(this).parent());
+            $('#playTrackBtn').css('background-position', '8px 0');
         }
     };
 
@@ -121,16 +123,17 @@ AudioManager.prototype.bindListeners = function() {
         if (self.audio.paused) {
             self.play();
             self._setPauseImgButton(self.$currentTrack);
+            $('#playTrackBtn').css('background-position', '8px -50px');
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
+            $('#playTrackBtn').css('background-position', '8px 0');
         }
     });
 
     $('#nextTrackBtn').click(self._nextTrack);
     $('#prevTrackBtn').click(self._prevTrack);
 
-    $('#volumeImg').css('background-position', '0 0');
     $('#volumeImg').click(function () {
         if (self.audio.volume == 0) {
             self.audio.volume = 1;
