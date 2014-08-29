@@ -20,7 +20,7 @@ var SettingsManager = function(manager) {
 			type: 'GET',
 			async: false,
 			success: function(playlistData) {
-				var tracks = playlistData.Result;
+				var tracks = playlistData;
 				for (var i = 0; i < tracks.length; i++) {
 					var track = tracks[i];
 					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
@@ -93,7 +93,7 @@ SettingsManager.prototype.showPlaylists = function(playlists) {
 				if (typeof playlistsData.Message === 'undefined') {
 					self.$reloginForm.hide();
 					self.$vkMusic.show();
-					self.playlists = playlistsData.Result;
+					self.playlists = playlistsData;
 					for (var i = 0; i < self.playlists.length; i++) {
 						var playlist = self.playlists[i];
 					    if (playlist.Accessibilty === 1) {
@@ -226,7 +226,8 @@ var moveTrackToNewPosition = function($currentItem, $draggableStub) {
     });
 }
 
-var saveTrackFromVkToPlaylist = function($currentItem, $draggableStub, $element) {
+var saveTrackFromVkToPlaylist = function ($currentItem, $draggableStub, $element) {
+    var self = this;
     var index = -1;
     var provider = $('.tab-pane.active').attr('id');
     var tracks = [];
@@ -252,8 +253,8 @@ var saveTrackFromVkToPlaylist = function($currentItem, $draggableStub, $element)
         dataType: 'json',
         contentType: 'application/json',
         async: true,
-        success: function() {
-            
+        success: function () {
+            self.showPlaylists();
         }
     });
 }

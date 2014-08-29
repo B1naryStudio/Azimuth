@@ -69,6 +69,7 @@ namespace Azimuth.Services.Concrete
 
                     ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
                     {
+                        Id = s.Identifier.Track.Id,
                         Name = s.Identifier.Track.Name,
                         Duration = s.Identifier.Track.Duration,
                         Genre = s.Identifier.Track.Genre,
