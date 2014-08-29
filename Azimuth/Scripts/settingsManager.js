@@ -1,7 +1,8 @@
 var SettingsManager = function(manager) {
     var self = this;
     this.audioManager = manager;
-	this.playlistsGlobal = [];
+    this.playlistsGlobal = [];
+    this.playlistTracksGlobal = [];
 	this.stringForCreateBtn = "Create new playlist ";
 	this.playlistTrackTemplate = $("#playlistTrackTemplate");
 	this.playlistTemplate = $("#playlistTemplate");
@@ -11,31 +12,32 @@ var SettingsManager = function(manager) {
 	this.$playlistsTable = $('#playlistsTable');
 	this.$searchInput = $('#searchPlaylistName');
 	this.$createNewPlaylistBtn = $('#createNewPlaylistBtn');
+    this.$vkMusicTable = $('#vkMusicTable').parent();
 
 	this._getTracks = function() {
 		//var $dragList = $(this).next();
 		//if (!$(this).hasClass('active') && $dragList.children().length === 0) {
-		$.ajax({
-		    url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
-			type: 'GET',
-			async: false,
-			success: function(tracksData) {
-			    var tracks = tracksData;
-				for (var i = 0; i < tracks.length; i++) {
-					var track = tracks[i];
-					track.Duration = Math.floor(track.Duration / 60) + ":" + (track.Duration % 60 < 10 ? "0" + track.Duration % 60 : track.Duration % 60);
-					self.playlistTrackTemplate.tmpl(track).appendTo('#playlistTracks');
-				}
-				$('.draggable').makeDraggable({
-					contextMenu:[
-						{ 'id': '1', 'name': 'first action', "isNewSection": "false" },
-						{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
-						{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
-						{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
-					]
-				});
-			}
-		});
+	    $.ajax({
+	        url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
+	        type: 'GET',
+	        async: false,
+	        success: function (tracksData) {
+	            for (var i = 0; i < tracksData.length; i++) {
+	                tracksData[i].Duration = Math.floor(tracksData[i].Duration / 60) + ":" + (tracksData[i].Duration % 60 < 10 ? "0" + tracksData[i].Duration % 60 : tracksData[i].Duration % 60);
+	            }
+	            self.playlistTracksGlobal = tracksData;
+	            self.showTracks(tracksData);
+	            $('.draggable').makeDraggable({
+	                contextMenu: [
+	                    { 'id': '1', 'name': 'first action', "isNewSection": "false" },
+	                    { 'id': '2', 'name': 'second action', "isNewSection": "false" },
+	                    { 'id': '3', 'name': 'third action', "isNewSection": "true" },
+	                    { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+	                ]
+	            });
+	            self.$searchInput.val('');
+	        }
+	});
 		//}
 		//$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
 		$('#playlistsTable').hide();
@@ -81,6 +83,15 @@ var SettingsManager = function(manager) {
 	};
 };
 
+SettingsManager.prototype.showTracks = function (tracks) {
+    var self = this;
+
+    $('#playlistTracks').find('.track').remove();
+    for (var i = 0; i < tracks.length; i++) {
+        self.playlistTrackTemplate.tmpl(tracks[i]).appendTo('#playlistTracks');
+    }
+};
+
 SettingsManager.prototype.showPlaylists = function(playlists) {
 	var self = this;
 	self.$playlistsTable.find(".tableHeader").remove();
@@ -90,7 +101,7 @@ SettingsManager.prototype.showPlaylists = function(playlists) {
 			success: function(playlistsData) {
 				if (typeof playlistsData.Message === 'undefined') {
 					self.$reloginForm.hide();
-					self.$vkMusic.show();
+					self.$vkMusicTable.show();
 					self.playlists = playlistsData;
 					for (var i = 0; i < self.playlists.length; i++) {
 						var playlist = self.playlists[i];
@@ -106,7 +117,7 @@ SettingsManager.prototype.showPlaylists = function(playlists) {
 				} else {
 					self.$reloginForm.show();
 					self.$reloginForm.find('a').attr('href', reloginUrl);
-					self.$vkMusic.hide();
+					self.$vkMusicTable.hide();
 				}
 				$('.accordion .tableRow').on("click", self._getTracks);
 			}
@@ -139,7 +150,7 @@ SettingsManager.prototype.bindListeners = function() {
 			success: function(tracks) {
 				if (typeof tracks.Message === 'undefined') {
 					self.$reloginForm.hide();
-					self.$vkMusic.show();
+					self.$vkMusicTable.show();
 					var list = $('.vkMusicList');
 					for (var i = 0; i < tracks.length; i++) {
 						var track = tracks[i];
@@ -157,7 +168,7 @@ SettingsManager.prototype.bindListeners = function() {
 				} else {
 					self.$reloginForm.show();
 					self.$reloginForm.find('a').attr('href', reloginUrl);
-					self.$vkMusic.hide();
+					self.$vkMusicTable.hide();
 				}
 			    self.audioManager.bindPlayBtnListeners();
 			}
@@ -177,13 +188,13 @@ SettingsManager.prototype.bindListeners = function() {
 		$(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
 	});
 
-	$('#checkall').click(function () {
-		if ($(this).prop('checked')) {
-			$('input:checkbox').prop('checked', true);
-		} else {
-			$('input:checkbox').prop('checked', false);
-		}
-	});
+	//$('#checkall').click(function () {
+	//	if ($(this).prop('checked')) {
+	//		$('input:checkbox').prop('checked', true);
+	//	} else {
+	//		$('input:checkbox').prop('checked', false);
+	//	}
+	//});
 
 	this.$searchInput.on('input', function (e) {
 	    self.$createNewPlaylistBtn.hide();
@@ -193,6 +204,10 @@ SettingsManager.prototype.bindListeners = function() {
 			self.$searchInput.next().children().remove();
 			return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
 		}));
+		self.showTracks(self.playlistTracksGlobal.filter(function (index) {
+		    self.$searchInput.next().children().remove();
+		    return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+		}));
 		$('.accordion .tableRow').on("click", self._getTracks);
 	});
 
@@ -200,7 +215,9 @@ SettingsManager.prototype.bindListeners = function() {
 	    $('#backToPlaylistsBtn').hide();
 	    $('#playlistTracks').empty();
 	    $('#playlistTracks').hide();
-        $('#playlistsTable').show(); 
+	    self.showPlaylists(self.playlistsGlobal);
+	    self.$playlistsTable.show();
+	    self.$searchInput.val('');
 	});
 
     $('#playlists').mCustomScrollbar({
