@@ -200,7 +200,7 @@ namespace Azimuth.Services.Concrete
                     }
                     else
                     {
-                        throw new PrivilegeNotHeldException("Only creator can delete public playlist id="+userId);
+                        throw new PrivilegeNotHeldException("Only creator can delete public playlist");
                     }
                 }
                 else
