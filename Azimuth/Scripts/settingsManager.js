@@ -1,6 +1,7 @@
 var SettingsManager = function (manager) {
     var self = this;
     this.audioManager = manager;
+    this.tracksGlobal = [];
     this.playlistsGlobal = [];
     this.playlistTracksGlobal = [];
     this.stringForCreateBtn = "Create new playlist ";
@@ -10,7 +11,8 @@ var SettingsManager = function (manager) {
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
     this.$playlistsTable = $('#playlistsTable');
-    this.$searchInput = $('#searchPlaylistName');
+    this.$searchPlaylistInput = $('#searchPlaylistName');
+    this.$searchTrackInput = $('#searchTrackName');
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
 
@@ -37,7 +39,7 @@ var SettingsManager = function (manager) {
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition
                 });
-                self.$searchInput.val('');
+                self.$searchPlaylistInput.val('');
             }
         });
         //}
@@ -83,6 +85,15 @@ var SettingsManager = function (manager) {
     };
 
 
+};
+
+SettingsManager.prototype.showTracks = function (tracks) {
+    var self = this;
+
+    $('.vkMusicList').find('.track').remove();
+    for (var i = 0; i < tracks.length; i++) {
+        self.trackTemplate.tmpl(tracks[i]).appendTo('.vkMusicList');
+    }
 };
 
 SettingsManager.prototype.showPlaylistTracks = function (tracks) {
@@ -131,7 +142,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
             }
         } else {
             self.$createNewPlaylistBtn.show();
-            self.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchInput.val());
+            self.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchPlaylistInput.val());
         }
     }
 };
@@ -141,7 +152,7 @@ SettingsManager.prototype.bindListeners = function () {
 
     $(document).on('PlaylistAdded', function (playlist) { // TODO Remove event triggering on document object
         self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
-        self.$searchInput.trigger('input');
+        self.$searchPlaylistInput.trigger('input');
     });
 
     $('.providerBtn').click(function (e) {
@@ -155,10 +166,10 @@ SettingsManager.prototype.bindListeners = function () {
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
                     for (var i = 0; i < tracks.length; i++) {
-                        var track = tracks[i];
-                        track.duration = self._toFormattedTime(track.duration, true);
-                        self.trackTemplate.tmpl(track).appendTo(list);
+                        tracks[i].duration = self._toFormattedTime(tracks[i].duration, true);
                     }
+                    self.tracksGlobal = tracks;
+                    self.showTracks(tracks);
                     //$('.draggable').makeDraggable({
                     list.parent().parent().makeDraggable({
                         contextMenu: [
@@ -179,22 +190,22 @@ SettingsManager.prototype.bindListeners = function () {
         });
     });
 
+    this.$searchTrackInput.keyup(function (e) {
+        var searchParam = $(this).val().toLocaleLowerCase();
 
-    //$('#checkall').click(function () {
-    //	if ($(this).prop('checked')) {
-    //		$('input:checkbox').prop('checked', true);
-    //	} else {
-    //		$('input:checkbox').prop('checked', false);
-    //	}
-    //});
+        self.showTracks(self.tracksGlobal.filter(function (index) {
+            self.$searchTrackInput.next().next().children().remove();
+            return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
+        }));
+    });
 
-    this.$searchInput.keyup(function (e) {
+    this.$searchPlaylistInput.keyup(function (e) {
         var searchParam = $(this).val().toLocaleLowerCase();
 
         if (self.$playlistsTable.css('visibility') != 'hidden' && self.$playlistsTable.css('display') != 'none') {
 
             var foundedPlaylist = self.playlistsGlobal.filter(function (index) {
-                self.$searchInput.next().children().remove();
+                self.$searchPlaylistInput.next().children().remove();
                 return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
             });
 
@@ -215,7 +226,7 @@ SettingsManager.prototype.bindListeners = function () {
             $('.accordion .tableRow').on("click", self._getTracks);
         } else {
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function (index) {
-                self.$searchInput.next().children().remove();
+                self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
         }
@@ -229,7 +240,7 @@ SettingsManager.prototype.bindListeners = function () {
         self.$playlistsTable.empty();
         self.showPlaylists(self.playlistsGlobal);
         self.$playlistsTable.show();
-        self.$searchInput.val('');
+        self.$searchPlaylistInput.val('');
         $('.accordion .tableRow').on("click", self._getTracks);
     });
 
@@ -239,7 +250,7 @@ SettingsManager.prototype.bindListeners = function () {
     });
 
     this._createPlaylist = function () {
-        var playlistName = self.$searchInput.val();
+        var playlistName = self.$searchPlaylistInput.val();
         $.ajax({
             url: '/api/playlists?name=' + playlistName + '&accessibilty=Public',
             type: 'POST',
