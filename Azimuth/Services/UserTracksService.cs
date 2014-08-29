@@ -96,25 +96,25 @@ namespace Azimuth.Services
             }
         }
 
-        public void PutTrackToPlaylist(long playlistId, int newIndex, List<string> trackId)
+        public void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId)
         {
             using (_unitOfWork)
             {
                 var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
-                //pt.Where(s => s.Identifier.Track.Id == trackId).Select(v =>
-                //{
-                //    v.TrackPosition = newIndex;
-                //    return v;
-                //}).ToList();
 
-                //pt.ForEach((item, n) =>
-                //{
-                //    if (item.Identifier.Track.Id != trackId[0] && item.TrackPosition <= newIndex)
-                //    {
-                //        item.TrackPosition += 1;
-                //    }
-                //});
+                pt.Where(s => trackId.Contains(s.Identifier.Track.Id)).Select((item, i) =>
+                {
+                    item.TrackPosition = newIndex + i;
+                    return item;
+                }).ToList();
 
+                pt.ForEach((item, i) =>
+                {
+                    if (!trackId.Contains(item.Identifier.Track.Id) && item.TrackPosition >= newIndex)
+                    {
+                        item.TrackPosition += trackId.Count();
+                    }
+                });
                 _unitOfWork.Commit();
             }
         }

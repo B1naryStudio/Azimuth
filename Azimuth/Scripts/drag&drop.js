@@ -1,15 +1,17 @@
 ﻿$(document).ready(function () {
 
     $.fn.makeDraggable = function (options) {
+        var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
+        var contextMenu = options.contextMenu;
+        var saveVkTrackToPlaylist = options.saveVkTrack;
+
         var $rootElement = this;
         var $currentItem = null;
-        //var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
         var $contextMenuContainer = $('#contextMenu').empty();
         var $contextMenuTemplate = $('#contextmenuTemplate');
 
-        var contextMenu = options.contextMenu;
         var movingInfo = { "data": [] };
         var timerId = null;
         var lastEvent = null;
@@ -90,58 +92,12 @@
                     }
                 } else {
 
-                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks') {
-                        var playlistId = $('.playlist.active').children('.playlistId').text();
-                        var tracksIds = [];
-                        //var trackId = $currentItem.children().children('.trackId').text();
-
-                        $currentItem.children().each(function() {
-                            tracksIds.push($(this).find('.trackId').text());
-                        }).get();
-
-
-                        //$('.draggable-item-selected').each(function () {
-                        //    tracks.push($(this).closest('.tableRow').find('.trackId').text());
-                        //}).get();
-
-                        //data: JSON.stringify({
-                        //    "Id": playlistId,
-                        //    "TrackIds": tracks
-                        //}),
-
-                        //traditional: true,
-                        //data: JSON.stringify({
-                        //"trackId": tracksIds
-                        //}),
-                        //contentType: 'application/json',
-
-                        var index = $draggableStub.index();
-                        $.ajax({
-                            url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
-                            type: 'PUT',
-                            dataType: 'json',
-                            data: JSON.stringify(tracksIds),
-                            contentType: 'application/json; charset=utf-8'
-                        });
-
+                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
+                        moveTrackToNewPosition($currentItem, $draggableStub);
                     }
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
-                        var index = -1;
-                        var provider = $('.tab-pane.active').attr('id');
-                        var tracks = [];
-                        var playlistId = -1;
-                        $currentItem.children().toggleClass('vk-item', false);
-                        if ($element.hasClass('playlist')) {
-                            playlistId = $element.children('.playlistId').text();
-                        } else {
-                            playlistId = $('.playlist.active').children('.playlistId').text();
-                            index = $draggableStub.index();
-                        }
-                        $('.draggable-item-selected').each(function() {
-                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
-                        }).get();
-                        _trackPostQuery(provider, index, playlistId, tracks);
+                        saveVkTrackToPlaylist($currentItem, $draggableStub, $element);
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -161,7 +117,6 @@
                     }
                 }
             }
-            //$draggableStub.detach();
             $draggableStub.hide();
         });
 
@@ -173,8 +128,6 @@
             }
             $contextMenuContainer.append(object);
         }
-
-
 
         $('.contextMenuActionName').on('1', function () {
             alert("1 action");
@@ -200,20 +153,6 @@
             }
 
         });
-
-        function _trackPostQuery(provider, index, playlistId, tracks) {
-            $.ajax({
-                url: '/api/usertracks?provider=' + provider + "&index=" + index,
-                type: 'POST',
-                data: JSON.stringify({
-                    "Id": playlistId,
-                    "TrackIds": tracks
-                }),
-                dataType: 'json',
-                contentType: 'application/json',
-                async: true
-            });
-        }
 
         function _makeDraggable(event) {
 
@@ -304,8 +243,14 @@
             }
             $currentItem.hide();
             var $elem = $(document.elementFromPoint(x, y));
-            if ($elem.parent().hasClass('playlist') && event.type == "mouseup") {
-                return $elem.parent();
+
+            if (event.type == "mouseup") {
+                if ($elem.hasClass('playlist')) {
+                    return $elem;
+                }
+                if ($elem.parents('.playlist').length > 0 && event.type == "mouseup") {
+                    return $elem.parents('.playlist');
+                }
             }
             if ($elem.hasClass('delete-area'))
                 _onDeleteArea();
@@ -332,7 +277,7 @@
             } else {
                 $('.delete-area').css({
                     'border': 'solid black 1px'
-                })
+                });
             }
         }
 
@@ -379,13 +324,13 @@
             _setDeleteAreaCss();
         });
 
-        $('.draggable-list').on('shuffle', function () {
+        $('.draggable-list').on('shuffle', function() {
             var $this = $(this);
             var elems = $this.children('li');
-            elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+            elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
             $this.remove(elems[0].tagName);
             $this.prepend(elems);
-        })
+        });
 
         $('.draggable-list').on('add', function (e, data) {
             var $newItem = $('<li>').toggleClass('draggable-item', true).text(data);

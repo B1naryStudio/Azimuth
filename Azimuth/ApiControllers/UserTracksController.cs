@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
+using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
@@ -71,7 +72,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                _userTracksService.PutTrackToPlaylist(playlistId, newIndex, trackId);
+                List<long> tracksIds = trackId.ConvertAll<long>((item) => { return Convert.ToInt64(item); });
+                _userTracksService.PutTrackToPlaylist(playlistId, newIndex, tracksIds);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)

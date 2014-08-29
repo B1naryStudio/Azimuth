@@ -33,7 +33,8 @@ var SettingsManager = function(manager) {
 						{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
 						{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
 						{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
-					]
+					],
+					onMoveTrackToNewPosition: moveTrackToNewPosition
 				});
 			}
 		});
@@ -154,7 +155,8 @@ SettingsManager.prototype.bindListeners = function() {
 							{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
 							{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
 							{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
-						]
+						],
+						saveVkTrack: saveTrackFromVkToPlaylist
 					});
 				} else {
 					self.$reloginForm.show();
@@ -205,3 +207,50 @@ SettingsManager.prototype.bindListeners = function() {
         $('#playlistsTable').show(); 
     });
 };
+
+var moveTrackToNewPosition = function($currentItem, $draggableStub) {
+    var playlistId = $('.playlist.active').children('.playlistId').text();
+    var tracksIds = [];
+
+    $currentItem.children().each(function () {
+        tracksIds.push($(this).find('.trackId').text());
+    }).get();
+
+    var index = $draggableStub.index();
+    $.ajax({
+        url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
+        type: 'PUT',
+        dataType: 'json',
+        data: JSON.stringify(tracksIds),
+        contentType: 'application/json; charset=utf-8'
+    });
+}
+
+var saveTrackFromVkToPlaylist = function($currentItem, $draggableStub, $element) {
+    var index = -1;
+    var provider = $('.tab-pane.active').attr('id');
+    var tracks = [];
+    var playlistId = -1;
+    $currentItem.children().toggleClass('vk-item', false);
+    if ($element.hasClass('playlist')) {
+        playlistId = $element.children('.playlistId').text();
+    } else {
+        playlistId = $('.playlist.active').children('.playlistId').text();
+        index = $draggableStub.index();
+    }
+    $('.draggable-item-selected').each(function () {
+        tracks.push($(this).closest('.tableRow').find('.trackId').text());
+    }).get();
+
+    $.ajax({
+        url: '/api/usertracks?provider=' + provider + "&index=" + index,
+        type: 'POST',
+        data: JSON.stringify({
+            "Id": playlistId,
+            "TrackIds": tracks
+        }),
+        dataType: 'json',
+        contentType: 'application/json',
+        async: true
+    });
+}
