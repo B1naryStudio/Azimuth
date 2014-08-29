@@ -67,11 +67,11 @@ namespace Azimuth.ApiControllers
 
         [HttpPut]
         [Route("put")]
-        public HttpResponseMessage PutTrackToPlaylist(List<string> trackId, long playlistId, int newIndex)
+        public HttpResponseMessage PutTrackToPlaylist(long playlistId, int newIndex, [FromBody] List<string> trackId)
         {
             try
             {
-                _userTracksService.PutTrackToPlaylist(trackId, playlistId, newIndex);
+                _userTracksService.PutTrackToPlaylist(playlistId, newIndex, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)

@@ -109,17 +109,18 @@
                         //    "TrackIds": tracks
                         //}),
 
+                        //traditional: true,
+                        //data: JSON.stringify({
+                        //"trackId": tracksIds
+                        //}),
+                        //contentType: 'application/json',
+
                         var index = $draggableStub.index();
                         $.ajax({
                             url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
                             type: 'PUT',
-                            data: { 'trackId': tracksIds },
-                            //data: JSON.stringify({
-                            //"trackId": tracksIds
-                            //}),
                             dataType: 'json',
-                            contentType: 'application/json',
-                            async: false
+                            data: { trackId: JSON.stringify(tracksIds) }
                         });
 
                     }

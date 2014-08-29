@@ -96,12 +96,12 @@ namespace Azimuth.Services
             }
         }
 
-        public void PutTrackToPlaylist(List<string> trackId, long playlistId, int newIndex)
+        public void PutTrackToPlaylist(long playlistId, int newIndex, List<string> trackId)
         {
             using (_unitOfWork)
             {
-                //var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
-                //pt.Where(s => s.Identifier.Track.Id == trackId[0]).Select(v =>
+                var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+                //pt.Where(s => s.Identifier.Track.Id == trackId).Select(v =>
                 //{
                 //    v.TrackPosition = newIndex;
                 //    return v;
@@ -114,28 +114,6 @@ namespace Azimuth.Services
                 //        item.TrackPosition += 1;
                 //    }
                 //});
-
-
-                var some = 1;
-
-
-                //pt.PlaylistTracks.ForEach((item, n) =>
-                //{
-                //    if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
-                //    {
-                //        item.TrackPosition += i;
-                //    }
-                //});
-
-                //var track = _trackRepository.GetOne(t => t.Id == trackId);
-                //if (track == null)
-                //    throw new BadRequestException("There is no track with current Id in database");
-
-                //var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
-                //if (playlist == null)
-                //    throw new BadRequestException("There is no playlist with current Id in database");                
-
-                //track.Playlists.Add(playlist);
 
                 _unitOfWork.Commit();
             }
