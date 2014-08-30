@@ -22,6 +22,10 @@
         }
     };
 
+    self.audio.ontimeupdate = function() {
+        $('#timeBar').css('width', self.audio.currentTime / self.audio.duration * 100 + '%');
+    };
+
     this._nextTrack = function() {
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
@@ -82,7 +86,7 @@
                     } else {
                         url = $($(self.tracksGlobal).get(index - 1)).text();
                     }
-                    if (!self.audio.paused) {
+                    if (!self.audio.paused || self.audio.currentTime === self.audio.duration) {
                         self._setAttribute(url);
                         self.play();
                     } else {
@@ -109,6 +113,16 @@ AudioManager.prototype.pause = function() {
 AudioManager.prototype.setVolume = function(value) {
     var self = this;
     self.audio.volume = value;
+};
+
+AudioManager.prototype.setCurrentTime = function (value) {
+    var self = this;
+    self.audio.currentTime = value;
+};
+
+AudioManager.prototype.getDuration = function () {
+    var self = this;
+    return self.audio.duration;
 };
 
 AudioManager.prototype.bindPlayBtnListeners = function() {

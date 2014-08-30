@@ -246,7 +246,8 @@ SettingsManager.prototype.bindListeners = function () {
 
     $('#playlists').mCustomScrollbar({
         theme: 'dark-3',
-        scrollButtons: { enable: true }
+        scrollButtons: { enable: true },
+        advanced: { updateOnSelectorChange: "true"}
     });
 
     $('#volumeBar').on('mousedown', function(e) {
@@ -254,6 +255,13 @@ SettingsManager.prototype.bindListeners = function () {
         var percentage = 100 * position / $('#volumeBar').height();
         $('#volume').css('height', percentage + '%');
         self.audioManager.setVolume(position / $('#volumeBar').height());
+    });
+
+    $('#progressBar').on('mousedown', function (e) {
+        var position = e.pageX - $('#progressBar').offset().left;
+        var percentage = 100 * position / $('#progressBar').width();
+        $('#timeBar').css('width', percentage + '%');
+        self.audioManager.setCurrentTime(self.audioManager.getDuration() * percentage / 100);
     });
 
     this._createPlaylist = function () {

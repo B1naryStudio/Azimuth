@@ -98,6 +98,28 @@
     border-radius: 3px;
 }
 
+#progressBar {
+    position: relative;
+    width: 90%;
+    left: 5%;
+    margin-left: -5px;
+    height: 7px;
+    background-color: #ccc;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#timeBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #428bca;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+
 #playTrackBtn {
     content: "";
     width: 100%;
