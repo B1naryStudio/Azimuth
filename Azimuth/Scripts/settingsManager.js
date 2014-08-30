@@ -37,7 +37,8 @@ var SettingsManager = function (manager) {
 						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": false, "hasSubMenu": true, "callback" : moveTrackToPlaylistActions },
 						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "callback": removeSelectedTracksAction }
                     ],
-                    onMoveTrackToNewPosition: moveTrackToNewPosition
+                    onMoveTrackToNewPosition: moveTrackToNewPosition,
+                    showSubContextMenu: showSubContextMenuAction
                 });
                 self.$searchPlaylistInput.val('');
             }
@@ -179,7 +180,8 @@ SettingsManager.prototype.bindListeners = function () {
                             { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "callback": moveTrackToPlaylistActions },
                             { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "callback": createPlaylistAction }
                         ],
-                        saveVkTrack: saveTrackFromVkToPlaylist
+                        saveVkTrack: saveTrackFromVkToPlaylist,
+                        showSubContextMenu: showSubContextMenuAction    
                     });
                 } else {
                     self.$reloginForm.show();
@@ -281,19 +283,19 @@ var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
     });
 }
 
-var saveTrackFromVkToPlaylist = function ($currentItem, $draggableStub, $element) {
+var saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
     var self = this;
-    var index = -1;
+    //var index = -1;
     var provider = $('.tab-pane.active').attr('id');
     var tracks = [];
-    var playlistId = -1;
+    //var playlistId = -1;
     $currentItem.children().toggleClass('vk-item', false);
-    if ($element.hasClass('playlist')) {
-        playlistId = $element.children('.playlistId').text();
-    } else {
-        playlistId = $('.playlist.active').children('.playlistId').text();
-        index = $draggableStub.index();
-    }
+    //if ($element.hasClass('playlist')) {
+    //    playlistId = $element.children('.playlistId').text();
+    //} else {
+    //    playlistId = $('.playlist.active').children('.playlistId').text();
+    //    //index = $draggableStub.index();
+    //}
     $('.draggable-item-selected').each(function () {
         tracks.push($(this).closest('.tableRow').find('.trackId').text());
     }).get();
@@ -325,10 +327,19 @@ var removeSelectedTracksAction = function () {
     alert("remove");
 };
 
-var hideSelectedTracksAction = function() {
-    alert('hide');
+var hideSelectedTracksAction = function(list) {
+    list.hide();
+    list.toggleClass('draggable-item-selected', false);
 };
 
 var createPlaylistAction = function() {
     alert('createplaylist');
+};
+
+var showSubContextMenuAction = function($subContextMenuContainer, $object, $toElement) {
+    //var self = $(this);
+    //var $toElement = $(e.toElement);
+    if ($object.hasClass('hasSubMenu') && $toElement.parents('.subMenu').length < 1) {
+        $subContextMenuContainer.hide();
+    }
 };

@@ -4,6 +4,7 @@
         var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
         var contextMenu = options.contextMenu;
         var saveVkTrackToPlaylist = options.saveVkTrack;
+        var subContextMenu = options.showSubContextMenu;
 
         var $rootElement = this;
         var $currentItem = null;
@@ -13,7 +14,7 @@
                                          '</div>');
                                                 
         //var $subContextMenuContainer = $('<div class="subContextMenu">dekgbdfjkjgbd</div>');
-        var $subContextMenuContainer = $('<div class="contextMenu"></div>');
+        var $subContextMenuContainer = $('<div class="contextMenu subMenu"></div>');
         var $contextMenuTemplate = $('#contextmenuTemplate');
         var $subContextMenuTemplate = $('#subContextmenuTemplate');
 
@@ -116,7 +117,14 @@
                     }
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
-                        saveVkTrackToPlaylist($currentItem, $draggableStub, $element);
+                        var playlistId = -1;
+                        if ($element.hasClass('playlist')) {
+                            playlistId = $element.children('.playlistId').text();
+                        } else {
+                            playlistId = $('.playlist.active').children('.playlistId').text();
+                            //index = $draggableStub.index();
+                        }
+                        saveVkTrackToPlaylist($currentItem, $draggableStub.index(), playlistId); // Maybe problem there
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -174,23 +182,36 @@
 
         this.mousedown(function (e) {
             var $target = $(e.target);
-             if (contextMenuSelected == true && e.which != 3) {
+             if (contextMenuSelected == true && e.which != 3 && !$target.parent().hasClass('hasSubMenu')) {
                  $contextMenuContainer.hide();
+                 $subContextMenuContainer.hide();
              }
-            if ($target.hasClass('contextMenuActionName')) {
+             if ($target.hasClass('contextMenuActionName')) {
+                 if ($target.parents().hasClass('subMenu')) {
+
+                     var index = -1;
+
+                     $currentItem = $container;
+                     $currentItem.append($('.draggable-item-selected'));
+                     if ($currentItem.children().length > 0) {
+                         saveVkTrackToPlaylist($currentItem, index, $target.parent().children('.playlistId').text());
+                     }
+                 }
+
+
                 var id = $target.attr('id');
                 switch (id) {
                     case 'selectall':
                         selectAllAction($(this).find('.track'));
                         break;
                     case 'movetoplaylist':
-                        moveToPlaylistAction();
+                        showSubContextMenuAction($subContextMenuContainer, $(this));
                         break;
                     case 'removeselected':
                         removeAction();
                         break;
                     case 'hideselected':
-                        hideAction();
+                        hideAction($(this).find('.track.draggable-item-selected'));
                         break;
                     case 'createplaylist':
                         createPlaylistAction();
@@ -265,12 +286,14 @@
                             }
                     });
 
-                $rootElement.find('.contextMenu .tableRow').mouseleave(function(e) {
-                    var self = $(this);
-                    if (self.hasClass('hasSubMenu')) {
-                        $subContextMenuContainer.hide();
-                    }
-                });
+                    $rootElement.find('.contextMenu .tableRow').mouseleave(function (e) {
+                        subContextMenu($subContextMenuContainer, $(this), $(e.toElement));
+                        //var self = $(this);
+                        //var $toElement = $(e.toElement);
+                        //if (self.hasClass('hasSubMenu') && $toElement.parents('.subMenu').length < 1) {
+                        //    $subContextMenuContainer.hide();
+                        //}
+                    });
             } else {
 
                 mousedown = true;
