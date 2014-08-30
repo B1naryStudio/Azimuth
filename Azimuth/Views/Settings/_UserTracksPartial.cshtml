@@ -5,9 +5,13 @@
         <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
         <div id="vkMusicTable" class="vkMusicTable">
             <div class="tableTitle">User Tracks</div>
-            <div id="progressBar">
-                <div id="timeBar"></div>
+            
+            <div id="statusBar">
+                <span id="currentTime" style="position: relative; left: 5%;"></span>
+                <span id="remainingTime" style="position: relative; left: 88%;"></span>
+                <div id="progressSlider"></div>
             </div>
+
             <div class="draggable-list vkMusicList"></div>
         </div>
     </div>
