@@ -18,6 +18,8 @@
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/settingsManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <div class="playlist-plated" >
             <div class="playlist-plated-info">
@@ -44,6 +46,7 @@
         </div>
     </script>
     <script>
+        var audioManager = new AudioManager();
         var playlists_global = null;
         var $playlistTemplate = $("#playlistTemplate");
         var $trackTemplate = $("#trackTemplate");
@@ -116,6 +119,8 @@
                     }
                 }
             });
+            audioManager.bindPlayBtnListeners();
+            $(this).toggleClass("active");
         }
 
     </script>
