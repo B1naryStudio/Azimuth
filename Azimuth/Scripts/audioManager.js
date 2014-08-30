@@ -3,9 +3,23 @@
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
+    this.audio.volume = 0.5;
+    this.beforeMuteVolume = null;
 
     self.audio.onended = function() {
         self._nextTrack();
+    };
+
+    self.audio.onvolumechange = function() {
+        if (self.audio.volume == 0) {
+            $('#volumeImg').css('background-position', '0 -120px');
+        } else if (self.audio.volume <= 0.33) {
+            $('#volumeImg').css('background-position', '0 -80px');
+        } else if (self.audio.volume <= 0.66) {
+            $('#volumeImg').css('background-position', '0 -40px');
+        } else {
+            $('#volumeImg').css('background-position', '0 0');
+        }
     };
 
     this._nextTrack = function() {
@@ -92,6 +106,11 @@ AudioManager.prototype.pause = function() {
     self.audio.pause();
 };
 
+AudioManager.prototype.setVolume = function(value) {
+    var self = this;
+    self.audio.volume = value;
+};
+
 AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
@@ -136,11 +155,13 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#volumeImg').click(function () {
         if (self.audio.volume == 0) {
-            self.audio.volume = 1;
+            self.audio.volume = self.beforeMuteVolume;
             $('#volumeImg').css('background-position', '0 0');
+            $('#volume').css('height', self.beforeMuteVolume*100 + '%');
         } else {
+            self.beforeMuteVolume = self.audio.volume;
             self.audio.volume = 0;
-            $('#volumeImg').css('background-position', '0 -120px');
+            $('#volume').css('height', 0);
         }
     });
 
