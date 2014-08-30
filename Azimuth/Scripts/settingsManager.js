@@ -298,12 +298,18 @@ SettingsManager.prototype.bindListeners = function() {
         }
     });
 
-    self.$friendList.click(function(e) {
-        console.log("5201543");
-        var provider = "Vkontakte";
+    self.$friendList.click(function(e) {;
+        var $currentItem = $(e.target);
+        var currentId;
+        if ($currentItem.hasClass('friend')) {
+            currentId = $currentItem.children('.friend-id').html();
+        } else {
+            currentId = $currentItem.parents('.friend').children('.friend-id').html();
+        }
+        var provider = "Vkontakte"; // TODO: Fix for all providers
         var reloginUrl = $(e.target).data('reloginurl');
         $.ajax({
-            url: '/api/user/friends/audio?provider=' + provider + '&friendId=5201543',
+            url: '/api/user/friends/audio?provider=' + provider + '&friendId=' + currentId,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
@@ -314,7 +320,6 @@ SettingsManager.prototype.bindListeners = function() {
                     }
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
-                    //$('.draggable').makeDraggable({
                     list.parent().parent().makeDraggable({
                         contextMenu: [
                             { 'id': '1', 'name': 'Select All', "isNewSection": "false" },
