@@ -154,7 +154,6 @@
                     return false;
                 }
                 contextMenuSelected = true;
-                //var $target = $(event.target).parents('#playlistTracks');
                 var $target = $(event.target).parents('.draggable-list').parent();
                 var parentOffset = $target.parent().offset();
                     var x = event.pageX - parentOffset.left;
@@ -167,19 +166,20 @@
                     $target.append($contextMenuContainer);
                     $contextMenuContainer.show();
 
-                    //$('.contextMenuActionName').on('1', function () {
-                    //    alert("1 action");
-                    //});
-                    //$('.contextMenuActionName').on('2', function () {
-                    //    alert("2 action");
-                //});
-
-                    $contextMenuContainer.children('#1').off('1').on('1', function () {
-                        //$(this).parent().parent().children('#playlistTracks.draggable-list').children().toggleClass('draggable-item-selected', true);
+                    $contextMenuContainer.children('#selectall').off('selectall').on('selectall', function () {
                         $(this).parent().parent().children('.draggable-list').children('.track').toggleClass('draggable-item-selected', true);
                     });
-                    $contextMenuContainer.children('#2').off('2').on('2', function () {
-                        alert("2 action");
+                    $contextMenuContainer.children('#movetoplaylist').off('movetoplaylist').on('movetoplaylist', function () {
+                        alert("movetoplaylist");
+                    });
+                    $contextMenuContainer.children('#removeselected').off('removeselected').on('removeselected', function () {
+                        alert("removeselected");
+                    });
+                    $contextMenuContainer.children('#hideselected').off('hideselected').on('hideselected', function () {
+                        alert("hideselected");
+                    });
+                    $contextMenuContainer.children('#createplaylist').off('createplaylist').on('createplaylist', function () {
+                        alert("createplaylist");
                     });
 
             } else {
@@ -239,20 +239,6 @@
                     } else if ($('.draggable-item-selected').length > 1) {
                         $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
                     }
-
-
-
-                    //if (!$currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0) {
-                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                    //} else if ($currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0 && !$currentItem.hasClass('draggable-item-selected')) {
-                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                    //} else if ($currentItem.hasClass('draggable-item-selected') && $('.draggable-item-selected').length < 2) {
-                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                    //} else if ($('.draggable-item-selected').length == 1) {
-                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                    //} else if ($('.draggable-item-selected').length > 1) {
-                    //    $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
-                    //}
                     $currentItem.toggleClass('draggable-item-selected', true);
                 }
             }

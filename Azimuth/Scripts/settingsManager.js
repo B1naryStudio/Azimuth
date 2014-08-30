@@ -32,10 +32,9 @@ var SettingsManager = function (manager) {
                 //$('.draggable').makeDraggable({
                 $('.stuck.draggable').makeDraggable({
                     contextMenu: [
-						{ 'id': '1', 'name': 'Select All', "isNewSection": "false" },
-						{ 'id': '2', 'name': 'second action', "isNewSection": "false" },
-						{ 'id': '3', 'name': 'third action', "isNewSection": "true" },
-						{ 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": "false" },
+						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": "false" },
+						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": "true" }
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition
                 });
@@ -173,10 +172,10 @@ SettingsManager.prototype.bindListeners = function () {
                     //$('.draggable').makeDraggable({
                     list.parent().parent().makeDraggable({
                         contextMenu: [
-                            { 'id': '1', 'name': 'Select All', "isNewSection": "false" },
-                            { 'id': '2', 'name': 'second action', "isNewSection": "false" },
-                            { 'id': '3', 'name': 'third action', "isNewSection": "true" },
-                            { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": "false" },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": "false" },
+                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": "true" },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": "false" }
                         ],
                         saveVkTrack: saveTrackFromVkToPlaylist
                     });
