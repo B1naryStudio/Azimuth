@@ -11,7 +11,7 @@
         var $currentItem = null;
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('<div class="subContextMenu contextMenu">' +
+        var $contextMenuContainer = $('<div class="contextMenu">' +
                                          '</div>');
 
         var $subContextMenuContainer = $('<div class="contextMenu subMenu"></div>');
@@ -92,6 +92,13 @@
         });
 
         $(document).mouseup(function () {
+
+            if ($currentItem != null && !event.shiftKey && !event.ctrlKey && !$currentItem.hasClass('itemsContainer')) {
+                if ($('.draggable-item-selected').length > 1) {
+                        $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
+                    }
+            }
+
             mousedown = false;
             clearTimeout(timerId);
             if ($currentItem) {
@@ -107,8 +114,8 @@
                 } else {
 
                     if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
-                        /moveTrackToNewPosition($currentItem, $draggableStub);
-                        cop
+                        //moveTrackToNewPosition($currentItem, $draggableStub);
+                        copyToPlaylistAction($currentItem, $draggableStub);
                     }
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
@@ -119,7 +126,11 @@
                             playlistId = $('.playlist.active').children('.playlistId').text();
                             //index = $draggableStub.index();
                         }
-                        saveVkTrackToPlaylist($currentItem, $draggableStub.index(), playlistId); // Maybe problem there
+                        var index = -1;
+                        if (!$draggableStub.parent().hasClass('vkMusicList')) {
+                            index = $draggableStub.index();
+                        }
+                        saveVkTrackToPlaylist($currentItem, index, playlistId); // Maybe problem there
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -190,9 +201,11 @@
                      var index = -1;
 
                      $currentItem = $container;
-                     $currentItem.append($('.draggable-item-selected'));
+                     $currentItem.hide();
+                     $currentItem.append($('.draggable-item-selected').clone());
                      if ($currentItem.children().length > 0) {
                          saveVkTrackToPlaylist($currentItem, index, $target.parent().children('.playlistId').text());
+                         $container.empty();
                      }
                  }
 
@@ -349,9 +362,10 @@
                         $selectedItems.toggleClass('draggable-item-selected', false);
                     } else if ($('.draggable-item-selected').length == 1) {
                         $selectedItems.toggleClass('draggable-item-selected', false);
-                    } else if ($('.draggable-item-selected').length > 1) {
-                        $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
                     }
+                    //else if ($('.draggable-item-selected').length > 1) {
+                    //    $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
+                    //}
                     $currentItem.toggleClass('draggable-item-selected', true);
                 }
             }
