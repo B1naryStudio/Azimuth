@@ -35,6 +35,11 @@
     };
 }
 
+SliderController.prototype.getSlider = function () {
+    var self = this;
+    return self.$sliderBar;
+};
+
 SliderController.prototype.getPosition = function () {
     var self = this;
     return self.relativePosition;
