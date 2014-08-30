@@ -1,10 +1,12 @@
-﻿var AudioManager = function() {
+﻿var AudioManager = function(volumeSlider, progressSlider) {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
     this.audio.volume = 0.5;
     this.beforeMuteVolume = null;
+    this.volumeSlider = volumeSlider;
+    this.progressSlider = progressSlider;
 
     self.audio.onended = function() {
         self._nextTrack();
@@ -23,7 +25,9 @@
     };
 
     self.audio.ontimeupdate = function() {
-        $('#timeBar').css('width', self.audio.currentTime / self.audio.duration * 100 + '%');
+        self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
+        $('#currentTime').text(Math.floor(self.audio.currentTime));
+        $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
     };
 
     this._nextTrack = function() {
@@ -175,15 +179,25 @@ AudioManager.prototype.bindListeners = function() {
         if (self.audio.volume == 0) {
             self.audio.volume = self.beforeMuteVolume;
             $('#volumeImg').css('background-position', '0 0');
-            $('#volume').css('height', self.beforeMuteVolume*100 + '%');
+            self.volumeSlider.setPosition(self.beforeMuteVolume);
+            //$('#volume').css('height', self.beforeMuteVolume*100 + '%');
         } else {
             self.beforeMuteVolume = self.audio.volume;
             self.audio.volume = 0;
-            $('#volume').css('height', 0);
+            //$('#volume').css('height', 0);
+            self.volumeSlider.setPosition(0);
         }
     });
 
     $('.itemsContainer').on('AfterDropped', function() {
         self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    });
+
+    $('#volumeSlider').on('OnChange', function (e, value) {
+        self.setVolume(value);
+    });
+
+    $('#progressSlider').on('OnChange', function (e, value) {
+        self.audio.currentTime = value * self.audio.duration;
     });
 };

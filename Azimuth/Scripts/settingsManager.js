@@ -267,21 +267,7 @@ SettingsManager.prototype.bindListeners = function() {
         scrollButtons: { enable: true },
         advanced: { updateOnSelectorChange: "true"}
     });
-
-    $('#volumeBar').on('mousedown', function(e) {
-        var position =$('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
-        var percentage = 100 * position / $('#volumeBar').height();
-        $('#volume').css('height', percentage + '%');
-        self.audioManager.setVolume(position / $('#volumeBar').height());
-    });
-
-    $('#progressBar').on('mousedown', function (e) {
-        var position = e.pageX - $('#progressBar').offset().left;
-        var percentage = 100 * position / $('#progressBar').width();
-        $('#timeBar').css('width', percentage + '%');
-        self.audioManager.setCurrentTime(self.audioManager.getDuration() * percentage / 100);
-    });
-
+ 
     this._createPlaylist = function() {
         var playlistName = self.$searchPlaylistInput.val();
         $.ajax({
@@ -355,6 +341,8 @@ SettingsManager.prototype.bindListeners = function() {
     });
 
 };
+
+
 var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
     var playlistId = $('.playlist.active').children('.playlistId').text();
     var tracksIds = [];
