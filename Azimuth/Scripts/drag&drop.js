@@ -226,15 +226,33 @@
                         }
                     }
                 } else {
+                    var $selectedItems = $('.draggable-item-selected');
+
                     if (!$currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0) {
-                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        $selectedItems.toggleClass('draggable-item-selected', false);
                     } else if ($currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0 && !$currentItem.hasClass('draggable-item-selected')) {
-                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        $selectedItems.toggleClass('draggable-item-selected', false);
                     } else if ($currentItem.hasClass('draggable-item-selected') && $('.draggable-item-selected').length < 2) {
-                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        $selectedItems.toggleClass('draggable-item-selected', false);
                     } else if ($('.draggable-item-selected').length == 1) {
-                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        $selectedItems.toggleClass('draggable-item-selected', false);
+                    } else if ($('.draggable-item-selected').length > 1) {
+                        $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
                     }
+
+
+
+                    //if (!$currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0) {
+                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    //} else if ($currentItem.parent().children().hasClass('draggable-item-selected') && $('.draggable-item-selected').length > 0 && !$currentItem.hasClass('draggable-item-selected')) {
+                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    //} else if ($currentItem.hasClass('draggable-item-selected') && $('.draggable-item-selected').length < 2) {
+                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    //} else if ($('.draggable-item-selected').length == 1) {
+                    //    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    //} else if ($('.draggable-item-selected').length > 1) {
+                    //    $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
+                    //}
                     $currentItem.toggleClass('draggable-item-selected', true);
                 }
             }
