@@ -154,9 +154,13 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#playTrackBtn').click(function() {
         if (self.audio.paused) {
-            self.play();
-            self._setPauseImgButton(self.$currentTrack);
-            $('#playTrackBtn').css('background-position', '8px -50px');
+            if (self.audio.src === '') {
+                $($('.track:not(.draggable-stub)').children('.btn').get(0)).click();
+            } else {
+                self.play();
+                self._setPauseImgButton(self.$currentTrack);
+                $('#playTrackBtn').css('background-position', '8px -50px');
+            }
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
