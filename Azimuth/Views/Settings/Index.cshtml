@@ -37,7 +37,10 @@
             <span id="volumeImg"></span>
         </div>
         <div id="SN" class="stuck">
+            <div id="friends-container" style="display: none">
+            </div>
             <h3>Tracks</h3>
+            <button id="get-friends-info-btn">Get friends info</button>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
@@ -61,7 +64,7 @@
                             @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
                             {
                                 @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
-                            }
+                            }            
                             @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
                         </div>
                     }
@@ -112,6 +115,24 @@
             <div style="display: none" class="track-url">${Url}</div>
             <div style="display: none" class="trackId">${Id}</div>
         </div>
+    </script>
+    
+    <script id="friendsTemplate" type="text/x-jQuery-tmpl">
+        <div class="friend">
+            <div class="friend-photo">
+                <img src="${photo_100}" width="100" height="100" />
+            </div>
+            <div class="friend-initials">
+                <span>${last_name}</span>
+                <span>${first_name}</span>
+            </div>
+            <div class="friend-bdate">Birthdate: ${bdate}</div>
+            <div сlass="friend-inhabitation">
+                <span>${city}</span>
+                <span>${country}</span>
+            </div>
+            <div class="friend-id">${id}</div>
+        </div> 
     </script>
 
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">

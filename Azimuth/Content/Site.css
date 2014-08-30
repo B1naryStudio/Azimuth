@@ -327,6 +327,40 @@ div.draggable-list{
     margin-top: 40px;
 }
 
+
+#friends-container {
+    position: absolute;
+    width: 300px;
+    min-height: 80%;
+    z-index: 1000;
+    margin-left: 62%;
+    border: 2px solid black;
+    background: lightgrey;
+}
+
+div.friend {
+    display: block;
+    clear: left;
+    height: 106px;
+}
+
+#friends-container :hover {
+    background: lightblue;
+    cursor: pointer;
+}
+
+.friend-initials {
+    width: 100%;
+    height: 20%;
+}
+
+
+.friend-photo {
+    float: left;
+    margin: 3px;
+    display: block;
+}
+
 span.label {
     padding: 3px;
     margin: 3px;
