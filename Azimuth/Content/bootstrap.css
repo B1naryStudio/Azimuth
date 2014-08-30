@@ -6920,16 +6920,30 @@ td.visible-print {
   }
 }
 
-.barPlaylist {
+.playlist-plated {
     width: 200px;
     height: 200px;
     display: block;
     float: left;
-    background-image: url(http://userserve-ak.last.fm/serve/500/210303/Coldplay.jpg);
+    background-image: url(http://hackathon-in-a-box.org/img/box.png);
     background-size: cover;
     background-repeat: no-repeat;
     margin: 10px 10px 10px 10px;
+    position: relative;
+}
+
+.playlist-plated-info {
+    position: absolute;
+    background-color: rgba(0,0,0,0.3);
+    bottom: 0;
     padding: 10px 10px 10px 10px;
+    width: 100%;
+    height:100px;
+}
+.playlist-plated-info span{
+    margin: 0em;
+    color: white;
+    font-weight: bold;
 }
 
 #barplaylistArea,#editBarplaylistArea {

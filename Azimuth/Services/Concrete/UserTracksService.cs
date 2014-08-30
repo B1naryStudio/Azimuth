@@ -211,7 +211,7 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        public async void SetPlaylist(PlaylistData playlistData, string provider, int index)
+        public async Task SetPlaylist(PlaylistData playlistData, string provider, int index)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
