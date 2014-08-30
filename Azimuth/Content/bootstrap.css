@@ -6951,8 +6951,8 @@ td.visible-print {
     float: left;
 }
 #barplaylistArea {
-    
-    width: 70%;
+
+    padding: 0 40px 0 40px;
 }
 #editBarplaylistArea {
     width: 20%;
