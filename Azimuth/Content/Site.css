@@ -344,7 +344,7 @@ div.friend {
     height: 106px;
 }
 
-#friends-container :hover {
+div.friend:hover {
     background: lightblue;
     cursor: pointer;
 }
