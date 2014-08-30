@@ -5,6 +5,7 @@
         var contextMenu = options.contextMenu;
         var saveVkTrackToPlaylist = options.saveVkTrack;
         var subContextMenu = options.showSubContextMenu;
+        var movingBetweenPlaylists = options.movingTracksBetweenPlaylists;
 
         var $rootElement = this;
         var $currentItem = null;
@@ -12,13 +13,13 @@
         var $container = $('#itemsContainer');
         var $contextMenuContainer = $('<div class="subContextMenu contextMenu">' +
                                          '</div>');
-                                                
-        //var $subContextMenuContainer = $('<div class="subContextMenu">dekgbdfjkjgbd</div>');
+
         var $subContextMenuContainer = $('<div class="contextMenu subMenu"></div>');
         var $contextMenuTemplate = $('#contextmenuTemplate');
         var $subContextMenuTemplate = $('#subContextmenuTemplate');
 
         var selectAllAction = null;
+        var copyToPlaylistAction = null;
         var moveToPlaylistAction = null;
         var createPlaylistAction = null;
         var hideAction = null;
@@ -31,10 +32,6 @@
         var mousedown = false;
         var deleteFlag = false;
         var contextMenuSelected = false;
-
-        //this.$contextMenuContainer.on('hover', function() {
-        //    alert("yahoo");
-        //});
 
         this.find('.draggable-list > .tableRow').each(function (index, item) {
             var $item = $(item);
@@ -92,9 +89,6 @@
                     }
                 }
             }
-            //if ($elem.hasClass('contextMenuActionName')) {
-            //    alert("context hover");
-            //}
         });
 
         $(document).mouseup(function () {
@@ -113,7 +107,8 @@
                 } else {
 
                     if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
-                        moveTrackToNewPosition($currentItem, $draggableStub);
+                        /moveTrackToNewPosition($currentItem, $draggableStub);
+                        cop
                     }
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
@@ -153,6 +148,9 @@
             switch (contextMenu[i].id) {
                 case 'selectall':
                     selectAllAction = contextMenu[i].callback;
+                    break;
+                case 'copytoplaylist':
+                    copyToPlaylistAction = contextMenu[i].callback;
                     break;
                 case 'movetoplaylist':
                     moveToPlaylistAction = contextMenu[i].callback;
@@ -203,6 +201,9 @@
                 switch (id) {
                     case 'selectall':
                         selectAllAction($(this).find('.track'));
+                        break;
+                    case 'copytoplaylist':
+                        showSubContextMenuAction($subContextMenuContainer, $(this));
                         break;
                     case 'movetoplaylist':
                         showSubContextMenuAction($subContextMenuContainer, $(this));

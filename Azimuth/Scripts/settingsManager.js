@@ -34,11 +34,13 @@ var SettingsManager = function (manager) {
                 self.$playlistsTable.parent().parent().parent().makeDraggable({
                     contextMenu: [
 						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "callback": selectAllTracksAction },
-						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": false, "hasSubMenu": true, "callback" : moveTrackToPlaylistActions },
+						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "callback": moveTrackToPlaylistActions },
+                        { 'id': 'movetoplylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "callback": moveTracksBetweenPlaylistsAction },
 						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "callback": removeSelectedTracksAction }
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition,
-                    showSubContextMenu: showSubContextMenuAction
+                    showSubContextMenu: showSubContextMenuAction,
+                    //movingTracksBetweenPlaylists: moveTracksBetweenPlaylistsAction
                 });
                 self.$searchPlaylistInput.val('');
             }
@@ -343,3 +345,7 @@ var showSubContextMenuAction = function($subContextMenuContainer, $object, $toEl
         $subContextMenuContainer.hide();
     }
 };
+
+var moveTracksBetweenPlaylistsAction = function() {
+    alert("moving beetween");
+}
