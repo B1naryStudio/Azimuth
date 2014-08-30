@@ -137,5 +137,42 @@ namespace Azimuth.DataProviders.Concrete
             var json = JObject.Parse(await _webClient.GetWebData(url));
             return json["response"]["text"].ToString();
         }
+
+        public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string userId, string accessToken)
+        {
+            var url = BaseUri + "friends.get" +
+                      "?user_id=" + userId +
+                      "&fields=screen_name,bdate,sex,city,country,photo_100" +
+                      "&v=5.24" +
+                      "&access_token=" + Uri.EscapeDataString(accessToken);
+            var jsonData = await _webClient.GetWebData(url);
+            var friends = JsonConvert.DeserializeObject<VkFriendData>(jsonData);
+            if (friends.Response == null)
+            {
+                var error = JsonConvert.DeserializeObject<ErrorData>(jsonData);
+
+                int code = error.Error.ErrorCode;
+                string message = error.Error.ErrorMessage;
+                switch (code)
+                {
+                    case 1:
+                        throw new UnknownErrorException(message, code);
+                    case 2:
+                        throw new ApplicationDisabledException(message, code);
+                    case 4:
+                        throw new IncorrectSignatureException(message, code);
+                    case 5:
+                        throw new UserAuthorizationException(message, code);
+                    case 6:
+                        throw new ManyRequestException(message, code);
+                    case 100:
+                        throw new BadParametersException(message, code);
+                    default:
+                        throw new VkApiException(message, code);
+                }
+            }
+
+            return friends.Response.Friends;
+        }
     }
 }
