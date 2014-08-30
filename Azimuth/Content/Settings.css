@@ -75,7 +75,7 @@
     background: url("../Images/media_volume.png") no-repeat 0 0;
 }
 
-#volumeBar {
+.volumeBar {
     position: relative;
     width: 10px;
     top: 75%;
@@ -87,7 +87,7 @@
     border-radius: 3px;
 }
 
-#volume {
+.volume {
     position: absolute;
     bottom: 0;
     left: 0;

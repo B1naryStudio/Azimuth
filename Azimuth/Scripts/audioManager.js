@@ -1,10 +1,11 @@
-﻿var AudioManager = function() {
+﻿var AudioManager = function(volumeSlider) {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
     this.audio.volume = 0.5;
     this.beforeMuteVolume = null;
+    this.volumeSlider = volumeSlider;
 
     self.audio.onended = function() {
         self._nextTrack();
@@ -177,15 +178,21 @@ AudioManager.prototype.bindListeners = function() {
         if (self.audio.volume == 0) {
             self.audio.volume = self.beforeMuteVolume;
             $('#volumeImg').css('background-position', '0 0');
-            $('#volume').css('height', self.beforeMuteVolume*100 + '%');
+            self.volumeSlider.setPosition(self.beforeMuteVolume);
+            //$('#volume').css('height', self.beforeMuteVolume*100 + '%');
         } else {
             self.beforeMuteVolume = self.audio.volume;
             self.audio.volume = 0;
-            $('#volume').css('height', 0);
+            //$('#volume').css('height', 0);
+            self.volumeSlider.setPosition(0);
         }
     });
 
     $('.itemsContainer').on('AfterDropped', function() {
         self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    });
+
+    $('#volumeSlider').on('OnChange', function (e, value) {
+        self.setVolume(value);
     });
 };

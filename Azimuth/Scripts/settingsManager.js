@@ -16,7 +16,6 @@ var SettingsManager = function (manager) {
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
 
-    this.volumeDrag = false;
     this.timeDrag = false;
 
     this._getTracks = function () {
@@ -252,30 +251,30 @@ SettingsManager.prototype.bindListeners = function () {
         scrollButtons: { enable: true },
         advanced: { updateOnSelectorChange: "true"}
     });
+    
+    //$('#volumeBar').on('mousedown', function (e) {
+    //    self.volumeDrag = true;
+    //    var position =$('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
+    //    var percentage = 100 * position / $('#volumeBar').height();
+    //    $('#volume').css('height', percentage + '%');
+    //    self.audioManager.setVolume(position / $('#volumeBar').height());
+    //});
 
-    $('#volumeBar').on('mousedown', function (e) {
-        self.volumeDrag = true;
-        var position =$('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
-        var percentage = 100 * position / $('#volumeBar').height();
-        $('#volume').css('height', percentage + '%');
-        self.audioManager.setVolume(position / $('#volumeBar').height());
-    });
-
-    $(document).on('mousemove', function (e) {
-        if (self.volumeDrag == false) {
-            return;
-        }
-        if (e.pageY < $('#volumeBar').offset().top) {
-            position = $('#volumeBar').height();
-        } else if (e.pageY > $('#volumeBar').offset().top + $('#volumeBar').height()) {
-            position = 0;
-        } else {
-            var position = $('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
-        }
-        var percentage = 100 * position / $('#volumeBar').height();
-        $('#volume').css('height', percentage + '%');
-        self.audioManager.setVolume(position / $('#volumeBar').height());
-    });
+    //$(document).on('mousemove', function (e) {
+    //    if (self.volumeDrag == false) {
+    //        return;
+    //    }
+    //    if (e.pageY < $('#volumeBar').offset().top) {
+    //        position = $('#volumeBar').height();
+    //    } else if (e.pageY > $('#volumeBar').offset().top + $('#volumeBar').height()) {
+    //        position = 0;
+    //    } else {
+    //        var position = $('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
+    //    }
+    //    var percentage = 100 * position / $('#volumeBar').height();
+    //    $('#volume').css('height', percentage + '%');
+    //    self.audioManager.setVolume(position / $('#volumeBar').height());
+    //});
 
     $('#progressBar').on('mousedown', function (e) {
         self.timeDrag = true;
@@ -297,7 +296,6 @@ SettingsManager.prototype.bindListeners = function () {
 
     $(document).mouseup(function() {
         self.timeDrag = false;
-        self.volumeDrag = false;
     });
 
     this._createPlaylist = function () {
@@ -313,6 +311,8 @@ SettingsManager.prototype.bindListeners = function () {
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
     };
 }
+
+
 var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
     var playlistId = $('.playlist.active').children('.playlistId').text();
     var tracksIds = [];

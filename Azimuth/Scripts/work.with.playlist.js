@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-    var audioManager = new AudioManager();
+    var volumeSlider = new SliderController('#volumeSlider');
+    var audioManager = new AudioManager(volumeSlider);
     var manager = new SettingsManager(audioManager);
     
     manager.showPlaylists();
