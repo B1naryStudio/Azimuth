@@ -1,39 +1,73 @@
 ﻿@using Azimuth.Infrastructure
-<h2>Public Playlists</h2>
-<div id="barplaylistArea">
-    
-    <div class="playlists"></div>
-</div>
-<div id="editBarplaylistArea">
-    @Html.TextBox("playlistId")
-    <button id="RemovePlaylist" onclick="removePlaylist()" class="btn">Remove playlist</button>
-</div>
 
+<div id="barplaylistArea">
+    <div id="playlistsArea">
+        <h2>Public Playlists</h2>
+        <div id="playlists-plated"></div>
+    </div>
+    
+    <div id="tracksArea">
+        <h2 id="playlistName"></h2>
+        <div id="playlist-info">
+            <div id="tracks"></div>
+            <div id="liseners"></div>
+        </div>
+    </div>
+</div>
 @section scripts
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-        <div class="barPlaylist" style='background-image: url("http://www.jobaer.net/images/pageimages/f2/white_square_yellow.jpg")'>
-            <p>${Name}</p>
-            <p>${Duration}</p>
-            <p>Created by ${Creator}</p>
-            <p>${Genres}</p>
-
+        <div class="playlist-plated" >
+            <div class="playlist-plated-info">
+                <span class="playlist-plated-info-name">${Name}</span>
+                <span>${Duration}</span>
+                <span>Created by ${Creator}</span>
+                <span>${Genres}</span>
+            </div>
         </div>
         <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
     </script>
+    <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow draggable-item track">
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description">
+                <div class="track-info">
+                    <span class="nowrap">${Artist}</span>
+                </div>
+                <div class="track-title nowrap">${Name}</div>
+            </div>
+            <div class="track-duration nowrap">${Duration}</div>
+            <div style="display: none" class="track-url">${Url}</div>
+            <div style="display: none" class="trackId">${Id}</div>
+        </div>
+    </script>
     <script>
         var playlists_global = null;
-        var playlistTemplate = $("#playlistTemplate");
-        var trackTemplate = $("#trackTemplate");
-        $(document).ready(function () {
+        var $playlistTemplate = $("#playlistTemplate");
+        var $trackTemplate = $("#trackTemplate");
+        var $tracks = $('#tracks');
+        var $playlists = $('#playlists-plated');
+        var $playlistsArea = $('#playlistsArea');
+        var $tracksArea = $('#tracksArea');
+        var $playlistName = $('#playlistName');
+        $(document).ready(function() {
+            $('#playlistId').focus(function() {
+                $(this).val('');
+            });
             showPlaylists();
+
             $(document).on('playlistsUpdated', showPlaylists);
+            $playlists.click(function(event) {
+                $playlistsArea.hide();
+                $tracksArea.show();
+                showTracks($(event.target).closest('.playlist-plated'));
+            });
         });
 
         function showPlaylists() {
-            $(".playlists").empty();
+            $playlists.empty();
             $.ajax({
                 cache: false,
                 type: "GET",
@@ -41,71 +75,48 @@
                 dataType: "json",
                 async: false,
                 success: function(data) {
-                    var playlists = data["Result"];
+                    var playlists = data;
                     playlists_global = playlists;
-                    console.log(playlists);
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
                         var mins = Math.floor(playlist.Duration / 60);
                         var secs = ('0' + (playlist.Duration % 60)).slice(-2);
                         playlist.Duration = mins + ':' + secs;
-                        console.log(playlist);
                         playlist.Creator = playlist.Creator.Name;
-                        $(".playlists").append($('#playlistTemplate').tmpl(playlist)
-                            //"<h3>" + playlist.Name + "</h3>" +
-                            //"<table class='tablesorter table table-striped col-md-offset-1'>" +
-                            //"<thead>" +
-                            //"<th>Artist</th>" +
-                            //"<th>Title</th>" +
-                            //"<th>Album</th>" +
-                            //"<th>Genre</th>" +
-                            //"<th>Duration</th>" +
-                            //"<th>Url</th>" +
-                            //"</thead>" +
-                            //"<tbody id='playlist" + playlist.Id + "'></tbody>" +
-                            //"</table>"
-                        );
+                        $playlists.append($('#playlistTemplate').tmpl(playlist));
                     }
                 }
             });
         }
 
-        function removePlaylist() {
-            var searchedPlaylists = playlists_global.filter(function(index) {
-                console.log(index);
-                return index.Name.valueOf() == $('#playlistId').val().valueOf();
-            });
-            console.log(searchedPlaylists);
-            if (searchedPlaylists.length != 0)
-                $.ajax({
-                    cache: false,
-                    type: "DELETE",
-                    url: "/api/playlists/delete/" + searchedPlaylists[0].Id,
-                    dataType: "json",
-                    async: false,
-                    success: function(data) {
-                        console.log('hi');
-                        $(document).trigger('playlistsUpdated');
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
-                        console.log(status);
-                        console.log(error);
-                    }
-                });
-        }
-
-        function removeTrack() {
+        function showTracks(playlist) {
+            var playlistName = playlist.find('.playlist-plated-info-name').text();
+            console.log(playlistName);
+            //var $dragList = $(this).next();
+            //if (!$(this).hasClass('active') && $dragList.children().length === 0) {
+            var playlistId = playlists_global.filter(function(index) {
+                return index.Name.valueOf() == playlistName;
+            })[0].Id;
+            $playlistName.text(playlistName);
+            console.log(playlistId);
             $.ajax({
-                cache: false,
-                type: "DELETE",
-                url: "/api/playlists/delete?trackId=" + $("#trackId").val() + "&playlistId=" + $("#playlistId").val(),
-                dataType: "json",
+                url: "/api/usertracks?playlistId=" + playlistId, // TODO replace with class playlistID
+                type: 'GET',
                 async: false,
-                success: function(data) {
-                    alert("Track has been removed");
+                success: function(tracksData) {
+                    var tracks = tracksData;
+                    for (var i = 0; i < tracks.length; ++i)
+                    {
+                        var track = tracks[i];
+                        console.log(track);
+                        var mins = Math.floor(track.Duration / 60);
+                        var secs = ('0' + (track.Duration % 60)).slice(-2);
+                        track.Duration = mins + ':' + secs;
+                        $tracks.append($('#playlistTrackTemplate').tmpl(track));
+                    }
                 }
             });
         }
+
     </script>
-}
+    }

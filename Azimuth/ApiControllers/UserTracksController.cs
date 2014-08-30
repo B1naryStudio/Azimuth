@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
-using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +10,6 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
-using NHibernate.Mapping;
 
 namespace Azimuth.ApiControllers
 {
