@@ -282,7 +282,7 @@ SettingsManager.prototype.bindListeners = function() {
 
     this.$getFriendInfoBtn.click(function (e) {
         if (self.$friendList.is(':visible')) {
-            self.$friendList.hide();
+            self.$friendList.hide('slow');
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
             $.ajax({

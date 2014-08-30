@@ -333,7 +333,7 @@ div.draggable-list{
     width: 300px;
     min-height: 80%;
     z-index: 1000;
-    margin-left: 62%;
+    margin-left: 64%;
     border: 2px solid black;
     background: lightgrey;
 }
