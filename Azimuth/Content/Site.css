@@ -378,16 +378,6 @@ span.label {
     font: normal normal normal 130px/1 FontAwesome;
 }
 
-.contextMenuActionName:hover {
-    background: #3399FF;
-	cursor: pointer;
-}
-.contextMenuActionName {
-    font-family: "Arial";
-    font-size: 10pt;
-    font-style: normal;
-    padding: 3px 10px 3px 10px;
-}
 hr {
     padding: 0px;
     margin: 0px;
@@ -407,4 +397,35 @@ hr {
     position: absolute;
     border: 1px solid lightgray;
     background: white;
+    width: 150px;
+}
+
+.contextMenu .tableRow{
+    height: 20px;
+}
+
+.contextMenu .tableRow:hover {
+    background: #3399FF;
+	cursor: pointer;
+}
+.contextMenuActionName {
+    font-family: "Arial";
+    font-size: 10pt;
+    font-style: normal;
+    padding: 3px 10px 3px 10px;
+    float: left;
+    width: 90%;
+}
+.contextMenuExpander {
+    width: 10%
+}
+.subContextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    background: white;
+    width: 150px;
+}
+.subContextMenu .tableRow{
+    height: 20px;
 }

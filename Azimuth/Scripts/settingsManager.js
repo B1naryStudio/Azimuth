@@ -32,9 +32,9 @@ var SettingsManager = function (manager) {
                 //$('.draggable').makeDraggable({
                 $('.stuck.draggable').makeDraggable({
                     contextMenu: [
-						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": "false" },
-						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": "false" },
-						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": "true" }
+						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false },
+						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": false, "hasSubMenu": true },
+						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false }
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition
                 });
@@ -172,10 +172,10 @@ SettingsManager.prototype.bindListeners = function () {
                     //$('.draggable').makeDraggable({
                     list.parent().parent().makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": "false" },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": "false" },
-                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": "true" },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": "false" }
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false },
+                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false }
                         ],
                         saveVkTrack: saveTrackFromVkToPlaylist
                     });

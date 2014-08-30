@@ -9,9 +9,12 @@
         var $currentItem = null;
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('<div class="contextMenu"></div>');
-        var $subContextMenuContainer = $('<div class="subContextMenu"></div>');
+        var $contextMenuContainer = $('<div class="contextMenu">' +
+                                         '</div>');
+                                                
+        var $subContextMenuContainer = $('<div class="subContextMenu">dekgbdfjkjgbd</div>');
         var $contextMenuTemplate = $('#contextmenuTemplate');
+        //var $expander = $('<img src="../../Images/grey-caret-right.png"/>');
 
         var movingInfo = { "data": [] };
         var timerId = null;
@@ -124,10 +127,21 @@
 
         for (var i = 0; i < contextMenu.length; i++) {
             var object = $contextMenuTemplate.tmpl(contextMenu[i]);
-            if (contextMenu[i].isNewSection == "true") {
+            if (contextMenu[i].hasSubMenu == true) {
+                //object.children('.contextMenuExpander').append(">");
+                // WRONG!!!!
+                object.append(">");
+                object.toggleClass('hasSubMenu', true);
+            }
+            if (contextMenu[i].isNewSection == true) {
+
                 $contextMenuContainer.append("<hr/>");
             }
-            $contextMenuContainer.append(object);
+
+            object.appendTo($contextMenuContainer);
+            //$('<img src="../../Images/grey-caret-right.png"/>').appendTo($contextMenuContainer.children('.contextMenuExpander'));
+
+            //$contextMenuContainer.append(object);
         }
 
         $(document).mousedown(function (e) {
@@ -147,6 +161,7 @@
             }
 
         });
+
         function _makeDraggable(event) {
 
             if (event.which == 3) {
@@ -166,19 +181,19 @@
                     $target.append($contextMenuContainer);
                     $contextMenuContainer.show();
 
-                    $contextMenuContainer.children('#selectall').off('selectall').on('selectall', function () {
-                        $(this).parent().parent().children('.draggable-list').children('.track').toggleClass('draggable-item-selected', true);
+                    $contextMenuContainer.children('.tableRow').children('#selectall').off('selectall').on('selectall', function () {
+                        $(this).parent().parent().parent().children('.draggable-list').children('.track').toggleClass('draggable-item-selected', true);
                     });
-                    $contextMenuContainer.children('#movetoplaylist').off('movetoplaylist').on('movetoplaylist', function () {
+                    $contextMenuContainer.children('.tableRow').children('#movetoplaylist').off('movetoplaylist').on('movetoplaylist', function () {
                         alert("movetoplaylist");
                     });
-                    $contextMenuContainer.children('#removeselected').off('removeselected').on('removeselected', function () {
+                    $contextMenuContainer.children('.tableRow').children('#removeselected').off('removeselected').on('removeselected', function () {
                         alert("removeselected");
                     });
-                    $contextMenuContainer.children('#hideselected').off('hideselected').on('hideselected', function () {
+                    $contextMenuContainer.children('.tableRow').children('#hideselected').off('hideselected').on('hideselected', function () {
                         alert("hideselected");
                     });
-                    $contextMenuContainer.children('#createplaylist').off('createplaylist').on('createplaylist', function () {
+                    $contextMenuContainer.children('.tableRow').children('#createplaylist').off('createplaylist').on('createplaylist', function () {
                         alert("createplaylist");
                     });
 
@@ -362,6 +377,25 @@
                 return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? dir : -dir;
             });
             $list.prepend(sorted);
+        });
+
+        $contextMenuContainer.children('.tableRow').children().hover(function () {
+            var self = $(this);
+            if (self.parent().hasClass('hasSubMenu')) {
+
+                var contextMenuOffset = $('.contextMenu .tableRow:hover').parent().position();
+                var contextMenuItemOffset = $('.contextMenu .tableRow:hover').position();
+
+                if (contextMenuItemOffset != undefined) {
+                    $subContextMenuContainer.css({
+                        'top': contextMenuOffset.top + contextMenuItemOffset.top + 'px',
+                        'left': contextMenuOffset.left + $('.contextMenu .tableRow:hover').width() + 'px',
+                        'position': 'absolute'
+                    });
+                    self.parent().parent().parent().append($subContextMenuContainer);
+                    $subContextMenuContainer.show();
+                }
+            }
         });
     };
 });
