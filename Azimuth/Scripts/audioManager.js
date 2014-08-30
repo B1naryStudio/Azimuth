@@ -24,6 +24,8 @@
 
     self.audio.ontimeupdate = function() {
         $('#timeBar').css('width', self.audio.currentTime / self.audio.duration * 100 + '%');
+        $('#currentTime').text(Math.floor(self.audio.currentTime));
+        $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
     };
 
     this._nextTrack = function() {
