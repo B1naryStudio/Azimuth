@@ -42,7 +42,7 @@ namespace Azimuth.ApiControllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index)
         {
-            _userTracksService.SetPlaylist(playlistData, provider, index);
+            await _userTracksService.SetPlaylist(playlistData, provider, index);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

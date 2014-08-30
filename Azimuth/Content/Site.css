@@ -429,3 +429,7 @@ hr {
 .subContextMenu .tableRow{
     height: 20px;
 }
+.subContextMenu .tableRow:hover {
+    background: #3399FF;
+	cursor: pointer;
+}
