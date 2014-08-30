@@ -30,11 +30,12 @@ var SettingsManager = function (manager) {
                 self.playlistTracksGlobal = tracksData;
                 self.showPlaylistTracks(tracksData);
                 //$('.draggable').makeDraggable({
-                $('.stuck.draggable').makeDraggable({
+                //$('#playlists').makeDraggable({
+                self.$playlistsTable.parent().parent().parent().makeDraggable({
                     contextMenu: [
-						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false },
-						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": false, "hasSubMenu": true },
-						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false }
+						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "callback": selectAllTracksAction },
+						{ 'id': 'movetoplaylist', 'name': 'Move to another playlist', "isNewSection": false, "hasSubMenu": true, "callback" : moveTrackToPlaylistActions },
+						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "callback": removeSelectedTracksAction }
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition
                 });
@@ -170,12 +171,13 @@ SettingsManager.prototype.bindListeners = function () {
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
                     //$('.draggable').makeDraggable({
-                    list.parent().parent().makeDraggable({
+                    //list.parent().parent().makeDraggable({
+                    self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false },
-                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false }
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "callback": selectAllTracksAction  },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "callback": hideSelectedTracksAction },
+                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "callback": moveTrackToPlaylistActions },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "callback": createPlaylistAction }
                         ],
                         saveVkTrack: saveTrackFromVkToPlaylist
                     });
@@ -312,7 +314,22 @@ var saveTrackFromVkToPlaylist = function ($currentItem, $draggableStub, $element
     });
 };
 
-//$('#SN').mCustomScrollbar({
-//    theme: 'dark-3',
-//    scrollButtons: { enable: true }
-//});
+var selectAllTracksAction = function(list) {
+    list.toggleClass('draggable-item-selected', true);
+};
+
+var moveTrackToPlaylistActions = function() {
+    alert("move track to laylist actions");
+};
+
+var removeSelectedTracksAction = function () {
+    alert("remove");
+};
+
+var hideSelectedTracksAction = function() {
+    alert('hide');
+};
+
+var createPlaylistAction = function() {
+    alert('createplaylist');
+};
