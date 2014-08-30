@@ -1,15 +1,18 @@
 ﻿$(document).ready(function () {
 
     $.fn.makeDraggable = function (options) {
+        var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
+        var contextMenu = options.contextMenu;
+        var saveVkTrackToPlaylist = options.saveVkTrack;
+
         var $rootElement = this;
         var $currentItem = null;
-        //var $draggableStub = $('<div class="tableRow draggable-item track">').toggleClass('draggable-item', true).toggleClass('draggable-stub', true);
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('#contextMenu').empty();
+        var $contextMenuContainer = $('<div class="contextMenu"></div>');
+        var $subContextMenuContainer = $('<div class="subContextMenu"></div>');
         var $contextMenuTemplate = $('#contextmenuTemplate');
 
-        var contextMenu = options.contextMenu;
         var movingInfo = { "data": [] };
         var timerId = null;
         var lastEvent = null;
@@ -90,22 +93,12 @@
                     }
                 } else {
 
+                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
+                        moveTrackToNewPosition($currentItem, $draggableStub);
+                    }
+
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
-                        var index = -1;
-                        var provider = $('.tab-pane.active').attr('id');
-                        var tracks = [];
-                        var playlistId = -1;
-                        $currentItem.children().toggleClass('vk-item', false);
-                        if ($element.hasClass('playlist')) {
-                            playlistId = $element.children('.playlistId').text();
-                        } else {
-                            playlistId = $('.playlist.active').children('.playlistId').text();
-                            index = $draggableStub.index();
-                        }
-                        $('.draggable-item-selected').each(function() {
-                            tracks.push($(this).closest('.tableRow').find('.trackId').text());
-                        }).get();
-                        _trackPostQuery(provider, index, playlistId, tracks);
+                        saveVkTrackToPlaylist($currentItem, $draggableStub, $element);
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -125,7 +118,6 @@
                     }
                 }
             }
-            //$draggableStub.detach();
             $draggableStub.hide();
         });
 
@@ -137,15 +129,6 @@
             }
             $contextMenuContainer.append(object);
         }
-
-
-
-        $('.contextMenuActionName').on('1', function () {
-            alert("1 action");
-        });
-        $('.contextMenuActionName').on('2', function () {
-            alert("2 action");
-        });
 
         $(document).mousedown(function (e) {
             var $target = $(e.target);
@@ -164,21 +147,6 @@
             }
 
         });
-
-        function _trackPostQuery(provider, index, playlistId, tracks) {
-            $.ajax({
-                url: '/api/usertracks?provider=' + provider + "&index=" + index,
-                type: 'POST',
-                data: JSON.stringify({
-                    "Id": playlistId,
-                    "TrackIds": tracks
-                }),
-                dataType: 'json',
-                contentType: 'application/json',
-                async: false
-            });
-        }
-
         function _makeDraggable(event) {
 
             if (event.which == 3) {
@@ -186,13 +154,34 @@
                     return false;
                 }
                 contextMenuSelected = true;
-                    var x = event.pageX;
-                    var y = event.pageY;
+                //var $target = $(event.target).parents('#playlistTracks');
+                var $target = $(event.target).parents('.draggable-list').parent();
+                var parentOffset = $target.parent().offset();
+                    var x = event.pageX - parentOffset.left;
+                    var y = event.pageY - parentOffset.top;
                     $contextMenuContainer.css({
                         'top': y + 'px',
                         'left': x + 'px'
                     });
+
+                    $target.append($contextMenuContainer);
                     $contextMenuContainer.show();
+
+                    //$('.contextMenuActionName').on('1', function () {
+                    //    alert("1 action");
+                    //});
+                    //$('.contextMenuActionName').on('2', function () {
+                    //    alert("2 action");
+                //});
+
+                    $contextMenuContainer.children('#1').off('1').on('1', function () {
+                        //$(this).parent().parent().children('#playlistTracks.draggable-list').children().toggleClass('draggable-item-selected', true);
+                        $(this).parent().parent().children('.draggable-list').children('.track').toggleClass('draggable-item-selected', true);
+                    });
+                    $contextMenuContainer.children('#2').off('2').on('2', function () {
+                        alert("2 action");
+                    });
+
             } else {
 
                 mousedown = true;
@@ -268,8 +257,14 @@
             }
             $currentItem.hide();
             var $elem = $(document.elementFromPoint(x, y));
-            if ($elem.parent().hasClass('playlist') && event.type == "mouseup") {
-                return $elem.parent();
+
+            if (event.type == "mouseup") {
+                if ($elem.hasClass('playlist')) {
+                    return $elem;
+                }
+                if ($elem.parents('.playlist').length > 0 && event.type == "mouseup") {
+                    return $elem.parents('.playlist');
+                }
             }
             if ($elem.hasClass('delete-area'))
                 _onDeleteArea();
@@ -296,7 +291,7 @@
             } else {
                 $('.delete-area').css({
                     'border': 'solid black 1px'
-                })
+                });
             }
         }
 
@@ -317,12 +312,12 @@
             _setDeleteAreaCss();
         }
 
-        $('.draggable').on('MergeItems', function (e, mergeTo, mergeElem, pageY) {
+        $('.draggable').on('MergeItems', function(e, mergeTo, mergeElem, pageY) {
             mergeToPos = mergeTo.offset();
             if ((!mergeTo.hasClass('draggable-stub')) && (mergeToPos.top + 0.15 * $('.draggable-item').height() < pageY) && (mergeToPos.top + 0.85 * $('.draggable-item').height() > pageY)) {
                 if (mergeElem && mergeTo) {
                     if ($currentItem.hasClass('itemsContainer') && $('.draggable-item-selected').length > 0) {
-                        $currentItem.children().each(function (index, item) {
+                        $currentItem.children().each(function(index, item) {
                             mergeTo.text(mergeTo.html() + ' ' + $(item).html());
                         });
                         $currentItem.children().detach();
@@ -334,7 +329,7 @@
                     _clearContainer();
                 }
             }
-        })
+        });
 
         $('.container').on('delete', function (e) {
             $currentItem.empty();
@@ -343,13 +338,13 @@
             _setDeleteAreaCss();
         });
 
-        $('.draggable-list').on('shuffle', function () {
+        $('.draggable-list').on('shuffle', function() {
             var $this = $(this);
             var elems = $this.children('li');
-            elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+            elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
             $this.remove(elems[0].tagName);
             $this.prepend(elems);
-        })
+        });
 
         $('.draggable-list').on('add', function (e, data) {
             var $newItem = $('<li>').toggleClass('draggable-item', true).text(data);

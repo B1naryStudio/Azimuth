@@ -233,6 +233,7 @@
     <Compile Include="DataProviders\Concrete\AccountProvider.cs" />
     <Compile Include="DataProviders\Concrete\GoogleAccountProvider.cs" />
     <Compile Include="DataProviders\Interfaces\IAccountProvider.cs" />
+    <Compile Include="Infrastructure\Concrete\ChallengeResult.cs" />
     <Compile Include="Infrastructure\Exceptions\ApplicationDisabledException.cs" />
     <Compile Include="Infrastructure\Exceptions\BadParametersException.cs" />
     <Compile Include="Infrastructure\Exceptions\EndUserException.cs" />
@@ -247,7 +248,7 @@
     <Compile Include="Infrastructure\Concrete\Mapper.cs" />
     <Compile Include="Infrastructure\Concrete\SocialNetworkApiModule.cs" />
     <Compile Include="Infrastructure\Concrete\UserCredential.cs" />
-    <Compile Include="DataProviders\Concrete\VkAccountProvider.cs" />
+    <Compile Include="DataProviders\Concrete\VKAccountProvider.cs" />
     <Compile Include="Infrastructure\Concrete\WebClient.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -265,6 +266,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -274,6 +276,7 @@
     <Content Include="Images\facebook_logo.png" />
     <Content Include="Images\google_logo.png" />
     <Content Include="Images\login_bg.jpeg" />
+    <Content Include="Images\mCSB_buttons.png" />
     <Content Include="Images\media_add.png" />
     <Content Include="Images\media_next.png" />
     <Content Include="Images\media_noread.png" />
@@ -293,6 +296,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

@@ -1,6 +1,8 @@
 ﻿#playlists {
-    width: 24%; 
-    left: 5%
+    width: 24%;
+    height: 90%;
+    top: 50px; /*navbar height*/
+    left: 5%;
 }
 
 #separator {
@@ -10,10 +12,10 @@
 }
 
 #SN {
-    position: absolute; 
     left: 30%;
     margin-left: 80px; 
-    width: 60%;
+    width: 63%;
+    height: 90%;
 }
 
 .stuck {

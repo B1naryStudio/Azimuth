@@ -42,11 +42,12 @@ namespace Azimuth.Services.Concrete
                         Name = playlist.Name,
                         Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
                         Genres = playlist.Tracks.Select(x => x.Genre)
-                            .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
-                            .OrderByDescending(x => x.Count)
-                            .Select(x => x.Name)
-                            .Take(5)
-                            .ToList(),
+                                                .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                                                .OrderByDescending(x => x.Count)
+                                                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                                                .Select(x => x.Name)
+                                                .Take(5)
+                                                .ToList(),
                         Creator = new UserBrief
                         {
                             Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
@@ -130,11 +131,12 @@ namespace Azimuth.Services.Concrete
                         Accessibilty = playlist.Accessibilty,
                         Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
                         Genres = playlist.Tracks.Select(x => x.Genre)
-                            .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
-                            .OrderByDescending(x => x.Count)
-                            .Select(x => x.Name)
-                            .Take(5)
-                            .ToList(),
+                                                .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
+                                                .OrderByDescending(x => x.Count)
+                                                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                                                .Select(x => x.Name)
+                                                .Take(5)
+                                                .ToList(),
                         ItemsCount = playlist.Tracks.Count,
                     };
                 }
@@ -163,6 +165,7 @@ namespace Azimuth.Services.Concrete
                         Genres = playlist.Tracks.Select(x => x.Genre)
                                                 .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
                                                 .OrderByDescending(x => x.Count)
+                                                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
                                                 .Select(x => x.Name)
                                                 .Take(5)
                                                 .ToList(),

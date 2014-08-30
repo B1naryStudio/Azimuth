@@ -69,6 +69,7 @@ namespace Azimuth.Services.Concrete
 
                     ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
                     {
+                        Id = s.Identifier.Track.Id,
                         Name = s.Identifier.Track.Name,
                         Duration = s.Identifier.Track.Duration,
                         Genre = s.Identifier.Track.Genre,
@@ -108,20 +109,60 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public void PutTrackToPlaylist(long playlistId, long trackId)
+        public void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId)
         {
             using (_unitOfWork)
             {
-                var track = _trackRepository.GetOne(t => t.Id == trackId);
-                if (track == null)
-                    throw new BadRequestException("There is no track with current Id in database");
+                var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+                int i = 0;
+                foreach (var id in trackId)
+                {
+                    int oldIndex = pt.Where(s => s.Identifier.Track.Id == id).Select(pos => pos.TrackPosition).First();
+                    pt.Where(s => s.Identifier.Track.Id == id).Select((item) =>
+                    {
+                        item.TrackPosition = newIndex + i++;
+                        return item;
+                    }).ToList();
 
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
-                if (playlist == null)
-                    throw new BadRequestException("There is no playlist with current Id in database");                
 
-                track.Playlists.Add(playlist);
-
+                    if (oldIndex > newIndex)
+                    {
+                        // +
+                        pt.Where(
+                            s =>
+                                !trackId.Contains(s.Identifier.Track.Id) && s.TrackPosition >= newIndex &&
+                                s.TrackPosition < oldIndex).Select(
+                                    (item) =>
+                                    {
+                                        item.TrackPosition++;
+                                        return item;
+                                    }).ToList();
+                    }
+                    else
+                    {
+                        // -
+                        pt.Where(
+                            s =>
+                                !trackId.Contains(s.Identifier.Track.Id) &&
+                                s.TrackPosition <= newIndex + trackId.Count() - 1 &&
+                                s.TrackPosition > oldIndex - i).Select(
+                                    (item) =>
+                                    {
+                                        item.TrackPosition--;
+                                        return item;
+                                    }).ToList();
+                    }
+                    var negativeTest = pt.OrderByDescending(s=> s.TrackPosition < 0).Where(s => s.TrackPosition < 0).ToList();
+                    if (negativeTest.Count > 0)
+                    {
+                        var neg = 0 - negativeTest[0].TrackPosition;
+                        pt.Select((item) =>
+                        {
+                            item.TrackPosition += neg;
+                            return item;
+                        }).ToList();
+                    }
+                }
                 _unitOfWork.Commit();
             }
         }

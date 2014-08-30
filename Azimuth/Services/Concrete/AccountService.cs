@@ -1,9 +1,19 @@
 ﻿using System;
+using System.IdentityModel.Claims;
+using System.IdentityModel.Services;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.DataProviders.Concrete;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using Claim = System.Security.Claims.Claim;
+using ClaimTypes = System.Security.Claims.ClaimTypes;
 
 namespace Azimuth.Services.Concrete
 {
@@ -14,6 +24,57 @@ namespace Azimuth.Services.Concrete
         private readonly UserSocialNetworkRepository _userSNRepository;
         private readonly SocialNetworkRepository _snRepository;
         private readonly PlaylistRepository _playlistRepository;
+
+        public async Task<bool> LoginCallback(bool autoLogin)
+        {
+            var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+
+            if (result == null || result.Identity == null)
+            {
+                return false;
+            }
+
+            var principal = ClaimsAuthenticationManager.Authenticate(String.Empty, new ClaimsPrincipal(result.Identity));
+            var identity = principal.Identity as AzimuthIdentity;
+            var loggedIdentity = AzimuthIdentity.Current;
+
+            if (identity == null)
+            {
+                return true;
+            }
+
+            var provider = AccountProviderFactory.GetAccountProvider(identity.UserCredential);
+
+            var userInfo = await provider.GetUserInfoAsync(identity.UserCredential.Email);
+            var storeResult = SaveOrUpdateUserData(userInfo, identity.UserCredential, loggedIdentity);
+
+            if (storeResult && autoLogin)
+            {
+                SignIn(identity, userInfo);
+            }
+            return true;
+        }
+
+        public void SignOut()
+        {
+            AuthenticationManager.SignOut();
+        }
+
+        public ClaimsAuthenticationManager ClaimsAuthenticationManager
+        {
+            get
+            {
+                return FederatedAuthentication.FederationConfiguration.IdentityConfiguration.ClaimsAuthenticationManager;
+            }
+        }
+
+        public IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.Current.GetOwinContext().Authentication;
+            }
+        }
 
         public AccountService(IUnitOfWork unitOfWork)
         {
@@ -147,6 +208,16 @@ namespace Azimuth.Services.Concrete
                 }
             }
             return true;
+        }
+
+        public void SignIn(AzimuthIdentity identity, User userInfo)
+        {
+            identity.AddClaim(new Claim(ClaimTypes.Name, userInfo.Name.FirstName + " " + userInfo.Name.LastName));
+            identity.AddClaim(new Claim(AzimuthClaims.PHOTO_BIG, userInfo.Photo));
+            identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider",
+                identity.UserCredential.SocialNetworkName, Rights.PossessProperty));
+
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, identity);
         }
     }
 }

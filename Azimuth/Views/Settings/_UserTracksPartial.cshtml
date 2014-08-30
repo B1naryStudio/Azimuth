@@ -1,26 +1,11 @@
 ﻿
 @if (Model.provider == "Vkontakte")
 {
-    <div>
-        
-        @*<div class="form-group">
-            <label for="inputPlaylistName" class="col-md-2 col-md-offset-1 control-label">Playlist name:</label>
-            <div class="col-md-2">
-                <input class="form-control" id="inputPlaylistName" placeholder="Playlist name">
-            </div>
-            <label for="setAccessibilty" class="col-md-2 control-label">Accessibilty:</label>
-            <select class="form-control col-md-2" id="setAccessibilty">
-                <option>Private</option>
-                <option>Public</option>
-            </select>
-            <a class="btn btn-primary col-md-offset-11" data-provider=@Model.provider id="applyBtn">Apply &raquo;</a>
-        </div>*@
-        
-        <div class="draggable">
-            <div id="vkMusicTable" class="vkMusicTable">
-                <div class="tableTitle">User Tracks</div>
-                <div class="draggable-list vkMusicList"></div>
-            </div>
+    <div class="draggable">
+        <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
+        <div id="vkMusicTable" class="vkMusicTable">
+            <div class="tableTitle">User Tracks</div>
+            <div class="draggable-list vkMusicList"></div>
         </div>
     </div>
 }

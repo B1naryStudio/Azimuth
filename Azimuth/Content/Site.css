@@ -236,13 +236,6 @@ div.draggable-list{
     right: 10px;
 }
 
-#contextMenu {
-    display: none;
-    position: absolute;
-    border: 1px solid lightgray;
-    background: white;
-}
-
 .playlistsContainer {
     display: block;
     float: left;
@@ -407,4 +400,11 @@ hr {
 
 .draggable-item-selected {
 	background: aquamarine;
+}
+
+.contextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    background: white;
 }
