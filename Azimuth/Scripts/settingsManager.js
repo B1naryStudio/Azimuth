@@ -16,8 +16,6 @@ var SettingsManager = function (manager) {
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
 
-    this.timeDrag = false;
-
     this._getTracks = function () {
         //var $dragList = $(this).next();
         //if (!$(this).hasClass('active') && $dragList.children().length === 0) {
@@ -251,53 +249,7 @@ SettingsManager.prototype.bindListeners = function () {
         scrollButtons: { enable: true },
         advanced: { updateOnSelectorChange: "true"}
     });
-    
-    //$('#volumeBar').on('mousedown', function (e) {
-    //    self.volumeDrag = true;
-    //    var position =$('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
-    //    var percentage = 100 * position / $('#volumeBar').height();
-    //    $('#volume').css('height', percentage + '%');
-    //    self.audioManager.setVolume(position / $('#volumeBar').height());
-    //});
-
-    //$(document).on('mousemove', function (e) {
-    //    if (self.volumeDrag == false) {
-    //        return;
-    //    }
-    //    if (e.pageY < $('#volumeBar').offset().top) {
-    //        position = $('#volumeBar').height();
-    //    } else if (e.pageY > $('#volumeBar').offset().top + $('#volumeBar').height()) {
-    //        position = 0;
-    //    } else {
-    //        var position = $('#volumeBar').height() - e.pageY + $('#volumeBar').offset().top;
-    //    }
-    //    var percentage = 100 * position / $('#volumeBar').height();
-    //    $('#volume').css('height', percentage + '%');
-    //    self.audioManager.setVolume(position / $('#volumeBar').height());
-    //});
-
-    $('#progressBar').on('mousedown', function (e) {
-        self.timeDrag = true;
-        var position = e.pageX - $('#progressBar').offset().left;
-        var percentage = 100 * position / $('#progressBar').width();
-        $('#timeBar').css('width', percentage + '%');
-        self.audioManager.setCurrentTime(self.audioManager.getDuration() * percentage / 100);
-    });
-
-    $('#progressBar').on('mousemove', function (e) {
-        if (self.timeDrag == false) {
-            return;
-        }
-        var position = e.pageX - $('#progressBar').offset().left;
-        var percentage = 100 * position / $('#progressBar').width();
-        $('#timeBar').css('width', percentage + '%');
-        self.audioManager.setCurrentTime(self.audioManager.getDuration() * percentage / 100);
-    });
-
-    $(document).mouseup(function() {
-        self.timeDrag = false;
-    });
-
+ 
     this._createPlaylist = function () {
         var playlistName = self.$searchPlaylistInput.val();
         $.ajax({

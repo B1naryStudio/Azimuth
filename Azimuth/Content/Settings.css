@@ -98,7 +98,7 @@
     border-radius: 3px;
 }
 
-#progressBar {
+.progressBar {
     position: relative;
     width: 90%;
     left: 5%;
@@ -109,12 +109,13 @@
     border-radius: 3px;
 }
 
-#timeBar {
+.progress {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 0;
     height: 100%;
+    margin-bottom: 0;
     background-color: #428bca;
     -ms-border-radius: 3px;
     border-radius: 3px;

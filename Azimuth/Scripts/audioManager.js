@@ -1,4 +1,4 @@
-﻿var AudioManager = function(volumeSlider) {
+﻿var AudioManager = function(volumeSlider, progressSlider) {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
@@ -6,6 +6,7 @@
     this.audio.volume = 0.5;
     this.beforeMuteVolume = null;
     this.volumeSlider = volumeSlider;
+    this.progressSlider = progressSlider;
 
     self.audio.onended = function() {
         self._nextTrack();
@@ -24,7 +25,7 @@
     };
 
     self.audio.ontimeupdate = function() {
-        $('#timeBar').css('width', self.audio.currentTime / self.audio.duration * 100 + '%');
+        self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
         $('#currentTime').text(Math.floor(self.audio.currentTime));
         $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
     };
@@ -194,5 +195,9 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#volumeSlider').on('OnChange', function (e, value) {
         self.setVolume(value);
+    });
+
+    $('#progressSlider').on('OnChange', function (e, value) {
+        self.audio.currentTime = value * self.audio.duration;
     });
 };

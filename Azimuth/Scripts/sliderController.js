@@ -1,15 +1,38 @@
-﻿var SliderController = function (sliderSelector) {
+﻿var SliderController = function (sliderSelector, sliderBarClass, sliderClass, dirrection) {
     var self = this;
 
     this.drag = false;
     this.relativePosition = 0;
+    this.dirrection = dirrection;
     this.$sliderBar = $(sliderSelector);
     $(sliderSelector).append('<div class="slider"></div>');
     this.$slider = $($(sliderSelector).find('.slider'));
 
-    self.$sliderBar.addClass('volumeBar');
-    self.$slider.addClass('volume');
+    this.size = (dirrection == 'vertical' ? 'height' : 'width');
+
+    self.$sliderBar.addClass(sliderBarClass);
+    self.$slider.addClass(sliderClass);
     self.bindListeners();
+
+    this._getSize = function() {
+        return (dirrection == 'vertical' ? self.$sliderBar.height() : self.$sliderBar.width());
+    };
+
+    this._getOffset = function () {
+        return (dirrection == 'vertical' ? self.$sliderBar.offset().top : self.$sliderBar.offset().left);
+    };
+
+    this._getPagePos = function(e) {
+        return (dirrection == 'vertical' ? e.pageY : e.pageX);
+    };
+
+    this._getCurrentPosition = function(e) {
+        if (dirrection == 'vertical') {
+            return self._getSize() - self._getPagePos(e) + self._getOffset();
+        } else {
+            return self._getPagePos(e) - self._getOffset();
+        }
+    };
 }
 
 SliderController.prototype.getPosition = function () {
@@ -20,7 +43,7 @@ SliderController.prototype.getPosition = function () {
 SliderController.prototype.setPosition = function (position) {
     var self = this;
     self.relativePosition = position;
-    self.$slider.css('height', 100 * self.relativePosition + '%');
+    self.$slider.css(self.size, 100 * self.relativePosition + '%');
 };
 
 SliderController.prototype.bindListeners = function () {
@@ -28,10 +51,10 @@ SliderController.prototype.bindListeners = function () {
 
     self.$sliderBar.on('mousedown', function (e) {
         self.drag = true;
-        var position = self.$sliderBar.height() - e.pageY + self.$sliderBar.offset().top;
-        var percentage = 100 * position / self.$sliderBar.height();
-        self.$slider.css('height', percentage + '%');
-        self.relativePosition = position / self.$sliderBar.height();
+        var position = self._getCurrentPosition(e);
+        var percentage = 100 * position / self._getSize();
+        self.$slider.css(self.size, percentage + '%');
+        self.relativePosition = position / self._getSize();
 
         self.$sliderBar.trigger('OnChange', [self.relativePosition]);
     });
@@ -40,16 +63,16 @@ SliderController.prototype.bindListeners = function () {
         if (self.drag == false) {
             return;
         }
-        if (e.pageY < self.$sliderBar.offset().top) {
-            position = self.$sliderBar.height();
-        } else if (e.pageY > self.$sliderBar.offset().top + self.$sliderBar.height()) {
+        if (self._getPagePos(e) < self._getOffset()) {
+            position = self._getSize();
+        } else if (self._getPagePos(e) > self._getOffset() + self._getSize()) {
             position = 0;
         } else {
-            var position = self.$sliderBar.height() - e.pageY + self.$sliderBar.offset().top;
+            var position = self._getCurrentPosition(e);
         }
-        var percentage = 100 * position / self.$sliderBar.height();
-        self.$slider.css('height', percentage + '%');
-        self.relativePosition = position / self.$sliderBar.height();
+        var percentage = 100 * position / self._getSize();
+        self.$slider.css(self.size, percentage + '%');
+        self.relativePosition = position / self._getSize();
 
         self.$sliderBar.trigger('OnChange', [self.relativePosition]);
     });
