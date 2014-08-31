@@ -455,7 +455,6 @@ hr {
     border: 1px solid lightgray;
     background: white;
     width: 150px;
-    z-index: 10;
 }
 
 .contextMenu .tableRow{
@@ -494,4 +493,8 @@ hr {
 
 .unactiveContextMenuAction .contextMenuActionName{
     color: gray;
+}
+
+#playlists .mCSB_container {
+    overflow: visible;
 }
