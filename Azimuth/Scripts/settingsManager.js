@@ -213,6 +213,9 @@ SettingsManager.prototype.bindListeners = function() {
             self.$searchTrackInput.next().next().children().remove();
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
+
+        self.audioManager.bindPlayBtnListeners();
+        self.progressSlider.bindListeners();
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
@@ -245,6 +248,8 @@ SettingsManager.prototype.bindListeners = function() {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
+            self.audioManager.bindPlayBtnListeners();
+            self.progressSlider.bindListeners();
         }
     });
 
