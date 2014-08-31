@@ -21,9 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @if (Request.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("UserProfile", "Index", "UserProfile")</li>
                         <li>@Html.ActionLink("My music", "Index", "MusicList")</li>
                     }
                     <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>

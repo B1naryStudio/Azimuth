@@ -217,6 +217,7 @@
     <Compile Include="Controllers\PublicPlaylistsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="DataProviders\Concrete\FacebookApi.cs" />
     <Compile Include="DataProviders\Concrete\GoogleApi.cs" />
     <Compile Include="DataProviders\Concrete\SocialNetworkApiFactory.cs" />
@@ -270,6 +271,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Settings.css" />
+    <Content Include="Content\UserProfile.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -337,6 +339,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\RunMigrator.cshtml" />
     <Content Include="Views\Test\Drop.cshtml" />
+    <Content Include="Views\UserProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,49 @@
+﻿.user-info-container {
+    margin-left: 10%;
+    margin-top: 5%;
+    width: 90%;
+    height: 95%;
+}
+
+#user-logo {
+    width: 20%;
+    height: 60%;
+    float: left;
+    margin-right: 20px;
+    display: block;
+}
+
+.user-photo {
+    text-align: center;
+}
+
+.user-screen-name {
+    text-align: center;
+    font-size: 20px;
+}
+
+ul.user-listen-info {
+    list-style-type: none;
+    display: inline-block;
+    width: 100%;
+    margin-left: 10%;
+    text-align: center;
+}
+
+.user-listen-count {
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.user-listen-label {
+    font-size: 12px;
+    font-style: italic;
+    color: darkgray;
+    cursor: pointer;
+}
+
+ul.user-listen-info > li {
+    float: left;
+    margin: 5px;
+}
