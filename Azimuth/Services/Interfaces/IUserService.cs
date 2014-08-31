@@ -7,7 +7,7 @@ namespace Azimuth.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider);
+        Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count);
         Task<List<TrackData.Audio>> GetFriendsTracks(string provider, string friendId);
         UserDto GetUserInfo(int id);
         UserDto GetUserInfo(string email);

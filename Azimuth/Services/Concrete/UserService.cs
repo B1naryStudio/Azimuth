@@ -24,7 +24,7 @@ namespace Azimuth.Services.Concrete
 
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
         }
-        public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider)
+        public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             UserSocialNetwork socialNetworkData;
@@ -41,7 +41,7 @@ namespace Azimuth.Services.Concrete
                 throw new EndUserException("Can't get social network info with provider name = " + provider);
             }
 
-            return await _socialNetworkApi.GetFriendsInfo(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
+            return await _socialNetworkApi.GetFriendsInfo(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken, offset, count);
         }
 
         public async Task<List<TrackData.Audio>> GetFriendsTracks(string provider, string friendId)

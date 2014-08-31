@@ -3,6 +3,7 @@ var SettingsManager = function (manager) {
     this.audioManager = manager;
     this.tracksGlobal = [];
     this.playlistsGlobal = [];
+    this.friendsOffset = 0;
     this.playlistTracksGlobal = [];
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
@@ -284,11 +285,12 @@ SettingsManager.prototype.bindListeners = function() {
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
             $.ajax({
-                url: '/api/user/friends/' + provider,
+                url: '/api/user/friends/' + provider + "?offset="+ self.friendsOffset + "&count=10",
                 async: true,
                 success: function(friends) {
                     self.showFriends(friends);
                     self.$friendList.show('slow');
+                    self.friendsOffset += friends.length;
                 }
             });
         } else {
@@ -337,6 +339,17 @@ SettingsManager.prototype.bindListeners = function() {
         });
     });
 
+    $('#get-other').click(function() {
+        var provider = $('.tab-pane.active').attr('id');
+        $.ajax({
+            url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+            success: function (friends) {
+                self.showFriends(friends);
+                self.$friendList.show('slow');
+                self.friendsOffset += friends.length;
+            }
+        });
+    });
 };
 
 
