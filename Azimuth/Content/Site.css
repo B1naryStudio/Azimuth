@@ -437,6 +437,7 @@ hr {
     border: 1px solid lightgray;
     background: white;
     width: 150px;
+    z-index: 10;
 }
 
 .contextMenu .tableRow{
@@ -471,4 +472,8 @@ hr {
 .subContextMenu .tableRow:hover {
     background: #3399FF;
 	cursor: pointer;
+}
+
+.unactiveContextMenuAction .contextMenuActionName{
+    color: gray;
 }

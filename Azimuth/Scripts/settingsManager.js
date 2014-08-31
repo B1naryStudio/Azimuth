@@ -32,14 +32,12 @@ var SettingsManager = function (manager) {
                 }
                 self.playlistTracksGlobal = tracksData;
                 self.showPlaylistTracks(tracksData);
-                //$('.draggable').makeDraggable({
-                //$('#playlists').makeDraggable({
                 self.$playlistsTable.parent().parent().parent().makeDraggable({
                     contextMenu: [
-						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "callback": selectAllTracksAction },
-						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "callback": moveTrackToPlaylistActions },
-                        { 'id': 'movetoplylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "callback": moveTracksBetweenPlaylistsAction },
-						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "callback": removeSelectedTracksAction }
+						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": selectAllTracksAction },
+						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": copyTrackToPlaylistAction },
+                        { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true, "callback": moveTracksBetweenPlaylistsAction },
+						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true, "callback": removeSelectedTracksAction }
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition,
                     showSubContextMenu: showSubContextMenuAction,
@@ -191,16 +189,13 @@ SettingsManager.prototype.bindListeners = function() {
                     }
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
-                    //$('.draggable').makeDraggable({
-                    //list.parent().parent().makeDraggable({
                     self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "callback": selectAllTracksAction  },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "callback": hideSelectedTracksAction },
-                            { 'id': 'movetoplaylist', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "callback": moveTrackToPlaylistActions },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "callback": createPlaylistAction }
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": selectAllTracksAction },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": hideSelectedTracksAction },
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": saveTrackFromVkToPlaylist },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": createPlaylistAction }
                         ],
-                        saveVkTrack: saveTrackFromVkToPlaylist,
                         showSubContextMenu: showSubContextMenuAction    
                     });
                 } else {
@@ -368,18 +363,10 @@ var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
 
 var saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
     var self = this;
-    //var index = -1;
     var provider = $('.tab-pane.active').attr('id');
     var tracks = [];
-    //var playlistId = -1;
     $currentItem.children().toggleClass('vk-item', false);
-    //if ($element.hasClass('playlist')) {
-    //    playlistId = $element.children('.playlistId').text();
-    //} else {
-    //    playlistId = $('.playlist.active').children('.playlistId').text();
-    //    //index = $draggableStub.index();
-    //}
-    $('.draggable-item-selected').each(function () {
+    $currentItem.children('.draggable-item-selected').each(function () {
         tracks.push($(this).closest('.tableRow').find('.trackId').text());
     }).get();
 
@@ -390,7 +377,6 @@ var saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
             "Id": playlistId,
             "TrackIds": tracks
         }),
-        dataType: 'json',
         contentType: 'application/json',
         success: function () {
             self.showPlaylists();
@@ -406,8 +392,21 @@ var moveTrackToPlaylistActions = function() {
     alert("move track to laylist actions");
 };
 
-var removeSelectedTracksAction = function () {
-    alert("remove");
+var removeSelectedTracksAction = function ($currentItem, playlistId) {
+    var tracksIds = [];
+    $currentItem.children('.draggable-item-selected').each(function () {
+        tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
+    }).get();
+    $.ajax({
+        url: '/api/usertracks/delete?playlistId=' + playlistId,
+        type: 'DELETE',
+        dataType: 'json',
+        data: JSON.stringify(tracksIds),
+        contentType: 'application/json; charset=utf-8',
+        success: function () {
+            self.showPlaylists();
+        }
+    });
 };
 
 var hideSelectedTracksAction = function(list) {
@@ -427,6 +426,47 @@ var showSubContextMenuAction = function($subContextMenuContainer, $object, $toEl
     }
 };
 
-var moveTracksBetweenPlaylistsAction = function() {
-    alert("moving beetween");
+var moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
+    var self = this;
+    var tracksIds = [];
+    $currentItem.children('.draggable-item-selected').each(function () {
+        tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
+    }).get();
+    $.ajax({
+        url: '/api/usertracks/copy?playlistId=' + newPlaylist,
+        type: 'POST',
+        //dataType: 'json',
+        data: JSON.stringify(tracksIds),
+        contentType: 'application/json; charset=utf-8',
+        success: function() {
+            $.ajax({
+                url: '/api/usertracks/delete?playlistId=' + oldPlaylist,
+                type: 'DELETE',
+                dataType: 'json',
+                data: JSON.stringify(tracksIds),
+                contentType: 'application/json; charset=utf-8',
+                success: function() {
+                    self.showPlaylists();
+                }
+            });
+        }
+    });
+}
+
+var copyTrackToPlaylistAction = function($currentItem, playlistId) {
+    var self = this;
+    var tracksIds = [];
+    $currentItem.children('.draggable-item-selected').each(function () {
+        tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
+    }).get();
+    $.ajax({
+        url: '/api/usertracks/copy?playlistId=' + playlistId,
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify(tracksIds),
+        contentType: 'application/json; charset=utf-8'
+        //success: function () {
+        //    self.showPlaylists();
+        //}
+    });
 }

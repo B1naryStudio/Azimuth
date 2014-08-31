@@ -87,13 +87,43 @@ namespace Azimuth.ApiControllers
             }
         }
 
-        [HttpPut]
-        [Route("move")]
-        public HttpResponseMessage MoveTracksBetweenPlaylists(long playlistId, long trackId)
+        [HttpPost]
+        [Route("copy")]
+        public HttpResponseMessage CopyTracksBetweenPlaylists(long playlistId, List<long> trackId)
         {
             try
             {
-                _userTracksService.MoveTrackBetweenPlaylists(playlistId, trackId);
+                _userTracksService.CopyTrackToAnotherPlaylist(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public HttpResponseMessage DeleteTracksFromPlaylist(long playlistId, List<long> trackId)
+        {
+            try
+            {
+                _userTracksService.DeleteTracksFromPlaylist(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("move")]
+        public async Task<HttpResponseMessage> MoveTracksBetweenPlaylists(long playlistId, List<long> trackId)
+        {
+            try
+            {
+                await _userTracksService.CopyTrackToAnotherPlaylist(playlistId, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)

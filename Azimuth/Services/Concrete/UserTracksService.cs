@@ -290,6 +290,58 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        public async Task CopyTrackToAnotherPlaylist (long playlistId, List<long> trackIds )
+        {
+            using (_unitOfWork)
+            {
+
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                var tracks = _trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
+                int i = 0;
+                tracks.ForEach(track =>
+                {
+                    track.Playlists.Add(playlist);
+                    var playlistTrack = new PlaylistTrack
+                    {
+                        Identifier = new PlaylistTracksIdentifier
+                        {
+                            Playlist = playlist,
+                            Track = track,
+                        },
+                        TrackPosition = playlist.Tracks.Count() + i++
+                    };
+                    _playlistTrackRepository.AddItem(playlistTrack);
+                    playlist.PlaylistTracks.Add(playlistTrack);
+                });
+
+                _unitOfWork.Commit();
+            }
+        }
+
+        public async Task DeleteTracksFromPlaylist(long playlistId, List<long> trackIds)
+        {
+            using (_unitOfWork)
+            {
+
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                var tracks = _trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
+                tracks.ForEach(track =>
+                {
+                    track.Playlists.Remove(playlist);
+                    var playlistTrack = _playlistTrackRepository.Get(pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
+                    playlistTrack.ForEach(pt =>
+                    {
+                        _playlistTrackRepository.DeleteItem(pt);
+                        playlist.PlaylistTracks.Remove(pt);
+                    });
+                });
+
+
+
+                _unitOfWork.Commit();
+            }
+        }
+
         private UserSocialNetwork GetSocialNetworkData(string provider)
         {
             var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
