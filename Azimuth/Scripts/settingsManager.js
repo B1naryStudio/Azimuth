@@ -262,7 +262,15 @@ SettingsManager.prototype.bindListeners = function() {
     $('#playlists').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
+        updateOnContentResize: true,
         advanced: { updateOnSelectorChange: "true"}
+    });
+
+    $('#vk-track-list').mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        advanced: { updateOnSelectorChange: "true" }
     });
  
     this._createPlaylist = function() {
@@ -340,11 +348,11 @@ SettingsManager.prototype.bindListeners = function() {
 };
 
 
-var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
+var moveTrackToNewPosition = function($currentItem, $draggableStub) {
     var playlistId = $('.playlist.active').children('.playlistId').text();
     var tracksIds = [];
 
-    $currentItem.children().each(function () {
+    $currentItem.children().each(function() {
         tracksIds.push($(this).find('.trackId').text());
     }).get();
 
@@ -356,7 +364,7 @@ var moveTrackToNewPosition = function ($currentItem, $draggableStub) {
         data: JSON.stringify(tracksIds),
         contentType: 'application/json; charset=utf-8'
     });
-}
+};
 
 var saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
     var self = this;
@@ -417,10 +425,10 @@ var showSubContextMenuAction = function($subContextMenuContainer, $object, $toEl
     }
 };
 
-var moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
+var moveTracksBetweenPlaylistsAction = function($currentItem, newPlaylist, oldPlaylist) {
     var self = this;
     var tracksIds = [];
-    $currentItem.children('.draggable-item-selected').each(function () {
+    $currentItem.children('.draggable-item-selected').each(function() {
         tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
     }).get();
     $.ajax({
@@ -441,11 +449,11 @@ var moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldP
             });
         }
     });
-}
+};
 
 var copyTrackToPlaylistAction = function($currentItem, playlistId) {
     var tracksIds = [];
-    $currentItem.children('.draggable-item-selected').each(function () {
+    $currentItem.children('.draggable-item-selected').each(function() {
         tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
     }).get();
     $.ajax({
@@ -454,4 +462,4 @@ var copyTrackToPlaylistAction = function($currentItem, playlistId) {
         data: JSON.stringify(tracksIds),
         contentType: 'application/json; charset=utf-8'
     });
-}
+};
