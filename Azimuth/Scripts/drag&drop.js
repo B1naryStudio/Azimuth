@@ -4,7 +4,6 @@
         var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
         var contextMenu = options.contextMenu;
         var subContextMenu = options.showSubContextMenu;
-        var movingBetweenPlaylists = options.movingTracksBetweenPlaylists;
 
         var $rootElement = this;
         var $currentItem = null;
@@ -41,7 +40,6 @@
 
         $(document).mousemove(function (event){
             lastEvent = event;
-            //var $elem = _getCurrentTarget(event);
             if ($currentItem && mousedown) {
                 var $elem = _getCurrentTarget(event);
 
@@ -114,7 +112,6 @@
                 } else {
 
                     if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
-                        //moveTrackToNewPosition($currentItem, $draggableStub);
                         moveTrackToNewPosition($currentItem, $draggableStub);
                     }
 
@@ -124,13 +121,12 @@
                             playlistId = $element.children('.playlistId').text();
                         } else {
                             playlistId = $('.playlist.active').children('.playlistId').text();
-                            //index = $draggableStub.index();
                         }
                         var index = -1;
                         if (!$draggableStub.parent().hasClass('vkMusicList')) {
                             index = $draggableStub.index();
                         }
-                        saveVkTrackToPlaylist($currentItem, index, playlistId); // Maybe problem there
+                        saveVkTrackToPlaylist($currentItem, index, playlistId);
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -166,27 +162,21 @@
                     break;
                 case 'copytoplaylist':
                     copyToPlaylistAction = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
                     break;
                 case 'movetoplaylist':
                     moveToPlaylistAction = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
                     break;
                 case 'savevktrack':
                     saveVkTrackToPlaylist = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
                     break;
                 case 'removeselected':
                     removeAction = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
                     break;
                 case 'hideselected':
                     hideAction = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
                     break;
                 case 'createplaylist':
                     createPlaylistAction = contextMenu[i].callback;
-                    //object.toggleClass('unactiveContextMenuAction', true);
             }
 
             if (contextMenu[i].hasSubMenu == true) {
@@ -221,6 +211,7 @@
                      switch (id) {
                          case 'selectall':
                              selectAllAction($(this).find('.track'));
+                             $currentItem = null;
                              break;
                          case 'copytoplaylist':
                              $currentItem = $container;
@@ -367,11 +358,6 @@
 
                     $rootElement.find('.contextMenu .tableRow').mouseleave(function (e) {
                         subContextMenu($subContextMenuContainer, $(this), $(e.toElement));
-                        //var self = $(this);
-                        //var $toElement = $(e.toElement);
-                        //if (self.hasClass('hasSubMenu') && $toElement.parents('.subMenu').length < 1) {
-                        //    $subContextMenuContainer.hide();
-                        //}
                     });
             } else {
 
@@ -428,9 +414,6 @@
                     } else if ($('.draggable-item-selected').length == 1) {
                         $selectedItems.toggleClass('draggable-item-selected', false);
                     }
-                    //else if ($('.draggable-item-selected').length > 1) {
-                    //    $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
-                    //}
                     $currentItem.toggleClass('draggable-item-selected', true);
                 }
             }
@@ -527,33 +510,33 @@
             }
         });
 
-        $('.container').on('delete', function (e) {
-            $currentItem.empty();
-            _clearContainer();
-            deleteFlag = false;
-            _setDeleteAreaCss();
-        });
+        //$('.container').on('delete', function (e) {
+        //    $currentItem.empty();
+        //    _clearContainer();
+        //    deleteFlag = false;
+        //    _setDeleteAreaCss();
+        //});
 
-        $('.draggable-list').on('shuffle', function() {
-            var $this = $(this);
-            var elems = $this.children('li');
-            elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
-            $this.remove(elems[0].tagName);
-            $this.prepend(elems);
-        });
+        //$('.draggable-list').on('shuffle', function() {
+        //    var $this = $(this);
+        //    var elems = $this.children('li');
+        //    elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
+        //    $this.remove(elems[0].tagName);
+        //    $this.prepend(elems);
+        //});
 
-        $('.draggable-list').on('add', function (e, data) {
-            var $newItem = $('<li>').toggleClass('draggable-item', true).text(data);
-            $newItem.mousedown(_makeDraggable);
-            $(this).prepend($newItem);
-        });
+        //$('.draggable-list').on('add', function (e, data) {
+        //    var $newItem = $('<li>').toggleClass('draggable-item', true).text(data);
+        //    $newItem.mousedown(_makeDraggable);
+        //    $(this).prepend($newItem);
+        //});
 
-        $('.draggable-list').on('sort', function (e, dir) {
-            $list = $(this);
-            var sorted = $list.find("> .draggable-item").sort(function (a, b) {
-                return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? dir : -dir;
-            });
-            $list.prepend(sorted);
-        });
+        //$('.draggable-list').on('sort', function (e, dir) {
+        //    $list = $(this);
+        //    var sorted = $list.find("> .draggable-item").sort(function (a, b) {
+        //        return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? dir : -dir;
+        //    });
+        //    $list.prepend(sorted);
+        //});
     };
 });

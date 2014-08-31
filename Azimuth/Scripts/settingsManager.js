@@ -20,8 +20,6 @@ var SettingsManager = function (manager) {
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
 
     this._getTracks = function () {
-        //var $dragList = $(this).next();
-        //if (!$(this).hasClass('active') && $dragList.children().length === 0) {
         $.ajax({
             url: "/api/usertracks?playlistId=" + $(this).find('.playlistId').text(), // TODO replace with class playlistID
             type: 'GET',
@@ -41,7 +39,6 @@ var SettingsManager = function (manager) {
                     ],
                     onMoveTrackToNewPosition: moveTrackToNewPosition,
                     showSubContextMenu: showSubContextMenuAction,
-                    //movingTracksBetweenPlaylists: moveTracksBetweenPlaylistsAction
                 });
                 self.$searchPlaylistInput.val('');
             }
@@ -388,11 +385,8 @@ var selectAllTracksAction = function(list) {
     list.toggleClass('draggable-item-selected', true);
 };
 
-var moveTrackToPlaylistActions = function() {
-    alert("move track to laylist actions");
-};
-
 var removeSelectedTracksAction = function ($currentItem, playlistId) {
+    var self = this;
     var tracksIds = [];
     $currentItem.children('.draggable-item-selected').each(function () {
         tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
@@ -400,7 +394,6 @@ var removeSelectedTracksAction = function ($currentItem, playlistId) {
     $.ajax({
         url: '/api/usertracks/delete?playlistId=' + playlistId,
         type: 'DELETE',
-        dataType: 'json',
         data: JSON.stringify(tracksIds),
         contentType: 'application/json; charset=utf-8',
         success: function () {
@@ -419,8 +412,6 @@ var createPlaylistAction = function() {
 };
 
 var showSubContextMenuAction = function($subContextMenuContainer, $object, $toElement) {
-    //var self = $(this);
-    //var $toElement = $(e.toElement);
     if ($object.hasClass('hasSubMenu') && $toElement.parents('.subMenu').length < 1) {
         $subContextMenuContainer.hide();
     }
@@ -435,7 +426,6 @@ var moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldP
     $.ajax({
         url: '/api/usertracks/copy?playlistId=' + newPlaylist,
         type: 'POST',
-        //dataType: 'json',
         data: JSON.stringify(tracksIds),
         contentType: 'application/json; charset=utf-8',
         success: function() {
@@ -454,7 +444,6 @@ var moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldP
 }
 
 var copyTrackToPlaylistAction = function($currentItem, playlistId) {
-    var self = this;
     var tracksIds = [];
     $currentItem.children('.draggable-item-selected').each(function () {
         tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
@@ -462,11 +451,7 @@ var copyTrackToPlaylistAction = function($currentItem, playlistId) {
     $.ajax({
         url: '/api/usertracks/copy?playlistId=' + playlistId,
         type: 'POST',
-        dataType: 'json',
         data: JSON.stringify(tracksIds),
         contentType: 'application/json; charset=utf-8'
-        //success: function () {
-        //    self.showPlaylists();
-        //}
     });
 }
