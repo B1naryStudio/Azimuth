@@ -69,9 +69,11 @@ SliderController.prototype.bindListeners = function () {
             return;
         }
         if (self._getPagePos(e) < self._getOffset()) {
-            position = self._getSize();
+            //position = self._getSize();
+            position = (self.dirrection == 'vertical' ? self._getSize() : 0);
         } else if (self._getPagePos(e) > self._getOffset() + self._getSize()) {
-            position = 0;
+            //position = 0;
+            position = (self.dirrection == 'vertical' ? 0 : self._getSize());
         } else {
             var position = self._getCurrentPosition(e);
         }

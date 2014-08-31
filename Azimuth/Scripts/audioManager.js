@@ -146,7 +146,6 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
-        self.progressSlider.setPosition(0);
         if (self.$currentTrack != null) {
             self.$currentTrack.find('.track-duration').show();
             self.$currentTrack.find('.track-remaining').hide();
@@ -157,6 +156,7 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
         if (self.audio.paused || self.audio.src != url) {
             if (self.audio.src != url) {
                 self._setAttribute(url);
+                self.progressSlider.setPosition(0);
             }
             self.$currentTrack = $(this).parent();
             self.play();
