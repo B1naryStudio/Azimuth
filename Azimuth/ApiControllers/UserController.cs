@@ -36,9 +36,9 @@ namespace Azimuth.ApiControllers
 
         [HttpGet]
         [Route("friends/{provider:alpha}")]
-        public async Task<HttpResponseMessage> GetUserFriendsInfo(string provider)
+        public async Task<HttpResponseMessage> GetUserFriendsInfo(string provider, int offset, int count)
         {
-            var data = await _userService.GetFriendsInfo(provider);
+            var data = await _userService.GetFriendsInfo(provider, offset, count);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
 
