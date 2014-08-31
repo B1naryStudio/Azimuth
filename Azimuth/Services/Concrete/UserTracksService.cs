@@ -109,7 +109,7 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId)
+        public void UpdateTrackPlaylistPosition(long playlistId, int newIndex, List<long> trackId)
         {
             using (_unitOfWork)
             {

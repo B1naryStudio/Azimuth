@@ -1,18 +1,28 @@
 ﻿$(document).ready(function () {
 
+    var count = 0;
+
     $.fn.makeDraggable = function (options) {
         var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
         var contextMenu = options.contextMenu;
-        var subContextMenu = options.showSubContextMenu;
 
         var $rootElement = this;
         var $currentItem = null;
         var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
-        var $contextMenuContainer = $('<div class="contextMenu">' +
-                                         '</div>');
 
-        var $subContextMenuContainer = $('<div class="contextMenu subMenu"></div>');
+        this._getCount = function () {
+            return count++;
+        };
+        this.contextMenuId = 'conteiner-id' + this._getCount();
+        var $contextMenuContainer = $('<div>');
+        $contextMenuContainer.addClass('contextMenu');
+        $contextMenuContainer.attr('id', this.contextMenuId);
+
+        var $subContextMenuContainer = $('<div>');
+        $subContextMenuContainer.addClass('contextMenu');
+        $subContextMenuContainer.addClass('subMenu');
+
         var $contextMenuTemplate = $('#contextmenuTemplate');
         var $subContextMenuTemplate = $('#subContextmenuTemplate');
 
@@ -122,8 +132,8 @@
                         var playlistId = -1;
                         if ($element.hasClass('playlist')) {
                             playlistId = $element.children('.playlistId').text();
-                        } else {
-                            playlistId = $('.playlist.active').children('.playlistId').text();
+                        } else if ($element.hasClass('track')) {
+                            playlistId = $element.parent().children('.playlistId').text();
                         }
                         var index = -1;
                         if (!$draggableStub.parent().hasClass('vkMusicList')) {
@@ -195,36 +205,37 @@
             object.appendTo($contextMenuContainer);
         }
 
-        this.mousedown(function (e) {
-            var $target = $(e.target);
-            if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
-                mousedownOnProgressBar = true;
-            }
-			if (contextMenuSelected == true && e.which != 3 && !$target.parent().hasClass('hasSubMenu')) {                 $contextMenuContainer.hide();
-                 $subContextMenuContainer.hide();
-             }
-             if ($target.hasClass('contextMenuActionName')) {
-                 var id = "";
-                 if ($target.parents().hasClass('subMenu')) {
+        $contextMenuContainer.mousedown(function (event) {
+            var $target = $(event.target);
+             if (contextMenuSelected == true && event.which != 3 && !$target.parent().hasClass('hasSubMenu')) {
 
-                     id = $target.parent().parents('.hasSubMenu').children('.contextMenuActionName').attr('id');
+                 $contextMenuContainer.detach();
+                 $subContextMenuContainer.detach();
+             }
+             if ($target.hasClass('contextMenuActionName') && !$target.parent().hasClass('hasSubMenu')) {
+                 var action = "";
+                 if ($target.parents().hasClass('subMenu')) {
+                     action = $subContextMenuContainer.attr('action');
                  } else {
-                     id = $target.attr('id');
+                     action = $target.attr('id');
                  }
 
                  if (!$target.parent().hasClass('unactiveContextMenuAction')) {
-                     switch (id) {
+                     switch (action) {
                          case 'selectall':
-                             selectAllAction($(this).find('.track'));
                              $currentItem = null;
+                             var $itemsToSelect = $rootElement.children().find('.track');
+                             selectAllAction($itemsToSelect);
                              break;
                          case 'copytoplaylist':
                              $currentItem = $container;
                              $currentItem.hide();
                              $currentItem.append($('.draggable-item-selected').clone());
                              if ($currentItem.children().length > 0) {
-                                 copyToPlaylistAction($currentItem, $target.parent().children('.playlistId').text());
+                                 var playlistId = $target.parent().children('.playlistId').text();
+                                 copyToPlaylistAction($currentItem, playlistId);
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'movetoplaylist':
@@ -236,6 +247,7 @@
                                  var oldPlaylist = $('.playlist.active').children('.playlistId').text();
                                  moveToPlaylistAction($currentItem, newPlaylist, oldPlaylist);
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'savevktrack':
@@ -255,6 +267,7 @@
                              if ($currentItem.children().length > 0) {
                                  removeAction($currentItem, $('.playlist.active').children('.playlistId').text());
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'hideselected':
@@ -268,16 +281,16 @@
             }
         });
 
-        $(document).mousedown(function (e) {
-            var $target = $(e.target);
+        $(document).mousedown(function (event) {
+            var $target = $(event.target);
             if (!$target.parents().hasClass('draggable-list')) {
                 document.oncontextmenu = function() {
                     return true;
                 }
             }
-            if (!$target.hasClass('contextMenuActionName') && e.which != 3) {
-                $contextMenuContainer.hide();
-                $subContextMenuContainer.hide();
+            if (!$target.hasClass('contextMenuActionName') && event.which != 3) {
+                $contextMenuContainer.detach();
+                $subContextMenuContainer.detach();
             }
         });
 
@@ -292,57 +305,34 @@
                 if ($target.hasClass('vkMusicTable')) {
                     $target = $target.parent();
                 }
-                var clientY = $(event.clientY);
-                var clientX = $(event.clientX);
-                var parentOffset = $target.parent().offset();
-                var x = event.pageX - parentOffset.left;
-                var y = event.pageY;
-                $target.append($contextMenuContainer);
-                if (($(window).height()  - ($contextMenuContainer.height() + clientY[0])) < $contextMenuContainer.height()){
+                var y = $(event.clientY)[0];
+                var x = $(event.clientX)[0];
+
+                //if (($(window).height() - ($contextMenuContainer.height() + y)) < $contextMenuContainer.height()) {
+                if (($contextMenuContainer.height() + y) > $(window).height()) {
                     y = y - $contextMenuContainer.height();
                 }
-
-                if (($(window).width() - ($contextMenuContainer.width() + clientX[0])) < $contextMenuContainer.width()) {
+                if (($contextMenuContainer.width() + x) > $(window).width()) {
                     x = x - $contextMenuContainer.width();
                 }
                     $contextMenuContainer.css({
-                        'top': y - $target.offset().top + 'px',
-                        'left': x + 'px'
+                        'top': y + 'px',
+                        'left': x  + 'px'
                     });
-
-                    $target.append($contextMenuContainer);
+                    $('body').append($contextMenuContainer);
 
                 if ($('.draggable-item-selected').length == 0) {
                     $('.needSelectedItems').toggleClass('unactiveContextMenuAction', true);
                 } else {
                     $('.needSelectedItems').toggleClass('unactiveContextMenuAction', false);
                 }
-
-                    
                     $contextMenuContainer.show();
-
-                    $rootElement.find('.contextMenu .tableRow').hover(function () {
+                    $contextMenuContainer.children('.tableRow').hover(function (event) {
                         var self = $(this);
                         var $elem = $('.tableRow:hover');
-                            if ($elem.hasClass('hasSubMenu')) {
+                            if ($elem.hasClass('hasSubMenu') && !$elem.hasClass('unactiveContextMenuAction')) {
                                 var contextMenuItemOffset = $('.contextMenu .tableRow:hover').position();
                                 if (contextMenuItemOffset != undefined) {
-                                    var x = $('.contextMenu .tableRow:hover').width();
-                                    var y = $('.contextMenu .tableRow:hover').position().top;
-
-                                    if (($(window).height() - ($subContextMenuContainer.height() + clientY[0])) < $subContextMenuContainer.height()) {
-                                        y = y - $subContextMenuContainer.height();
-                                    }
-
-                                    if (($(window).width() - clientX[0]) < $subContextMenuContainer.width()) {
-                                        x = x - $subContextMenuContainer.width() - $contextMenuContainer.width();
-                                    }
-                                    $subContextMenuContainer.css({
-                                        'top': y - 1 + 'px',
-                                        'left': x + 'px',
-                                        'position': 'absolute'
-                                    });
-
                                     var $playlists = $('#playlistsTable').children('.playlist');
                                     $subContextMenuContainer.children().remove('.tableRow');
                                     for (var j = 0; j < $playlists.length; j++) {
@@ -354,15 +344,22 @@
                                         var object = $subContextMenuTemplate.tmpl(playlist);
                                         object.appendTo($subContextMenuContainer);
                                     }
+                                    var x = $contextMenuContainer.width();
+                                    var y = $('.tableRow:hover').position().top;
+                                    if (($subContextMenuContainer.width() + x + $contextMenuContainer.position().left) > $(window).width()) {
+                                        x = x - 2 * $subContextMenuContainer.width();
+                                    }
+                                    $subContextMenuContainer.css({
+                                        'top': y + 'px',
+                                        'left': x + 'px',
+                                        'position': 'absolute'
+                                    });
 
+                                    $subContextMenuContainer.attr('action', $('.tableRow:hover').children().attr('id'));
                                     $('.tableRow:hover').append($subContextMenuContainer);
                                     $subContextMenuContainer.show();
                                 }
                             }
-                    });
-
-                    $rootElement.find('.contextMenu .tableRow').mouseleave(function (e) {
-                        subContextMenu($subContextMenuContainer, $(this), $(e.toElement));
                     });
             } else {
 
