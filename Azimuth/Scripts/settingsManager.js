@@ -41,8 +41,7 @@ var SettingsManager = function (manager) {
                         { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true, "callback": self._moveTracksBetweenPlaylistsAction },
 						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true, "callback": self._removeSelectedTracksAction }
                     ],
-                    onMoveTrackToNewPosition: self._moveTrackToNewPosition,
-                    showSubContextMenu: self._showSubContextMenuAction,
+                    onMoveTrackToNewPosition: self._moveTrackToNewPosition
                 });
                 self.$searchPlaylistInput.val('');
             }
@@ -165,12 +164,6 @@ var SettingsManager = function (manager) {
 
     this._createPlaylistAction = function () {
         alert('createplaylist');
-    };
-
-    this._showSubContextMenuAction = function ($subContextMenuContainer, $object, $toElement) {
-        if ($object.hasClass('hasSubMenu') && $toElement.parents('.subMenu').length < 1) {
-            $subContextMenuContainer.hide();
-        }
     };
 
     this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
@@ -320,8 +313,7 @@ SettingsManager.prototype.bindListeners = function() {
                             { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._shideSelectedTracksAction },
                             { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
                             { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._screatePlaylistAction }
-                        ],
-                        showSubContextMenu: self._showSubContextMenuAction,
+                        ]
                     });
                 } else {
                     self.$reloginForm.show();

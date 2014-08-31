@@ -437,7 +437,6 @@ hr {
     border: 1px solid lightgray;
     background: white;
     width: 150px;
-    z-index: 1000;
 }
 
 .contextMenu .tableRow{
