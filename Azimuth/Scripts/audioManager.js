@@ -26,12 +26,14 @@
 
     self.audio.ontimeupdate = function() {
         self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
-        $('#currentTime').text(Math.floor(self.audio.currentTime));
-        $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
+        var remaining = Math.floor(self.audio.duration - self.audio.currentTime);
+        self.$currentTrack.find('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
     };
 
     this._nextTrack = function () {
         self.progressSlider.setPosition(0);
+        self.$currentTrack.find('.track-duration').show();
+        self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
@@ -49,6 +51,8 @@
 
     this._prevTrack = function () {
         self.progressSlider.setPosition(0);
+        self.$currentTrack.find('.track-duration').show();
+        self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
@@ -110,6 +114,9 @@
 
 AudioManager.prototype.play = function() {
     var self = this;
+
+    self.$currentTrack.find('.track-duration').hide();
+    self.$currentTrack.find('.track-remaining').show();
     self.$currentTrack.append(self.progressSlider.getSlider());
     self.progressSlider.getSlider().show();
     self.audio.play();
@@ -140,6 +147,10 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
 
     function onPlayBtnClick() {
         self.progressSlider.setPosition(0);
+        if (self.$currentTrack != null) {
+            self.$currentTrack.find('.track-duration').show();
+            self.$currentTrack.find('.track-remaining').hide();
+        }
 
         self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
         var url = $(this).parent().children('.track-url').text();
