@@ -254,6 +254,11 @@ div.draggable-list{
     display: block;
     height: 50px;
     width: 100%;
+    -moz-min-width: 250px;
+    -ms-min-width: 250px;
+    -o-min-width: 250px;
+    -webkit-min-width: 250px;
+    min-width: 250px;
     background-color: #F0F0F0;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -294,7 +299,15 @@ div.draggable-list{
     margin-top: 10px;
     width: 15%;
 }
+
 .track-duration {
+    display: block;
+    float: right;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.track-remaining {
     display: block;
     float: right;
     margin-top: 10px;

@@ -32,6 +32,8 @@
         var deleteFlag = false;
         var contextMenuSelected = false;
 
+        var mousedownOnProgressBar = false;
+
         this.find('.draggable-list > .tableRow').each(function (index, item) {
             var $item = $(item);
             $item.toggleClass('draggable-item', true);
@@ -40,7 +42,7 @@
 
         $(document).mousemove(function (event){
             lastEvent = event;
-            if ($currentItem && mousedown) {
+            if ($currentItem && mousedown && !mousedownOnProgressBar) {
                 var $elem = _getCurrentTarget(event);
 
                 if ($currentItem.hasClass('draggable-item-selected')) {
@@ -98,6 +100,7 @@
             }
 
             mousedown = false;
+            mousedownOnProgressBar = false;
             clearTimeout(timerId);
             if ($currentItem) {
                 var $element = _getCurrentTarget(event);
@@ -194,8 +197,10 @@
 
         this.mousedown(function (e) {
             var $target = $(e.target);
-             if (contextMenuSelected == true && e.which != 3 && !$target.parent().hasClass('hasSubMenu')) {
-                 $contextMenuContainer.hide();
+            if ($target.hasClass('progressBar') || $target.hasClass('progress')) {
+                mousedownOnProgressBar = true;
+            }
+			if (contextMenuSelected == true && e.which != 3 && !$target.parent().hasClass('hasSubMenu')) {                 $contextMenuContainer.hide();
                  $subContextMenuContainer.hide();
              }
              if ($target.hasClass('contextMenuActionName')) {

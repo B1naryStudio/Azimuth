@@ -1,33 +1,33 @@
-﻿var SliderController = function (sliderSelector, sliderBarClass, sliderClass, dirrection) {
+﻿var SliderController = function (options) {
     var self = this;
 
     this.drag = false;
     this.relativePosition = 0;
-    this.dirrection = dirrection;
-    this.$sliderBar = $(sliderSelector);
-    $(sliderSelector).append('<div class="slider"></div>');
-    this.$slider = $($(sliderSelector).find('.slider'));
+    this.dirrection = options.dirrection;
+    this.$sliderBar = $(options.sliderSelector);
+    self.$sliderBar.append('<div class="slider"></div>');
+    this.$slider = $(self.$sliderBar.find('.slider'));
 
-    this.size = (dirrection == 'vertical' ? 'height' : 'width');
+    this.size = (self.dirrection == 'vertical' ? 'height' : 'width');
 
-    self.$sliderBar.addClass(sliderBarClass);
-    self.$slider.addClass(sliderClass);
+    self.$sliderBar.addClass(options.sliderBarClass);
+    self.$slider.addClass(options.sliderClass);
     self.bindListeners();
 
     this._getSize = function() {
-        return (dirrection == 'vertical' ? self.$sliderBar.height() : self.$sliderBar.width());
+        return (self.dirrection == 'vertical' ? self.$sliderBar.height() : self.$sliderBar.width());
     };
 
     this._getOffset = function () {
-        return (dirrection == 'vertical' ? self.$sliderBar.offset().top : self.$sliderBar.offset().left);
+        return (self.dirrection == 'vertical' ? self.$sliderBar.offset().top : self.$sliderBar.offset().left);
     };
 
     this._getPagePos = function(e) {
-        return (dirrection == 'vertical' ? e.pageY : e.pageX);
+        return (self.dirrection == 'vertical' ? e.pageY : e.pageX);
     };
 
     this._getCurrentPosition = function(e) {
-        if (dirrection == 'vertical') {
+        if (self.dirrection == 'vertical') {
             return self._getSize() - self._getPagePos(e) + self._getOffset();
         } else {
             return self._getPagePos(e) - self._getOffset();
@@ -69,9 +69,11 @@ SliderController.prototype.bindListeners = function () {
             return;
         }
         if (self._getPagePos(e) < self._getOffset()) {
-            position = self._getSize();
+            //position = self._getSize();
+            position = (self.dirrection == 'vertical' ? self._getSize() : 0);
         } else if (self._getPagePos(e) > self._getOffset() + self._getSize()) {
-            position = 0;
+            //position = 0;
+            position = (self.dirrection == 'vertical' ? 0 : self._getSize());
         } else {
             var position = self._getCurrentPosition(e);
         }
