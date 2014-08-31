@@ -253,7 +253,9 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Concrete\AccountService.cs" />
+    <Compile Include="Services\Concrete\UserService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
+    <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\Interfaces\IPlaylistService.cs" />
     <Compile Include="Services\Interfaces\ISettingsService.cs" />
     <Compile Include="Services\Interfaces\IUserTracksService.cs" />
@@ -275,6 +277,7 @@
     <Content Include="Images\arrow-square.gif" />
     <Content Include="Images\facebook_logo.png" />
     <Content Include="Images\google_logo.png" />
+    <Content Include="Images\grey-caret-right.png" />
     <Content Include="Images\login_bg.jpeg" />
     <Content Include="Images\mCSB_buttons.png" />
     <Content Include="Images\media_add.png" />
@@ -307,6 +310,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\settingsManager.js" />
+    <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\work.with.playlist.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />

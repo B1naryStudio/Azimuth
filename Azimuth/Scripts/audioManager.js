@@ -1,14 +1,38 @@
-﻿var AudioManager = function() {
+﻿var AudioManager = function(volumeSlider, progressSlider) {
     var self = this;
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
+    this.audio.volume = 0.5;
+    this.beforeMuteVolume = null;
+    this.volumeSlider = volumeSlider;
+    this.progressSlider = progressSlider;
 
     self.audio.onended = function() {
         self._nextTrack();
     };
 
-    this._nextTrack = function() {
+    self.audio.onvolumechange = function() {
+        if (self.audio.volume == 0) {
+            $('#volumeImg').css('background-position', '0 -120px');
+        } else if (self.audio.volume <= 0.33) {
+            $('#volumeImg').css('background-position', '0 -80px');
+        } else if (self.audio.volume <= 0.66) {
+            $('#volumeImg').css('background-position', '0 -40px');
+        } else {
+            $('#volumeImg').css('background-position', '0 0');
+        }
+    };
+
+    self.audio.ontimeupdate = function() {
+        self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
+        $('#currentTime').text(Math.floor(self.audio.currentTime));
+        $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
+    };
+
+    this._nextTrack = function () {
+        self.progressSlider.setPosition(0);
+
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next();
@@ -23,7 +47,9 @@
         self._setTrackTo('next');
     };
 
-    this._prevTrack = function() {
+    this._prevTrack = function () {
+        self.progressSlider.setPosition(0);
+
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev();
@@ -68,7 +94,7 @@
                     } else {
                         url = $($(self.tracksGlobal).get(index - 1)).text();
                     }
-                    if (!self.audio.paused) {
+                    if (!self.audio.paused || self.audio.currentTime === self.audio.duration) {
                         self._setAttribute(url);
                         self.play();
                     } else {
@@ -84,6 +110,8 @@
 
 AudioManager.prototype.play = function() {
     var self = this;
+    self.$currentTrack.append(self.progressSlider.getSlider());
+    self.progressSlider.getSlider().show();
     self.audio.play();
 };
 
@@ -92,10 +120,27 @@ AudioManager.prototype.pause = function() {
     self.audio.pause();
 };
 
+AudioManager.prototype.setVolume = function(value) {
+    var self = this;
+    self.audio.volume = value;
+};
+
+AudioManager.prototype.setCurrentTime = function (value) {
+    var self = this;
+    self.audio.currentTime = value;
+};
+
+AudioManager.prototype.getDuration = function () {
+    var self = this;
+    return self.audio.duration;
+};
+
 AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
+        self.progressSlider.setPosition(0);
+
         self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
         var url = $(this).parent().children('.track-url').text();
         if (self.audio.paused || self.audio.src != url) {
@@ -121,9 +166,13 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#playTrackBtn').click(function() {
         if (self.audio.paused) {
-            self.play();
-            self._setPauseImgButton(self.$currentTrack);
-            $('#playTrackBtn').css('background-position', '8px -50px');
+            if (self.audio.src === '') {
+                $($('.track:not(.draggable-stub)').children('.btn').get(0)).click();
+            } else {
+                self.play();
+                self._setPauseImgButton(self.$currentTrack);
+                $('#playTrackBtn').css('background-position', '8px -50px');
+            }
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
@@ -136,15 +185,27 @@ AudioManager.prototype.bindListeners = function() {
 
     $('#volumeImg').click(function () {
         if (self.audio.volume == 0) {
-            self.audio.volume = 1;
+            self.audio.volume = self.beforeMuteVolume;
             $('#volumeImg').css('background-position', '0 0');
+            self.volumeSlider.setPosition(self.beforeMuteVolume);
+            //$('#volume').css('height', self.beforeMuteVolume*100 + '%');
         } else {
+            self.beforeMuteVolume = self.audio.volume;
             self.audio.volume = 0;
-            $('#volumeImg').css('background-position', '0 -120px');
+            //$('#volume').css('height', 0);
+            self.volumeSlider.setPosition(0);
         }
     });
 
     $('.itemsContainer').on('AfterDropped', function() {
         self.tracksGlobal = $('.draggable-stub').parent().children('.track').children('.track-url');
+    });
+
+    $('#volumeSlider').on('OnChange', function (e, value) {
+        self.setVolume(value);
+    });
+
+    $('#progressSlider').on('OnChange', function (e, value) {
+        self.audio.currentTime = value * self.audio.duration;
     });
 };

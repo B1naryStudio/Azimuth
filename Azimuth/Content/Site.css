@@ -254,24 +254,29 @@ div.draggable-list{
     display: block;
     height: 50px;
     width: 100%;
-    background-color: #E0E0E0;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    background-color: #F0F0F0;
+    margin-top: 10px;
+    margin-bottom: 10px;
     -ms-border-radius: 5px;
     border-radius: 5px;
 }
 
+.track:hover {
+    background-color: #E0E0E0;
+}
+
 .track-description {
     display: inline;
-    height: 100%;
+    height: 80%;
     width: 70%;
     left: 10%;
+    font-size: 12px;
 }
 
 .track-info {
     display: block;
     float: left;
-    height: 50%;
+    height: 30%;
     width: 50%;
     margin-top: 3px;
 }
@@ -279,20 +284,20 @@ div.draggable-list{
 .track-title {
     display: block;
     float: left;
-    height: 50%;
+    height: 30%;
     width: 50%;
 }
 
 .track-genre {
     display: inline;
     float: left;
-    margin-top: -12px;
+    margin-top: 10px;
     width: 15%;
 }
 .track-duration {
     display: block;
     float: right;
-    margin-top: -12px;
+    margin-top: 10px;
     margin-right: 20px;
 }
 
@@ -303,7 +308,7 @@ div.draggable-list{
     height: 60%;
     margin-left: 5px;
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 4px;
     padding-left: 8px;
 }
 
@@ -325,6 +330,40 @@ div.draggable-list{
 
 .playlist-genres {
     margin-top: 40px;
+}
+
+
+#friends-container {
+    position: absolute;
+    width: 300px;
+    min-height: 80%;
+    z-index: 1000;
+    margin-left: 64%;
+    border: 2px solid black;
+    background: lightgrey;
+}
+
+div.friend {
+    display: block;
+    clear: left;
+    height: 106px;
+}
+
+div.friend:hover {
+    background: lightblue;
+    cursor: pointer;
+}
+
+.friend-initials {
+    width: 100%;
+    height: 20%;
+}
+
+
+.friend-photo {
+    float: left;
+    margin: 3px;
+    display: block;
 }
 
 span.label {
@@ -378,16 +417,6 @@ span.label {
     font: normal normal normal 130px/1 FontAwesome;
 }
 
-.contextMenuActionName:hover {
-    background: #3399FF;
-	cursor: pointer;
-}
-.contextMenuActionName {
-    font-family: "Arial";
-    font-size: 10pt;
-    font-style: normal;
-    padding: 3px 10px 3px 10px;
-}
 hr {
     padding: 0px;
     margin: 0px;
@@ -407,4 +436,44 @@ hr {
     position: absolute;
     border: 1px solid lightgray;
     background: white;
+    width: 150px;
+    z-index: 10;
+}
+
+.contextMenu .tableRow{
+    height: 20px;
+}
+
+.contextMenu .tableRow:hover {
+    background: #3399FF;
+	cursor: pointer;
+}
+.contextMenuActionName {
+    font-family: "Arial";
+    font-size: 10pt;
+    font-style: normal;
+    padding: 3px 10px 3px 10px;
+    float: left;
+    width: 90%;
+}
+.contextMenuExpander {
+    width: 10%
+}
+.subContextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid lightgray;
+    background: white;
+    width: 150px;
+}
+.subContextMenu .tableRow{
+    height: 20px;
+}
+.subContextMenu .tableRow:hover {
+    background: #3399FF;
+	cursor: pointer;
+}
+
+.unactiveContextMenuAction .contextMenuActionName{
+    color: gray;
 }

@@ -9,11 +9,13 @@ namespace Azimuth.Services.Interfaces
     {
         Task<List<TrackData.Audio>> GetTracks(string provider);
         Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id);
-		void SetPlaylist(PlaylistData playlistData, string provider, int index);
+        Task SetPlaylist(PlaylistData playlistData, string provider, int index);
         Task<ICollection<TracksDto>> GetUserTracks();
         void PutTrackToPlaylist(long playlistId, int newIndex, List<long> trackId);
         void MoveTrackBetweenPlaylists(long playlistId, long trackId);
         void PutTrackToPlaylist(int id, Track track);
+        Task CopyTrackToAnotherPlaylist(long playlistId, List<long> trackIds);
+        Task DeleteTracksFromPlaylist(long playlistId, List<long> trackIds);
 
     }
 }

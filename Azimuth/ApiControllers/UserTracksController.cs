@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
-using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +10,6 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
-using NHibernate.Mapping;
 
 namespace Azimuth.ApiControllers
 {
@@ -42,7 +40,7 @@ namespace Azimuth.ApiControllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index)
         {
-            _userTracksService.SetPlaylist(playlistData, provider, index);
+            await _userTracksService.SetPlaylist(playlistData, provider, index);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
@@ -89,13 +87,43 @@ namespace Azimuth.ApiControllers
             }
         }
 
-        [HttpPut]
-        [Route("move")]
-        public HttpResponseMessage MoveTracksBetweenPlaylists(long playlistId, long trackId)
+        [HttpPost]
+        [Route("copy")]
+        public HttpResponseMessage CopyTracksBetweenPlaylists(long playlistId, List<long> trackId)
         {
             try
             {
-                _userTracksService.MoveTrackBetweenPlaylists(playlistId, trackId);
+                _userTracksService.CopyTrackToAnotherPlaylist(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        public HttpResponseMessage DeleteTracksFromPlaylist(long playlistId, List<long> trackId)
+        {
+            try
+            {
+                _userTracksService.DeleteTracksFromPlaylist(playlistId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("move")]
+        public async Task<HttpResponseMessage> MoveTracksBetweenPlaylists(long playlistId, List<long> trackId)
+        {
+            try
+            {
+                await _userTracksService.CopyTrackToAnotherPlaylist(playlistId, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (BadRequestException ex)
