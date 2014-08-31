@@ -124,7 +124,6 @@ var SettingsManager = function (manager) {
             contentType: 'application/json',
             success: function () {
                 if ($('#playlistTracks').children().length > 0) {
-                    //self.tracksGlobal.length = 0;
                     var playlistId = $('#playlistTracks').find('.playlistId').text();
                     $('#playlistTracks').children().remove();
                     self._getTracks(playlistId);
@@ -151,7 +150,13 @@ var SettingsManager = function (manager) {
             type: 'DELETE',
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
-            success: function () {
+            success: function() {
+                var playlistId = $('#playlistTracks').find('.playlistId').text();
+                $('#playlistTracks').children().remove();
+                self._getTracks(playlistId);
+
+                $('.tableRow.playlist').remove();
+                self.playlistsGlobal.length = 0;
                 self.showPlaylists();
             }
         });
@@ -167,7 +172,6 @@ var SettingsManager = function (manager) {
     };
 
     this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
-        var self = this;
         var tracksIds = [];
         $currentItem.children('.draggable-item-selected').each(function () {
             tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
@@ -181,10 +185,15 @@ var SettingsManager = function (manager) {
                 $.ajax({
                     url: '/api/usertracks/delete?playlistId=' + oldPlaylist,
                     type: 'DELETE',
-                    dataType: 'json',
                     data: JSON.stringify(tracksIds),
                     contentType: 'application/json; charset=utf-8',
-                    success: function () {
+                    success: function() {
+                        var playlistId = $('#playlistTracks').find('.playlistId').text();
+                        $('#playlistTracks').children().remove();
+                        self._getTracks(playlistId);
+
+                        $('.tableRow.playlist').remove();
+                        self.playlistsGlobal.length = 0;
                         self.showPlaylists();
                     }
                 });
@@ -201,7 +210,18 @@ var SettingsManager = function (manager) {
             url: '/api/usertracks/copy?playlistId=' + playlistId,
             type: 'POST',
             data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8'
+            contentType: 'application/json; charset=utf-8',
+            success: function() {
+                if ($('#playlistTracks').children().length > 0) {
+                    var playlistId = $('#playlistTracks').find('.playlistId').text();
+                    $('#playlistTracks').children().remove();
+                    self._getTracks(playlistId);
+                }
+
+                $('.tableRow.playlist').remove();
+                self.playlistsGlobal.length = 0;
+                self.showPlaylists();
+            }
         });
     };
 

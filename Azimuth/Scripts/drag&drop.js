@@ -129,8 +129,8 @@
                         var playlistId = -1;
                         if ($element.hasClass('playlist')) {
                             playlistId = $element.children('.playlistId').text();
-                        } else {
-                            playlistId = $('.playlist.active').children('.playlistId').text();
+                        } else if ($element.hasClass('track')) {
+                            playlistId = $element.parent().children('.playlistId').text();
                         }
                         var index = -1;
                         if (!$draggableStub.parent().hasClass('vkMusicList')) {
@@ -209,7 +209,7 @@
                  $contextMenuContainer.detach();
                  $subContextMenuContainer.detach();
              }
-             if ($target.hasClass('contextMenuActionName')) {
+             if ($target.hasClass('contextMenuActionName') && !$target.parent().hasClass('hasSubMenu')) {
                  var action = "";
                  if ($target.parents().hasClass('subMenu')) {
                      action = $subContextMenuContainer.attr('action');
@@ -220,7 +220,6 @@
                  if (!$target.parent().hasClass('unactiveContextMenuAction')) {
                      switch (action) {
                          case 'selectall':
-                             //selectAllAction($(this).find('.track'));
                              $currentItem = null;
                              var $itemsToSelect = $rootElement.children().find('.track');
                              selectAllAction($itemsToSelect);
@@ -233,6 +232,7 @@
                                  var playlistId = $target.parent().children('.playlistId').text();
                                  copyToPlaylistAction($currentItem, playlistId);
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'movetoplaylist':
@@ -244,6 +244,7 @@
                                  var oldPlaylist = $('.playlist.active').children('.playlistId').text();
                                  moveToPlaylistAction($currentItem, newPlaylist, oldPlaylist);
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'savevktrack':
@@ -263,6 +264,7 @@
                              if ($currentItem.children().length > 0) {
                                  removeAction($currentItem, $('.playlist.active').children('.playlistId').text());
                                  $container.empty();
+                                 $currentItem = null;
                              }
                              break;
                          case 'hideselected':
@@ -302,6 +304,14 @@
                 }
                 var y = $(event.clientY)[0];
                 var x = $(event.clientX)[0];
+
+                //if (($(window).height() - ($contextMenuContainer.height() + y)) < $contextMenuContainer.height()) {
+                if (($contextMenuContainer.height() + y) > $(window).height()) {
+                    y = y - $contextMenuContainer.height();
+                }
+                if (($contextMenuContainer.width() + x) > $(window).width()) {
+                    x = x - $contextMenuContainer.width();
+                }
                     $contextMenuContainer.css({
                         'top': y + 'px',
                         'left': x  + 'px'
@@ -320,14 +330,6 @@
                             if ($elem.hasClass('hasSubMenu') && !$elem.hasClass('unactiveContextMenuAction')) {
                                 var contextMenuItemOffset = $('.contextMenu .tableRow:hover').position();
                                 if (contextMenuItemOffset != undefined) {
-                                    var x = $contextMenuContainer.width();
-                                    var y = $('.tableRow:hover').position().top;
-                                    $subContextMenuContainer.css({
-                                        'top': y + 'px',
-                                        'left': x + 'px',
-                                        'position': 'absolute'
-                                    });
-
                                     var $playlists = $('#playlistsTable').children('.playlist');
                                     $subContextMenuContainer.children().remove('.tableRow');
                                     for (var j = 0; j < $playlists.length; j++) {
@@ -339,6 +341,17 @@
                                         var object = $subContextMenuTemplate.tmpl(playlist);
                                         object.appendTo($subContextMenuContainer);
                                     }
+                                    var x = $contextMenuContainer.width();
+                                    var y = $('.tableRow:hover').position().top;
+                                    if (($subContextMenuContainer.width() + x + $contextMenuContainer.position().left) > $(window).width()) {
+                                        x = x - 2 * $subContextMenuContainer.width();
+                                    }
+                                    $subContextMenuContainer.css({
+                                        'top': y + 'px',
+                                        'left': x + 'px',
+                                        'position': 'absolute'
+                                    });
+
                                     $subContextMenuContainer.attr('action', $('.tableRow:hover').children().attr('id'));
                                     $('.tableRow:hover').append($subContextMenuContainer);
                                     $subContextMenuContainer.show();
