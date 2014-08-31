@@ -339,7 +339,9 @@ SettingsManager.prototype.bindListeners = function() {
         });
     });
 
-    $('#get-other').click(function() {
+    $('#get-other').click(function () {
+        var $this = $(this);
+        $this.hide();
         var provider = $('.tab-pane.active').attr('id');
         $.ajax({
             url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
@@ -347,6 +349,7 @@ SettingsManager.prototype.bindListeners = function() {
                 self.showFriends(friends);
                 self.$friendList.show('slow');
                 self.friendsOffset += friends.length;
+                $this.show();
             }
         });
     });
