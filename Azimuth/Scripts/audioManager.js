@@ -122,7 +122,9 @@ AudioManager.prototype.play = function() {
     self.$currentTrack.find('.track-remaining').show();
     self.$currentTrack.append(self.progressSlider.getSlider());
     self.progressSlider.getSlider().show();
+    self.progressSlider.bindListeners();
     self.audio.play();
+    self.refreshProgressBar();
 };
 
 AudioManager.prototype.pause = function() {
@@ -174,6 +176,14 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
     };
 
     $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
+};
+
+AudioManager.prototype.refreshProgressBar = function () {
+    var self = this;
+
+    $('#progressSlider').on('OnChange', function (e, value) {
+        self.audio.currentTime = value * self.audio.duration;
+    });
 };
 
 AudioManager.prototype.bindListeners = function() {
