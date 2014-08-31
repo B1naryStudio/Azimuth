@@ -4,7 +4,7 @@
     <id name="Id">
       <generator class="native"/>
     </id>
-    <many-to-one name="Playlist" column="PlaylistId" />
-    <many-to-one name="Listener" column="ListenerId" />
+    <one-to-one name="Playlist" class="Playlist" column="PlaylistId" cascade="all" constrained="true" fetch="select"/>
+    <propery name="Amount"></propery>
   </class>
 </hibernate-mapping>

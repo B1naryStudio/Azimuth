@@ -33,6 +33,7 @@ namespace Azimuth.DataAccess.Infrastructure
             Bind<IRepository<SocialNetwork>, BaseRepository<SocialNetwork>>().To<SocialNetworkRepository>();
             Bind<IRepository<UserSocialNetwork>, BaseRepository<UserSocialNetwork>>().To<UserSocialNetworkRepository>();
             Bind<IRepository<PlaylistTrack>, BaseRepository<PlaylistTrack>>().To<PlaylistTrackRepository>();
+            Bind<IRepository<PlaylistListeners>, BaseRepository<PlaylistListeners>>().To<PlaylistListenersRepository>();
         }
     }
 

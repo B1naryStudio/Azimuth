@@ -202,9 +202,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\Interfaces\IListenersService.cs" />
+    <Compile Include="Services\Concrete\ListenersService.cs" />
     <Compile Include="ApiControllers\PlaylistsController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserTracksController.cs" />
+    <Compile Include="ApiControllers\ListenersController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />

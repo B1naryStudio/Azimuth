@@ -8,6 +8,7 @@
     
     <div id="tracksArea">
         <h2 id="playlistName"></h2>
+        <h3 id="listeners"></h3>
         <div id="playlist-info">
             <div id="tracks"></div>
             <div id="liseners"></div>
@@ -55,18 +56,26 @@
         var $playlistsArea = $('#playlistsArea');
         var $tracksArea = $('#tracksArea');
         var $playlistName = $('#playlistName');
+        var $listeners = $('#listeners');
         $(document).ready(function() {
             $('#playlistId').focus(function() {
                 $(this).val('');
             });
             showPlaylists();
-
-            $(document).on('playlistsUpdated', showPlaylists);
+         
+            
             $playlists.click(function(event) {
                 $playlistsArea.hide();
                 $tracksArea.show();
-                showTracks($(event.target).closest('.playlist-plated'));
+                var $playlist = $(event.target).closest('.playlist-plated');
+                var playlistName = $playlist.find('.playlist-plated-info-name').text();
+                var playlist = playlists_global.filter(function(index) {
+                    return index.Name.valueOf() == playlistName;
+                })[0];
+                showTracks(playlist);
+                $(document).trigger('newListenerAdded', [playlist]);
             });
+            $(document).on('newListenerAdded', addCurrentUserAsListener);
         });
 
         function showPlaylists() {
@@ -85,25 +94,51 @@
                         var mins = Math.floor(playlist.Duration / 60);
                         var secs = ('0' + (playlist.Duration % 60)).slice(-2);
                         playlist.Duration = mins + ':' + secs;
+                        console.log(playlist.Creator);
                         playlist.Creator = playlist.Creator.Name;
                         $playlists.append($('#playlistTemplate').tmpl(playlist));
                     }
                 }
             });
         }
+        function addCurrentUserAsListener(event, playlist) {
+            $.ajax({
+                cache: false,
+                type: "Post",
+                url: "/api/listeners/" + playlist.Id,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    showListeners(playlist.Id);
+                    console.log("we're ok");
+                },
+                error: function () {
+                    console.log('playlist');
+                    console.log(playlist);
+                }
+        
+            });
+        }
+        function showListeners(playlist) {
+            $listeners.empty();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/api/listeners/"+playlist.Id,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
 
         function showTracks(playlist) {
-            var playlistName = playlist.find('.playlist-plated-info-name').text();
-            console.log(playlistName);
-            //var $dragList = $(this).next();
-            //if (!$(this).hasClass('active') && $dragList.children().length === 0) {
-            var playlistId = playlists_global.filter(function(index) {
-                return index.Name.valueOf() == playlistName;
-            })[0].Id;
-            $playlistName.text(playlistName);
-            console.log(playlistId);
+            
+            $playlistName.text(playlist.Name);
+            console.log(playlist.Id);
             $.ajax({
-                url: "/api/usertracks?playlistId=" + playlistId, // TODO replace with class playlistID
+                url: "/api/usertracks?playlistId=" + playlist.Id, // TODO replace with class playlistID
                 type: 'GET',
                 async: false,
                 success: function(tracksData) {
