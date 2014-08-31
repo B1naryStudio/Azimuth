@@ -1,0 +1,60 @@
+﻿@model Azimuth.Shared.Dto.UserDto
+
+@using Azimuth.Infrastructure.Concrete
+@{
+    ViewBag.Title = "User profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="user-info-container">
+    <div id="user-logo">
+        <div class="user-photo">
+            <img src="@Model.Photo" width="220" height="300"/>
+        </div>
+        <div class="user-screen-name">@Model.ScreenName</div>
+        <ul class="user-listen-info">
+            <li class="user-listeners">
+                <div class="user-listen-count">1</div>
+                <div class="user-listen-label">Listeners</div>
+            </li>
+            <li class="user-listening">
+                <div class="user-listen-count">2</div>
+                <div class="user-listen-label">Listening</div>
+            </li>
+        </ul>    
+    </div>
+    <div id="user-info">
+        <div class="user-initials">
+            <span class="info-label">Full name:</span>
+            <span>@Model.LastName</span>
+            <span>@Model.FirstName</span>
+        </div>
+        <div class="user-gender">
+            <span class="info-label">Gender:</span><span>@Model.Gender</span>
+        </div>
+        <div class="user-birthdate">
+            <span>Birthdate:</span><span>@Model.Birthdate</span>
+        </div>
+        <div class="user-location">
+            <span class="info-label">Location:</span>
+            <span>@Model.City</span>,
+            <span>@Model.Country</span>
+        </div>
+        <div class="user-email">
+            <span>Email:</span>
+            <span>@Model.Email</span>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                url: '/api/user',
+                success: function (userData) {
+                    console.log(userData);
+                }
+            });
+        });
+    </script>
+}

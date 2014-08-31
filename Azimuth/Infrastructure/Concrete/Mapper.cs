@@ -17,7 +17,10 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<GoogleUserData, User>(GoogleUserDataMap);
             AddMapp<TweetSharp.TwitterUser, User>(TwitterUserDataMap);
             AddMapp<Track, TracksDto>(TrackMap);
+            AddMapp<User, UserDto>(UserMap);
         }
+
+        
 
         public static void AddMapp<TSource, TDestination>(Action<TSource, TDestination> map)
             where TSource : class
@@ -147,6 +150,20 @@ namespace Azimuth.Infrastructure.Concrete
             tracksDto.Duration = track.Duration;
             tracksDto.Genre = track.Genre;
             tracksDto.Url = track.Url;
+        }
+
+        private static void UserMap(User user, UserDto userDto)
+        {
+            userDto.Id = user.Id.ToString();
+            userDto.FirstName = user.Name.FirstName;
+            userDto.LastName = user.Name.LastName;
+            userDto.Photo = user.Photo;
+            userDto.ScreenName = user.ScreenName;
+            userDto.Gender = user.Gender;
+            userDto.City = user.Location.City;
+            userDto.Country = user.Location.Country;
+            userDto.Email = user.Email;
+            userDto.Birthdate = user.Birthday;
         }
     }
 }

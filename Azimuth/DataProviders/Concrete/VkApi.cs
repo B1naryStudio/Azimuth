@@ -138,10 +138,12 @@ namespace Azimuth.DataProviders.Concrete
             return json["response"]["text"].ToString();
         }
 
-        public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string userId, string accessToken)
+        public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string userId, string accessToken, int offset, int count)
         {
             var url = BaseUri + "friends.get" +
                       "?user_id=" + userId +
+                      "&count=" + count +
+                      "&offset=" + offset +
                       "&fields=screen_name,bdate,sex,city,country,photo_100" +
                       "&v=5.24" +
                       "&access_token=" + Uri.EscapeDataString(accessToken);

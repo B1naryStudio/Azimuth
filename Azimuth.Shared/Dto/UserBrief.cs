@@ -1,5 +1,4 @@
-﻿
-namespace Azimuth.Shared.Dto
+﻿namespace Azimuth.Shared.Dto
 {
     public class UserBrief
     {
