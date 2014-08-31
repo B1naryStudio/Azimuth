@@ -1,4 +1,4 @@
-var SettingsManager = function (manager) {
+var SettingsManager = function(manager) {
     var self = this;
     this.audioManager = manager;
     this.tracksGlobal = [];
@@ -355,7 +355,6 @@ SettingsManager.prototype.bindListeners = function() {
         }));
 
         self.audioManager.bindPlayBtnListeners();
-        self.progressSlider.bindListeners();
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
@@ -388,8 +387,6 @@ SettingsManager.prototype.bindListeners = function() {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
-            self.audioManager.bindPlayBtnListeners();
-            self.progressSlider.bindListeners();
         }
     });
 

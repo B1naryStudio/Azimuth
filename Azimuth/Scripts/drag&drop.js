@@ -283,6 +283,9 @@
 
         $(document).mousedown(function (event) {
             var $target = $(event.target);
+            if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
+                mousedownOnProgressBar = true;
+            }
             if (!$target.parents().hasClass('draggable-list')) {
                 document.oncontextmenu = function() {
                     return true;
