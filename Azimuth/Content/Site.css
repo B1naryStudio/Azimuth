@@ -254,24 +254,29 @@ div.draggable-list{
     display: block;
     height: 50px;
     width: 100%;
-    background-color: #E0E0E0;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    background-color: #F0F0F0;
+    margin-top: 10px;
+    margin-bottom: 10px;
     -ms-border-radius: 5px;
     border-radius: 5px;
 }
 
+.track:hover {
+    background-color: #E0E0E0;
+}
+
 .track-description {
     display: inline;
-    height: 100%;
+    height: 80%;
     width: 70%;
     left: 10%;
+    font-size: 12px;
 }
 
 .track-info {
     display: block;
     float: left;
-    height: 50%;
+    height: 30%;
     width: 50%;
     margin-top: 3px;
 }
@@ -279,20 +284,20 @@ div.draggable-list{
 .track-title {
     display: block;
     float: left;
-    height: 50%;
+    height: 30%;
     width: 50%;
 }
 
 .track-genre {
     display: inline;
     float: left;
-    margin-top: -12px;
+    margin-top: 10px;
     width: 15%;
 }
 .track-duration {
     display: block;
     float: right;
-    margin-top: -12px;
+    margin-top: 10px;
     margin-right: 20px;
 }
 
@@ -303,7 +308,7 @@ div.draggable-list{
     height: 60%;
     margin-left: 5px;
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 4px;
     padding-left: 8px;
 }
 
@@ -344,7 +349,7 @@ div.friend {
     height: 106px;
 }
 
-#friends-container :hover {
+div.friend:hover {
     background: lightblue;
     cursor: pointer;
 }

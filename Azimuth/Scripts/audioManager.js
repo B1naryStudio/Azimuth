@@ -30,7 +30,9 @@
         $('#remainingTime').text(Math.floor(self.audio.duration - self.audio.currentTime));
     };
 
-    this._nextTrack = function() {
+    this._nextTrack = function () {
+        self.progressSlider.setPosition(0);
+
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next();
@@ -45,7 +47,9 @@
         self._setTrackTo('next');
     };
 
-    this._prevTrack = function() {
+    this._prevTrack = function () {
+        self.progressSlider.setPosition(0);
+
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev();
@@ -106,6 +110,8 @@
 
 AudioManager.prototype.play = function() {
     var self = this;
+    self.$currentTrack.append(self.progressSlider.getSlider());
+    self.progressSlider.getSlider().show();
     self.audio.play();
 };
 
@@ -133,6 +139,8 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
+        self.progressSlider.setPosition(0);
+
         self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
         var url = $(this).parent().children('.track-url').text();
         if (self.audio.paused || self.audio.src != url) {
