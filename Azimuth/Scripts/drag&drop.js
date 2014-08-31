@@ -135,7 +135,7 @@
 
         $(document).mousedown(function (e) {
             var $target = $(e.target);
-            if ($target.hasClass('progressBar')) {
+            if ($target.hasClass('progressBar') || $target.hasClass('progress')) {
                 mousedownOnProgressBar = true;
             }
             if (contextMenuSelected == true && e.which != 3) {
