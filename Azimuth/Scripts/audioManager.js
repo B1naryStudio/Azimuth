@@ -26,12 +26,14 @@
 
     self.audio.ontimeupdate = function() {
         self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
+        self.progressSlider.setBackgroundPosition(self.audio.buffered.end(0) / self.audio.duration);
         var remaining = Math.floor(self.audio.duration - self.audio.currentTime);
         self.$currentTrack.find('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
     };
 
     this._nextTrack = function () {
         self.progressSlider.setPosition(0);
+        self.progressSlider.setBackgroundPosition(0);
         self.$currentTrack.find('.track-duration').show();
         self.$currentTrack.find('.track-remaining').hide();
 
@@ -51,6 +53,7 @@
 
     this._prevTrack = function () {
         self.progressSlider.setPosition(0);
+        self.progressSlider.setBackgroundPosition(0);
         self.$currentTrack.find('.track-duration').show();
         self.$currentTrack.find('.track-remaining').hide();
 
@@ -157,6 +160,7 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             if (self.audio.src != url) {
                 self._setAttribute(url);
                 self.progressSlider.setPosition(0);
+                self.progressSlider.setBackgroundPosition(0);
             }
             self.$currentTrack = $(this).parent();
             self.play();

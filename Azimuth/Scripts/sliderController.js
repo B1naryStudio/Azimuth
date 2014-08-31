@@ -7,11 +7,14 @@
     this.$sliderBar = $(options.sliderSelector);
     self.$sliderBar.append('<div class="slider"></div>');
     this.$slider = $(self.$sliderBar.find('.slider'));
+    self.$sliderBar.append('<div class="backgroundSlider"></div>');
+    this.$backgroundSlider = $(self.$sliderBar.find('.backgroundSlider'));
 
     this.size = (self.dirrection == 'vertical' ? 'height' : 'width');
 
     self.$sliderBar.addClass(options.sliderBarClass);
     self.$slider.addClass(options.sliderClass);
+    self.$backgroundSlider.addClass(options.backgroundSliderClass);
     self.bindListeners();
 
     this._getSize = function() {
@@ -49,6 +52,11 @@ SliderController.prototype.setPosition = function (position) {
     var self = this;
     self.relativePosition = position;
     self.$slider.css(self.size, 100 * self.relativePosition + '%');
+};
+
+SliderController.prototype.setBackgroundPosition = function (position) {
+    var self = this;
+    self.$backgroundSlider.css(self.size, 100 * position + '%');
 };
 
 SliderController.prototype.bindListeners = function () {

@@ -126,6 +126,7 @@
     background-color: #ccc;
     -ms-border-radius: 3px;
     border-radius: 3px;
+    z-index: 1;
 }
 
 .progress {
@@ -138,6 +139,20 @@
     background-color: #428bca;
     -ms-border-radius: 3px;
     border-radius: 3px;
+    z-index: 100;
+}
+
+.cache {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    margin-bottom: 0;
+    background-color: #7da6c9;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    z-index: 10;
 }
 
 #playTrackBtn {

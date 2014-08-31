@@ -9,6 +9,7 @@
         sliderSelector: '#progressSlider',
         sliderBarClass: 'progressBar',
         sliderClass: 'progress',
+        backgroundSliderClass: 'cache',
         dirrection: 'horizontall'
     });
 
