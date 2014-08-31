@@ -215,6 +215,8 @@ namespace Azimuth.Services.Concrete
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
+            bool tracksToEnd = index == -1;
+
             using (_unitOfWork)
             {
                 //get checked tracks
@@ -278,13 +280,16 @@ namespace Azimuth.Services.Concrete
                     playlist.PlaylistTracks.Add(playlistTrack);
                 }
 
-                playlist.PlaylistTracks.ForEach((item, n) =>
+                if (tracksToEnd == false)
                 {
-                    if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                    playlist.PlaylistTracks.ForEach((item, n) =>
                     {
-                        item.TrackPosition += i;
-                    }
-                });
+                        if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                        {
+                            item.TrackPosition += i;
+                        }
+                    });
+                }
 
                 _unitOfWork.Commit();
             }
