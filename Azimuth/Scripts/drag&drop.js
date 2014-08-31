@@ -197,7 +197,7 @@
 
         this.mousedown(function (e) {
             var $target = $(e.target);
-            if ($target.hasClass('progressBar') || $target.hasClass('progress')) {
+            if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
                 mousedownOnProgressBar = true;
             }
 			if (contextMenuSelected == true && e.which != 3 && !$target.parent().hasClass('hasSubMenu')) {                 $contextMenuContainer.hide();
