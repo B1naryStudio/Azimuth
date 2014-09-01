@@ -2,7 +2,7 @@
 
     // Counter to different context menus on for plugin owners on one page
     var count = 0;
-
+    var mouseClickPosition;
     $.fn.makeDraggable = function (options) {
         var $rootElement = this;
         // Callback on dragging item in new position in list
@@ -46,6 +46,10 @@
         var mousedown = false;
         var deleteFlag = false;
         var contextMenuSelected = false;
+        var moveEnable = false;
+
+        // Mousemove start working after monig to mouseMovePxOffset pixels
+        var mouseMovePxOffset = 10;
 
         var mousedownOnProgressBar = false;
 
@@ -59,6 +63,19 @@
             lastEvent = event;
             if ($currentItem && mousedown && !mousedownOnProgressBar) {
                 var $elem = _getCurrentTarget(event);
+
+                var currentMousePos = { x: event.clientX, y: event.clientY };
+                if (moveEnable == false) {
+                    if (Math.abs(mouseClickPosition.x - currentMousePos.x) > mouseMovePxOffset || Math.abs(mouseClickPosition.y - currentMousePos.y) > mouseMovePxOffset) {
+                        moveEnable = true;
+                    } else {
+                        console.log(moveEnable);
+                        console.log(mouseClickPosition.x - currentMousePos.x);
+                        return;
+                    }
+                }
+                console.log(moveEnable);
+                console.log(mouseClickPosition.x - currentMousePos.x);
 
                 if ($currentItem.hasClass('draggable-item-selected')) {
                     var width = $currentItem.width();
@@ -107,7 +124,7 @@
         });
 
         $(document).mouseup(function (event) {
-
+            moveEnable = false;
             if ($currentItem != null && !event.shiftKey && !event.ctrlKey && !$currentItem.hasClass('itemsContainer') && event.which != 3) {
                 if ($('.draggable-item-selected').length > 1) {
                     $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
@@ -311,7 +328,7 @@
         });
 
         function _makeDraggable(event) {
-
+            mouseClickPosition = { x: event.clientX, y: event.clientY };
             if (event.which == 3) {
                 document.oncontextmenu = function () {
                     return false;
