@@ -283,8 +283,26 @@ SettingsManager.prototype.showTracks = function (tracks) {
 
     $('.vkMusicList').find('.track').remove();
     for (var i = 0; i < tracks.length; i++) {
-        self.trackTemplate.tmpl(tracks[i]).appendTo('.vkMusicList');
+        var tmpl = self.trackTemplate.tmpl(tracks[i]);
+        tmpl.appendTo('.vkMusicList');
+        if (self.audioManager.$currentTrack !== null
+            && self.audioManager.$currentTrack.children('.trackId').html() == tracks[i].id) {
+            tmpl.toggleClass('.draggable-item-selected');
+            self.audioManager.$currentTrack = tmpl;
+            tmpl.append(self.audioManager.progressSlider.getSlider());
+            if (self.audioManager.audio.paused) {
+                self.audioManager._setPlayImgButton(tmpl);
+                self.audioManager.$currentTrack.find('.track-duration').show();
+                self.audioManager.$currentTrack.find('.track-remaining').hide();
+            } else {
+                self.audioManager._setPauseImgButton(tmpl);
+                self.audioManager.$currentTrack.find('.track-duration').hide();
+                self.audioManager.$currentTrack.find('.track-remaining').show();
+            }
+        }
     }
+    self.audioManager.bindPlayBtnListeners();
+
 };
 
 SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized) {
@@ -329,8 +347,25 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 
     $('#playlistTracks').find('.track').remove();
     for (var i = 0; i < tracks.length; i++) {
-        self.playlistTrackTemplate.tmpl(tracks[i]).appendTo('#playlistTracks');
+        var tmpl = self.playlistTrackTemplate.tmpl(tracks[i]);
+        tmpl.appendTo('#playlistTracks');
+        if (self.audioManager.$currentTrack !== null
+            && self.audioManager.$currentTrack.children('.track-url').html() == tracks[i].Url) {
+            tmpl.toggleClass('.draggable-item-selected');
+            self.audioManager.$currentTrack = tmpl;
+            tmpl.append(self.audioManager.progressSlider.getSlider());
+            if (self.audioManager.audio.paused) {
+                self.audioManager._setPlayImgButton(tmpl);
+                self.audioManager.$currentTrack.find('.track-duration').show();
+                self.audioManager.$currentTrack.find('.track-remaining').hide();
+            } else {
+                self.audioManager._setPauseImgButton(tmpl);
+                self.audioManager.$currentTrack.find('.track-duration').hide();
+                self.audioManager.$currentTrack.find('.track-remaining').show();
+            }
+        }
     }
+    self.audioManager.bindPlayBtnListeners();
     $('#playlistTracks').append('<div style="display: none" class="playlistId">' + playlistId + '</div>');
 };
 
@@ -424,8 +459,6 @@ SettingsManager.prototype.bindListeners = function () {
             self.$searchTrackInput.next().next().children().remove();
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
-
-        self.audioManager.bindPlayBtnListeners();
     });
 
     this.$searchPlaylistInput.keyup(function (e) {
