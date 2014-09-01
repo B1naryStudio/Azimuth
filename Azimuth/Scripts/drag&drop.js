@@ -339,6 +339,20 @@
                     $contextMenuContainer.show();
                     $contextMenuContainer.children('.tableRow').hover(function (event) {
                         var self = $(this);
+
+                        $('.contextMenu .tableRow:hover').off('mouseleave').mouseleave(function (event) {
+                            
+                            var $target = $(event.target);
+                            if ($('.subMenu').length > 0) {
+                                if (!$target.hasClass('subMenu')) {
+                                    clearTimeout(timerId);
+                                    timerId = setTimeout(function () {
+                                        $subContextMenuContainer.detach();
+                                    }, 1000);
+                                }
+                            }
+                        });
+
                         var $elem = $('.tableRow:hover');
                             if ($elem.hasClass('hasSubMenu') && !$elem.hasClass('unactiveContextMenuAction')) {
                                 var contextMenuItemOffset = $('.contextMenu .tableRow:hover').position();
