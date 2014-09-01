@@ -35,7 +35,7 @@ var SettingsManager = function(manager) {
                 }
                 self.playlistTracksGlobal = tracksData;
                 self.showPlaylistTracks(tracksData, playlistId);
-                self.$playlistsTable.parent().parent().parent().makeDraggable({
+                self.$playlistsTable.parents('.draggable').makeDraggable({
                     contextMenu: [
 						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
 						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._copyTrackToPlaylistAction },
@@ -168,8 +168,19 @@ var SettingsManager = function(manager) {
         list.toggleClass('draggable-item-selected', false);
     };
 
-    this._createPlaylistAction = function () {
-        alert('createplaylist');
+    this._createPlaylistAction = function ($currentItem) {
+        var playlist = prompt('Enter playlist name', "");
+        if (playlist != null) {
+            $.ajax({
+                url: '/api/playlists?name=' + playlist + '&accessibilty=Public',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                success: function(playlistId) {
+                    self._saveTrackFromVkToPlaylist($currentItem, -1, playlistId);
+                }
+            });
+        }
     };
 
     this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
@@ -189,9 +200,9 @@ var SettingsManager = function(manager) {
                     data: JSON.stringify(tracksIds),
                     contentType: 'application/json; charset=utf-8',
                     success: function() {
-                        var playlistId = $('#playlistTracks').find('.playlistId').text();
+                        //var playlistId = $('#playlistTracks').find('.playlistId').text();
                         $('#playlistTracks').children().remove();
-                        self._getTracks(playlistId);
+                        self._getTracks(oldPlaylist);
 
                         $('.tableRow.playlist').remove();
                         self.playlistsGlobal.length = 0;
@@ -333,7 +344,7 @@ SettingsManager.prototype.bindListeners = function() {
                             { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
                             { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._shideSelectedTracksAction },
                             { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._screatePlaylistAction }
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
                         ]
                     });
                 } else {

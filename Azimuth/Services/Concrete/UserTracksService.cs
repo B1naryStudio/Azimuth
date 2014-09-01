@@ -264,7 +264,7 @@ namespace Azimuth.Services.Concrete
                     {
                         index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
                     }
-                    
+
                     var playlistTrack = new PlaylistTrack
                     {
                         Identifier = new PlaylistTracksIdentifier
@@ -327,21 +327,27 @@ namespace Azimuth.Services.Concrete
         {
             using (_unitOfWork)
             {
-
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
                 var tracks = _trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
                 tracks.ForEach(track =>
                 {
                     track.Playlists.Remove(playlist);
-                    var playlistTrack = _playlistTrackRepository.Get(pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
-                    playlistTrack.ForEach(pt =>
+                    var playlistTrackToDelete = _playlistTrackRepository.Get(pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
+                    var curPlaylistPt = _playlistTrackRepository.Get(pt => pt.Identifier.Playlist.Id == playlistId);
+                    playlistTrackToDelete.ForEach(pt =>
                     {
+                        var curTrackPos = pt.TrackPosition;
                         _playlistTrackRepository.DeleteItem(pt);
                         playlist.PlaylistTracks.Remove(pt);
+                        curPlaylistPt.ForEach(item =>
+                        {
+                            if (item.TrackPosition > curTrackPos)
+                            {
+                                item.TrackPosition--;
+                            }
+                        });
                     });
                 });
-
-
 
                 _unitOfWork.Commit();
             }
