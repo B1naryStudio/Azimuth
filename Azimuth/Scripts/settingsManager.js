@@ -4,6 +4,7 @@ var SettingsManager = function (manager) {
     this.tracksGlobal = [];
     this.playlistsGlobal = [];
     this.friendsOffset = 0;
+    this.provider = "";
     this.playlistTracksGlobal = [];
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
@@ -13,6 +14,7 @@ var SettingsManager = function (manager) {
     this.$friendList = $('#friends-container');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
+    this.$getUserTracksBtn = $("#get-user-tracks");
     this.$playlistsTable = $('#playlistsTable');
     this.$searchPlaylistInput = $('#searchPlaylistName');
     this.$searchTrackInput = $('#searchTrackName');
@@ -242,15 +244,47 @@ var SettingsManager = function (manager) {
         });
     };
 
+    this._getUserTracks = function (provider, reloginUrl) {
+        $.ajax({
+            url: '/api/usertracks?provider=' + provider,
+            success: function (tracks) {
+                if (typeof tracks.Message === 'undefined') {
+                    self.$reloginForm.hide();
+                    self.$vkMusicTable.show();
+                    var list = $('.vkMusicList');
+                    for (var i = 0; i < tracks.length; i++) {
+                        tracks[i].duration = self._toFormattedTime(tracks[i].duration, true);
+                    }
+                    self.tracksGlobal = tracks;
+                    self.showTracks(tracks);
+                    self.$vkMusicTable.makeDraggable({
+                        contextMenu: [
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
+                        ]
+                    });
+                } else {
+                    self.$reloginForm.show();
+                    self.$reloginForm.find('a').attr('href', reloginUrl);
+                    self.$vkMusicTable.hide();
+                }
+                self.audioManager.bindPlayBtnListeners();
+                $('#vkMusicTable > .tableTitle').html("User Tracks");
+            }
+        });
+    };
+
     this._getFriendTracks = function() {
         var $currentItem = $(this);
         $currentItem.parent().children('.friend').toggleClass('active', false);
         var currentId = $currentItem.children('.friend-id').html();
         $currentItem.toggleClass('active', true);
 
-        var provider = "Vkontakte"; // TODO: Fix for all providers
+        //var provider = "Vkontakte"; // TODO: Fix for all providers
         $.ajax({
-            url: '/api/user/friends/audio?provider=' + provider + '&friendId=' + currentId,
+            url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
@@ -442,36 +476,13 @@ SettingsManager.prototype.bindListeners = function () {
     });
 
     $('.providerBtn').click(function (e) {
-        var provider = $(e.target).data('provider');
+        self.provider = $(e.target).data('provider');
         var reloginUrl = $(e.target).data('reloginurl');
-        $.ajax({
-            url: '/api/usertracks?provider=' + provider,
-            success: function (tracks) {
-                if (typeof tracks.Message === 'undefined') {
-                    self.$reloginForm.hide();
-                    self.$vkMusicTable.show();
-                    var list = $('.vkMusicList');
-                    for (var i = 0; i < tracks.length; i++) {
-                        tracks[i].duration = self._toFormattedTime(tracks[i].duration, true);
-                    }
-                    self.tracksGlobal = tracks;
-                    self.showTracks(tracks);
-                    self.$vkMusicTable.makeDraggable({
-                        contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
-                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
-                        ]
-                    });
-                } else {
-                    self.$reloginForm.show();
-                    self.$reloginForm.find('a').attr('href', reloginUrl);
-                    self.$vkMusicTable.hide();
-                }
-                self.audioManager.bindPlayBtnListeners();
-            }
-        });
+        self._getUserTracks(self.provider, reloginUrl);
+    });
+
+    self.$getUserTracksBtn.click(function(e) {
+        self._getUserTracks(self.provider);
     });
 
     this.$searchTrackInput.keyup(function (e) {
