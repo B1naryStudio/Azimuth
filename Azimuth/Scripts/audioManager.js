@@ -8,6 +8,8 @@
     this.volumeSlider = volumeSlider;
     this.progressSlider = progressSlider;
 
+    this.onProgressBarClick = false;
+
     self.audio.onended = function() {
         self._nextTrack();
     };
@@ -191,8 +193,12 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
 AudioManager.prototype.refreshProgressBar = function () {
     var self = this;
 
-    $('#progressSlider').on('OnChange', function (e, value) {
-        self.audio.currentTime = value * self.audio.duration;
+    //$('#progressSlider').on('OnChange', function (e, value) {
+    //    self.audio.currentTime = value * self.audio.duration;
+    //});
+    $('#progressSlider').on('mousedown', function () {
+        self.audio.pause();
+        self.onProgressBarClick = true;
     });
 };
 
@@ -240,7 +246,20 @@ AudioManager.prototype.bindListeners = function() {
         self.setVolume(value);
     });
 
-    $('#progressSlider').on('OnChange', function (e, value) {
-        self.audio.currentTime = value * self.audio.duration;
+    //$('#progressSlider').on('OnChange', function (e, value) {
+    //    self.audio.currentTime = value * self.audio.duration;
+    //});
+
+    $('#progressSlider').on('mousedown', function() {
+        self.audio.pause();
+        self.onProgressBarClick = true;
+    });
+
+    $(document).on('mouseup', function (e) {
+        if (self.onProgressBarClick == true) {
+            self.setCurrentTime(self.progressSlider.getPosition() * self.getDuration());
+            self.audio.play();
+            self.onProgressBarClick = false;
+        }
     });
 };
