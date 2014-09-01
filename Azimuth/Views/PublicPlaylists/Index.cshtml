@@ -20,8 +20,10 @@
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
-    <script type="text/javascript" src="../../Scripts/settingsManager.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
+    <script type="" src="../../Scripts/drag&drop.js"></script>
+    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="../../Scripts/sliderController.js"></script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <div class="playlist-plated" >
             <div class="playlist-plated-info">
@@ -49,7 +51,7 @@
         </div>
     </script>
     <script>
-        var audioManager = new AudioManager();
+        var audioManager = null;
         var playlists_global = null;
         var $playlistTemplate = $("#playlistTemplate");
         var $trackTemplate = $("#trackTemplate");
@@ -61,7 +63,21 @@
         var $listeners = $('#listeners');
         var $backToPlaylistsBtn = $('#backToPlaylistsBtn');
         var currentPlaylist = null;
-        $(document).ready(function() {
+        $(document).ready(function () {
+            var volumeSlider = new SliderController({
+                sliderSelector: '#volumeSlider',
+                sliderBarClass: 'volumeBar',
+                sliderClass: 'volume',
+                dirrection: 'vertical'
+            });
+            var progressSlider = new SliderController({
+                sliderSelector: '#progressSlider',
+                sliderBarClass: 'progressBar',
+                sliderClass: 'progress',
+                backgroundSliderClass: 'cache',
+                dirrection: 'horizontall'
+            });
+            audioManager = new AudioManager(volumeSlider, progressSlider);
             $('#playlistId').focus(function() {
                 $(this).val('');
             });
