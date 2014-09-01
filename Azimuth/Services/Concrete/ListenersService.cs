@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Azimuth.ApiControllers;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure.Concrete;
 
-namespace Azimuth.ApiControllers
+namespace Azimuth.Services.Concrete
 {
     public class ListenersService : IListenersService
     {
