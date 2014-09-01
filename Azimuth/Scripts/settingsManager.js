@@ -249,7 +249,7 @@ SettingsManager.prototype.showTracks = function (tracks) {
     }
 };
 
-SettingsManager.prototype.showFriends = function(friends) {
+SettingsManager.prototype.showFriends = function(friends, scrollbarInitialized) {
     var self = this;
 
     for (var i = 0; i < friends.length; i++) {
@@ -260,14 +260,27 @@ SettingsManager.prototype.showFriends = function(friends) {
         if (friend.country != null) {
             friend.country = friend.country.title;
         }
-        self.$friendList.append(self.$friendsTemplate.tmpl(friends[i]));
+        var container = scrollbarInitialized ? self.$friendList.find('.mCSB_container') : self.$friendList;
+        container.append(self.$friendsTemplate.tmpl(friends[i]));
     }
 
     $('#friends-container').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,
-        advanced: { updateOnSelectorChange: "true" }
+        advanced: { updateOnSelectorChange: "true" },
+        callbacks: {
+            onTotalScroll: function () {
+                var provider = $('.tab-pane.active').attr('id');
+                $.ajax({
+                    url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+                    success: function (friends) {
+                        self.showFriends(friends, true);
+                        self.friendsOffset += friends.length;
+                    }
+                });
+            }
+        }
     });
 };
 
@@ -488,14 +501,13 @@ SettingsManager.prototype.bindListeners = function() {
                     }
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
-                    list.parent().parent().makeDraggable({
+                    self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': '1', 'name': 'Select All', "isNewSection": "false" },
-                            { 'id': '2', 'name': 'second action', "isNewSection": "false" },
-                            { 'id': '3', 'name': 'third action', "isNewSection": "true" },
-                            { 'id': '4', 'name': 'fourth action', "isNewSection": "false" }
-                        ],
-                        saveVkTrack: saveTrackFromVkToPlaylist
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._shideSelectedTracksAction },
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
+                        ]
                     });
                 } else {
                     self.$reloginForm.show();
@@ -505,20 +517,5 @@ SettingsManager.prototype.bindListeners = function() {
                 self.audioManager.bindPlayBtnListeners();
             }
         });
-    });
-
-    $('#get-other').click(function () {
-        var $this = $(this);
-        $this.hide();
-        var provider = $('.tab-pane.active').attr('id');
-    $.ajax({
-            url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
-            success: function (friends) {
-                self.showFriends(friends);
-                self.$friendList.show('slow');
-                self.friendsOffset += friends.length;
-                $this.show();
-        }
-    });
     });
 };
