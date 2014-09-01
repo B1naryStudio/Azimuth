@@ -248,15 +248,14 @@ var SettingsManager = function (manager) {
         var currentId = $currentItem.children('.friend-id').html();
         $currentItem.toggleClass('active', true);
 
-        var currentUser = $currentItem.children('.friend-initials').html();
-
-        $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
-
         var provider = "Vkontakte"; // TODO: Fix for all providers
         $.ajax({
             url: '/api/user/friends/audio?provider=' + provider + '&friendId=' + currentId,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
+                    var currentUser = $currentItem.children('.friend-initials').html();
+
+                    $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
@@ -279,6 +278,23 @@ var SettingsManager = function (manager) {
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
+            },
+            error: function (thrownException) {
+                var $accessDenied = $('#forbidden');
+                var $messageContainer = $('#forbidden .error ');
+                $messageContainer.text(thrownException.responseJSON.ExceptionMessage);
+                $accessDenied.css({
+                    'top': 100 + 'px',
+                    'left': 800 + 'px',
+                    'position': 'absolute'
+                });
+                $accessDenied.show();
+
+                var timerId = null;
+                clearTimeout(timerId);
+                timerId = setTimeout(function () {
+                    $accessDenied.fadeOut(1000);
+                }, 4000);
             }
         });
     };

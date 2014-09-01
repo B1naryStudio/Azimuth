@@ -71,6 +71,8 @@ namespace Azimuth.DataProviders.Concrete
                             throw new ManyRequestException(message, code);
                         case 100:
                             throw new BadParametersException(message, code);
+                        case 201:
+                            throw new AccessDeniedException(message, code);
                         default:
                             throw new VkApiException(message, code);
                     }

@@ -35,6 +35,10 @@ namespace Azimuth.ApiControllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exception);
             }
+            catch (AccessDeniedException exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, exception);
+            }
         }
 
         [HttpPost]
