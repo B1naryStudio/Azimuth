@@ -110,13 +110,17 @@ var SettingsManager = function (manager) {
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
         var provider = $('.tab-pane.active').attr('id');
         var tracks = [];
+        var friendId = $('.friend.active').children('.friend-id').text();
         $currentItem.children().toggleClass('vk-item', false);
         $currentItem.children('.draggable-item-selected').each(function () {
             tracks.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
+        //if ($('.friend.active').length > 0) {
+        //    friendId = $('.friend.active').text();
+        //}
 
         $.ajax({
-            url: '/api/usertracks?provider=' + provider + "&index=" + index,
+            url: '/api/usertracks?provider=' + provider + "&index=" + index + "&friendId=" + friendId,
             type: 'POST',
             data: JSON.stringify({
                 "Id": playlistId,
@@ -240,7 +244,9 @@ var SettingsManager = function (manager) {
 
     this._getFriendTracks = function() {
         var $currentItem = $(this);
+        $currentItem.parent().children('.friend').toggleClass('active', false);
         var currentId = $currentItem.children('.friend-id').html();
+        $currentItem.toggleClass('active', true);
 
         var currentUser = $currentItem.children('.friend-initials').html();
 

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Threading.Tasks;
+using System.Web.WebPages;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -14,6 +16,7 @@ using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using WebGrease.Css.Extensions;
+using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 namespace Azimuth.Services.Concrete
 {
@@ -152,16 +155,16 @@ namespace Azimuth.Services.Concrete
                                         return item;
                                     }).ToList();
                     }
-                    var negativeTest = pt.OrderByDescending(s=> s.TrackPosition < 0).Where(s => s.TrackPosition < 0).ToList();
-                    if (negativeTest.Count > 0)
-                    {
-                        var neg = 0 - negativeTest[0].TrackPosition;
-                        pt.Select((item) =>
-                        {
-                            item.TrackPosition += neg;
-                            return item;
-                        }).ToList();
-                    }
+                    //var negativeTest = pt.OrderByDescending(s=> s.TrackPosition < 0).Where(s => s.TrackPosition < 0).ToList();
+                    //if (negativeTest.Count > 0)
+                    //{
+                    //    var neg = 0 - negativeTest[0].TrackPosition;
+                    //    pt.Select((item) =>
+                    //    {
+                    //        item.TrackPosition += neg;
+                    //        return item;
+                    //    }).ToList();
+                    //}
                 }
                 _unitOfWork.Commit();
             }
@@ -211,7 +214,7 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        public async Task SetPlaylist(PlaylistData playlistData, string provider, int index)
+        public async Task SetPlaylist(PlaylistData playlistData, string provider, int index, string friendId)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
@@ -219,76 +222,89 @@ namespace Azimuth.Services.Concrete
 
             using (_unitOfWork)
             {
+                List<TrackData.Audio> trackDatas = null;
                 //get checked tracks
                 var socialNetworkData = GetSocialNetworkData(provider);
-                var trackDatas = await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
+                if (!String.IsNullOrEmpty(friendId) && !String.IsNullOrWhiteSpace(friendId))
+                {
+                    trackDatas = await _socialNetworkApi.GetSelectedTracks(friendId,
                     playlistData.TrackIds,
                     socialNetworkData.AccessToken);
-
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistData.Id);
-                playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistData.Id).ToList();
-
-                int i = 0;
-                //create Track objects
-                var artistRepo = _unitOfWork.GetRepository<Artist>();
-                foreach (var trackData in trackDatas)
+                }
+                else
                 {
-                    var artist = new Artist
-                    {
-                        Name = trackData.Artist
-                    };
-                    var album = new Album
-                    {
-                        Name = "",
-                        Artist = artist,
-                    };
-                    artist.Albums.Add(album);
-                    artistRepo.AddItem(artist);
-                    var track = new Track
-                    {
-                        Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
-                        //Lyrics =
-                        //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
-                        //            socialNetworkData.AccessToken),
-                        Name = trackData.Title,
-                        Url = trackData.Url,
-                        Genre = trackData.GenreId.ToString(),
-                        Album = album
-                    };
-
-                    track.Playlists.Add(playlist);
-                    album.Tracks.Add(track);
-                    _trackRepository.AddItem(track);
-
-                    if (index == -1)
-                    {
-                        index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
-                    }
-
-                    var playlistTrack = new PlaylistTrack
-                    {
-                        Identifier = new PlaylistTracksIdentifier
-                        {
-                            Playlist = playlist,
-                            Track = track
-                        },
-                        TrackPosition = index + i++
-                    };
-
-                    _playlistTrackRepository.AddItem(playlistTrack);
-
-                    playlist.PlaylistTracks.Add(playlistTrack);
+                    trackDatas = await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
+                    playlistData.TrackIds,
+                    socialNetworkData.AccessToken);
                 }
 
-                if (tracksToEnd == false)
+                if (trackDatas.Any())
                 {
-                    playlist.PlaylistTracks.ForEach((item, n) =>
+                    var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistData.Id);
+                    playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistData.Id).ToList();
+
+                    int i = 0;
+                    //create Track objects
+                    var artistRepo = _unitOfWork.GetRepository<Artist>();
+                    foreach (var trackData in trackDatas)
                     {
-                        if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                        var artist = new Artist
                         {
-                            item.TrackPosition += i;
+                            Name = trackData.Artist
+                        };
+                        var album = new Album
+                        {
+                            Name = "",
+                            Artist = artist,
+                        };
+                        artist.Albums.Add(album);
+                        artistRepo.AddItem(artist);
+                        var track = new Track
+                        {
+                            Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
+                            //Lyrics =
+                            //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
+                            //            socialNetworkData.AccessToken),
+                            Name = trackData.Title,
+                            Url = trackData.Url,
+                            Genre = trackData.GenreId.ToString(),
+                            Album = album
+                        };
+
+                        track.Playlists.Add(playlist);
+                        album.Tracks.Add(track);
+                        _trackRepository.AddItem(track);
+
+                        if (index == -1)
+                        {
+                            index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
                         }
-                    });
+
+                        var playlistTrack = new PlaylistTrack
+                        {
+                            Identifier = new PlaylistTracksIdentifier
+                            {
+                                Playlist = playlist,
+                                Track = track
+                            },
+                            TrackPosition = index + i++
+                        };
+
+                        _playlistTrackRepository.AddItem(playlistTrack);
+
+                        playlist.PlaylistTracks.Add(playlistTrack);
+                    }
+
+                    if (tracksToEnd == false)
+                    {
+                        playlist.PlaylistTracks.ForEach((item, n) =>
+                        {
+                            if (n < playlist.PlaylistTracks.Count - i && item.TrackPosition >= index)
+                            {
+                                item.TrackPosition += i;
+                            }
+                        });
+                    }
                 }
 
                 _unitOfWork.Commit();
