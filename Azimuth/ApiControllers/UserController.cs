@@ -49,5 +49,12 @@ namespace Azimuth.ApiControllers
             var data = await _userService.GetFriendsTracks(provider, friendId);
             return Request.CreateResponse(HttpStatusCode.OK, data);
         }
+
+        [HttpPut]
+        [Route("follow/{followerId:long}")]
+        public async Task<HttpResponseMessage> Follow(long followerId)
+        {
+            return await _userService.FollowPerson(followerId);
+        }
     }
 }

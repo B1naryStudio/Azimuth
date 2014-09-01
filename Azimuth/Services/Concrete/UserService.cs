@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -88,6 +89,11 @@ namespace Azimuth.Services.Concrete
                 _unitOfWork.Commit();
             }
             return userDto;
+        }
+
+        public Task<HttpResponseMessage> FollowPerson(long followerId)
+        {
+            throw new System.NotImplementedException();
         }
 
         private UserSocialNetwork GetSocialNetworkData(string provider)

@@ -249,20 +249,8 @@ SettingsManager.prototype.showTracks = function (tracks) {
     }
 };
 
-SettingsManager.prototype.showFriends = function(friends, scrollbarInitialized) {
+SettingsManager.prototype.showFriends = function(friends) {
     var self = this;
-
-    for (var i = 0; i < friends.length; i++) {
-        var friend = friends[i];
-        if (friend.city != null) {
-            friend.city = friend.city.title;
-        }
-        if (friend.country != null) {
-            friend.country = friend.country.title;
-        }
-        var container = scrollbarInitialized ? self.$friendList.find('.mCSB_container') : self.$friendList;
-        container.append(self.$friendsTemplate.tmpl(friends[i]));
-    }
 
     $('#friends-container').mCustomScrollbar({
         theme: 'dark-3',
@@ -275,13 +263,25 @@ SettingsManager.prototype.showFriends = function(friends, scrollbarInitialized) 
                 $.ajax({
                     url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friends) {
-                        self.showFriends(friends, true);
+                        self.showFriends(friends);
                         self.friendsOffset += friends.length;
                     }
                 });
             }
         }
     });
+
+    for (var i = 0; i < friends.length; i++) {
+        var friend = friends[i];
+        if (friend.city != null) {
+            friend.city = friend.city.title;
+        }
+        if (friend.country != null) {
+            friend.country = friend.country.title;
+        }
+        var container = self.$friendList.find('.mCSB_container');
+        container.append(self.$friendsTemplate.tmpl(friends[i]));
+    }
 };
 
 SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {

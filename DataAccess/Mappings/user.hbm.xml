@@ -21,6 +21,14 @@
       <key column="UserId"/>
       <one-to-many class="UserSocialNetwork"/>
     </set>
+    <set name="Followers" table="UserToUser" cascade="save-update">
+      <key column="FollowingId" />
+      <many-to-many column="FollowerId" class="User" />
+    </set>
+    <set name="Following" table="UserToUser" cascade="save-update">
+      <key column="FollowerId" />
+      <many-to-many column="FollowingId" class="User" />
+    </set>
     <property name="Email" unique="true"/>
   </class>
 </hibernate-mapping>
