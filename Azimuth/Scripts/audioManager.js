@@ -113,6 +113,9 @@
             });
         }
     };
+    this._refreshTrackList = function() {
+        self.tracksGlobal =$('.vkMusicList').children('.track').children('.track-url');
+    };
 };
 
 AudioManager.prototype.play = function() {

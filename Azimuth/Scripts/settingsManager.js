@@ -164,8 +164,9 @@ var SettingsManager = function (manager) {
     };
 
     this._hideSelectedTracksAction = function (list) {
-        list.hide();
+        list.detach();
         list.toggleClass('draggable-item-selected', false);
+        self.audioManager._refreshTrackList();
     };
 
     this._createPlaylistAction = function ($currentItem) {
