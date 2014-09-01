@@ -20,25 +20,26 @@
                 </button>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated)
-                    {
+                @if (Request.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("UserProfile", "Index", "UserProfile")</li>
                         <li>@Html.ActionLink("My music", "Index", "MusicList")</li>
-                    }
-                    <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a id="user-settings" href="@Url.Action("Index", "Settings")">
-                            <img src="@AzimuthIdentity.Current.UserCredential.PhotoBig" />
-                        </a>
-                    </li>
-                    <li id="user-name-item">
-                        <div id="user-name">@User.Identity.GetUserName()</div>
-                        @Html.ActionLink("Log off", "LogOff", "Account", null, new { id = "log-off-link" })
-                    </li>
-                </ul>
+                    
+                        <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a id="user-settings" href="@Url.Action("Index", "Settings")">
+                                <img src="@AzimuthIdentity.Current.UserCredential.PhotoBig" />
+                            </a>
+                        </li>
+                        <li id="user-name-item">
+                            <div id="user-name">@User.Identity.GetUserName()</div>
+                            @Html.ActionLink("Log off", "LogOff", "Account", null, new {id = "log-off-link"})
+                        </li>
+                    </ul>
+                }
             </div>
         </div>
     </div>
