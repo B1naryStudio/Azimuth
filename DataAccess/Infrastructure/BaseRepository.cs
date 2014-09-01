@@ -40,6 +40,11 @@ namespace Azimuth.DataAccess.Infrastructure
             _session.Save(item);
         }
 
+        public void UpdateItem(T item)
+        {
+            _session.Update(item);
+        }
+
         public void DeleteItem(T item)
         {
             _session.Delete(item);
