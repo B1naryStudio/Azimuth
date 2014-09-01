@@ -473,17 +473,12 @@ SettingsManager.prototype.bindListeners = function () {
         $('.accordion .tableRow').on("click", self._getTracks);
     });
 
-    $('#playlists').mCustomScrollbar({
+    $('#playlists, #vk-track-list').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,
-        advanced: { updateOnSelectorChange: "true" }
-    });
-
-    $('#vk-track-list').mCustomScrollbar({
-        theme: 'dark-3',
-        scrollButtons: { enable: true },
-        updateOnContentResize: true,
+        scrollInertia: 0,
+        autoHideScrollbar: true,
         advanced: { updateOnSelectorChange: "true" }
     });
 
