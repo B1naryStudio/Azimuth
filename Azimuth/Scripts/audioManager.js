@@ -37,12 +37,12 @@
         self.$currentTrack.find('.track-duration').show();
         self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next();
+        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
-            trackItem = trackItem.next();
+            trackItem = trackItem.next('.tableRow');
         }
         if (trackItem.length == 0) {
-            trackItem = self.$currentTrack.parent().children().first();
+            trackItem = self.$currentTrack.parent().children('.tableRow').first();
         }
         self.$currentTrack = trackItem;
 
@@ -57,12 +57,12 @@
         self.$currentTrack.find('.track-duration').show();
         self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev();
+        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
-            trackItem = trackItem.prev();
+            trackItem = trackItem.prev('.tableRow');
         }
         if (trackItem.length == 0) {
-            trackItem = self.$currentTrack.parent().children().last();
+            trackItem = self.$currentTrack.parent().children('.tableRow').last();
         }
         self.$currentTrack = trackItem;
 
