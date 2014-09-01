@@ -185,9 +185,9 @@ div.accordion > div.dropdown {
 	background-position: right 0;
 }
 
-/*div.list{
-	width: 500px;
-}*/
+div.list{
+    height: 100%;
+}
 
 div.list span{
 	/*width: 50%;*/
