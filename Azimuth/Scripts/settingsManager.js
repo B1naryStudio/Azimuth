@@ -240,13 +240,12 @@ var SettingsManager = function (manager) {
 
     this._getFriendTracks = function() {
         var $currentItem = $(this);
-        var currentId;
+        var currentId = $currentItem.children('.friend-id').html();
 
-        if ($currentItem.hasClass('friend')) {
-            currentId = $currentItem.children('.friend-id').html();
-        } else {
-            currentId = $currentItem.parents('.friend').children('.friend-id').html();
-        }
+        var currentUser = $currentItem.children('.friend-initials').html();
+
+        $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
+
         var provider = "Vkontakte"; // TODO: Fix for all providers
         $.ajax({
             url: '/api/user/friends/audio?provider=' + provider + '&friendId=' + currentId,
