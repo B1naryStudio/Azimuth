@@ -359,6 +359,7 @@ div.draggable-list{
     margin-left: 64%;
     border: 2px solid black;
     background: lightgrey;
+    height: 100%;
 }
 
 div.friend {

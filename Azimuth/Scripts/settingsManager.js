@@ -262,6 +262,13 @@ SettingsManager.prototype.showFriends = function(friends) {
         }
         self.$friendList.append(self.$friendsTemplate.tmpl(friends[i]));
     }
+
+    $('#friends-container').mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        advanced: { updateOnSelectorChange: "true" }
+    });
 };
 
 SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
@@ -440,23 +447,23 @@ SettingsManager.prototype.bindListeners = function() {
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
     };
 
-    this.$getFriendInfoBtn.click(function (e) {
+    this.$getFriendInfoBtn.click(function(e) {
         if (self.$friendList.is(':visible')) {
             self.$friendList.hide('slow');
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
-    $.ajax({
-                url: '/api/user/friends/' + provider + "?offset="+ self.friendsOffset + "&count=10",
+            $.ajax({
+                url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
                 async: true,
                 success: function(friends) {
                     self.showFriends(friends);
                     self.$friendList.show('slow');
                     self.friendsOffset += friends.length;
                 }
-    });
+            });
         } else {
             self.$friendList.show('slow');
-}
+        }
     });
 
     self.$friendList.click(function(e) {;
@@ -471,7 +478,7 @@ SettingsManager.prototype.bindListeners = function() {
         var reloginUrl = $(e.target).data('reloginurl');
         $.ajax({
             url: '/api/user/friends/audio?provider=' + provider + '&friendId=' + currentId,
-            success: function (tracks) {
+            success: function(tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -490,13 +497,13 @@ SettingsManager.prototype.bindListeners = function() {
                         ],
                         saveVkTrack: saveTrackFromVkToPlaylist
                     });
-    } else {
+                } else {
                     self.$reloginForm.show();
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
-    }
+            }
         });
     });
 
