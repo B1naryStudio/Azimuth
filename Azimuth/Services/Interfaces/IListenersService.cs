@@ -10,6 +10,7 @@ namespace Azimuth.ApiControllers
         void AddNewListener(int playlistId, int userId);
         void AddCurrentUserAsListener(int playlistId);
         void RemoveListener(int playlistId, int userId);
-        
+        void RemoveCurrentUserAsListener(int playlistId);
+
     }
 }

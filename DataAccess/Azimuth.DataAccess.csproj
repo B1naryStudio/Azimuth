@@ -77,6 +77,7 @@
     <Compile Include="Entities\PlaylistTrack.cs" />
     <Compile Include="Entities\SocialNetwork.cs" />
     <Compile Include="Entities\Track.cs" />
+    <Compile Include="Entities\UnauthorizedListeners.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserSocialNetwork.cs" />
     <Compile Include="Infrastructure\BaseEntity.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Repositories\PlaylistTrackRepository.cs" />
     <Compile Include="Repositories\SocialNetworkRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
+    <Compile Include="Repositories\UnauthorizedListenersRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserSocialNetworkRepository.cs" />
   </ItemGroup>
@@ -140,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\playlistlisteners.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Mappings\unauthorizedusers.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

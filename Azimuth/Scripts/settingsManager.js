@@ -301,7 +301,7 @@ var saveTrackFromVkToPlaylist = function ($currentItem, $draggableStub, $element
         url: '/api/usertracks?provider=' + provider + "&index=" + index,
         type: 'POST',
         data: JSON.stringify({
-            "Id": playlistId,
+          "Id": playlistId,
             "TrackIds": tracks
         }),
         dataType: 'json',

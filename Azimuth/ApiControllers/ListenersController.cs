@@ -59,14 +59,11 @@ namespace Azimuth.ApiControllers
         }
 
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [HttpDelete]
+        [Route("{playlistId:int}")]
+        public void DeleteCurrentUserAsListener(int playlistId)
         {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            _listenersService.RemoveCurrentUserAsListener(playlistId);
         }
     }
 }
