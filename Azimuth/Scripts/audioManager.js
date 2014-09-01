@@ -113,10 +113,17 @@
             });
         }
     };
-    this._refreshTrackList = function() {
-        self.tracksGlobal =$('.vkMusicList').children('.track').children('.track-url');
-    };
 };
+
+AudioManager.prototype.refreshTracks = function () {
+    var self = this;
+    self.tracksGlobal = $('.vkMusicList').children('.track').children('.track-url');
+}
+
+AudioManager.prototype.refreshPlaylistTracks = function () {
+    var self = this;
+    self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
+}
 
 AudioManager.prototype.play = function() {
     var self = this;

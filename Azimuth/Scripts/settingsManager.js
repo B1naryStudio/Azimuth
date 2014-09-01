@@ -170,7 +170,7 @@ var SettingsManager = function (manager) {
     this._hideSelectedTracksAction = function (list) {
         list.detach();
         list.toggleClass('draggable-item-selected', false);
-        self.audioManager._refreshTrackList();
+        self.audioManager.refreshTracks();
     };
 
     this._createPlaylistAction = function ($currentItem) {
@@ -465,6 +465,7 @@ SettingsManager.prototype.bindListeners = function () {
             self.$searchTrackInput.next().next().children().remove();
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
+        self.audioManager.refreshTracks();
     });
 
     this.$searchPlaylistInput.keyup(function (e) {
@@ -497,6 +498,7 @@ SettingsManager.prototype.bindListeners = function () {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
+            self.audioManager.refreshPlaylistTracks();
         }
     });
 
