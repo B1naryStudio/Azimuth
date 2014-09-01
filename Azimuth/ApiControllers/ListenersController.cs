@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Services.Concrete;
@@ -27,9 +29,16 @@ namespace Azimuth.ApiControllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id:int}/users")]
-        public ICollection<User> GetListeners(int id)
+        public async Task<HttpResponseMessage> GetListeners(int id)
         {
-            return  _listenersService.GetListenersByPlaylistId(id).Result;
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _listenersService.GetListenersByPlaylistId(id));
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         /// <summary>
@@ -39,31 +48,64 @@ namespace Azimuth.ApiControllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id:int}")]
-        public int GetListenersAmount(int id)
+        public async Task<HttpResponseMessage> GetListenersAmount(int id)
         {
-            return _listenersService.GetListenersByPlaylistId(id).Result.Count;
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    _listenersService.GetListenersByPlaylistId(id).Result.Count);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            
         }
 
         [HttpPost]
         [Route("{playlistId:int}/{userId:int}")]
-        public void AddListener(int playlistId, int userId)
+        public async Task<HttpResponseMessage> AddListener(int playlistId, int userId)
         {
-            _listenersService.AddNewListener(playlistId, userId);
+            try
+            {
+                _listenersService.AddNewListener(playlistId, userId);
+                return Request.CreateResponse(HttpStatusCode.OK, "Ok");
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         [HttpPost]
         [Route("{playlistId:int}")]
-        public void AddCurrentUserAsListener(int playlistId)
+        public async Task<HttpResponseMessage> AddCurrentUserAsListener(int playlistId)
         {
-            _listenersService.AddCurrentUserAsListener(playlistId);
+            try
+            {
+                _listenersService.AddCurrentUserAsListener(playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK, "Ok");
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
 
         [HttpDelete]
         [Route("{playlistId:int}")]
-        public void DeleteCurrentUserAsListener(int playlistId)
+        public async Task<HttpResponseMessage> DeleteCurrentUserAsListener(int playlistId)
         {
-            _listenersService.RemoveCurrentUserAsListener(playlistId);
+            try
+            {
+                _listenersService.RemoveCurrentUserAsListener(playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK, "Ok");
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
     }
 }
