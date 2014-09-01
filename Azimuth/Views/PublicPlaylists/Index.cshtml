@@ -8,9 +8,11 @@
     
     <div id="tracksArea">
         <h2 id="playlistName"></h2>
+        <h3 id="listeners"></h3>
+        <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
         <div id="playlist-info">
             <div id="tracks"></div>
-            <div id="liseners"></div>
+            <div class="listeners"></div>
         </div>
     </div>
 </div>
@@ -18,13 +20,16 @@
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/settingsManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">
         <div class="playlist-plated" >
             <div class="playlist-plated-info">
-                <span class="playlist-plated-info-name">${Name}</span>
-                <span>${Duration}</span>
-                <span>Created by ${Creator}</span>
-                <span>${Genres}</span>
+                <div class="playlist-plated-info-name">${Name}</div>
+                <div>${Duration}</div>
+                <div>Created by ${Creator}</div>
+                <div>${Genres}</div>
+                <div class="listeners"></div>
             </div>
         </div>
         <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
@@ -44,6 +49,7 @@
         </div>
     </script>
     <script>
+        var audioManager = new AudioManager();
         var playlists_global = null;
         var $playlistTemplate = $("#playlistTemplate");
         var $trackTemplate = $("#trackTemplate");
@@ -52,17 +58,36 @@
         var $playlistsArea = $('#playlistsArea');
         var $tracksArea = $('#tracksArea');
         var $playlistName = $('#playlistName');
+        var $listeners = $('#listeners');
+        var $backToPlaylistsBtn = $('#backToPlaylistsBtn');
+        var currentPlaylist = null;
         $(document).ready(function() {
             $('#playlistId').focus(function() {
                 $(this).val('');
             });
             showPlaylists();
-
-            $(document).on('playlistsUpdated', showPlaylists);
+            $backToPlaylistsBtn.click(function() {
+                $playlistsArea.show();
+                $tracksArea.hide();
+                $backToPlaylistsBtn.hide();
+                removeCurrentUserAsListener();
+            });
             $playlists.click(function(event) {
+
                 $playlistsArea.hide();
                 $tracksArea.show();
-                showTracks($(event.target).closest('.playlist-plated'));
+                $backToPlaylistsBtn.show();
+                var $playlist = $(event.target).closest('.playlist-plated');
+
+                var playlistName = $playlist.find('.playlist-plated-info-name').text();
+                currentPlaylist = playlists_global.filter(function(index) {
+                    return index.Name.valueOf() == playlistName;
+                })[0];
+                showTracks(currentPlaylist);
+                $(document).trigger('newListenerAdded', [currentPlaylist]);
+            });
+            $(document).on('newListenerAdded', function(event, data) {
+                $listeners.text(addCurrentUserAsListener(data));
             });
         });
 
@@ -83,30 +108,79 @@
                         var secs = ('0' + (playlist.Duration % 60)).slice(-2);
                         playlist.Duration = mins + ':' + secs;
                         playlist.Creator = playlist.Creator.Name;
-                        $playlists.append($('#playlistTemplate').tmpl(playlist));
+                        var $playlist = $('#playlistTemplate').tmpl(playlist);
+                        $playlists.append($playlist);
+                        console.log('Playlist'+i);
+                        console.log($playlist);
+                        var $listener = $playlist.find('.listeners');
+                        console.log('listenre');
+                        console.log($listener);
+                        var returnVal = getPlaylistListeners(playlist);
+                        console.log(returnVal);
+                        $listener.text('Listening ' + returnVal + ' people');
                     }
                 }
             });
         }
 
-        function showTracks(playlist) {
-            var playlistName = playlist.find('.playlist-plated-info-name').text();
-            console.log(playlistName);
-            //var $dragList = $(this).next();
-            //if (!$(this).hasClass('active') && $dragList.children().length === 0) {
-            var playlistId = playlists_global.filter(function(index) {
-                return index.Name.valueOf() == playlistName;
-            })[0].Id;
-            $playlistName.text(playlistName);
-            console.log(playlistId);
+        function addCurrentUserAsListener(playlist) {
+
             $.ajax({
-                url: "/api/usertracks?playlistId=" + playlistId, // TODO replace with class playlistID
+                cache: false,
+                type: "Post",
+                url: "/api/listeners/" + playlist.Id,
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    $listeners.text('This album listening ' + getPlaylistListeners(playlist) + ' people');
+                }
+            });
+        }
+
+        function removeCurrentUserAsListener() {
+            $.ajax({
+                cache: false,
+                type: "delete",
+                url: "/api/listeners/" + currentPlaylist.Id,
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    $listeners.text(getPlaylistListeners(currentPlaylist));
+                }
+            });
+        }
+
+        function getPlaylistListeners(playlist) {
+            console.log('playlist');
+            console.log(playlist);
+            $listeners.empty();
+            var res = -1;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/api/listeners/" + playlist.Id,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+
+                    console.log(data);
+                    res = data;
+                }
+            });
+            return res;
+        }
+
+        function showTracks(playlist) {
+
+            $playlistName.text(playlist.Name);
+            $tracks.empty();
+            $.ajax({
+                url: "/api/usertracks?playlistId=" + playlist.Id, // TODO replace with class playlistID
                 type: 'GET',
                 async: false,
                 success: function(tracksData) {
                     var tracks = tracksData;
-                    for (var i = 0; i < tracks.length; ++i)
-                    {
+                    for (var i = 0; i < tracks.length; ++i) {
                         var track = tracks[i];
                         console.log(track);
                         var mins = Math.floor(track.Duration / 60);
@@ -116,7 +190,9 @@
                     }
                 }
             });
+            audioManager.bindPlayBtnListeners();
+            $(this).toggleClass("active");
         }
 
     </script>
-    }
+}

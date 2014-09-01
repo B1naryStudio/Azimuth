@@ -445,7 +445,7 @@ SettingsManager.prototype.bindListeners = function() {
             self.$friendList.hide('slow');
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
-            $.ajax({
+    $.ajax({
                 url: '/api/user/friends/' + provider + "?offset="+ self.friendsOffset + "&count=10",
                 async: true,
                 success: function(friends) {
@@ -453,10 +453,10 @@ SettingsManager.prototype.bindListeners = function() {
                     self.$friendList.show('slow');
                     self.friendsOffset += friends.length;
                 }
-            });
+    });
         } else {
             self.$friendList.show('slow');
-        }
+}
     });
 
     self.$friendList.click(function(e) {;
@@ -490,13 +490,13 @@ SettingsManager.prototype.bindListeners = function() {
                         ],
                         saveVkTrack: saveTrackFromVkToPlaylist
                     });
-                } else {
+    } else {
                     self.$reloginForm.show();
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
-            }
+    }
         });
     });
 
@@ -504,14 +504,14 @@ SettingsManager.prototype.bindListeners = function() {
         var $this = $(this);
         $this.hide();
         var provider = $('.tab-pane.active').attr('id');
-        $.ajax({
+    $.ajax({
             url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
             success: function (friends) {
                 self.showFriends(friends);
                 self.$friendList.show('slow');
                 self.friendsOffset += friends.length;
                 $this.show();
-            }
-        });
+        }
+    });
     });
 };
