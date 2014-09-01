@@ -134,8 +134,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                _playlistService.CreatePlaylist(name, accessibilty);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                long playlistId = _playlistService.CreatePlaylist(name, accessibilty);
+                return Request.CreateResponse(HttpStatusCode.OK, playlistId);
             }
             catch (BadRequestException ex)
             {

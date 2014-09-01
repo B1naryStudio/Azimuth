@@ -77,8 +77,10 @@ namespace Azimuth.Services.Concrete
             _unitOfWork.Commit();
         }
 
-        public void CreatePlaylist(string name, Accessibilty accessibilty)
+        public long CreatePlaylist(string name, Accessibilty accessibilty)
         {
+            long playlistId = -1;
+
             if (!Enum.IsDefined(typeof(Accessibilty), accessibilty))
             {
                 throw new BadRequestException("Accessibilty not correct");
@@ -105,9 +107,11 @@ namespace Azimuth.Services.Concrete
                 };
 
                 playlistRepo.AddItem(playlist);
+                playlistId = playlist.Id;
 
                 _unitOfWork.Commit();
             }
+            return playlistId;
         }
 
         public async Task<PlaylistData> GetPlaylistById(int id)

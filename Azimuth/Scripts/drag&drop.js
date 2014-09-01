@@ -1,31 +1,15 @@
 ﻿$(document).ready(function () {
 
+    // Counter to different context menus on for plugin owners on one page
     var count = 0;
 
     $.fn.makeDraggable = function (options) {
-        var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
-        var contextMenu = options.contextMenu;
-
         var $rootElement = this;
-        var $currentItem = null;
-        var $draggableStub = $('#draggableStub');
-        var $container = $('#itemsContainer');
-
-        this._getCount = function () {
-            return count++;
-        };
-        this.contextMenuId = 'conteiner-id' + this._getCount();
-        var $contextMenuContainer = $('<div>');
-        $contextMenuContainer.addClass('contextMenu');
-        $contextMenuContainer.attr('id', this.contextMenuId);
-
-        var $subContextMenuContainer = $('<div>');
-        $subContextMenuContainer.addClass('contextMenu');
-        $subContextMenuContainer.addClass('subMenu');
-
-        var $contextMenuTemplate = $('#contextmenuTemplate');
-        var $subContextMenuTemplate = $('#subContextmenuTemplate');
-
+        // Callback on dragging item in new position in list
+        var moveTrackToNewPosition = options.onMoveTrackToNewPosition;
+        // Initial data for context menu (action names, etc)
+        var contextMenu = options.contextMenu;
+        // Callbacks for context menu actions 
         var selectAllAction = null;
         var copyToPlaylistAction = null;
         var moveToPlaylistAction = null;
@@ -33,7 +17,28 @@
         var hideAction = null;
         var removeAction = null;
         var saveVkTrackToPlaylist = null;
+        // Containers and pointers for working with drag items
+        var $currentItem = null;
+        var $draggableStub = $('#draggableStub');
+        var $container = $('#itemsContainer');
+        // Call to create unique plugin owner id
+        this._getCount = function () {
+            return count++;
+        };
+        // Context menu container creation
+        this.contextMenuId = 'conteiner-id' + this._getCount();
+        var $contextMenuContainer = $('<div>');
+        $contextMenuContainer.addClass('contextMenu');
+        $contextMenuContainer.attr('id', this.contextMenuId);
+        // Subcontext menu container creation
+        var $subContextMenuContainer = $('<div>');
+        $subContextMenuContainer.addClass('contextMenu');
+        $subContextMenuContainer.addClass('subMenu');
 
+        var $contextMenuTemplate = $('#contextmenuTemplate');
+        var $subContextMenuTemplate = $('#subContextmenuTemplate');
+
+        // Saving data about item moving (from -> to)
         var movingInfo = { "data": [] };
         var timerId = null;
         var lastEvent = null;
@@ -223,6 +228,7 @@
                              $currentItem = null;
                              var $itemsToSelect = $rootElement.children().find('.track');
                              selectAllAction($itemsToSelect);
+                             $currentItem = $itemsToSelect;
                              break;
                          case 'copytoplaylist':
                              $currentItem = $container;
@@ -236,12 +242,12 @@
                              }
                              break;
                          case 'movetoplaylist':
+                             var newPlaylist = $target.parent().children('.playlistId').text();
+                             var oldPlaylist = $currentItem.parent().children('.playlistId').text();
                              $currentItem = $container;
                              $currentItem.hide();
                              $currentItem.append($('.draggable-item-selected').clone());
                              if ($currentItem.children().length > 0) {
-                                 var newPlaylist = $target.parent().children('.playlistId').text();
-                                 var oldPlaylist = $('.playlist.active').children('.playlistId').text();
                                  moveToPlaylistAction($currentItem, newPlaylist, oldPlaylist);
                                  $container.empty();
                                  $currentItem = null;
@@ -254,15 +260,16 @@
                              $currentItem.append($('.draggable-item-selected').clone());
                              if ($currentItem.children().length > 0) {
                                  saveVkTrackToPlaylist($currentItem, index, $target.parent().children('.playlistId').text());
-                                 $container.empty();
                              }
+                             $container.empty();
                              break;
                          case 'removeselected':
+                             var playlistId = $currentItem.parent().children('.playlistId').text();
                              $currentItem = $container;
                              $currentItem.hide();
                              $currentItem.append($('.draggable-item-selected').clone());
                              if ($currentItem.children().length > 0) {
-                                 removeAction($currentItem, $('.playlist.active').children('.playlistId').text());
+                                 removeAction($currentItem, playlistId);
                                  $container.empty();
                                  $currentItem = null;
                              }
@@ -272,7 +279,13 @@
                              hideAction($(this).find('.track.draggable-item-selected'));
                              break;
                          case 'createplaylist':
-                             createPlaylistAction();
+                             $currentItem = $container;
+                             $currentItem.hide();
+                             $currentItem.append($('.draggable-item-selected').clone());
+                             if ($currentItem.children().length > 0) {
+                                 createPlaylistAction($currentItem);
+                             }
+                             $container.empty();        
                      }
                  }
             }
