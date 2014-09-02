@@ -287,7 +287,10 @@ div.draggable-list{
     display: block;
     float: left;
     height: 30%;
-    width: 50%;
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-top: 3px;
 }
 
