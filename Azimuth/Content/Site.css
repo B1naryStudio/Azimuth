@@ -283,6 +283,19 @@ div.draggable-list{
     font-size: 12px;
 }
 
+.track-description:hover::after { 
+    content: attr(data-title); 
+    position: absolute; 
+    left: 40%;
+    z-index: 1; 
+    background: #e0e0e0; 
+    font-family: Arial, sans-serif; 
+    font-size: 11px; 
+    padding: 5px 10px; 
+    border: 1px solid #333;
+    border-radius: 20px;
+}
+
 .track-info {
     display: block;
     float: left;
