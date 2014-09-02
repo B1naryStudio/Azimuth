@@ -5,7 +5,7 @@
         <h2>Public Playlists</h2>
         <div id="playlists-plated"></div>
     </div>
-    
+    <div id="progressSlider" style="display: none"></div>
     <div id="tracksArea">
         <h2 id="playlistName"></h2>
         <h3 id="listeners"></h3>
@@ -21,6 +21,8 @@
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/workWithPublicPlaylists.js"></script>
+    <script type="text/javascript" src="../../Scripts/publicPlaylistManager.js"></script>
     <script type="" src="../../Scripts/drag&drop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
@@ -46,169 +48,9 @@
                 <div class="track-title nowrap">${Name}</div>
             </div>
             <div class="track-duration nowrap">${Duration}</div>
+            <div class="track-remaining" style="display: none"></div>
             <div style="display: none" class="track-url">${Url}</div>
             <div style="display: none" class="trackId">${Id}</div>
         </div>
-    </script>
-    <script>
-        var audioManager = null;
-        var playlists_global = null;
-        var $playlistTemplate = $("#playlistTemplate");
-        var $trackTemplate = $("#trackTemplate");
-        var $tracks = $('#tracks');
-        var $playlists = $('#playlists-plated');
-        var $playlistsArea = $('#playlistsArea');
-        var $tracksArea = $('#tracksArea');
-        var $playlistName = $('#playlistName');
-        var $listeners = $('#listeners');
-        var $backToPlaylistsBtn = $('#backToPlaylistsBtn');
-        var currentPlaylist = null;
-        $(document).ready(function () {
-            var volumeSlider = new SliderController({
-                sliderSelector: '#volumeSlider',
-                sliderBarClass: 'volumeBar',
-                sliderClass: 'volume',
-                dirrection: 'vertical'
-            });
-            var progressSlider = new SliderController({
-                sliderSelector: '#progressSlider',
-                sliderBarClass: 'progressBar',
-                sliderClass: 'progress',
-                backgroundSliderClass: 'cache',
-                dirrection: 'horizontall'
-            });
-            audioManager = new AudioManager(volumeSlider, progressSlider);
-            $('#playlistId').focus(function() {
-                $(this).val('');
-            });
-            showPlaylists();
-            $backToPlaylistsBtn.click(function() {
-                $playlistsArea.show();
-                $tracksArea.hide();
-                $backToPlaylistsBtn.hide();
-                removeCurrentUserAsListener();
-            });
-            $playlists.click(function(event) {
-
-                $playlistsArea.hide();
-                $tracksArea.show();
-                $backToPlaylistsBtn.show();
-                var $playlist = $(event.target).closest('.playlist-plated');
-
-                var playlistName = $playlist.find('.playlist-plated-info-name').text();
-                currentPlaylist = playlists_global.filter(function(index) {
-                    return index.Name.valueOf() == playlistName;
-                })[0];
-                showTracks(currentPlaylist);
-                $(document).trigger('newListenerAdded', [currentPlaylist]);
-            });
-            $(document).on('newListenerAdded', function(event, data) {
-                $listeners.text(addCurrentUserAsListener(data));
-            });
-        });
-
-        function showPlaylists() {
-            $playlists.empty();
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "/api/playlists/public",
-                dataType: "json",
-                async: false,
-                success: function(data) {
-                    var playlists = data;
-                    playlists_global = playlists;
-                    for (var i = 0; i < playlists.length; i++) {
-                        var playlist = playlists[i];
-                        var mins = Math.floor(playlist.Duration / 60);
-                        var secs = ('0' + (playlist.Duration % 60)).slice(-2);
-                        playlist.Duration = mins + ':' + secs;
-                        playlist.Creator = playlist.Creator.Name;
-                        var $playlist = $('#playlistTemplate').tmpl(playlist);
-                        $playlists.append($playlist);
-                        console.log('Playlist'+i);
-                        console.log($playlist);
-                        var $listener = $playlist.find('.listeners');
-                        console.log('listenre');
-                        console.log($listener);
-                        var returnVal = getPlaylistListeners(playlist);
-                        console.log(returnVal);
-                        $listener.text('Listening ' + returnVal + ' people');
-                    }
-                }
-            });
-        }
-
-        function addCurrentUserAsListener(playlist) {
-
-            $.ajax({
-                cache: false,
-                type: "Post",
-                url: "/api/listeners/" + playlist.Id,
-                dataType: "json",
-                async: false,
-                success: function(data) {
-                    $listeners.text('This album listening ' + getPlaylistListeners(playlist) + ' people');
-                }
-            });
-        }
-
-        function removeCurrentUserAsListener() {
-            $.ajax({
-                cache: false,
-                type: "delete",
-                url: "/api/listeners/" + currentPlaylist.Id,
-                dataType: "json",
-                async: false,
-                success: function(data) {
-                    $listeners.text(getPlaylistListeners(currentPlaylist));
-                }
-            });
-        }
-
-        function getPlaylistListeners(playlist) {
-            console.log('playlist');
-            console.log(playlist);
-            $listeners.empty();
-            var res = -1;
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "/api/listeners/" + playlist.Id,
-                dataType: "json",
-                async: false,
-                success: function (data) {
-
-                    console.log(data);
-                    res = data;
-                }
-            });
-            return res;
-        }
-
-        function showTracks(playlist) {
-
-            $playlistName.text(playlist.Name);
-            $tracks.empty();
-            $.ajax({
-                url: "/api/usertracks?playlistId=" + playlist.Id, // TODO replace with class playlistID
-                type: 'GET',
-                async: false,
-                success: function(tracksData) {
-                    var tracks = tracksData;
-                    for (var i = 0; i < tracks.length; ++i) {
-                        var track = tracks[i];
-                        console.log(track);
-                        var mins = Math.floor(track.Duration / 60);
-                        var secs = ('0' + (track.Duration % 60)).slice(-2);
-                        track.Duration = mins + ':' + secs;
-                        $tracks.append($('#playlistTrackTemplate').tmpl(track));
-                    }
-                }
-            });
-            audioManager.bindPlayBtnListeners();
-            $(this).toggleClass("active");
-        }
-
     </script>
 }
