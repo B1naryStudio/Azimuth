@@ -68,10 +68,6 @@
                     }
                 </div>
             </div>
-            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px">
-                <p id="error"> Your time has expired, please login again. </p>
-                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
-            </div>
         </div>
     </div>
     <div class="itemsContainer tableRow" id="itemsContainer" ></div>
@@ -89,10 +85,8 @@
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description">
-                <div class="track-info">
-                    <span>${artist}</span>
-                </div>
+            <div class="track-description" data-title="${artist} ${title}">
+                <div class="track-info">${artist}</div>
                 <div class="track-title nowrap">${title}</div>
             </div>
             <div class="track-duration">${duration}</div>
@@ -105,7 +99,7 @@
     <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description">
+            <div class="track-description" data-title="${Artist} ${Name}">
                 <div class="track-info">${Artist}</div>
                 <div class="track-title nowrap" style="text-overflow: ellipsis">${Name}</div>
             </div>

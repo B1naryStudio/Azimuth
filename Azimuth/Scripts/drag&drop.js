@@ -61,10 +61,10 @@
         this.find('.draggable-list > .tableRow').each(function (index, item) {
             var $item = $(item);
             $item.toggleClass('draggable-item', true);
-            $item.off('mousedown').mousedown(_makeDraggable);
+            $item.mousedown(_makeDraggable);
         });
 
-        $(document).off('mousemove').mousemove(function (event) {
+        $(document).mousemove(function (event) {
             lastEvent = event;
             if ($currentItem && mousedown && !mousedownOnProgressBar) {
                 var $elem = _getCurrentTarget(event);
@@ -123,7 +123,7 @@
             }
         });
 
-        $(document).off('mouseup').mouseup(function (event) {
+        $(document).mouseup(function (event) {
             if ($currentItem != null && !event.shiftKey && !event.ctrlKey && !$currentItem.hasClass('itemsContainer') && event.which != 3) {
                 if ($('.draggable-item-selected').length > 1) {
                     $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
@@ -227,7 +227,7 @@
             object.appendTo($contextMenuContainer);
         }
 
-        $contextMenuContainer.off('mousedown').mousedown(function (event) {
+        $contextMenuContainer.mousedown(function (event) {
             var $target = $(event.target);
             if (contextMenuSelected == true && event.which != 3 && !$target.parent().hasClass('hasSubMenu')) {
 
@@ -311,7 +311,7 @@
             }
         });
 
-        $(document).off('mousedown').mousedown(function (event) {
+        $(document).mousedown(function (event) {
             var $target = $(event.target);
             if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
                 mousedownOnProgressBar = true;
@@ -510,6 +510,7 @@
 
             if (event.type == "mouseup") {
                 if ($elem.hasClass('playlist')) {
+                    //$currentItem.show();
                     return $elem;
                 }
                 if ($elem.parents('.playlist').length > 0 && event.type == "mouseup") {
