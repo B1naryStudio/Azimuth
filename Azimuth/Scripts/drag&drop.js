@@ -342,6 +342,11 @@
                     }
                 }
 
+                var anotherContextMenu = $('.contextMenu');
+                if (anotherContextMenu.length > 0) {
+                    anotherContextMenu.detach();
+                }
+
                 contextMenuSelected = true;
                 var $target = $(event.target).parents('.draggable-list').parent();
                 if ($target.hasClass('vkMusicTable')) {
