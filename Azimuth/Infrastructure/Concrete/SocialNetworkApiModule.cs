@@ -12,6 +12,7 @@ namespace Azimuth.Infrastructure.Concrete
         {
             Bind<IUserTracksService>().To<UserTracksService>();
             Bind<ISocialNetworkApi>().To<VkApi>().Named("Vkontakte");
+            Bind<IMusicService>().To<LastfmApi>();
             //Bind<ISocialNetworkApi>().To<FacebookApi>().Named("Facebook");
             //Bind<ISocialNetworkApi>().To<TwitterApi>().Named("Twitter");
             //Bind<ISocialNetworkApi>().To<GoogleApi>().Named("Google");
