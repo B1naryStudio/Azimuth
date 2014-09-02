@@ -277,7 +277,7 @@ var SettingsManager = function (manager) {
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
-                $('#vkMusicTable > .tableTitle').html("User Tracks");
+                $('#vkMusicTable > .tableTitle').text("User Tracks");
             },
             error: function() {
                 $('#vkMusic-header-spinner').hide();
@@ -551,6 +551,7 @@ SettingsManager.prototype.bindListeners = function () {
     $('#backToPlaylistsBtn').click(function () {
         $('#backToPlaylistsBtn').hide();
         $('#playlistTracks').empty();
+
         $('#playlistTracks').hide();
         self.$playlistsTable.empty();
         self.showPlaylists(self.playlistsGlobal);

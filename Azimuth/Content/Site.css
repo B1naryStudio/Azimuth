@@ -223,18 +223,22 @@ div.draggable-list{
 	display: block;
 }
 
+.vkMusicTable {
+    height: 70%;
+}
+
 #vkMusic-header {
     position: relative;
+    float: none;
+    height: 20px;
 }
 
 #vkMusic-header-spinner {
-    position: absolute;
-    left: 280px;
-    top: 0;
+    float: left;
 }
 
 #vkMusic-header-title {
-    text-align: center;
+    float: left;
     font-weight: bold;
     font-size: larger;
 }
