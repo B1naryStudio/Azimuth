@@ -47,8 +47,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                await _userTracksService.GetTrackInfo(author, trackName);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                var data = await _userTracksService.GetTrackInfo(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception exception)
             {

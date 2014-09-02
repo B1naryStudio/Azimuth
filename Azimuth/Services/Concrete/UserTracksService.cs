@@ -23,14 +23,14 @@ namespace Azimuth.Services.Concrete
     public class UserTracksService : IUserTracksService
     {
         private ISocialNetworkApi _socialNetworkApi;
-        private ILastfmApi _lastfmApi;
+        private IMusicService _lastfmApi;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserRepository _userRepository;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
         private readonly PlaylistTrackRepository _playlistTrackRepository;
 
-        public UserTracksService(IUnitOfWork unitOfWork, ILastfmApi lastfmApi)
+        public UserTracksService(IUnitOfWork unitOfWork, IMusicService lastfmApi)
         {
             _unitOfWork = unitOfWork;
 
@@ -61,9 +61,9 @@ namespace Azimuth.Services.Concrete
             return await _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
         }
 
-        public async Task GetTrackInfo(string author, string trackName)
+        public async Task<TrackInfoDto> GetTrackInfo(string author, string trackName)
         {
-            await _lastfmApi.GetTrackInfo(author, trackName);
+            return await _lastfmApi.GetTrackInfo(author, trackName);
         }
 
         public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
