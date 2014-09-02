@@ -37,6 +37,10 @@
             <div id="volumeSlider"></div>
         </div>
         <div id="SN" class="stuck">
+            <div id="relogin" class="alert alert-danger" style="margin-top: 10px; z-index: 1001;">
+                <p id="error"> Your time has expired, please login again. </p>
+                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+            </div>
             <div id="friends-container" style="display: none">
             </div>
             <h3>Tracks</h3>

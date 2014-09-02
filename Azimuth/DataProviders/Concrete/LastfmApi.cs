@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Azimuth.DataAccess.Entities;
+using System.Web.Helpers;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
@@ -27,19 +28,7 @@ namespace Azimuth.DataProviders.Concrete
                      "&format=json";
 
             var json = await _webClient.GetWebData(url);
-            var jObject = JObject.Parse(json);
-
-            var trackInfo = new TrackInfoDto
-            {
-                Title = jObject["track"]["name"].ToString(),
-                Artist = jObject["track"]["artist"]["name"].ToString(),
-                AboutArtistUrl = jObject["track"]["artist"]["url"].ToString(),
-                Album = jObject["track"]["album"]["title"].ToString(),
-                AlbumUrl = jObject["track"]["album"]["url"].ToString(),
-                Photo = jObject["track"]["album"]["image"].Last["#text"].ToString(),
-                Summary = jObject["track"]["wiki"]["summary"].ToString(),
-                Content = jObject["track"]["wiki"]["content"].ToString()
-            };
+            var trackInfo = JsonConvert.DeserializeObject<TrackInfoDto>(json);
 
             return trackInfo;
         }
