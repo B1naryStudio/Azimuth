@@ -61,10 +61,10 @@
         this.find('.draggable-list > .tableRow').each(function (index, item) {
             var $item = $(item);
             $item.toggleClass('draggable-item', true);
-            $item.mousedown(_makeDraggable);
+            $item.off('mousedown').mousedown(_makeDraggable);
         });
 
-        $(document).mousemove(function (event) {
+        $(document).off('mousemove').mousemove(function (event) {
             lastEvent = event;
             if ($currentItem && mousedown && !mousedownOnProgressBar) {
                 var $elem = _getCurrentTarget(event);
@@ -123,7 +123,7 @@
             }
         });
 
-        $(document).mouseup(function (event) {
+        $(document).off('mouseup').mouseup(function (event) {
             if ($currentItem != null && !event.shiftKey && !event.ctrlKey && !$currentItem.hasClass('itemsContainer') && event.which != 3) {
                 if ($('.draggable-item-selected').length > 1) {
                     $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
@@ -227,7 +227,7 @@
             object.appendTo($contextMenuContainer);
         }
 
-        $contextMenuContainer.mousedown(function (event) {
+        $contextMenuContainer.off('mousedown').mousedown(function (event) {
             var $target = $(event.target);
             if (contextMenuSelected == true && event.which != 3 && !$target.parent().hasClass('hasSubMenu')) {
 
@@ -311,7 +311,7 @@
             }
         });
 
-        $(document).mousedown(function (event) {
+        $(document).off('mousedown').mousedown(function (event) {
             var $target = $(event.target);
             if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
                 mousedownOnProgressBar = true;
