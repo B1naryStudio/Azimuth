@@ -247,9 +247,13 @@ var SettingsManager = function (manager) {
     };
 
     this._getUserTracks = function (provider, reloginUrl) {
+        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        $('#vkMusic-header-spinner').fadeIn('normal');
         $.ajax({
             url: '/api/usertracks?provider=' + provider,
             success: function (tracks) {
+                $('#vkMusic-header-spinner').hide();
+                self.$vkMusicTitle.text('User tracks');
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -274,6 +278,9 @@ var SettingsManager = function (manager) {
                 }
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').html("User Tracks");
+            },
+            error: function() {
+                $('#vkMusic-header-spinner').hide();
             }
         });
     };
@@ -292,7 +299,7 @@ var SettingsManager = function (manager) {
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
-                    $('#vkMusic-header-spinner').fadeOut('fast');
+                    $('#vkMusic-header-spinner').hide();
                     self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -318,6 +325,8 @@ var SettingsManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
             },
             error: function (thrownException) {
+                $('#vkMusic-header-spinner').hide();
+                self.$vkMusicTitle.html("Error");
                 var $accessDenied = $('#forbidden');
                 var $messageContainer = $('#forbidden .error ');
                 $messageContainer.text(thrownException.responseJSON.ExceptionMessage);
