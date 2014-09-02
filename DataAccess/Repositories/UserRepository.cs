@@ -1,6 +1,8 @@
-﻿using Azimuth.DataAccess.Entities;
+﻿using System.Linq;
+using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace Azimuth.DataAccess.Repositories
 {
@@ -8,6 +10,11 @@ namespace Azimuth.DataAccess.Repositories
     {
         public UserRepository(ISession session) : base(session)
         {
+        }
+
+        public User GetFullUserData(long id)
+        {
+            return _session.Query<User>().Fetch(x => x.Followers).FirstOrDefault(x => x.Id == id);
         }
 
         public void Remove(User user)

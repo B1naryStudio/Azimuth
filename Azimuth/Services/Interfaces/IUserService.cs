@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
 
 namespace Azimuth.Services.Interfaces
@@ -9,8 +9,9 @@ namespace Azimuth.Services.Interfaces
     {
         Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count);
         Task<List<TrackData.Audio>> GetFriendsTracks(string provider, string friendId);
-        UserDto GetUserInfo(int id);
-        UserDto GetUserInfo(string email);
-        Task<HttpResponseMessage> FollowPerson(long followerId);
+        User GetUserInfo(long id);
+        User GetUserInfo(string email);
+        User FollowPerson(long followerId);
+        User UnfollowPerson(long followerId);
     }
 }

@@ -24,6 +24,7 @@ namespace Azimuth.Infrastructure.Concrete
         {
             get
             {
+                var id = GetClaim(AzimuthClaims.ID) == "" ? "0" : GetClaim(AzimuthClaims.ID);
                 return new UserCredential
                 {
                     AccessToken = GetClaim(AzimuthClaims.ACCESS_TOKEN),
@@ -34,7 +35,8 @@ namespace Azimuth.Infrastructure.Concrete
                     SocialNetworkId = GetSocialNetworkId(),
                     SocialNetworkName = GetSocialNetworkName(),
                     PhotoBig = GetClaim(AzimuthClaims.PHOTO_BIG),
-                    Email = GetClaim(ClaimTypes.Email)
+                    Email = GetClaim(ClaimTypes.Email),
+                    Id = long.Parse(id)
                 };
             }
         }
@@ -91,5 +93,7 @@ namespace Azimuth.Infrastructure.Concrete
         public const string CONSUMER_SECRET = "ConsumerSecret";
 
         public const string PHOTO_BIG = "PhotoBig";
+
+        public const string ID = "Id";
     }
 }

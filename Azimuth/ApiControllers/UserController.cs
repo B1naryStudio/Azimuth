@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -52,9 +53,20 @@ namespace Azimuth.ApiControllers
 
         [HttpPut]
         [Route("follow/{followerId:long}")]
-        public async Task<HttpResponseMessage> Follow(long followerId)
+        public HttpResponseMessage Follow(long followerId)
         {
-            return await _userService.FollowPerson(followerId);
+            var updatedUser = _userService.FollowPerson(followerId);
+            var userFollowers = updatedUser.Followers.Select(x => x.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, userFollowers);
+        }
+
+        [HttpPut]
+        [Route("unfollow/{followerId:long}")]
+        public HttpResponseMessage Unfollow(long followerId)
+        {
+            var updatedUser = _userService.UnfollowPerson(followerId);
+            var userFollowers = updatedUser.Followers.Select(x => x.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, userFollowers);
         }
     }
 }

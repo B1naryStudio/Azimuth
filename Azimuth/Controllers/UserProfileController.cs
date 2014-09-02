@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
@@ -17,7 +18,7 @@ namespace Azimuth.Controllers
         // GET: /UserProfile/
         public ActionResult Index(int? id)
         {
-            UserDto data;
+            User data;
             if (id == null)
             {
                 var email = AzimuthIdentity.Current.UserCredential.Email;

@@ -344,6 +344,7 @@
     <Content Include="Views\Test\RunMigrator.cshtml" />
     <Content Include="Views\Test\Drop.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
+    <Content Include="Views\UserProfile\_FollowUserPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
