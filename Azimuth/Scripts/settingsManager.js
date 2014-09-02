@@ -11,6 +11,7 @@ var SettingsManager = function (manager) {
     this.playlistTemplate = $("#playlistTemplate");
     this.trackTemplate = $("#trackTemplate");
     this.$friendsTemplate = $("#friendsTemplate");
+    this.$friendsBody = $('#friends-body');
     this.$friendList = $('#friends-container');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
@@ -568,8 +569,8 @@ SettingsManager.prototype.bindListeners = function () {
     };
 
     this.$getFriendInfoBtn.click(function (e) {
-        if (self.$friendList.is(':visible')) {
-            self.$friendList.hide('slow');
+        if (self.$friendsBody.is(':visible')) {
+            self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
             $.ajax({
@@ -577,12 +578,12 @@ SettingsManager.prototype.bindListeners = function () {
                 async: true,
                 success: function (friends) {
                     self.showFriends(friends);
-                    self.$friendList.show('slow');
+                    self.$friendsBody.show('slow');
                     self.friendsOffset += friends.length;
                 }
             });
         } else {
-            self.$friendList.show('slow');
+            self.$friendsBody.show('slow');
         }
     });
 };

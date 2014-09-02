@@ -295,6 +295,7 @@
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
     <Content Include="Images\media_volume.png" />
+    <Content Include="Images\spinner_loading.gif" />
     <Content Include="Scripts\audioManager.js" />
     <Content Include="Images\twitter_logo.png" />
     <Content Include="Images\vkontakte_logo.png" />
@@ -313,11 +314,13 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\myMusicManager.js" />
+    <Content Include="Scripts\publicPlaylistManager.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\settingsManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\work.with.playlist.js" />
+    <Content Include="Scripts\workWithPublicPlaylists.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

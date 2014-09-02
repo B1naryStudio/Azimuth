@@ -367,7 +367,7 @@ div.draggable-list{
 }
 
 
-#friends-container {
+#friends-body {
     position: absolute;
     width: 300px;
     min-height: 80%;
