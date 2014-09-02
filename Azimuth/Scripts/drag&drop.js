@@ -74,8 +74,6 @@
                     if (Math.abs(mouseClickPosition.x - currentMousePos.x) > mouseMovePxOffset || Math.abs(mouseClickPosition.y - currentMousePos.y) > mouseMovePxOffset) {
                         moveEnable = true;
                     } else {
-                        console.log(moveEnable);
-                        console.log(mouseClickPosition.x - currentMousePos.x);
                         return;
                     }
                 }
@@ -126,7 +124,6 @@
         });
 
         $(document).mouseup(function (event) {
-            moveEnable = false;
             if ($currentItem != null && !event.shiftKey && !event.ctrlKey && !$currentItem.hasClass('itemsContainer') && event.which != 3) {
                 if ($('.draggable-item-selected').length > 1) {
                     $('.draggable-item-selected:not(:hover)').toggleClass('draggable-item-selected', false);
@@ -148,9 +145,10 @@
                     }
                 } else {
 
-                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden')) {
+                    if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden') && moveEnable) {
                         moveTrackToNewPosition($currentItem, $draggableStub);
                     }
+                    moveEnable = false;
 
                     if ($currentItem.children().hasClass('vk-item') && !$element.hasClass('vk-item') && !$element.parent().hasClass('vkMusicList')) {
                         var playlistId = -1;
@@ -335,6 +333,15 @@
                 document.oncontextmenu = function () {
                     return false;
                 }
+
+                var $currentList = $(event.target);
+                $currentList = $currentList.parents('.draggable-list');
+                if ($currentList.children().length > 0) {
+                    if ($currentList.children('.draggable-item-selected').length == 0) {
+                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    }
+                }
+
                 contextMenuSelected = true;
                 var $target = $(event.target).parents('.draggable-list').parent();
                 if ($target.hasClass('vkMusicTable')) {
