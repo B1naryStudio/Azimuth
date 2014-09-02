@@ -22,6 +22,7 @@ var SettingsManager = function (manager) {
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
+    this.$loadingSpinner = $('#friends-header-spinner');
 
     this._getTracks = function (plId) {
         var playlistId = $(this).find('.playlistId').text();
@@ -284,13 +285,15 @@ var SettingsManager = function (manager) {
         $currentItem.toggleClass('active', true);
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
+        $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
         $.ajax({
             url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
+                console.log('dsqwdqwdqwd');
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
 
-                    $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
+                    $('#vkMusicTable  #vkMusic-header-titletableTitle').html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
@@ -376,7 +379,7 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         var container = scrollbarInitialized ? self.$friendList.find('.mCSB_container') : self.$friendList;
         container.append(self.$friendsTemplate.tmpl(friends[i]));
     }
-
+    console.log('hi i\'m before scroll');
     $('#friends-container').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
@@ -384,12 +387,14 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         advanced: { updateOnSelectorChange: "true" },
         callbacks: {
             onTotalScroll: function () {
+                self.$loadingSpinner.fadeIn('normal');
                 var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
                     url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {
                         self.showFriends(friendsData, true);
                         self.friendsOffset += friendsData.length;
+                        self.$loadingSpinner.fadeOut('normal');
                     }
                 });
             }
