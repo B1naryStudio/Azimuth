@@ -9,6 +9,7 @@ namespace Azimuth.Services.Interfaces
     {
         Task<List<TrackData.Audio>> GetTracks(string provider);
         Task<TrackInfoDto> GetTrackInfo(string author, string trackName);
+        Task<DeezerTrackData> GetDeezerTrackInfo(string author, string trackName);
         Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id);
         Task SetPlaylist(PlaylistData playlistData, string provider, int index, string friendId);
         Task<ICollection<TracksDto>> GetUserTracks();

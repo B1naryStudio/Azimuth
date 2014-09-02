@@ -175,12 +175,11 @@ namespace Azimuth.ApiControllers
 
         [HttpGet]
         [Route("trackinfo")]
-        public async Task<HttpResponseMessage> GetTrackInfo(string artist, string trackName)
+        public async Task<HttpResponseMessage> GetDeezerTrackInfo(string artist, string trackName)
         {
             try
             {
-                var deezerApi = new DeezerApi(new Infrastructure.Concrete.WebClient());
-                return Request.CreateResponse(HttpStatusCode.OK, await deezerApi.GetTrackInfo(artist, trackName));
+                return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetDeezerTrackInfo(artist, trackName));
             }
             catch (Exception ex)
             {

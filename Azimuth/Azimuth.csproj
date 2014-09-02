@@ -202,8 +202,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="DataProviders\Concrete\DeezerApi.cs" />
+    <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />
+    <Compile Include="DataProviders\Interfaces\IDeezerService.cs" />
     <Compile Include="DataProviders\Interfaces\IMusicService.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
     <Compile Include="Services\Interfaces\IListenersService.cs" />

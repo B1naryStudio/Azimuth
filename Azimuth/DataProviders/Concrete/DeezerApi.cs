@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
 {
-    public class DeezerApi
+    public class DeezerApi : IDeezerService
     {
         private readonly IWebClient _webClient;
         private const string BaseUri = "https://api.deezer.com/";
