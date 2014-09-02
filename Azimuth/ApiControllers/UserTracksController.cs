@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
@@ -38,6 +40,21 @@ namespace Azimuth.ApiControllers
             catch (AccessDeniedException exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, exception);
+            }
+        }
+
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        {
+            try
+            {
+                var data = await _userTracksService.GetTrackInfo(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
             }
         }
 
@@ -153,6 +170,20 @@ namespace Azimuth.ApiControllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetDeezerTrackInfo(string artist, string trackName)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetDeezerTrackInfo(artist, trackName));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }

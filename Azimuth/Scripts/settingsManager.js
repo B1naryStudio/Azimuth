@@ -14,6 +14,7 @@ var SettingsManager = function (manager) {
     this.$friendList = $('#friends-container');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
+    this.$getTrackInfoBtn = $('.track-info-btn');
     this.$getUserTracksBtn = $("#get-user-tracks");
     this.$playlistsTable = $('#playlistsTable');
     this.$searchPlaylistInput = $('#searchPlaylistName');
@@ -270,6 +271,39 @@ var SettingsManager = function (manager) {
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
+
+                $('.track-info-btn').click(function (e) {
+                    var $self = $(this);
+                    var author = $self.parent().children('.track-description').children('.track-info');
+                    var trackName = $self.parent().children('.track-description').children('.track-title');
+                    $.ajax({
+                        url: '/api/usertracks/trackinfo?author=' + author.html() + '&trackName=' + trackName.html(),
+                        async: true,
+                        success: function (trackInfo) {
+                            var track = trackInfo.track;
+                            console.log(track);
+                            alert(track.name);
+                            alert(track.url);
+                            if (track.artist != null) {
+                                alert(track.artist.name);
+                                alert(track.artist.url);
+                            }
+                            if (track.album != null) {
+                                alert(track.album.title);
+                                alert(track.album.url);
+                                if (track.album.image != null) {
+                                    alert(track.album.image[track.album.image.length - 1]['#text']);
+                                }
+                            }
+                            if (track.wiki != null) {
+                                alert(track.wiki.published);
+                                alert(track.wiki.content);
+                                alert(track.wiki.summary);
+                            }
+                        }
+                    });
+                });
+
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').html("User Tracks");
             }
