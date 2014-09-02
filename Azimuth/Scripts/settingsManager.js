@@ -23,7 +23,7 @@ var SettingsManager = function (manager) {
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
     this.$loadingSpinner = $('#friends-header-spinner');
-    this.$vkMusicTitle = $('#vkMusicTable  #vkMusic-header-title');
+    this.$vkMusicTitle = $('#vkMusic-header-title');
     this._getTracks = function (plId) {
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
@@ -388,7 +388,6 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         var container = scrollbarInitialized ? self.$friendList.find('.mCSB_container') : self.$friendList;
         container.append(self.$friendsTemplate.tmpl(friends[i]));
     }
-    console.log('hi i\'m before scroll');
     $('#friends-container').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
@@ -560,7 +559,7 @@ SettingsManager.prototype.bindListeners = function () {
         $('.accordion .tableRow').on("click", self._getTracks);
     });
 
-    $('#playlists, #vk-track-list').mCustomScrollbar({
+    $('#playlists, .vkMusicTable').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,

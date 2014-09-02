@@ -8,13 +8,13 @@
                 @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
             </div>
     <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
-    <div class="draggable" id="vk-track-list">
-        <div id="vkMusicTable" class="vkMusicTable">
-            <div id="vkMusic-header">
-                <div id="vkMusic-header-title">User Tracks</div>
-                <div id="vkMusic-header-spinner" class="spinner"></div>
-            </div>
-            <div id="progressSlider" style="display: none"></div>
+    <div id="vk-track-list">
+        <div id="vkMusic-header">
+            <div id="vkMusic-header-title">User Tracks</div>
+            <div id="vkMusic-header-spinner" class="spinner"></div>
+        </div>
+        <div id="progressSlider" style="display: none"></div>
+        <div id="vkMusicTable" class="vkMusicTable draggable">
             <div class="draggable-list vkMusicList"></div>
         </div>
     </div>
