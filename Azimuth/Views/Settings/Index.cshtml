@@ -14,10 +14,10 @@
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
 
             <div class="list accordion" id="playlistsTable">
-                <div class="vkMusicTable">My Playlists</div>
-                <div class="tableHeader">
-                    <span>Artist</span>
-                    <span>Accessibility</span>
+
+                <div class="table-header">
+                    <div class="table-title">My Playlists</div>
+                    <div id="playlist-header-spinner" class="spinner"></div>
                 </div>
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
@@ -38,9 +38,9 @@
         </div>
         <div id="SN" class="stuck">
             <div id="friends-body" style="display: none">
-                <div id="friends-header">
+                <div id="friends-header" class="table-header">
+                    <div id="friends-header-title" class="table-title">Friends</div>
                     <div id="friends-header-spinner" class="spinner"></div>
-                    <div id="friends-header-title" >Friends</div>
                 </div>
                 <div id="friends-container"></div>
             </div>

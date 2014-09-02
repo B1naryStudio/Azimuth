@@ -22,7 +22,9 @@ var SettingsManager = function (manager) {
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
-    this.$loadingSpinner = $('#friends-header-spinner');
+    this.$friendsLoadingSpinner = $('#friends-header-spinner');
+    this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
+    this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this._getTracks = function (plId) {
         var playlistId = $(this).find('.playlistId').text();
@@ -247,12 +249,13 @@ var SettingsManager = function (manager) {
     };
 
     this._getUserTracks = function (provider, reloginUrl) {
+        
         self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
-        $('#vkMusic-header-spinner').fadeIn('normal');
+        self.$vkMusicLoadingSpinner.fadeIn('normal');
         $.ajax({
             url: '/api/usertracks?provider=' + provider,
             success: function (tracks) {
-                $('#vkMusic-header-spinner').hide();
+                self.$vkMusicLoadingSpinner.hide();
                 self.$vkMusicTitle.text('User tracks');
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
@@ -280,7 +283,7 @@ var SettingsManager = function (manager) {
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
             },
             error: function() {
-                $('#vkMusic-header-spinner').hide();
+                self.$vkMusicLoadingSpinner.hide();
             }
         });
     };
@@ -293,13 +296,13 @@ var SettingsManager = function (manager) {
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
         self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
-        $('#vkMusic-header-spinner').fadeIn('normal');
+        self.$vkMusicLoadingSpinner.fadeIn('normal');
         $.ajax({
             url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
-                    $('#vkMusic-header-spinner').hide();
+                    self.$vkMusicLoadingSpinner.hide();
                     self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -325,7 +328,7 @@ var SettingsManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
             },
             error: function (thrownException) {
-                $('#vkMusic-header-spinner').hide();
+                self.$vkMusicLoadingSpinner.hide();
                 self.$vkMusicTitle.html("Error");
                 var $accessDenied = $('#forbidden');
                 var $messageContainer = $('#forbidden .error ');
@@ -395,14 +398,14 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         advanced: { updateOnSelectorChange: "true" },
         callbacks: {
             onTotalScroll: function () {
-                self.$loadingSpinner.fadeIn('normal');
+                self.$friendsLoadingSpinner.fadeIn('normal');
                 var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
                     url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {
                         self.showFriends(friendsData, true);
                         self.friendsOffset += friendsData.length;
-                        self.$loadingSpinner.fadeOut('normal');
+                        self.$friendsLoadingSpinner.fadeOut('normal');
                     }
                 });
             }
@@ -442,10 +445,12 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     self.$playlistsTable.find(".tableHeader").remove();
+    self.$playlistsLoadingSpinner.fadeIn("normal");
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
         $.ajax({
             url: '/api/playlists',
             success: function (playlistsData) {
+                self.$playlistsLoadingSpinner.fadeOut("normal");
                 if (typeof playlistsData.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();

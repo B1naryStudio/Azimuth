@@ -227,17 +227,15 @@ div.draggable-list{
     height: 70%;
 }
 
-#vkMusic-header {
+.table-header {
     position: relative;
     float: none;
     height: 20px;
 }
 
-#vkMusic-header-spinner {
-    float: left;
-}
 
-#vkMusic-header-title {
+.table-title {
+    width: auto;
     float: left;
     font-weight: bold;
     font-size: larger;
@@ -391,19 +389,12 @@ div.draggable-list{
 }
 
 .spinner {
+    float: left;
     display: none;
     background: url(../Images/spinner_loading.gif) no-repeat;
     background-size: contain;
     width: 20px;
     height: 20px;
-}
-
-#friends-header-spinner {
-    
-    position: absolute;
-    left: 70px;
-    top: 0;
-    text-indent: -9999em;    
 }
 
 #friends-container {
