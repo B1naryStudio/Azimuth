@@ -7,8 +7,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
-using Azimuth.DataProviders.Concrete;
-using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
@@ -26,6 +24,22 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("tracklyric")]
+        //public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        {
+            try
+            {
+                var data = await _userTracksService.GetTrackLyrics(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> Get(string provider)
         {
             try
@@ -40,21 +54,6 @@ namespace Azimuth.ApiControllers
             catch (AccessDeniedException exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, exception);
-            }
-        }
-
-        [HttpGet]
-        [Route("trackinfo")]
-        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
-        {
-            try
-            {
-                var data = await _userTracksService.GetTrackInfo(author, trackName);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch (Exception exception)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
             }
         }
 
@@ -98,7 +97,6 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                //List<long> tracksIds = trackId.ConvertAll<long>((item) => { return Convert.ToInt64(item); });
                 _userTracksService.UpdateTrackPlaylistPosition(playlistId, newIndex, trackId);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -170,20 +168,6 @@ namespace Azimuth.ApiControllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
-            }
-        }
-
-        [HttpGet]
-        [Route("trackinfo")]
-        public async Task<HttpResponseMessage> GetDeezerTrackInfo(string artist, string trackName)
-        {
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, await _userTracksService.GetDeezerTrackInfo(artist, trackName));
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }
