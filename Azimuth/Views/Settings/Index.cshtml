@@ -37,6 +37,10 @@
             <div id="volumeSlider"></div>
         </div>
         <div id="SN" class="stuck">
+            <div id="relogin" class="alert alert-danger" style="margin-top: 10px; z-index: 1001;">
+                <p id="error"> Your time has expired, please login again. </p>
+                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+            </div>
             <div id="friends-container" style="display: none">
             </div>
             <h3>Tracks</h3>
@@ -89,6 +93,8 @@
                 <div class="track-info">${artist}</div>
                 <div class="track-title nowrap">${title}</div>
             </div>
+
+            <div class="btn  btn-default track-info-btn">i</div>
             <div class="track-duration">${duration}</div>
             <div class="track-remaining" style="display: none"></div>
             <div style="display: none" class="track-url">${url}</div>
