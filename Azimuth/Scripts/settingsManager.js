@@ -502,7 +502,11 @@ SettingsManager.prototype.bindListeners = function () {
 
             var foundedPlaylist = self.playlistsGlobal.filter(function (index) {
                 self.$searchPlaylistInput.next().children().remove();
-                return (index.Name.toLocaleLowerCase().indexOf(searchParam) != -1);
+                var isGenre = false;
+                for (var i = 0; i < index.Genres.length && isGenre == false; i++) {
+                    isGenre = index.Genres[i].toLocaleLowerCase().indexOf(searchParam) != -1;
+                }
+                return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || isGenre);
             });
 
             if (foundedPlaylist.length == 0) {
