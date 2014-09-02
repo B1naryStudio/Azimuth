@@ -26,7 +26,7 @@ namespace Azimuth.ApiControllers
         [HttpGet]
         [Route("tracklyric")]
         //public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
-        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        public async Task<HttpResponseMessage> GetTrackLyrics(string author, string trackName)
         {
             try
             {
@@ -36,6 +36,35 @@ namespace Azimuth.ApiControllers
             catch (Exception exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        {
+            try
+            {
+                var data = await _userTracksService.GetTrackInfo(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetDeezerTrackInfo(string artist, string trackName)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    await _userTracksService.GetDeezerTrackInfo(artist, trackName));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
         }
 
