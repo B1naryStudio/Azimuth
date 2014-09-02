@@ -41,6 +41,21 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        {
+            try
+            {
+                await _userTracksService.GetTrackInfo(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
         [HttpPost]
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index, string friendId)
         {

@@ -14,6 +14,7 @@ var SettingsManager = function (manager) {
     this.$friendList = $('#friends-container');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
+    this.$getTrackInfoBtn = $('.track-info-btn');
     this.$getUserTracksBtn = $("#get-user-tracks");
     this.$playlistsTable = $('#playlistsTable');
     this.$searchPlaylistInput = $('#searchPlaylistName');
@@ -270,6 +271,17 @@ var SettingsManager = function (manager) {
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
+
+                $('.track-info-btn').click(function (e) {
+                    $.ajax({
+                        url: '/api/usertracks/trackinfo?author=' + 'Michael Jackson' + '&trackName=' + 'Beat It',
+                        async: true,
+                        success: function (trackInfo) {
+                            console.log(trackInfo);
+                        }
+                    });
+                });
+
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').html("User Tracks");
             }
