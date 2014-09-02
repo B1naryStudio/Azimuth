@@ -202,6 +202,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataProviders\Concrete\ChartLyricsApi.cs" />
+    <Compile Include="DataProviders\Interfaces\IChartLyricsApi.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
     <Compile Include="Services\Interfaces\IListenersService.cs" />
     <Compile Include="Services\Concrete\ListenersService.cs" />

@@ -24,6 +24,22 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("tracklyric")]
+        //public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
+        {
+            try
+            {
+                var data = await _userTracksService.GetTrackLyrics(author, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> Get(string provider)
         {
             try

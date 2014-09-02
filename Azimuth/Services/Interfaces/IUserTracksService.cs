@@ -16,6 +16,7 @@ namespace Azimuth.Services.Interfaces
         void PutTrackToPlaylist(int id, Track track);
         Task CopyTrackToAnotherPlaylist(long playlistId, List<long> trackIds);
         Task DeleteTracksFromPlaylist(long playlistId, List<long> trackIds);
+        Task<string> GetTrackLyrics(string author, string trackName);
 
     }
 }
