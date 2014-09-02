@@ -397,6 +397,11 @@
                             var $playlists = $('#playlistsTable').children('.playlist');
                             $subContextMenuContainer.children().remove('.tableRow');
                             for (var j = 0; j < $playlists.length; j++) {
+                                var currentplaylist = $('.playlist.active').find('.playlistId').text();
+                                var takenPlaylistId = $($playlists[j]).find('.playlistId').text();
+                                if (currentplaylist == takenPlaylistId && $rootElement.find('.vkMusicTable').length == 0) {
+                                    continue;
+                                }
                                 var playlist = {
                                     "name": $($playlists[j]).children('.playlist-title').text(),
                                     "id": $($playlists[j]).children('.playlistId').text()
@@ -405,20 +410,23 @@
                                 var object = $subContextMenuTemplate.tmpl(playlist);
                                 object.appendTo($subContextMenuContainer);
                             }
-                            var x = $contextMenuContainer.width();
-                            var y = $('.tableRow:hover').position().top;
-                            if (($subContextMenuContainer.width() + x + $contextMenuContainer.position().left) > $(window).width()) {
-                                x = x - 2 * $subContextMenuContainer.width();
-                            }
-                            $subContextMenuContainer.css({
-                                'top': y + 'px',
-                                'left': x + 'px',
-                                'position': 'absolute'
-                            });
 
-                            $subContextMenuContainer.attr('action', $('.tableRow:hover').children().attr('id'));
-                            $('.tableRow:hover').append($subContextMenuContainer);
-                            $subContextMenuContainer.show();
+                            if ($subContextMenuContainer.children().length > 0) {
+                                var x = $contextMenuContainer.width();
+                                var y = $('.tableRow:hover').position().top;
+                                if (($subContextMenuContainer.width() + x + $contextMenuContainer.position().left) > $(window).width()) {
+                                    x = x - 2 * $subContextMenuContainer.width();
+                                }
+                                $subContextMenuContainer.css({
+                                    'top': y + 'px',
+                                    'left': x + 'px',
+                                    'position': 'absolute'
+                                });
+
+                                $subContextMenuContainer.attr('action', $('.tableRow:hover').children().attr('id'));
+                                $('.tableRow:hover').append($subContextMenuContainer);
+                                $subContextMenuContainer.show();
+                            }
                         }
                     }
                 });
