@@ -23,7 +23,7 @@ var SettingsManager = function (manager) {
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
     this.$loadingSpinner = $('#friends-header-spinner');
-
+    this.$vkMusicTitle = $('#vkMusicTable  #vkMusic-header-title');
     this._getTracks = function (plId) {
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
@@ -278,22 +278,22 @@ var SettingsManager = function (manager) {
         });
     };
 
-    this._getFriendTracks = function() {
+    this._getFriendTracks = function () {
         var $currentItem = $(this);
         $currentItem.parent().children('.friend').toggleClass('active', false);
         var currentId = $currentItem.children('.friend-id').html();
         $currentItem.toggleClass('active', true);
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
-        $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
+        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        $('#vkMusic-header-spinner').fadeIn('normal');
         $.ajax({
             url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
-                console.log('dsqwdqwdqwd');
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
-
-                    $('#vkMusicTable  #vkMusic-header-titletableTitle').html("Now playing: " + currentUser + "'s playlist");
+                    $('#vkMusic-header-spinner').fadeOut('fast');
+                    self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
