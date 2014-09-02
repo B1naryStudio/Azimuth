@@ -19,7 +19,7 @@
         var saveVkTrackToPlaylist = null;
         // Containers and pointers for working with drag items
         var $currentItem = null;
-        var $draggableStub = $('#draggableStub');
+        //var $draggableStub = $('#draggableStub');
         var $container = $('#itemsContainer');
         // Call to create unique plugin owner id
         this._getCount = function () {
@@ -34,6 +34,11 @@
         var $subContextMenuContainer = $('<div>');
         $subContextMenuContainer.addClass('contextMenu');
         $subContextMenuContainer.addClass('subMenu');
+        var $draggableStub = $('<div>');
+        $draggableStub.addClass('tableRow');
+        $draggableStub.addClass('draggable-item');
+        $draggableStub.addClass('draggable-stub');
+        $draggableStub.addClass('track');
 
         var $contextMenuTemplate = $('#contextmenuTemplate');
         var $subContextMenuTemplate = $('#subContextmenuTemplate');
@@ -74,8 +79,6 @@
                         return;
                     }
                 }
-                console.log(moveEnable);
-                console.log(mouseClickPosition.x - currentMousePos.x);
 
                 if ($currentItem.hasClass('draggable-item-selected')) {
                     var width = $currentItem.width();
@@ -86,8 +89,6 @@
                     $currentItem.append($('.draggable-item-selected'));
                 }
                 $currentItem.toggleClass('dragging', true);
-
-                $draggableStub.show();
 
                 if (!$currentItem.hasClass('itemsContainer')) {
                     $draggableStub.insertAfter($currentItem.children().last());
@@ -120,6 +121,7 @@
                         }
                     }
                 }
+                $draggableStub.show();
             }
         });
 
