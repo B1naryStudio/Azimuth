@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Azimuth.DataAccess.Entities;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
@@ -153,6 +155,21 @@ namespace Azimuth.ApiControllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetTrackInfo(string artist, string trackName)
+        {
+            try
+            {
+                var deezerApi = new DeezerApi(new Infrastructure.Concrete.WebClient());
+                return Request.CreateResponse(HttpStatusCode.OK, await deezerApi.GetTrackInfo(artist, trackName));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
         }
     }
