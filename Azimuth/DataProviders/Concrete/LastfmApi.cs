@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
 {
-    public class LastfmApi : IMusicService
+    public class LastfmApi : IMusicService<LastfmTrackData>
     {
         private readonly IWebClient _webClient;
         private const string BaseUri = "http://ws.audioscrobbler.com/2.0/?method=";
@@ -19,7 +19,7 @@ namespace Azimuth.DataProviders.Concrete
             _webClient = webClient;
         }
 
-        public async Task<TrackInfoDto> GetTrackInfo(string author, string trackName)
+        public async Task<LastfmTrackData> GetTrackInfo(string author, string trackName)
         {
             var url = BaseUri + "track.getInfo" +
                      "&api_key=" + AppKey +
@@ -28,7 +28,7 @@ namespace Azimuth.DataProviders.Concrete
                      "&format=json";
 
             var json = await _webClient.GetWebData(url);
-            var trackInfo = JsonConvert.DeserializeObject<TrackInfoDto>(json);
+            var trackInfo = JsonConvert.DeserializeObject<LastfmTrackData>(json);
 
             return trackInfo;
         }

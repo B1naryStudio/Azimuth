@@ -48,12 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dto\DeezerAlbumData.cs" />
-    <Compile Include="Dto\DeezerArtistData.cs" />
     <Compile Include="Dto\DeezerTrackData.cs" />
     <Compile Include="Dto\ErrorData.cs" />
     <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\GoogleUserData.cs" />
+    <Compile Include="Dto\LastFMTrackData.cs" />
     <Compile Include="Dto\PlaylistData.cs" />
     <Compile Include="Dto\TrackInfoDto.cs" />
     <Compile Include="Dto\TracksDto.cs" />

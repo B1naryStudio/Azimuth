@@ -7,7 +7,7 @@ using Azimuth.Infrastructure.Interfaces;
 
 namespace Azimuth.DataProviders.Concrete
 {
-    public class ChartLyricsApi: IChartLyricsApi
+    public class ChartLyricsApi: IMusicService<string[]>
     {
         private readonly IWebClient _webClient;
         private const string BaseUri = "http://api.chartlyrics.com/apiv1.asmx/";
@@ -17,7 +17,7 @@ namespace Azimuth.DataProviders.Concrete
             _webClient = webClient;
         }
 
-        public async Task<string> GetTrackLyric(string author, string trackName)
+        public async Task<string[]> GetTrackInfo(string author, string trackName)
         {
             string url = BaseUri + "SearchLyricDirect?artist=" + author + "&song=" + trackName;
             string trackLyricXml = await _webClient.GetWebData(url);
@@ -29,10 +29,11 @@ namespace Azimuth.DataProviders.Concrete
             try
             {
                 trackLyric = xmlDoc.GetElementsByTagName("Lyric").Item(0).InnerText;
-                trackLyric = trackLyric.Replace("\r\n", "<br>");
-                return trackLyric;
+                string[] separators = new string[] {"\r\n"};
+                var splittedLyric = trackLyric.Split(separators, StringSplitOptions.None);
+                return splittedLyric;
             }
-            catch (NullReferenceException exception)
+            catch (NullReferenceException)
             {
                 throw new BadParametersException("Wrong track or artist name", 404);
             }

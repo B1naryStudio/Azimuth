@@ -24,47 +24,17 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
-        [Route("tracklyric")]
-        //public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
-        public async Task<HttpResponseMessage> GetTrackLyrics(string author, string trackName)
+        [Route("trackinfo")]
+        public async Task<HttpResponseMessage> GetTrackInfo(string artist, string trackName)
         {
             try
             {
-                var data = await _userTracksService.GetTrackLyrics(author, trackName);
+                var data = await _userTracksService.GetTrackInfo(artist, trackName);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception exception)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
-            }
-        }
-        [HttpGet]
-        [Route("trackinfo")]
-        public async Task<HttpResponseMessage> GetTrackInfo(string author, string trackName)
-        {
-            try
-            {
-                var data = await _userTracksService.GetTrackInfo(author, trackName);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch (Exception exception)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
-            }
-        }
-
-        [HttpGet]
-        [Route("trackinfo")]
-        public async Task<HttpResponseMessage> GetDeezerTrackInfo(string artist, string trackName)
-        {
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK,
-                    await _userTracksService.GetDeezerTrackInfo(artist, trackName));
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex);
             }
         }
 

@@ -178,22 +178,23 @@
     </script>
     
     <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
-        <div class="artistPhoto" style="float: left"><img src="${image}"></div>
         <div class="trackInfo">
             <div class="tableRow">
-                <div class="trackTitle">Title: ${track.name}</div>
+                <div class="artistPhoto" style="float: left"><img src=${ArtistImage}></div>
+                <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
+                <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
+                <div>Fans count: ${ArtistFans}</div>
             </div>
             <div class="tableRow">
-                <div class="Artist">Artist: ${artist.name}; Rank: ${artist.name}; Fans count: ${artist.fans}</div>
+                <div class="tableRow">
+                    <div class="albumPhoto"><img src=${AlbumCover}></div>
+                    <div>Album: ${AlbumTitle} </div>
+                    <div>Fans count: ${AlbumFans}</div>
+                    <div>Year: ${AlbumRelease}</div>
+                </div>
             </div>
             <div class="tableRow">
-                <div class="album">Artist: ${album.name}; Rank: ${album.name}; Fans count: ${album.fans}; Year: ${album.year}</div>
-            </div>
-            <div class="tableRow">
-                <div class="genres">Artist: ${genres.name}</div>
-            </div>
-            <div class="tableRow">
-                <div class="trackText"></div>
+                <div class="trackLyric"></div>
             </div>
         </div>
     </script>

@@ -21,26 +21,30 @@ namespace Azimuth.Services.Concrete
     public class UserTracksService : IUserTracksService
     {
         private ISocialNetworkApi _socialNetworkApi;
-        private readonly IMusicService _lastfmApi;
-        private readonly IDeezerService _deezerApi;
+        private readonly LastfmApi _lastfmApi;
+        private readonly DeezerApi _deezerApi;
+        private readonly ChartLyricsApi _chartLyricsApi;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMusicServiceWorkUnit _musicServiceWorkUnit;
         private readonly UserRepository _userRepository;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
         private readonly PlaylistTrackRepository _playlistTrackRepository;
-        private readonly IChartLyricsApi _chartLyricsApi;
 
-        public UserTracksService(IUnitOfWork unitOfWork, IMusicService lastfmApi, IDeezerService deezerApi, IChartLyricsApi chartLyricsApi)
+        public UserTracksService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
         {
             _unitOfWork = unitOfWork;
 
-            _lastfmApi = lastfmApi;
-            _deezerApi = deezerApi;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
             _playlistTrackRepository = _unitOfWork.GetRepository<PlaylistTrack>() as PlaylistTrackRepository;
-            _chartLyricsApi = chartLyricsApi;
+
+            _musicServiceWorkUnit = musicServiceWorkUnit;
+            _lastfmApi = _musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
+            _deezerApi = _musicServiceWorkUnit.GetMusicService<DeezerTrackData.TrackData>() as DeezerApi;
+            _chartLyricsApi = _musicServiceWorkUnit.GetMusicService<string[]>() as ChartLyricsApi;
+
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)
@@ -63,14 +67,29 @@ namespace Azimuth.Services.Concrete
             return await _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
         }
 
-        public async Task<TrackInfoDto> GetTrackInfo(string author, string trackName)
+        public async Task<TrackInfoDto> GetTrackInfo(string artist, string trackName)
         {
-            return await _lastfmApi.GetTrackInfo(author, trackName);
-        }
 
-        public async Task<DeezerTrackData> GetDeezerTrackInfo(string author, string trackName)
-        {
-            return await _deezerApi.GetTrackInfo(author, trackName);
+            var trackData = new TrackInfoDto();
+
+            var lastfmData = await _lastfmApi.GetTrackInfo(artist, trackName);
+            var deezerData = await _deezerApi.GetTrackInfo(artist, trackName);
+            var chartLyricData = await _chartLyricsApi.GetTrackInfo(artist, trackName);
+
+            if (deezerData != null)
+            {
+                Mapper.Map(deezerData, trackData);
+            }
+            if (lastfmData != null)
+            {
+                Mapper.Map(lastfmData, trackData);
+            }
+            if (chartLyricData != null)
+            {
+                Mapper.Map(chartLyricData, trackData);
+            }
+
+            return trackData;
         }
 
         public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
@@ -371,11 +390,6 @@ namespace Azimuth.Services.Concrete
 
                 _unitOfWork.Commit();
             }
-        }
-
-        public async Task<string> GetTrackLyrics(string author, string trackName)
-        {
-            return await _chartLyricsApi.GetTrackLyric(author, trackName);
         }
 
         private UserSocialNetwork GetSocialNetworkData(string provider)

@@ -3,8 +3,8 @@ using Azimuth.Shared.Dto;
 
 namespace Azimuth.DataProviders.Interfaces
 {
-    public interface IMusicService
+    public interface IMusicService<T>
     {
-        Task<TrackInfoDto> GetTrackInfo(string author, string trackName);
+        Task<T> GetTrackInfo(string author, string trackName);
     }
 }

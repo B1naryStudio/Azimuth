@@ -18,6 +18,9 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<TweetSharp.TwitterUser, User>(TwitterUserDataMap);
             AddMapp<Track, TracksDto>(TrackMap);
             AddMapp<User, UserDto>(UserMap);
+            AddMapp<DeezerTrackData.TrackData, TrackInfoDto>(DeezerDataMap);
+            AddMapp<LastfmTrackData, TrackInfoDto>(LastfmDataMap);
+            AddMapp<string[], TrackInfoDto>(ChartLyricMap);
         }
 
         
@@ -164,6 +167,59 @@ namespace Azimuth.Infrastructure.Concrete
             userDto.Country = user.Location.Country;
             userDto.Email = user.Email;
             userDto.Birthdate = user.Birthday;
+        }
+
+        private static void DeezerDataMap(DeezerTrackData.TrackData deezerData, TrackInfoDto info)
+        {
+            info.AlbumCover = deezerData.Album.Cover;
+            info.AlbumFans = deezerData.Album.Fans;
+            info.AlbumRank = deezerData.Album.Rating;
+            info.AlbumRelease = deezerData.Album.ReleaseDate;
+            info.AlbumTitle = deezerData.Album.Title;
+
+            info.Artist = deezerData.Artist.Name;
+            info.ArtistFans = deezerData.Artist.FansNumber;
+            info.ArtistImage = deezerData.Artist.Picture;
+            info.ArtistTopTracks = deezerData.Artist.TrackList; // TOP?
+
+            info.Title = deezerData.Title;
+            info.TrackRank = deezerData.Rank;
+            info.TrackDeezerUrl = deezerData.Link;
+
+            deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
+        }
+
+        private static void LastfmDataMap(LastfmTrackData lastfmTrackData, TrackInfoDto trackInfoDto)
+        {
+            trackInfoDto.Title = trackInfoDto.Title ?? lastfmTrackData.Track.Name;
+            trackInfoDto.TrackLastfmUrl = lastfmTrackData.Track.Url;
+
+            if (lastfmTrackData.Track.TrackArtist != null)
+            {
+                trackInfoDto.Artist = trackInfoDto.Artist ?? lastfmTrackData.Track.TrackArtist.Name;
+                trackInfoDto.ArtistLastfmUrl = lastfmTrackData.Track.TrackArtist.Url;
+            }
+
+            if (lastfmTrackData.Track.TrackAlbum != null)
+            {
+                trackInfoDto.AlbumTitle = trackInfoDto.AlbumTitle ?? lastfmTrackData.Track.TrackAlbum.Title;
+                trackInfoDto.AlbumLastfmUrl = lastfmTrackData.Track.TrackAlbum.Url;
+            }
+
+            if (lastfmTrackData.Track.TrackWiki != null)
+            {
+                trackInfoDto.Summary = lastfmTrackData.Track.TrackWiki.Summary;
+                trackInfoDto.Description = lastfmTrackData.Track.TrackWiki.Content;
+                trackInfoDto.Published = lastfmTrackData.Track.TrackWiki.Published;
+            }
+        }
+
+        private static void ChartLyricMap(string[] lyric, TrackInfoDto trackInfoDto)
+        {
+            if (lyric.Any())
+            {
+                trackInfoDto.Lyric = lyric;
+            }
         }
     }
 }

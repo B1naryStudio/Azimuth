@@ -5,6 +5,6 @@ namespace Azimuth.DataProviders.Interfaces
 {
     public interface IDeezerService
     {
-        Task<DeezerTrackData> GetTrackInfo(string author, string trackName);
+        Task<DeezerTrackData.TrackData> GetTrackInfo(string author, string trackName);
     }
 }
