@@ -27,7 +27,11 @@ var SettingsManager = function (manager) {
     this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
+    this.$playlistsTitle = $('#playlist-header-title');
     this._getTracks = function (plId) {
+        self.$playlistsTitle.text('platlist\'re loading');
+        self.$playlistsLoadingSpinner.fadeIn('normal');
+        console.log(self.playlistsGlobal);
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
             playlistId = plId;
@@ -52,6 +56,15 @@ var SettingsManager = function (manager) {
                     onMoveTrackToNewPosition: self._moveTrackToNewPosition
                 });
                 self.$searchPlaylistInput.val('');
+                console.log(playlistId);
+                var temp = self.playlistsGlobal.filter(function(index) {
+                    console.log(index);
+
+                    return index.Id == playlistId;
+                })[0].Name;
+                console.log(temp);
+                self.$playlistsTitle.text(temp);
+                self.$playlistsLoadingSpinner.fadeOut('normal');
             }
         });
         //}
@@ -256,7 +269,6 @@ var SettingsManager = function (manager) {
         $.ajax({
             url: '/api/usertracks?provider=' + provider,
             success: function (tracks) {
-                self.$vkMusicLoadingSpinner.hide();
                 self.$vkMusicTitle.text('User tracks');
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
@@ -315,8 +327,10 @@ var SettingsManager = function (manager) {
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
+                self.$vkMusicLoadingSpinner.hide();
             },
-            error: function() {
+            error: function () {
+                $('#vkMusicTable > .tableTitle').text("Error has occurred");
                 self.$vkMusicLoadingSpinner.hide();
             }
         });
@@ -336,7 +350,7 @@ var SettingsManager = function (manager) {
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
-                    self.$vkMusicLoadingSpinner.hide();
+                    
                     self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -360,9 +374,10 @@ var SettingsManager = function (manager) {
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
+                self.$vkMusicLoadingSpinner.hide();
             },
             error: function (thrownException) {
-                self.$vkMusicLoadingSpinner.hide();
+                
                 self.$vkMusicTitle.html("Error");
                 var $accessDenied = $('#forbidden');
                 var $messageContainer = $('#forbidden .error ');
@@ -373,7 +388,7 @@ var SettingsManager = function (manager) {
                     'position': 'absolute'
                 });
                 $accessDenied.show();
-
+                self.$vkMusicLoadingSpinner.hide();
                 var timerId = null;
                 clearTimeout(timerId);
                 timerId = setTimeout(function () {
@@ -478,14 +493,16 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 
 SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
-    self.$playlistsTable.find(".tableHeader").remove();
+    //self.$playlistsTable.find(".tableHeader").remove();
+    self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.fadeIn("normal");
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
         $.ajax({
             url: '/api/playlists',
             success: function (playlistsData) {
-                self.$playlistsLoadingSpinner.fadeOut("normal");
+                console.log(playlistsData.Message);
                 if (typeof playlistsData.Message === 'undefined') {
+                    
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     self.playlists = playlistsData;
@@ -505,10 +522,13 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
+                self.$playlistsLoadingSpinner.fadeOut("normal");
                 $('.accordion .tableRow').on("click", self._getTracks);
+                
             }
         });
     } else { //using to print playlists after using filter
+        self.$playlistsTable.empty();
         if (self.playlists.length !== 0) {
             for (var i = 0; i < playlists.length; i++) {
                 self.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
@@ -517,6 +537,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
             self.$createNewPlaylistBtn.show();
             self.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchPlaylistInput.val());
         }
+        self.$playlistsLoadingSpinner.fadeOut("normal");
     }
 };
 
@@ -578,6 +599,7 @@ SettingsManager.prototype.bindListeners = function () {
             self.showPlaylists(foundedPlaylist);
             $('.accordion .tableRow').on("click", self._getTracks);
         } else {
+            console.log('nothing to do here');
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function (index) {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));

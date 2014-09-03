@@ -12,17 +12,19 @@
         <div id="playlists" class="stuck draggable">
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
-
+            <div id ="playlist-header" class="table-header">
+                <div id="playlist-header-title" class="table-title"></div>
+                <div id="playlist-header-spinner" class="spinner"></div>
+                
+            </div>
+            <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
             <div class="list accordion" id="playlistsTable">
 
-                <div class="table-header">
-                    <div class="table-title">My Playlists</div>
-                    <div id="playlist-header-spinner" class="spinner"></div>
-                </div>
+                
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
 
-            <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
+            
             <div id="playlistTracks" style="display: none;" class="draggable-list"></div>
         </div>
         <div id="separator" class="stuck">
