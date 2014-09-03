@@ -37,6 +37,9 @@ namespace Azimuth.DataProviders.Concrete
             var albumJson = await _webClient.GetWebData(albumUrl);
             trackData.Album = JsonConvert.DeserializeObject<DeezerTrackData.Album>(albumJson);
 
+            var topTracks = await _webClient.GetWebData(trackData.Artist.TrackList);
+            trackData.TopTracks = JsonConvert.DeserializeObject<List<DeezerTrackData.TrackData>>((JObject.Parse(topTracks))["data"].ToString());
+
             return trackData;
         }
     }
