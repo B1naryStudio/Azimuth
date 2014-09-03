@@ -223,8 +223,20 @@ div.draggable-list{
 	display: block;
 }
 
-.tableTitle {
-    text-align: center;
+.vkMusicTable {
+    height: 70%;
+}
+
+.table-header {
+    position: relative;
+    float: none;
+    height: 20px;
+}
+
+
+.table-title {
+    width: auto;
+    float: left;
     font-weight: bold;
     font-size: larger;
 }
@@ -372,16 +384,31 @@ div.draggable-list{
     margin-top: 40px;
 }
 
+#friends-body {
+    position: absolute;
+    width: 300px;
+    min-height: 80%;
+    z-index: 800;
+    border: 2px solid black;
+    margin-left: 64%;
+    background: lightgrey;
+}
+
+.spinner {
+    float: left;
+    display: none;
+    background: url(../Images/spinner_loading.gif) no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+}
 
 #friends-container {
     position: absolute;
     width: 300px;
-    min-height: 80%;
+    min-height: 50%;
     z-index: 1000;
-    margin-left: 64%;
-    border: 2px solid black;
-    background: lightgrey;
-    height: 100%;
+    height: 95%;
 }
 
 div.friend {

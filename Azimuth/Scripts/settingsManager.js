@@ -11,6 +11,7 @@ var SettingsManager = function (manager) {
     this.playlistTemplate = $("#playlistTemplate");
     this.trackTemplate = $("#trackTemplate");
     this.$friendsTemplate = $("#friendsTemplate");
+    this.$friendsBody = $('#friends-body');
     this.$friendList = $('#friends-container');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
@@ -22,7 +23,10 @@ var SettingsManager = function (manager) {
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
-
+    this.$friendsLoadingSpinner = $('#friends-header-spinner');
+    this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
+    this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
+    this.$vkMusicTitle = $('#vkMusic-header-title');
     this._getTracks = function (plId) {
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
@@ -246,9 +250,14 @@ var SettingsManager = function (manager) {
     };
 
     this._getUserTracks = function (provider, reloginUrl) {
+        
+        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        self.$vkMusicLoadingSpinner.fadeIn('normal');
         $.ajax({
             url: '/api/usertracks?provider=' + provider,
             success: function (tracks) {
+                self.$vkMusicLoadingSpinner.hide();
+                self.$vkMusicTitle.text('User tracks');
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -305,25 +314,30 @@ var SettingsManager = function (manager) {
                 });
 
                 self.audioManager.bindPlayBtnListeners();
-                $('#vkMusicTable > .tableTitle').html("User Tracks");
+                $('#vkMusicTable > .tableTitle').text("User Tracks");
+            },
+            error: function() {
+                self.$vkMusicLoadingSpinner.hide();
             }
         });
     };
 
-    this._getFriendTracks = function() {
+    this._getFriendTracks = function () {
         var $currentItem = $(this);
         $currentItem.parent().children('.friend').toggleClass('active', false);
         var currentId = $currentItem.children('.friend-id').html();
         $currentItem.toggleClass('active', true);
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
+        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        self.$vkMusicLoadingSpinner.fadeIn('normal');
         $.ajax({
             url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
-
-                    $('#vkMusicTable > .tableTitle').html("Now playing: " + currentUser + "'s playlist");
+                    self.$vkMusicLoadingSpinner.hide();
+                    self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
@@ -348,6 +362,8 @@ var SettingsManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
             },
             error: function (thrownException) {
+                self.$vkMusicLoadingSpinner.hide();
+                self.$vkMusicTitle.html("Error");
                 var $accessDenied = $('#forbidden');
                 var $messageContainer = $('#forbidden .error ');
                 $messageContainer.text(thrownException.responseJSON.ExceptionMessage);
@@ -409,7 +425,6 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         var container = scrollbarInitialized ? self.$friendList.find('.mCSB_container') : self.$friendList;
         container.append(self.$friendsTemplate.tmpl(friends[i]));
     }
-
     $('#friends-container').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
@@ -417,12 +432,14 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         advanced: { updateOnSelectorChange: "true" },
         callbacks: {
             onTotalScroll: function () {
+                self.$friendsLoadingSpinner.fadeIn('normal');
                 var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
                     url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {
                         self.showFriends(friendsData, true);
                         self.friendsOffset += friendsData.length;
+                        self.$friendsLoadingSpinner.fadeOut('normal');
                     }
                 });
             }
@@ -462,10 +479,12 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     self.$playlistsTable.find(".tableHeader").remove();
+    self.$playlistsLoadingSpinner.fadeIn("normal");
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
         $.ajax({
             url: '/api/playlists',
             success: function (playlistsData) {
+                self.$playlistsLoadingSpinner.fadeOut("normal");
                 if (typeof playlistsData.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
@@ -571,6 +590,7 @@ SettingsManager.prototype.bindListeners = function () {
     $('#backToPlaylistsBtn').click(function () {
         $('#backToPlaylistsBtn').hide();
         $('#playlistTracks').empty();
+
         $('#playlistTracks').hide();
         self.$playlistsTable.empty();
         self.showPlaylists(self.playlistsGlobal);
@@ -579,7 +599,7 @@ SettingsManager.prototype.bindListeners = function () {
         $('.accordion .tableRow').on("click", self._getTracks);
     });
 
-    $('#playlists, #vk-track-list').mCustomScrollbar({
+    $('#playlists, .vkMusicTable').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,
@@ -602,8 +622,8 @@ SettingsManager.prototype.bindListeners = function () {
     };
 
     this.$getFriendInfoBtn.click(function (e) {
-        if (self.$friendList.is(':visible')) {
-            self.$friendList.hide('slow');
+        if (self.$friendsBody.is(':visible')) {
+            self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
             var provider = $('.tab-pane.active').attr('id');
             $.ajax({
@@ -611,12 +631,12 @@ SettingsManager.prototype.bindListeners = function () {
                 async: true,
                 success: function (friends) {
                     self.showFriends(friends);
-                    self.$friendList.show('slow');
+                    self.$friendsBody.show('slow');
                     self.friendsOffset += friends.length;
                 }
             });
         } else {
-            self.$friendList.show('slow');
+            self.$friendsBody.show('slow');
         }
     });
 };

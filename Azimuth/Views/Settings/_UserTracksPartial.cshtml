@@ -5,10 +5,13 @@
     <button id="get-user-tracks" class="btn btn-default">Get user tracks</button>
     
     <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
-    <div class="draggable" id="vk-track-list">
-        <div id="vkMusicTable" class="vkMusicTable">
-            <div class="tableTitle">User Tracks</div>
-            <div id="progressSlider" style="display: none"></div>
+    <div id="vk-track-list">
+        <div id="vkMusic-header" class="table-header">
+            <div id="vkMusic-header-title" class="table-title">User Tracks</div>
+            <div id="vkMusic-header-spinner" class="spinner"></div>
+        </div>
+        <div id="progressSlider" style="display: none"></div>
+        <div id="vkMusicTable" class="vkMusicTable draggable">
             <div class="draggable-list vkMusicList"></div>
         </div>
     </div>

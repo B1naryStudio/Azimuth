@@ -14,10 +14,10 @@
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
 
             <div class="list accordion" id="playlistsTable">
-                <div class="tableTitle">My Playlists</div>
-                <div class="tableHeader">
-                    <span>Artist</span>
-                    <span>Accessibility</span>
+
+                <div class="table-header">
+                    <div class="table-title">My Playlists</div>
+                    <div id="playlist-header-spinner" class="spinner"></div>
                 </div>
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
@@ -37,12 +37,18 @@
             <div id="volumeSlider"></div>
         </div>
         <div id="SN" class="stuck">
+            <div id="friends-body" style="display: none">
+                <div id="friends-header" class="table-header">
+                    <div id="friends-header-title" class="table-title">Friends</div>
+                    <div id="friends-header-spinner" class="spinner"></div>
+                </div>
+                <div id="friends-container"></div>
+            </div>
             <div id="relogin" class="alert alert-danger" style="margin-top: 10px; z-index: 1001;">
                 <p id="error"> Your time has expired, please login again. </p>
                 @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
             </div>
-            <div id="friends-container" style="display: none">
-            </div>
+            
             <h3>Tracks</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs" style="width: 90%">
@@ -76,6 +82,7 @@
     </div>
 <div class="itemsContainer tableRow" id="itemsContainer" ></div>
 <div class="trackInfoContainer" id="trackInfoContainer"></div>
+</div>
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
