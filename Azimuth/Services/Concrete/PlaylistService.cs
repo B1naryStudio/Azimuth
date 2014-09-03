@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.DataProviders.Concrete;
+using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
@@ -18,13 +20,17 @@ namespace Azimuth.Services.Concrete
     public class PlaylistService : IPlaylistService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMusicServiceWorkUnit _musicServiceWorkUnit;
+        private readonly LastfmApi _lastfmApi;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
 
-        public PlaylistService(IUnitOfWork unitOfWork)
+        public PlaylistService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
         {
             _unitOfWork = unitOfWork;
+            _musicServiceWorkUnit = musicServiceWorkUnit;
 
+            _lastfmApi = musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
         }
@@ -237,6 +243,49 @@ namespace Azimuth.Services.Concrete
                 playlist.Tracks.Remove(trackToDelete);
                 _unitOfWork.Commit();
             }
+        }
+
+        public async Task<string> GetImageById(int id)
+        {
+            var image = String.Empty;
+
+            using (_unitOfWork)
+            {
+                var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
+
+                var tracks = playlist.Tracks.ToList();
+
+                if (!tracks.Any())
+                {
+                    return image;
+                }
+
+                var seed = new Random().Next(tracks.Count - 1);
+                
+                for (int i = 0; i < tracks.Count; i++)
+                {
+                    var artist = tracks[seed].Album.Artist.Name;
+                    var trackName = tracks[seed].Name;
+
+                    var trackInfoDto = await _lastfmApi.GetTrackInfo(artist, trackName);
+
+
+                    if (trackInfoDto.Track.TrackAlbum != null && trackInfoDto.Track.TrackAlbum.AlbumImages != null)
+                    {
+                        image = trackInfoDto.Track.TrackAlbum.AlbumImages.Last().Url;
+                        if (image != String.Empty)
+                        {
+                            break;
+                        }
+                    }
+    
+                    seed = (seed < tracks.Count - 1) ? ++seed: 0;
+                }
+
+                _unitOfWork.Commit();
+            }
+
+            return image;
         }
     }
 }
