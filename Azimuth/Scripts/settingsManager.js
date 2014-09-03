@@ -295,8 +295,6 @@ var SettingsManager = function (manager) {
 
                 $('.track-info-btn').click(function(e) {
                     var $self = $(this);
-                    var $trackInfoLastFm;
-                    var $trackInfoDeezer;
                     var author = $self.parent().children('.track-description').children('.track-info');
                     var trackName = $self.parent().children('.track-description').children('.track-title');
                     $.ajax({
@@ -305,7 +303,8 @@ var SettingsManager = function (manager) {
                         success: function(trackInfo) {
                             var $trackInfoTemplate = $('#trackInfoTemplate');
                             var object = $trackInfoTemplate.tmpl(trackInfo);
-                            var $trackInfoContainer = $('#trackInfoContainer');
+                            var $trackInfoContainer = $('.modal-body');
+                            $trackInfoContainer.text('');
                             object.appendTo($trackInfoContainer);
                             if (trackInfo.Lyric != null) {
                                 for (var i = 0; i < trackInfo.Lyric.length; i++) {
@@ -314,7 +313,8 @@ var SettingsManager = function (manager) {
                                     $trackInfoContainer.find('.trackLyric').append($p);
                                 }
                             }
-                            $trackInfoContainer.show();
+                            //$trackInfoContainer.show();
+                            //$('.modal-body').append($trackInfoContainer);
                         }
                     });
                 });
