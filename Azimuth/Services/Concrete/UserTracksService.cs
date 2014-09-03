@@ -5,7 +5,6 @@ using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Threading.Tasks;
-using System.Web.WebPages;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -16,27 +15,32 @@ using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using WebGrease.Css.Extensions;
-using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 namespace Azimuth.Services.Concrete
 {
     public class UserTracksService : IUserTracksService
     {
         private ISocialNetworkApi _socialNetworkApi;
+        private readonly IMusicService _lastfmApi;
+        private readonly IDeezerService _deezerApi;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserRepository _userRepository;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
         private readonly PlaylistTrackRepository _playlistTrackRepository;
+        private readonly IChartLyricsApi _chartLyricsApi;
 
-        public UserTracksService(IUnitOfWork unitOfWork)
+        public UserTracksService(IUnitOfWork unitOfWork, IMusicService lastfmApi, IDeezerService deezerApi, IChartLyricsApi chartLyricsApi)
         {
             _unitOfWork = unitOfWork;
 
+            _lastfmApi = lastfmApi;
+            _deezerApi = deezerApi;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
             _playlistTrackRepository = _unitOfWork.GetRepository<PlaylistTrack>() as PlaylistTrackRepository;
+            _chartLyricsApi = chartLyricsApi;
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)
@@ -57,6 +61,16 @@ namespace Azimuth.Services.Concrete
             }
 
             return await _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
+        }
+
+        public async Task<TrackInfoDto> GetTrackInfo(string author, string trackName)
+        {
+            return await _lastfmApi.GetTrackInfo(author, trackName);
+        }
+
+        public async Task<DeezerTrackData> GetDeezerTrackInfo(string author, string trackName)
+        {
+            return await _deezerApi.GetTrackInfo(author, trackName);
         }
 
         public async Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id)
@@ -155,16 +169,6 @@ namespace Azimuth.Services.Concrete
                                         return item;
                                     }).ToList();
                     }
-                    //var negativeTest = pt.OrderByDescending(s=> s.TrackPosition < 0).Where(s => s.TrackPosition < 0).ToList();
-                    //if (negativeTest.Count > 0)
-                    //{
-                    //    var neg = 0 - negativeTest[0].TrackPosition;
-                    //    pt.Select((item) =>
-                    //    {
-                    //        item.TrackPosition += neg;
-                    //        return item;
-                    //    }).ToList();
-                    //}
                 }
                 _unitOfWork.Commit();
             }
@@ -367,6 +371,11 @@ namespace Azimuth.Services.Concrete
 
                 _unitOfWork.Commit();
             }
+        }
+
+        public async Task<string> GetTrackLyrics(string author, string trackName)
+        {
+            return await _chartLyricsApi.GetTrackLyric(author, trackName);
         }
 
         private UserSocialNetwork GetSocialNetworkData(string provider)

@@ -510,10 +510,11 @@
 
             if (event.type == "mouseup") {
                 if ($elem.hasClass('playlist')) {
-                    //$currentItem.show();
+                    $currentItem.show();
                     return $elem;
                 }
                 if ($elem.parents('.playlist').length > 0 && event.type == "mouseup") {
+                    $currentItem.show();
                     return $elem.parents('.playlist');
                 }
             }
