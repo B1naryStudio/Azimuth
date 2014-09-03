@@ -10,5 +10,6 @@ namespace Azimuth.DataProviders.Interfaces
         Task<List<VkFriendData.Friend>>  GetFriendsInfo(string userId, string accessToken, int offset, int count);
         Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken);
         Task<string> GetLyricsById(string userId, long lyricsId, string accessToken);
+        Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId);
     }
 }

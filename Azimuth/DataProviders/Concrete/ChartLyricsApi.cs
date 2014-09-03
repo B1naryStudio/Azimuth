@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 using Azimuth.DataProviders.Interfaces;
@@ -20,7 +21,15 @@ namespace Azimuth.DataProviders.Concrete
         public async Task<string[]> GetTrackInfo(string author, string trackName)
         {
             string url = BaseUri + "SearchLyricDirect?artist=" + author + "&song=" + trackName;
-            string trackLyricXml = await _webClient.GetWebData(url);
+            string trackLyricXml;
+            try
+            {
+                trackLyricXml = await _webClient.GetWebData(url);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(trackLyricXml);

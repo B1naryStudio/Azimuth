@@ -178,5 +178,23 @@ namespace Azimuth.DataProviders.Concrete
 
             return friends.Response.Friends;
         }
+
+        public async Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId)
+        {
+            var searchUrl = BaseUri + "audio.search?q=" + artist + " " + trackName +
+                      "&auto_complete=0&lyrics=1&sort=2&offset=0&v=5.24&access_token=" +
+                      Uri.EscapeDataString(accessToken);
+
+            var trackJson = await _webClient.GetWebData(searchUrl);
+            var trackData = JsonConvert.DeserializeObject<VkTrackData>(trackJson);
+            if (trackData.ResponseData.Tracks.Any())
+            {
+                var trackLyric = await GetLyricsById(userId, trackData.ResponseData.Tracks.First().LyricsId, accessToken);
+                string[] separator = new string[] {"\n"};
+                var splittedLyric = trackLyric.Split(separator, StringSplitOptions.None);
+                return splittedLyric;
+            }
+            return null;
+        }
     }
 }

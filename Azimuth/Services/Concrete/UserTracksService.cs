@@ -74,7 +74,20 @@ namespace Azimuth.Services.Concrete
 
             var lastfmData = await _lastfmApi.GetTrackInfo(artist, trackName);
             var deezerData = await _deezerApi.GetTrackInfo(artist, trackName);
-            var chartLyricData = await _chartLyricsApi.GetTrackInfo(artist, trackName);
+            string[] lyricData;
+            lyricData = await _chartLyricsApi.GetTrackInfo(artist, trackName);
+            if (lyricData == null)
+            {
+                _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+                UserSocialNetwork socialNetworkData;
+                using (_unitOfWork)
+                {
+                    socialNetworkData = GetSocialNetworkData("Vkontakte");
+                    _unitOfWork.Commit();
+                }
+
+                lyricData = await _socialNetworkApi.GetTrackLyricByArtistAndName(artist, trackName, socialNetworkData.AccessToken, socialNetworkData.ThirdPartId);
+            }
 
             if (deezerData != null)
             {
@@ -84,9 +97,9 @@ namespace Azimuth.Services.Concrete
             {
                 Mapper.Map(lastfmData, trackData);
             }
-            if (chartLyricData != null)
+            if (lyricData != null)
             {
-                Mapper.Map(chartLyricData, trackData);
+                Mapper.Map(lyricData, trackData);
             }
 
             return trackData;

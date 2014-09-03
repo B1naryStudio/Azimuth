@@ -304,18 +304,15 @@ var SettingsManager = function (manager) {
                         async: true,
                         success: function(trackInfo) {
                             var $trackInfoTemplate = $('#trackInfoTemplate');
-                            var lyricHTML = [];
-                            for (var i = 0; i < trackInfo.Lyric.length; i++) {
-                                var $p = $('<p>');
-                                $p.text(trackInfo.Lyric[i]);
-                                $p.appendTo($trackInfoTemplate);
-                                lyricHTML.push($p);
-                            }
                             var object = $trackInfoTemplate.tmpl(trackInfo);
                             var $trackInfoContainer = $('#trackInfoContainer');
                             object.appendTo($trackInfoContainer);
-                            for (var i = 0; i < trackInfo.Lyric.length; i++) {
-                                $trackInfoContainer.children(".trackLyric").append(lyricHTML[i].text());
+                            if (trackInfo.Lyric != null) {
+                                for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                                    var $p = $('<p>');
+                                    $p.text(trackInfo.Lyric[i]);
+                                    $trackInfoContainer.find('.trackLyric').append($p);
+                                }
                             }
                             $trackInfoContainer.show();
                         }

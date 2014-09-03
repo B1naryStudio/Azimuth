@@ -60,6 +60,7 @@
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Dto\TrackData.cs" />
     <Compile Include="Dto\VkFriendData.cs" />
+    <Compile Include="Dto\VkTrackData.cs" />
     <Compile Include="Dto\VkUserData.cs" />
     <Compile Include="Enums\Accessibilty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
