@@ -22,7 +22,7 @@ namespace Azimuth.Infrastructure.Concrete
             Bind<IAccountProvider>().To<VkAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");
             Bind<IAccountProvider>().To<GoogleAccountProvider>().Named("Google");
-            Bind<IChartLyricsApi>().To<ChartLyricsApi>();
+            //Bind<IChartLyricsApi>().To<ChartLyricsApi>();
         }
     }
 }

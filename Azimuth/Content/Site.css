@@ -544,3 +544,19 @@ hr {
 .unactiveContextMenuAction .contextMenuActionName{
     color: gray;
 }
+
+#trackInfoContainer {
+    border: solid black 1px;
+    position: absolute;
+    top: 400px;
+    display: none;
+}
+/*#trackInfoContainer div {
+    float: left;
+}*/
+#trackInfoContainer div img {
+    float: left;
+}
+#trackInfoContainer .tableRow {
+    padding: 3px;
+}

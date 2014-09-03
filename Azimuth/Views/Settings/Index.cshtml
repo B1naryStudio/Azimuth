@@ -82,7 +82,8 @@
             </div>
         </div>
     </div>
-    <div class="itemsContainer tableRow" id="itemsContainer" ></div>
+<div class="itemsContainer tableRow" id="itemsContainer" ></div>
+<div class="trackInfoContainer" id="trackInfoContainer"></div>
 </div>
 @section scripts
 {
@@ -175,6 +176,28 @@
         <div class="tableRow">
             <div class="contextMenuActionName">${name}</div>
             <span class="playlistId" style="display: none">${id}</span>
+        </div>
+    </script>
+    
+    <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
+        <div class="trackInfo">
+            <div class="tableRow">
+                <div class="artistPhoto" style="float: left"><img src=${ArtistImage}></div>
+                <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
+                <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
+                <div>Fans count: ${ArtistFans}</div>
+            </div>
+            <div class="tableRow">
+                <div class="tableRow">
+                    <div class="albumPhoto"><img src=${AlbumCover}></div>
+                    <div>Album: ${AlbumTitle} </div>
+                    <div>Fans count: ${AlbumFans}</div>
+                    <div>Year: ${AlbumRelease}</div>
+                </div>
+            </div>
+            <div class="tableRow">
+                <div class="trackLyric"></div>
+            </div>
         </div>
     </script>
 }

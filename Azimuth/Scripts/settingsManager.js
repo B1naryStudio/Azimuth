@@ -293,34 +293,31 @@ var SettingsManager = function (manager) {
                     self.$vkMusicTable.hide();
                 }
 
-                $('.track-info-btn').click(function (e) {
+                $('.track-info-btn').click(function(e) {
                     var $self = $(this);
+                    var $trackInfoLastFm;
+                    var $trackInfoDeezer;
                     var author = $self.parent().children('.track-description').children('.track-info');
                     var trackName = $self.parent().children('.track-description').children('.track-title');
                     $.ajax({
-                        url: '/api/usertracks/trackinfo?author=' + author.html() + '&trackName=' + trackName.html(),
+                        url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
                         async: true,
-                        success: function (trackInfo) {
-                            var track = trackInfo.track;
-                            console.log(track);
-                            alert(track.name);
-                            alert(track.url);
-                            if (track.artist != null) {
-                                alert(track.artist.name);
-                                alert(track.artist.url);
+                        success: function(trackInfo) {
+                            var $trackInfoTemplate = $('#trackInfoTemplate');
+                            var lyricHTML = [];
+                            for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                                var $p = $('<p>');
+                                $p.text(trackInfo.Lyric[i]);
+                                $p.appendTo($trackInfoTemplate);
+                                lyricHTML.push($p);
                             }
-                            if (track.album != null) {
-                                alert(track.album.title);
-                                alert(track.album.url);
-                                if (track.album.image != null) {
-                                    alert(track.album.image[track.album.image.length - 1]['#text']);
-                                }
+                            var object = $trackInfoTemplate.tmpl(trackInfo);
+                            var $trackInfoContainer = $('#trackInfoContainer');
+                            object.appendTo($trackInfoContainer);
+                            for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                                $trackInfoContainer.children(".trackLyric").append(lyricHTML[i].text());
                             }
-                            if (track.wiki != null) {
-                                alert(track.wiki.published);
-                                alert(track.wiki.content);
-                                alert(track.wiki.summary);
-                            }
+                            $trackInfoContainer.show();
                         }
                     });
                 });

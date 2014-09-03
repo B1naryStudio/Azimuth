@@ -204,10 +204,12 @@
   <ItemGroup>
     <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />
+    <Compile Include="DataProviders\Concrete\MusicServiceWorkUnit.cs" />
     <Compile Include="DataProviders\Interfaces\IDeezerService.cs" />
     <Compile Include="DataProviders\Interfaces\IMusicService.cs" />
     <Compile Include="DataProviders\Concrete\ChartLyricsApi.cs" />
     <Compile Include="DataProviders\Interfaces\IChartLyricsApi.cs" />
+    <Compile Include="DataProviders\Interfaces\IMusicServiceWorkUnit.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
     <Compile Include="Services\Interfaces\IListenersService.cs" />
     <Compile Include="Services\Concrete\ListenersService.cs" />
@@ -301,7 +303,6 @@
     <Content Include="Images\media_prev.png" />
     <Content Include="Images\media_stop.png" />
     <Content Include="Images\media_volume.png" />
-    <Content Include="Images\spinner_loading.gif" />
     <Content Include="Scripts\audioManager.js" />
     <Content Include="Images\twitter_logo.png" />
     <Content Include="Images\vkontakte_logo.png" />
@@ -320,13 +321,11 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\myMusicManager.js" />
-    <Content Include="Scripts\publicPlaylistManager.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\settingsManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\work.with.playlist.js" />
-    <Content Include="Scripts\workWithPublicPlaylists.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
