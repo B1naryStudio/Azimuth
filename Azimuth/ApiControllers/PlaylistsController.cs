@@ -91,6 +91,24 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpGet]
+        [Route("image/{id:int}")]
+        public async Task<HttpResponseMessage> GetPlaylistImageById(int id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetImageById(id));
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpDelete]
         [Route("delete/{id:int}")]
         public HttpResponseMessage DeletePlaylistById(int id)

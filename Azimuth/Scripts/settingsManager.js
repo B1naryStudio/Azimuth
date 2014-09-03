@@ -391,6 +391,23 @@ var SettingsManager = function (manager) {
             }
         });
     };
+
+    this._setChangingPlaylistImage = function(playlist) {
+        setInterval(function() {
+            var id = playlist.children('.playlistId').html();
+            $.ajax({
+                url: '/api/playlists/image/' + id,
+                success: function (image) {
+                    var $logo = playlist.children('.playlist-logo').children();
+                    if (image != "") {
+                        $logo.attr("src", image);
+                    } else {
+                        $logo.attr("src", "http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg");
+                    }
+                }
+            });
+        }, 40000);
+    };
 };
 
 SettingsManager.prototype.showTracks = function (tracks) {
@@ -509,7 +526,9 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                         }
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
                         self.playlistsGlobal.push(playlist);
-                        self.$playlistsTable.append(self.playlistTemplate.tmpl(playlist));
+                        var tmpl = self.playlistTemplate.tmpl(playlist);
+                        self.$playlistsTable.append(tmpl);
+                        self._setChangingPlaylistImage(tmpl);
                     }
                 } else {
                     self.$reloginForm.show();
@@ -518,14 +537,15 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                 }
                 self.$playlistsLoadingSpinner.fadeOut("normal");
                 $('.accordion .tableRow').on("click", self._getTracks);
-                
             }
         });
     } else { //using to print playlists after using filter
         self.$playlistsTable.empty();
         if (self.playlists.length !== 0) {
             for (var i = 0; i < playlists.length; i++) {
-                self.$playlistsTable.append(this.playlistTemplate.tmpl(playlists[i]));
+                var tmpl = this.playlistTemplate.tmpl(playlists[i]);
+                self.$playlistsTable.append(tmpl);
+                self._setChangingPlaylistImage(tmpl);
             }
         } else {
             self.$createNewPlaylistBtn.show();
