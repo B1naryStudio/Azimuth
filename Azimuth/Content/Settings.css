@@ -168,5 +168,10 @@
 #backToPlaylistsBtn {
     display: block;
     width: 70px;
-   
+}
+
+#trackInfo > div{
+    display: block;
+    overflow: auto;
+    margin-bottom: 10px;
 }

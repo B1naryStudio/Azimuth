@@ -196,23 +196,34 @@
     </script>
     
     <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
-        <div class="trackInfo">
-            <div class="tableRow">
+        <div id="trackInfo">
+            <div class="tableRow" id="artistData" style="display: block">
                 <div class="artistPhoto" style="float: left"><img src=${ArtistImage}></div>
                 <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
                 <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
                 <div>Fans count: ${ArtistFans}</div>
             </div>
-            <div class="tableRow">
+            <div class="tableRow" id="albumData" style="display: block">
                 <div class="tableRow">
-                    <div class="albumPhoto"><img src=${AlbumCover}></div>
+                    <div class="albumPhoto" style="float: left"><img src=${AlbumCover}></div>
                     <div>Album: ${AlbumTitle} </div>
                     <div>Fans count: ${AlbumFans}</div>
                     <div>Year: ${AlbumRelease}</div>
                 </div>
             </div>
-            <div class="tableRow">
-                <div class="trackLyric"></div>
+            <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseLyrics">
+                            Lyrics
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseLyrics" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackLyric"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
