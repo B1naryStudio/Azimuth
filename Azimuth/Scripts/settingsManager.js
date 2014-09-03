@@ -674,7 +674,7 @@ SettingsManager.prototype.bindListeners = function () {
         }
     });
 
-    $('#closeModalBtn').click(function() {
+    $('#infoModal').on('hidden.bs.modal', function() {
         $('.modal-body').text('');
     });
 };
