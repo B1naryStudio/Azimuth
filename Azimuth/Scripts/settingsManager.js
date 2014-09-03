@@ -313,8 +313,6 @@ var SettingsManager = function (manager) {
                                     $trackInfoContainer.find('.trackLyric').append($p);
                                 }
                             }
-                            //$trackInfoContainer.show();
-                            //$('.modal-body').append($trackInfoContainer);
                         }
                     });
                 });
@@ -674,5 +672,9 @@ SettingsManager.prototype.bindListeners = function () {
         } else {
             self.$friendsBody.show('slow');
         }
+    });
+
+    $('#closeModalBtn').click(function() {
+        $('.modal-body').text('');
     });
 };

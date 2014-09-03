@@ -95,7 +95,7 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -197,15 +197,17 @@
     
     <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
         <div id="trackInfo">
-            <div class="tableRow" id="artistData" style="display: block">
-                <div class="artistPhoto" style="float: left"><img src=${ArtistImage}></div>
-                <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
-                <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
-                <div>Fans count: ${ArtistFans}</div>
+            <div class="tableRow" id="artistData">
+                <div class="descriptionPhoto"><img src=${ArtistImage}></div>
+                <div class="infoDescription">
+                    <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
+                    <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
+                    <div>Fans count: ${ArtistFans}</div>
+                </div>
             </div>
-            <div class="tableRow" id="albumData" style="display: block">
-                <div class="tableRow">
-                    <div class="albumPhoto" style="float: left"><img src=${AlbumCover}></div>
+            <div class="tableRow" id="albumData">
+                <div class="descriptionPhoto"><img src=${AlbumCover}></div>
+                <div class="infoDescription">
                     <div>Album: ${AlbumTitle} </div>
                     <div>Fans count: ${AlbumFans}</div>
                     <div>Year: ${AlbumRelease}</div>

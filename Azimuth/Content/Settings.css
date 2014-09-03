@@ -175,3 +175,20 @@
     overflow: auto;
     margin-bottom: 10px;
 }
+
+.infoDescription {
+    width: 75%;
+    display: inline;
+    float: left;
+    margin-left: 10px;
+}
+
+.descriptionPhoto {
+    width: 20%;
+    display: inline;
+    float: left;
+}
+
+.descriptionPhoto img {
+    width: 100%;
+}
