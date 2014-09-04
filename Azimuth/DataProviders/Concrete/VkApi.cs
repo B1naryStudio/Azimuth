@@ -185,6 +185,7 @@ namespace Azimuth.DataProviders.Concrete
         {
             const string emailRegular = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$";
             const string websiteRegular = @"^(http|https|ftp|)\://|[a-zA-Z0-9\-\.]+\.[a-zA-Z](:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*[^\.\,\)\(\s]$";
+            const string phoneNumberRegular = @"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$";
             var searchUrl = BaseUri + "audio.search?q=" + artist + " " + trackName +
                       "&auto_complete=0&lyrics=1&sort=2&offset=0&v=5.24&access_token=" +
                       Uri.EscapeDataString(accessToken);
@@ -203,7 +204,8 @@ namespace Azimuth.DataProviders.Concrete
                         splittedLyric.FirstOrDefault(
                             splittedItem =>
                                 Regex.IsMatch(splittedItem, emailRegular) ||
-                                Regex.IsMatch(splittedItem, websiteRegular));
+                                Regex.IsMatch(splittedItem, websiteRegular) ||
+                                Regex.IsMatch(splittedItem, phoneNumberRegular));
                     if (notLyric!=null)
                         continue;
                     else
