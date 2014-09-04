@@ -186,7 +186,8 @@ namespace Azimuth.Infrastructure.Concrete
                 info.Artist = deezerData.Artist.Name;
                 info.ArtistFans = deezerData.Artist.FansNumber;
                 info.ArtistImage = deezerData.Artist.Picture;
-                info.ArtistTopTracks = deezerData.Artist.TrackList; // TOP?
+                info.ArtistTopTracksUrl = deezerData.Artist.TrackListUrl; // TOP?
+                info.ArtistTopTrackList = deezerData.Artist.TopTrackList;
             }
 
             info.Title = deezerData.Title;

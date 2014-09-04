@@ -23,7 +23,9 @@ namespace Azimuth.Shared.Dto
             [JsonProperty(PropertyName = "radio")]
             public bool Radio { get; set; }
             [JsonProperty(PropertyName = "tracklist")]
-            public string TrackList { get; set; }
+            public string TrackListUrl { get; set; }
+
+            public List<TrackData> TopTrackList { get; set; }
             [JsonProperty(PropertyName = "type")]
             public string Type { get; set; }
 
