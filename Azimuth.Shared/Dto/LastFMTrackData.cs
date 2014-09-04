@@ -67,5 +67,17 @@ namespace Azimuth.Shared.Dto
 
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
+        [JsonProperty(PropertyName = "image")]
+        public List<ArtistImage> ArtistImages { get; set; }
+
+        public class ArtistImage
+        {
+            [JsonProperty(PropertyName = "size")]
+            public string Size { get; set; }
+
+            [JsonProperty(PropertyName = "#text")]
+            public string Url { get; set; }
+        }
+
     }
 }

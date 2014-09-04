@@ -171,22 +171,27 @@ namespace Azimuth.Infrastructure.Concrete
 
         private static void DeezerDataMap(DeezerTrackData.TrackData deezerData, TrackInfoDto info)
         {
-            info.AlbumCover = deezerData.Album.Cover;
-            info.AlbumFans = deezerData.Album.Fans;
-            info.AlbumRank = deezerData.Album.Rating;
-            info.AlbumRelease = deezerData.Album.ReleaseDate;
-            info.AlbumTitle = deezerData.Album.Title;
-
-            info.Artist = deezerData.Artist.Name;
-            info.ArtistFans = deezerData.Artist.FansNumber;
-            info.ArtistImage = deezerData.Artist.Picture;
-            info.ArtistTopTracks = deezerData.Artist.TrackList; // TOP?
+            if (deezerData.Album != null)
+            {
+                info.AlbumCover = deezerData.Album.Cover;
+                info.AlbumFans = deezerData.Album.Fans;
+                info.AlbumRank = deezerData.Album.Rating;
+                info.AlbumRelease = deezerData.Album.ReleaseDate;
+                info.AlbumTitle = deezerData.Album.Title;
+                if (deezerData.Album.Genres != null)
+                    deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
+            }
+            if (deezerData.Artist != null)
+            {
+                info.Artist = deezerData.Artist.Name;
+                info.ArtistFans = deezerData.Artist.FansNumber;
+                info.ArtistImage = deezerData.Artist.Picture;
+                info.ArtistTopTracks = deezerData.Artist.TrackList; // TOP?
+            }
 
             info.Title = deezerData.Title;
             info.TrackRank = deezerData.Rank;
             info.TrackDeezerUrl = deezerData.Link;
-
-            deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
         }
 
         private static void LastfmDataMap(LastfmTrackData lastfmTrackData, TrackInfoDto trackInfoDto)

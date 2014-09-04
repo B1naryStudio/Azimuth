@@ -313,6 +313,9 @@ var SettingsManager = function (manager) {
                                     $trackInfoContainer.find('.trackLyric').append($p);
                                 }
                             }
+                            if (trackInfo.Summary != null) {
+                                $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
+                            }
                         }
                     });
                 });

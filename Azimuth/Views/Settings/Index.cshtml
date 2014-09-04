@@ -252,6 +252,23 @@
                 </div>
             </div>
             {{/if}}
+            
+            {{if Summary != null}}
+            <div class="tableRow panel panel-primary" id="summaryData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseSummary">
+                            Summary
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseSummary" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackSummary"></div>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
         </div>
     </script>
 }
