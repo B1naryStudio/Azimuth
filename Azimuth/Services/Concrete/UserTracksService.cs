@@ -250,6 +250,22 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        //public async Task<List<VkTrackData.Track>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider)
+        public async Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider)
+        {
+            _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
+            List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
+
+            using (_unitOfWork)
+            {
+                var socialNetworkData = GetSocialNetworkData(provider);
+                searchedTracks = await _socialNetworkApi.SearchTracks(tracksDescription, socialNetworkData.AccessToken);
+                _unitOfWork.Commit();
+            }
+
+            return searchedTracks;
+        }
+
         public async Task SetPlaylist(PlaylistData playlistData, string provider, int index, string friendId)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);

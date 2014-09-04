@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Infrastructure.Interfaces;
@@ -191,10 +193,10 @@ namespace Azimuth.DataProviders.Concrete
                       Uri.EscapeDataString(accessToken);
 
             var trackJson = await _webClient.GetWebData(searchUrl);
-            var trackData = JsonConvert.DeserializeObject<VkTrackData>(trackJson);
-            if (trackData.ResponseData.Tracks.Any())
+            var trackData = JsonConvert.DeserializeObject<TrackData>(trackJson);
+            if (trackData.Response.Audios.Any())
             {
-                foreach (var item in trackData.ResponseData.Tracks)
+                foreach (var item in trackData.Response.Audios)
                 {
                     var trackLyric = await GetLyricsById(userId, item.LyricsId, accessToken);
                     string[] separator = new string[] { " ", "(", ")", "\r\n", "\r", "\n" };
@@ -213,6 +215,21 @@ namespace Azimuth.DataProviders.Concrete
                 }
             }
             return null;
+        }
+
+        public async Task<List<TrackData.Audio>> SearchTracks(List<TrackSearchInfo.SearchData> tracks, string accessToken)
+        {
+            List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
+            foreach (var searchData in tracks)
+            {
+                var url = BaseUri + "audio.search?q=" + searchData.Artist + " " + searchData.Name +
+                          "&auto_complete=1&sort=2&offset=0&count=5&v=5.24&access_token=" + accessToken;
+
+                    var trackJson = await _webClient.GetWebData(url);
+                    var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
+                    searchedTracks.Add(track.Response.Audios.FirstOrDefault(s => !s.Title.Contains("(") && !s.Title.Contains(")") && !s.Artist.Contains("(") && !s.Artist.Contains(")")));
+            }
+            return searchedTracks;
         }
     }
 }

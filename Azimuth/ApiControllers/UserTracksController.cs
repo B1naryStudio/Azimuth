@@ -10,6 +10,7 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
+using Newtonsoft.Json;
 
 namespace Azimuth.ApiControllers
 {
@@ -30,6 +31,22 @@ namespace Azimuth.ApiControllers
             try
             {
                 var data = await _userTracksService.GetTrackInfo(artist, trackName);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
+        [HttpGet]
+        [Route("tracksearch")]
+        public async Task<HttpResponseMessage> SearchTracksInVk(string provider, string infoForSearch)
+        {
+            try
+            {
+                var listOfTracks = JsonConvert.DeserializeObject<TrackSearchInfo>(infoForSearch);
+                var data = await _userTracksService.SearchTracksInSn(listOfTracks.TrackDatas, "Vkontakte");
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception exception)

@@ -330,6 +330,28 @@ var SettingsManager = function (manager) {
                 if (trackInfo.Summary != null) {
                     $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
                 }
+
+                if (trackInfo.ArtistTopTrackList != null) {
+                    var info = [];
+                    for (var i = 0; i < 3; i++) {
+                        var item = {
+                            artist: trackInfo.ArtistTopTrackList[i].artist.name,
+                            track: trackInfo.ArtistTopTrackList[i].title
+                        }
+                        info.push(item);
+                    }
+                    var tracks = JSON.stringify({trackdata: info});
+                    $.ajax({
+                        url: '/api/usertracks/tracksearch?provider=' + "Vkontakte",
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {"infoForSearch" : tracks},
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var some = 1 + 2;
+                        }
+                    });
+                }
             }
         });
     };
