@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Exceptions;
@@ -9,6 +10,7 @@ using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WebGrease.Css.Extensions;
 
 namespace Azimuth.DataProviders.Concrete
 {
@@ -181,6 +183,9 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId)
         {
+            const string emailRegular = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$";
+            const string websiteRegular = @"^(http|https|ftp|)\://|[a-zA-Z0-9\-\.]+\.[a-zA-Z](:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*[^\.\,\)\(\s]$";
+            const string phoneNumberRegular = @"^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$";
             var searchUrl = BaseUri + "audio.search?q=" + artist + " " + trackName +
                       "&auto_complete=0&lyrics=1&sort=2&offset=0&v=5.24&access_token=" +
                       Uri.EscapeDataString(accessToken);
@@ -189,10 +194,23 @@ namespace Azimuth.DataProviders.Concrete
             var trackData = JsonConvert.DeserializeObject<VkTrackData>(trackJson);
             if (trackData.ResponseData.Tracks.Any())
             {
-                var trackLyric = await GetLyricsById(userId, trackData.ResponseData.Tracks.First().LyricsId, accessToken);
-                string[] separator = new string[] {"\n"};
-                var splittedLyric = trackLyric.Split(separator, StringSplitOptions.None);
-                return splittedLyric;
+                foreach (var item in trackData.ResponseData.Tracks)
+                {
+                    var trackLyric = await GetLyricsById(userId, item.LyricsId, accessToken);
+                    string[] separator = new string[] { " ", "(", ")", "\r\n", "\r", "\n" };
+                    var splittedLyric = trackLyric.Split(separator, StringSplitOptions.None);
+
+                    var notLyric =
+                        splittedLyric.FirstOrDefault(
+                            splittedItem =>
+                                Regex.IsMatch(splittedItem, emailRegular) ||
+                                Regex.IsMatch(splittedItem, websiteRegular) ||
+                                Regex.IsMatch(splittedItem, phoneNumberRegular));
+                    if (notLyric!=null)
+                        continue;
+                    else
+                        return trackLyric.Split(new string[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+                }
             }
             return null;
         }

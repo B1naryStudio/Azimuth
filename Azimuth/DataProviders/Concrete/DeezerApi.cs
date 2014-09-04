@@ -22,19 +22,35 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<DeezerTrackData.TrackData> GetTrackInfo(string artist, string trackName)
         {
-            var searchUrl = BaseUri + "search/" +
+            string searchUrl = BaseUri + "search/" +
                       "autocomplete?q=" + Uri.EscapeDataString(artist) + " " + Uri.EscapeDataString(trackName);
+            string artistUrl, artistJson, albumUrl, albumJson, trackJson;
+            DeezerTrackData.TrackData trackData;
+            DeezerTrackData.Track resultSearch;
 
-            var trackJson = await _webClient.GetWebData(searchUrl);
-            var resultSearch = JsonConvert.DeserializeObject<DeezerTrackData.Track>(trackJson);
-            var trackData = resultSearch.Tracks.Datas.FirstOrDefault();
+            trackJson = await _webClient.GetWebData(searchUrl);
+            resultSearch = JsonConvert.DeserializeObject<DeezerTrackData.Track>(trackJson);
+            trackData = resultSearch.Tracks.Datas.FirstOrDefault();
             if (trackData == null)
-                return null;
-            var artistUrl = BaseUri + "artist/" + trackData.Artist.Id;
-            var artistJson = await _webClient.GetWebData(artistUrl);
+            {
+                searchUrl = BaseUri + "search/" + "autocomplete?q=" + Uri.EscapeDataString(artist);
+                trackJson = await _webClient.GetWebData(searchUrl);
+                resultSearch = JsonConvert.DeserializeObject<DeezerTrackData.Track>(trackJson);
+                trackData = resultSearch.Tracks.Datas.FirstOrDefault();
+                if (trackData != null)
+                {
+                    artistUrl = BaseUri + "artist/" + trackData.Artist.Id;
+                    artistJson = await _webClient.GetWebData(artistUrl);
+                    trackData.Artist = JsonConvert.DeserializeObject<DeezerTrackData.Artist>(artistJson);
+                    trackData.Album = null;
+                }
+                return trackData;
+            }
+            artistUrl = BaseUri + "artist/" + trackData.Artist.Id;
+            artistJson = await _webClient.GetWebData(artistUrl);
             trackData.Artist = JsonConvert.DeserializeObject<DeezerTrackData.Artist>(artistJson);
-            var albumUrl = BaseUri + "album/" + trackData.Album.Id;
-            var albumJson = await _webClient.GetWebData(albumUrl);
+            albumUrl = BaseUri + "album/" + trackData.Album.Id;
+            albumJson = await _webClient.GetWebData(albumUrl);
             trackData.Album = JsonConvert.DeserializeObject<DeezerTrackData.Album>(albumJson);
 
             var topTracksUrl = BaseUri + "artist/" + trackData.Artist.Id + "/top?limit=10";

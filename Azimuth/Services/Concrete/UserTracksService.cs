@@ -76,7 +76,7 @@ namespace Azimuth.Services.Concrete
             var deezerData = await _deezerApi.GetTrackInfo(artist, trackName);
             string[] lyricData;
             lyricData = await _chartLyricsApi.GetTrackInfo(artist, trackName);
-            if (lyricData == null)
+            if (lyricData == null || !lyricData.Any() || (lyricData.Count() == 1 && String.IsNullOrEmpty(lyricData[0])))
             {
                 _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
                 UserSocialNetwork socialNetworkData;
@@ -93,7 +93,7 @@ namespace Azimuth.Services.Concrete
             {
                 Mapper.Map(deezerData, trackData);
             }
-            if (lastfmData != null)
+            if (lastfmData.Track != null)
             {
                 Mapper.Map(lastfmData, trackData);
             }
