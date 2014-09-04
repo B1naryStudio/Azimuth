@@ -732,6 +732,7 @@ SettingsManager.prototype.bindListeners = function () {
                     success: function (data) {
                         self.topTracksVk = [];
                         $(data).each(function () {
+                            this.duration = self._toFormattedTime(this.duration, true);
                             if ((typeof (this.artist) != 'undefined') && (typeof (this.title) != 'undefined')) {
                                 self.topTracksVk.push(this);
                             }

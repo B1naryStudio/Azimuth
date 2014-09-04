@@ -270,7 +270,9 @@ namespace Azimuth.Services.Concrete
                     var trackInfoDto = await _lastfmApi.GetTrackInfo(artist, trackName);
 
 
-                    if (trackInfoDto.Track.TrackAlbum != null && trackInfoDto.Track.TrackAlbum.AlbumImages != null)
+                    if (trackInfoDto.Track != null 
+                        && trackInfoDto.Track.TrackAlbum != null 
+                        && trackInfoDto.Track.TrackAlbum.AlbumImages != null)
                     {
                         image = trackInfoDto.Track.TrackAlbum.AlbumImages.Last().Url;
                         if (image != String.Empty)
