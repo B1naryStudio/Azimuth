@@ -74,6 +74,8 @@ var SettingsManager = function (manager) {
         $('#playlistTracks').show();
         self.audioManager.bindPlayBtnListeners();
         $(this).toggleClass("active");
+
+        $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
     };
 
     this._toFormattedTime = function (input, roundSeconds) {
@@ -293,29 +295,7 @@ var SettingsManager = function (manager) {
                     self.$vkMusicTable.hide();
                 }
 
-                $('.track-info-btn').click(function(e) {
-                    var $self = $(this);
-                    var author = $self.parent().children('.track-description').children('.track-info');
-                    var trackName = $self.parent().children('.track-description').children('.track-title');
-                    $.ajax({
-                        url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
-                        async: true,
-                        success: function(trackInfo) {
-                            var $trackInfoTemplate = $('#trackInfoTemplate');
-                            var object = $trackInfoTemplate.tmpl(trackInfo);
-                            var $trackInfoContainer = $('.modal-body');
-                            $trackInfoContainer.text('');
-                            object.appendTo($trackInfoContainer);
-                            if (trackInfo.Lyric != null) {
-                                for (var i = 0; i < trackInfo.Lyric.length; i++) {
-                                    var $p = $('<p>');
-                                    $p.text(trackInfo.Lyric[i]);
-                                    $trackInfoContainer.find('.trackLyric').append($p);
-                                }
-                            }
-                        }
-                    });
-                });
+                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
@@ -324,6 +304,30 @@ var SettingsManager = function (manager) {
             error: function () {
                 $('#vkMusicTable > .tableTitle').text("Error has occurred");
                 self.$vkMusicLoadingSpinner.hide();
+            }
+        });
+    };
+
+    this._getTrackInfo = function() {
+        var $self = $(this);
+        var author = $self.parent().children('.track-description').children('.track-info');
+        var trackName = $self.parent().children('.track-description').children('.track-title');
+        $.ajax({
+            url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
+            async: true,
+            success: function (trackInfo) {
+                var $trackInfoTemplate = $('#trackInfoTemplate');
+                var object = $trackInfoTemplate.tmpl(trackInfo);
+                var $trackInfoContainer = $('.modal-body');
+                $trackInfoContainer.text('');
+                object.appendTo($trackInfoContainer);
+                if (trackInfo.Lyric != null) {
+                    for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                        var $p = $('<p>');
+                        $p.text(trackInfo.Lyric[i]);
+                        $trackInfoContainer.find('.trackLyric').append($p);
+                    }
+                }
             }
         });
     };
@@ -367,6 +371,8 @@ var SettingsManager = function (manager) {
                 }
                 self.audioManager.bindPlayBtnListeners();
                 self.$vkMusicLoadingSpinner.hide();
+
+                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
             },
             error: function (thrownException) {
                 

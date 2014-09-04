@@ -93,7 +93,7 @@ namespace Azimuth.Services.Concrete
             {
                 Mapper.Map(deezerData, trackData);
             }
-            if (lastfmData != null)
+            if (lastfmData.Track != null)
             {
                 Mapper.Map(lastfmData, trackData);
             }
