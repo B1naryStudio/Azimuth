@@ -107,7 +107,7 @@ namespace Azimuth.Services.Concrete
         {
             using (_unitOfWork)
             {
-                var user = _userRepository.GetOne(x => x.Id == followerId);
+                var user = _userRepository.GetFullUserData(followerId);
                 var loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
                 if (user == null || loggedUser == null)
                 {

@@ -52,7 +52,7 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPut]
-        [Route("follow/{followerId:long}")]
+        [Route("follow")]
         public HttpResponseMessage Follow(long followerId)
         {
             var updatedUser = _userService.FollowPerson(followerId);
@@ -61,7 +61,7 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPut]
-        [Route("unfollow/{followerId:long}")]
+        [Route("unfollow")]
         public HttpResponseMessage Unfollow(long followerId)
         {
             var updatedUser = _userService.UnfollowPerson(followerId);
