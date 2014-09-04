@@ -187,12 +187,17 @@ namespace Azimuth.Infrastructure.Concrete
                 info.ArtistFans = deezerData.Artist.FansNumber;
                 info.ArtistImage = deezerData.Artist.Picture;
                 info.ArtistTopTracksUrl = deezerData.Artist.TrackListUrl; // TOP?
-                info.ArtistTopTrackList = deezerData.Artist.TopTrackList;
             }
 
             info.Title = deezerData.Title;
             info.TrackRank = deezerData.Rank;
             info.TrackDeezerUrl = deezerData.Link;
+
+            deezerData.TopTracks.ForEach(track => info.ArtistTopTrackList.Add(new TrackSearchInfo.SearchData {Artist = track.Artist.Name, Name = track.Title}));
+            if ((deezerData.Album != null) && (deezerData.Album.Genres != null))
+            {
+                deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
+            }
         }
 
         private static void LastfmDataMap(LastfmTrackData lastfmTrackData, TrackInfoDto trackInfoDto)

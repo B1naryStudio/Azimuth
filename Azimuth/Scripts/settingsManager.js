@@ -6,6 +6,8 @@ var SettingsManager = function (manager) {
     this.friendsOffset = 0;
     this.provider = "";
     this.playlistTracksGlobal = [];
+    this.topTracks = null;
+    this.topTracksVk = [];
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
@@ -28,6 +30,7 @@ var SettingsManager = function (manager) {
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
+
     this._getTracks = function (plId) {
         self.$playlistsTitle.text('platlist\'re loading');
         self.$playlistsLoadingSpinner.fadeIn('normal');
@@ -332,28 +335,8 @@ var SettingsManager = function (manager) {
                 if (trackInfo.Summary != null) {
                     $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
                 }
-
-                if (trackInfo.ArtistTopTrackList != null) {
-                    var info = [];
-                    for (var i = 0; i < 3; i++) {
-                        var item = {
-                            artist: trackInfo.ArtistTopTrackList[i].artist.name,
-                            track: trackInfo.ArtistTopTrackList[i].title
-                        }
-                        info.push(item);
-                    }
-                    var tracks = JSON.stringify({trackdata: info});
-                    $.ajax({
-                        url: '/api/usertracks/tracksearch?provider=' + "Vkontakte",
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {"infoForSearch" : tracks},
-                        contentType: 'application/json; charset=utf-8',
-                        success: function (data) {
-                            var some = 1 + 2;
-                        }
-                    });
-                }
+                self.topTracks = trackInfo.ArtistTopTrackList;
+                $('#listenTopBtn').attr('disabled', false);
             }
         });
     };
@@ -723,5 +706,42 @@ SettingsManager.prototype.bindListeners = function () {
 
     $('#infoModal').on('hidden.bs.modal', function() {
         $('.modal-body').text('');
+        $('#listenTopBtn').attr('disabled', true);
+    });
+
+    $('#listenTopBtn').click(function () {
+        if (self.topTracks != null) {
+            $('#vkMusic-header-title').text('');
+            
+            if (self.topTracks != null) {
+                //var info = [];
+                //for (var i = 0; i < 3; i++) {
+                //    var item = {
+                //        artist: trackInfo.ArtistTopTrackList[i].artist.name,
+                //        track: trackInfo.ArtistTopTrackList[i].title
+                //    }
+                //    info.push(item);
+                //}
+                var tracks = JSON.stringify({ trackdata: self.topTracks });
+                $.ajax({
+                    url: '/api/usertracks/tracksearch?provider=' + "Vkontakte",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { "infoForSearch": tracks },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        self.topTracksVk = [];
+                        $(data).each(function () {
+                            if ((typeof (this.artist) != 'undefined') && (typeof (this.title) != 'undefined')) {
+                                self.topTracksVk.push(this);
+                            }
+                        });
+                        self.showTracks(self.topTracksVk);
+                        //$('#listenTopBtn').attr('disabled', false);
+                    }
+                });
+            }
+        }
+
     });
 };

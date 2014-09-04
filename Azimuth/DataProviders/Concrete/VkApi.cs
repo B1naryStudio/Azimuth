@@ -219,15 +219,37 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<List<TrackData.Audio>> SearchTracks(List<TrackSearchInfo.SearchData> tracks, string accessToken)
         {
-            List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
-            foreach (var searchData in tracks)
+            var searchedTracks = new List<TrackData.Audio>();
+            if (tracks != null)
             {
-                var url = BaseUri + "audio.search?q=" + searchData.Artist + " " + searchData.Name +
-                          "&auto_complete=1&sort=2&offset=0&count=5&v=5.24&access_token=" + accessToken;
+                foreach (var searchData in tracks)
+                {
+                    if (searchData != null)
+                    {
+                        var url = BaseUri + "audio.search?q=" + searchData.Artist + " " + searchData.Name +
+                                  "&auto_complete=1&sort=2&offset=0&count=5&v=5.24&access_token=" + accessToken;
 
-                    var trackJson = await _webClient.GetWebData(url);
-                    var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
-                    searchedTracks.Add(track.Response.Audios.FirstOrDefault(s => !s.Title.Contains("(") && !s.Title.Contains(")") && !s.Artist.Contains("(") && !s.Artist.Contains(")")));
+                        var trackJson = await _webClient.GetWebData(url);
+                        var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
+                        try
+                        {
+                            searchedTracks.Add(track.Response.Audios.FirstOrDefault());
+                        }
+                        catch
+                        {
+                            
+                        }
+                        //searchedTracks.Add(
+                        //    track.Response.Audios.FirstOrDefault(
+                        //        s =>
+                        //            !s.Title.Contains("(") && !s.Title.Contains(")") && !s.Artist.Contains("(") &&
+                        //            !s.Artist.Contains(")")));
+                        //if (searchedTracks.Count >= 10)
+                        //{
+                        //    return searchedTracks;
+                        //}
+                    }
+                }
             }
             return searchedTracks;
         }

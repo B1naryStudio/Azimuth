@@ -11,7 +11,7 @@ namespace Azimuth.Shared.Dto
         public string Artist { get; set; }
         public string ArtistImage { get; set; }
         public string ArtistTopTracksUrl { get; set; }
-        public List<DeezerTrackData.TrackData> ArtistTopTrackList { get; set; }
+        public List<TrackSearchInfo.SearchData> ArtistTopTrackList { get; set; }
         public int ArtistFans { get; set; }
         public string ArtistLastfmUrl { get; set; }
         public string AlbumTitle { get; set; }
@@ -29,7 +29,7 @@ namespace Azimuth.Shared.Dto
         public TrackInfoDto()
         {
             Genres = new List<string>();
-            ArtistTopTrackList = new List<DeezerTrackData.TrackData>();
+            ArtistTopTrackList = new List<TrackSearchInfo.SearchData>();
         }
     }
 }
