@@ -50,12 +50,9 @@ namespace Azimuth.DataProviders.Concrete
             artistJson = await _webClient.GetWebData(artistUrl);
             trackData.Artist = JsonConvert.DeserializeObject<DeezerTrackData.Artist>(artistJson);
 
-
-            string trackListJson = await _webClient.GetWebData(trackData.Artist.TrackListUrl);
-            var trackList = JsonConvert.DeserializeObject<DeezerTrackData.Data>(trackListJson);
-            trackData.Artist.TopTrackList = trackList.Datas;
-
-
+            //string trackListJson = await _webClient.GetWebData(trackData.Artist.TrackListUrl);
+            //var trackList = JsonConvert.DeserializeObject<DeezerTrackData.Data>(trackListJson);
+            //trackData.Artist.TopTrackList = trackList.Datas;
 
             albumUrl = BaseUri + "album/" + trackData.Album.Id;
             albumJson = await _webClient.GetWebData(albumUrl);

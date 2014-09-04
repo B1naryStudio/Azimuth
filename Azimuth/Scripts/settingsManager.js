@@ -331,15 +331,15 @@ var SettingsManager = function (manager) {
                     $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
                 }
                 if (trackInfo.ArtistTopTrackList != null) {
-                    var info = [];
-                    for (var i = 0; i < 3; i++) {
-                        var item = {
-                            artist: trackInfo.ArtistTopTrackList[i].artist.name,
-                            track: trackInfo.ArtistTopTrackList[i].title
-                        }
-                        info.push(item);
-                    }
-                    var tracks = JSON.stringify({trackdata: info});
+                    //var info = [];
+                    //for (var i = 0; i < 3; i++) {
+                    //    var item = {
+                    //        artist: trackInfo.ArtistTopTrackList[i].artist.name,
+                    //        track: trackInfo.ArtistTopTrackList[i].title
+                    //    }
+                    //    info.push(item);
+                    //}
+                    var tracks = JSON.stringify({ trackdata: trackInfo.ArtistTopTrackList });
                     $.ajax({
                         url: '/api/usertracks/tracksearch?provider=' + "Vkontakte",
                         type: 'GET',
@@ -347,7 +347,11 @@ var SettingsManager = function (manager) {
                         data: {"infoForSearch" : tracks},
                         contentType: 'application/json; charset=utf-8',
                         success: function (data) {
-                            var some = 1 + 2;
+                            $(data).each(function() {
+                                if ((typeof (this.artist) != 'undefined') && (typeof (this.title) != 'undefined')) {
+                                    $('.topTracks').append(this.artist + " - " + this.title + "<br>");
+                                }
+                            });
                         }
                     });
                 }
