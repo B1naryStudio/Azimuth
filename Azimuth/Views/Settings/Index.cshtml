@@ -109,7 +109,7 @@
     <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
     <script type="" src="../../Scripts/drag&drop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="../../Scripts/sliderController.js"></script>
+    <script src="../../Scripts/sliderController.js"></script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
@@ -198,21 +198,45 @@
     <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
         <div id="trackInfo">
             <div class="tableRow" id="artistData">
-                <div class="descriptionPhoto"><img src=${ArtistImage}></div>
+                <div class="descriptionPhoto">
+                    {{if ArtistImage != null}}
+                    <img src=${ArtistImage}>
+                    {{/if}}
+                </div>
                 <div class="infoDescription">
-                    <div class="trackTitle">Title: <a href=${TrackLastfmUrl}>${Title}</a></div>
-                    <div class="Artist">Artist: <a href=${ArtistLastfmUrl}>${Artist}</a> </div>
-                    <div>Fans count: ${ArtistFans}</div>
+                    <div class="trackTitle">
+                        {{if Title != null}}
+                        Title: <a href=${TrackLastfmUrl}>${Title}</a>
+                        {{/if}}
+                    </div>
+                    <div class="Artist">Artist:
+                        {{if Artist != null}}
+                        <a href=${ArtistLastfmUrl}>${Artist}</a> 
+                        {{/if}}
+                    </div>
+                    {{if ArtistFans != 0}}
+                    <div>Fans count: ${ArtistFans}</div> 
+                    {{/if}}
+                   
                 </div>
             </div>
             <div class="tableRow" id="albumData">
+                {{if AlbumCover != null}}
                 <div class="descriptionPhoto"><img src=${AlbumCover}></div>
+                {{/if}}
                 <div class="infoDescription">
+                    {{if AlbumTitle != null}}
                     <div>Album: ${AlbumTitle} </div>
+                    {{/if}}
+                    {{if AlbumFans != 0}}
                     <div>Fans count: ${AlbumFans}</div>
+                    {{/if}}
+                    {{if AlbumRelease != null}}
                     <div>Year: ${AlbumRelease}</div>
+                    {{/if}}
                 </div>
             </div>
+            {{if Lyric!= null}}
             <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -227,6 +251,7 @@
                     </div>
                 </div>
             </div>
+            {{/if}}
         </div>
     </script>
 }
