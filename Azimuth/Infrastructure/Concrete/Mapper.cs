@@ -186,6 +186,7 @@ namespace Azimuth.Infrastructure.Concrete
             info.TrackRank = deezerData.Rank;
             info.TrackDeezerUrl = deezerData.Link;
 
+            deezerData.TopTracks.ForEach(track => info.TopTracks.Add(track));
             deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
         }
 

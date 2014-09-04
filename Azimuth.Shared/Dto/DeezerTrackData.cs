@@ -102,7 +102,7 @@ namespace Azimuth.Shared.Dto
             public Album Album { get; set; }
             [JsonProperty(PropertyName = "type")]
             public string Type { get; set; }
-            [JsonProperty(PropertyName = "topTracks")]
+            
             public List<TrackData> TopTracks { get; set; }
         }
 

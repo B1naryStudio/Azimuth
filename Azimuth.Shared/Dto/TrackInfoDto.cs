@@ -25,6 +25,8 @@ namespace Azimuth.Shared.Dto
         public string Published { get; set; }
         public string[]  Lyric { get; set; }
 
+        public List<DeezerTrackData.TrackData> TopTracks = new List<DeezerTrackData.TrackData>();
+
         public TrackInfoDto()
         {
             Genres = new List<string>();
