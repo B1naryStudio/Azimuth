@@ -313,6 +313,13 @@ var SettingsManager = function (manager) {
                                     $trackInfoContainer.find('.trackLyric').append($p);
                                 }
                             }
+                            if (trackInfo.TopTracks.length != 0) {
+                                for (var i = 0; i < trackInfo.TopTracks.length; i++) {
+                                    var $p = $('<p>');
+                                    $p.text(trackInfo.TopTracks[i].artist.name + " - " + trackInfo.TopTracks[i].title);
+                                    $trackInfoContainer.find('.topTracks').append($p);
+                                }
+                            }
                         }
                     });
                 });
