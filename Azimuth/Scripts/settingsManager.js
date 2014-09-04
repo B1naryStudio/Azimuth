@@ -399,10 +399,10 @@ var SettingsManager = function (manager) {
     };
 
     this._setChangingPlaylistImage = function (playlist) {
-        var time = Math.floor((Math.random() * 40000) + 30000);
+        var time = Math.floor((Math.random() * 40000) + 25000);
 
         function timer() {
-            time = Math.floor((Math.random() * 40000) + 30000);
+            time = Math.floor((Math.random() * 40000) + 25000);
             self._setNewImage(playlist);
             setTimeout(timer, time);
         };
@@ -416,11 +416,14 @@ var SettingsManager = function (manager) {
             url: '/api/playlists/image/' + id,
             success: function (image) {
                 var $logo = playlist.children('.playlist-logo').children();
-                if (image != "") {
-                    $logo.attr("src", image)
-                } else {
-                    $logo.attr("src", "http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg");
-                }
+                $logo.fadeOut(500, function() {
+                    if (image != "") {
+                        $logo.attr("src", image);
+                    } else {
+                        $logo.attr("src", "http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg");
+                    }
+                });
+                $logo.fadeIn(500);
             }
         });
     };

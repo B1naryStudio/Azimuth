@@ -379,6 +379,9 @@ div.draggable-list{
 }
 
 .playlist-genres {
+    vertical-align: bottom;
+    height: 50%;
+    margin-top: 20px;
 }
 
 .playlist-logo {
@@ -387,10 +390,6 @@ div.draggable-list{
 }
 .playlist-title {
     padding-top: 5px;
-}
-
-.playlist-genres {
-    margin-top: 40px;
 }
 
 #friends-body {
