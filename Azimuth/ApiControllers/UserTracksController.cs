@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
+using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;
@@ -76,7 +77,10 @@ namespace Azimuth.ApiControllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index, string friendId)
         {
-            await _userTracksService.SetPlaylist(playlistData, provider, index, friendId);
+            if (playlistData.TrackIds.Any())
+            {
+                await _userTracksService.SetPlaylist(playlistData, provider, index, friendId);
+            }
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
