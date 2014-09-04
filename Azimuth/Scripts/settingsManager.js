@@ -420,21 +420,34 @@ var SettingsManager = function (manager) {
         });
     };
 
-    this._setChangingPlaylistImage = function(playlist) {
-        setInterval(function() {
-            var id = playlist.children('.playlistId').html();
-            $.ajax({
-                url: '/api/playlists/image/' + id,
-                success: function (image) {
-                    var $logo = playlist.children('.playlist-logo').children();
+    this._setChangingPlaylistImage = function (playlist) {
+        var time = Math.floor((Math.random() * 40000) + 25000);
+
+        function timer() {
+            time = Math.floor((Math.random() * 40000) + 25000);
+            self._setNewImage(playlist);
+            setTimeout(timer, time);
+        };
+
+        setTimeout(timer, time);
+    };
+
+    this._setNewImage = function (playlist) {
+        var id = playlist.children('.playlistId').html();
+        $.ajax({
+            url: '/api/playlists/image/' + id,
+            success: function (image) {
+                var $logo = playlist.children('.playlist-logo').children();
+                $logo.fadeOut(500, function() {
                     if (image != "") {
                         $logo.attr("src", image);
                     } else {
                         $logo.attr("src", "http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg");
                     }
-                }
-            });
-        }, 40000);
+                });
+                $logo.fadeIn(500);
+            }
+        });
     };
 };
 
@@ -555,6 +568,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
                         self.playlistsGlobal.push(playlist);
                         var tmpl = self.playlistTemplate.tmpl(playlist);
+                        self._setNewImage(tmpl);
                         self.$playlistsTable.append(tmpl);
                         self._setChangingPlaylistImage(tmpl);
                     }
@@ -573,6 +587,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
             for (var i = 0; i < playlists.length; i++) {
                 var tmpl = this.playlistTemplate.tmpl(playlists[i]);
                 self.$playlistsTable.append(tmpl);
+                self._setNewImage(tmpl);
                 self._setChangingPlaylistImage(tmpl);
             }
         } else {
