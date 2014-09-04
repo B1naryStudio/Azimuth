@@ -6,6 +6,7 @@ var SettingsManager = function (manager) {
     this.friendsOffset = 0;
     this.provider = "";
     this.playlistTracksGlobal = [];
+    this.topTracks = [];
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
@@ -28,6 +29,7 @@ var SettingsManager = function (manager) {
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
+
     this._getTracks = function (plId) {
         self.$playlistsTitle.text('platlist\'re loading');
         self.$playlistsLoadingSpinner.fadeIn('normal');
@@ -347,11 +349,14 @@ var SettingsManager = function (manager) {
                         data: {"infoForSearch" : tracks},
                         contentType: 'application/json; charset=utf-8',
                         success: function (data) {
+                            self.topTracks = [];
                             $(data).each(function() {
                                 if ((typeof (this.artist) != 'undefined') && (typeof (this.title) != 'undefined')) {
                                     $('.topTracks').append(this.artist + " - " + this.title + "<br>");
+                                    self.topTracks.push(this);
                                 }
                             });
+                            $('#listenTopBtn').attr('disabled', false);
                         }
                     });
                 }
@@ -709,5 +714,13 @@ SettingsManager.prototype.bindListeners = function () {
 
     $('#infoModal').on('hidden.bs.modal', function() {
         $('.modal-body').text('');
+        $('#listenTopBtn').attr('disabled', true);
+    });
+
+    $('#listenTopBtn').click(function () {
+        if (self.topTracks != null) {
+            $('#vkMusic-header-title').text('');
+            self.showTracks(self.topTracks);
+        }
     });
 };
