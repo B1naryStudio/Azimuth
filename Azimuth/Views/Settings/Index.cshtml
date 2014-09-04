@@ -100,6 +100,28 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Enter Playlist Name For Selected Tracks</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="playlistNameToCreate" placeholder="Enter Playlist Name" />
+                    <select class="form-control" id="newPlaylistAccessibility">
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="okPlaylistCreateModalBtn" data-dimiss="modal">OK</button>
+                    <button type="button" class="btn btn-default" id="cancelModalBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @section scripts
 {

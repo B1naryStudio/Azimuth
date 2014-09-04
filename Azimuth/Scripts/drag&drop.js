@@ -212,6 +212,8 @@
                     break;
                 case 'createplaylist':
                     createPlaylistAction = contextMenu[i].callback;
+                    object.children('#createplaylist').attr('data-toggle', 'modal');
+                    object.children('#createplaylist').attr('data-target', '#createPlaylistModal');
             }
 
             if (contextMenu[i].hasSubMenu == true) {
@@ -303,9 +305,13 @@
                             $currentItem.hide();
                             $currentItem.append($('.draggable-item-selected').clone());
                             if ($currentItem.children().length > 0) {
-                                createPlaylistAction($currentItem);
+                                $('#createPlaylistModal').modal({
+                                    show: true
+                                });
+                                $('#createPlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function () {
+                                    $("#playlistNameToCreate").focus();
+                                });
                             }
-                            $container.empty();
                     }
                 }
             }
@@ -355,7 +361,6 @@
                 var y = $(event.clientY)[0];
                 var x = $(event.clientX)[0];
 
-                //if (($(window).height() - ($contextMenuContainer.height() + y)) < $contextMenuContainer.height()) {
                 if (($contextMenuContainer.height() + y) > $(window).height()) {
                     y = y - $contextMenuContainer.height();
                 }

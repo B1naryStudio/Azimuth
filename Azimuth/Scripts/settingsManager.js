@@ -78,6 +78,27 @@ var SettingsManager = function (manager) {
         $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
     };
 
+    $('#okPlaylistCreateModalBtn').click(function () {
+
+        $('#createPlaylistModal').modal('hide');
+
+        $('#createPlaylistModal').on('hidden.bs.modal', function () {
+            $('.modal-body').text('');
+        });
+
+        var playlistName = $('#playlistNameToCreate').val();
+        var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+        $.ajax({
+            url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+            type: 'POST',
+            contentType: 'application/json',
+            async: false,
+            success: function (playlistId) {
+                self._saveTrackFromVkToPlaylist($('.draggable-item-selected'), -1, playlistId);
+            }
+        });
+    });
+
     this._toFormattedTime = function (input, roundSeconds) {
         if (roundSeconds) {
             input = Math.ceil(input);
@@ -134,12 +155,9 @@ var SettingsManager = function (manager) {
         var tracks = [];
         var friendId = $('.friend.active').children('.friend-id').text();
         $currentItem.children().toggleClass('vk-item', false);
-        $currentItem.children('.draggable-item-selected').each(function () {
+        $('.draggable-item-selected').each(function () {
             tracks.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
-        //if ($('.friend.active').length > 0) {
-        //    friendId = $('.friend.active').text();
-        //}
 
         $.ajax({
             url: '/api/usertracks?provider=' + provider + "&index=" + index + "&friendId=" + friendId,
@@ -195,21 +213,6 @@ var SettingsManager = function (manager) {
         self.audioManager.refreshTracks();
     };
 
-    this._createPlaylistAction = function ($currentItem) {
-        var playlist = prompt('Enter playlist name', "");
-        if (playlist != null) {
-            $.ajax({
-                url: '/api/playlists?name=' + playlist + '&accessibilty=Public',
-                type: 'POST',
-                contentType: 'application/json',
-                async: false,
-                success: function (playlistId) {
-                    self._saveTrackFromVkToPlaylist($currentItem, -1, playlistId);
-                }
-            });
-        }
-    };
-
     this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
         var tracksIds = [];
         $currentItem.children('.draggable-item-selected').each(function () {
@@ -227,7 +230,6 @@ var SettingsManager = function (manager) {
                     data: JSON.stringify(tracksIds),
                     contentType: 'application/json; charset=utf-8',
                     success: function () {
-                        //var playlistId = $('#playlistTracks').find('.playlistId').text();
                         $('#playlistTracks').children().remove();
                         self._getTracks(oldPlaylist);
 
