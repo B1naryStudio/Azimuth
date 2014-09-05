@@ -29,6 +29,11 @@ namespace Azimuth.Shared.Dto
             [JsonProperty(PropertyName = "type")]
             public string Type { get; set; }
 
+            public Artist()
+            {
+                TopTrackList = new List<TrackData>();
+            }
+
         }
             public class Datum
             {
@@ -44,6 +49,11 @@ namespace Azimuth.Shared.Dto
             {
                 [JsonProperty(PropertyName = "data")]
                 public List<Datum> Data { get; set; }
+
+                public Genres()
+                {
+                    Data = new List<Datum>();
+                }
             }
 
             public class Album
@@ -106,12 +116,22 @@ namespace Azimuth.Shared.Dto
             public string Type { get; set; }
             
             public List<TrackData> TopTracks { get; set; }
+
+            public TrackData()
+            {
+                TopTracks = new List<TrackData>();
+            }
         }
 
         public class Data
         {
             [JsonProperty(PropertyName = "data")]
             public List<TrackData> Datas { get; set; }
+
+            public Data()
+            {
+                Datas = new List<TrackData>();
+            }
         }
 
         public class Track

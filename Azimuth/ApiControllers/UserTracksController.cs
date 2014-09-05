@@ -40,9 +40,9 @@ namespace Azimuth.ApiControllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("tracksearch")]
-        public async Task<HttpResponseMessage> SearchTracksInVk(string provider, string infoForSearch)
+        public async Task<HttpResponseMessage> PostSearchinVk(string infoForSearch, string provider)
         {
             try
             {
