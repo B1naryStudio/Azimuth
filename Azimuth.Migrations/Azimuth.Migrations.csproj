@@ -58,6 +58,7 @@
     <Compile Include="Migrations\Migration_201408281315_AddTrackPositionColumn.cs" />
     <Compile Include="Migrations\Migration_201408291506_AddIdToAlbumListeners.cs" />
     <Compile Include="Migrations\Migration_201409010308_AddFollowers.cs" />
+    <Compile Include="Migrations\Migration_201409052047_AddSharing.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -68,6 +69,7 @@
     <Compile Include="Runner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

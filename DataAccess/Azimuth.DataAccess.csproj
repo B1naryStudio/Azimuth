@@ -75,6 +75,7 @@
     <Compile Include="Entities\Name.cs" />
     <Compile Include="Entities\Playlist.cs" />
     <Compile Include="Entities\PlaylistTrack.cs" />
+    <Compile Include="Entities\SharedPlaylist.cs" />
     <Compile Include="Entities\SocialNetwork.cs" />
     <Compile Include="Entities\Track.cs" />
     <Compile Include="Entities\UnauthorizedListeners.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Repositories\ArtistRepository.cs" />
     <Compile Include="Repositories\PlaylistRepository.cs" />
     <Compile Include="Repositories\PlaylistTrackRepository.cs" />
+    <Compile Include="Repositories\SharedPlaylistRepository.cs" />
     <Compile Include="Repositories\SocialNetworkRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
     <Compile Include="Repositories\UnauthorizedListenersRepository.cs" />
@@ -144,6 +146,7 @@
     <EmbeddedResource Include="Mappings\playlistlisteners.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Mappings\sharedplaylist.hbm.xml" />
     <Content Include="Mappings\unauthorizedusers.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
