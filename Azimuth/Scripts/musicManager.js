@@ -132,20 +132,32 @@ var SettingsManager = function (manager) {
         return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
     };
 
-    this._moveTrackToNewPosition = function ($currentItem, $draggableStub) {
-        var playlistId = $('.playlist.active').children('.playlistId').text();
-        var tracksIds = [];
+    this._moveTrackToNewPosition = function (playlist) {
+        var playlistId = $('#playlistTracks').children('.playlistId').text();
+        var $tracks = $(playlist).children('.tableRow');
+        var wholePlaylist = [];
+        for (var i = 0; i < $tracks.length; i++) {
+            if (!$($tracks[i]).hasClass('draggable-stub')) {
+                wholePlaylist.push({
+                    'trackId': $($tracks[i]).find('.trackId').text(),
+                    'trackPosition': i
+                });
+            }
+        }
 
-        $currentItem.children().each(function () {
-            tracksIds.push($(this).find('.trackId').text());
-        }).get();
+        // Realisation without rewriting whole list
+        //var playlistId = $('.playlist.active').children('.playlistId').text();
+        //var tracksIds = [];
+        //$currentItem.children().each(function () {
+        //    tracksIds.push($(this).find('.trackId').text());
+        //}).get();
+        //var index = $draggableStub.index();
 
-        var index = $draggableStub.index();
         $.ajax({
-            url: '/api/usertracks/put?playlistId=' + playlistId + "&newIndex=" + index,
+            url: '/api/usertracks/put?playlistId=' + playlistId,
             type: 'PUT',
             dataType: 'json',
-            data: JSON.stringify(tracksIds),
+            data: JSON.stringify(wholePlaylist),
             contentType: 'application/json; charset=utf-8'
         });
     };
@@ -155,6 +167,8 @@ var SettingsManager = function (manager) {
         elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
         $currentItem.children().detach('.tableRow');
         $currentItem.prepend(elems);
+
+        self._moveTrackToNewPosition($currentItem);
     };
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
@@ -515,6 +529,8 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
 
 SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
     var self = this;
+
+
 
     $('#playlistTracks').find('.track').remove();
     for (var i = 0; i < tracks.length; i++) {

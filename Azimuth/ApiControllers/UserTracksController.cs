@@ -126,6 +126,21 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpPut]
+        [Route("put")]
+        public HttpResponseMessage UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId)
+        {
+            try
+            {
+                _userTracksService.UpdateWholePlaylistTrackPositions(playlist, playlistId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("copy")]
         public HttpResponseMessage CopyTracksBetweenPlaylists(long playlistId, List<long> trackId)
