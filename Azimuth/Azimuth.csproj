@@ -281,8 +281,13 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ContextMenu.css" />
+    <Content Include="Content\Draggable.css" />
+    <Content Include="Content\Friends.css" />
     <Content Include="Content\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Playlist.css" />
     <Content Include="Content\Settings.css" />
+    <Content Include="Content\Track.css" />
     <Content Include="Content\UserProfile.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
