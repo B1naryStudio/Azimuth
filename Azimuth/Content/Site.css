@@ -403,10 +403,6 @@ div.draggable-list{
 }
 
 #vkMusic-header-spinner.spinner {
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    margin-top: 10%;
 }
 
 #friends-header.table-header {
@@ -415,29 +411,15 @@ div.draggable-list{
 
 .spinner {
     display: none;
-    background: url(../Images/spinner_loading_circle.gif) no-repeat;
-    background-size: contain;
-}
-
-#info-header-spinner.spinner {
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    margin-top: 10%;
 }
 
 #friends-header-spinner.spinner {
+    background: url(../Images/spinner_loading_circle.gif);
+    background-size: contain;
     float: left;
     width: 20px;
     height: 20px;
     margin-left: 10px;
-}
-
-#playlist-header-spinner.spinner {
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    margin-top: 20%;
 }
 
 #friends-container {

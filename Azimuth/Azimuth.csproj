@@ -282,6 +282,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Loading.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\UserProfile.css" />
     <Content Include="favicon.ico" />

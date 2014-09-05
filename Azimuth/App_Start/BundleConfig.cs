@@ -27,6 +27,7 @@ namespace Azimuth
                       "~/Content/site.css",
                       "~/Content/settings.css",
                       "~/Content/userprofile.css",
+                      "~/Content/Loading.css",
                       "~/Content/jquery.mCustomScrollbar.css"));
         }
     }
