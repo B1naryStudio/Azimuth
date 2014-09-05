@@ -225,7 +225,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MusicListController.cs" />
+    <Compile Include="Controllers\MusicController.cs" />
     <Compile Include="Controllers\PublicPlaylistsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -322,12 +322,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\myMusicManager.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\musicManager.js" />
     <Content Include="Scripts\settingsManager.js" />
     <Content Include="Scripts\sliderController.js" />
-    <Content Include="Scripts\work.with.playlist.js" />
+    <Content Include="Scripts\workWithMusic.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -349,7 +349,7 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\Settings\_UserTracksPartial.cshtml" />
-    <Content Include="Views\MusicList\Index.cshtml" />
+    <Content Include="Views\Music\Index.cshtml" />
     <Content Include="Views\PublicPlaylists\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\RunMigrator.cshtml" />

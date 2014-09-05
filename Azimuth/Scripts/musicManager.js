@@ -4,7 +4,8 @@ var SettingsManager = function (manager) {
     this.tracksGlobal = [];
     this.playlistsGlobal = [];
     this.friendsOffset = 0;
-    this.provider = "";
+    this.provider = "Vkontakte";
+    this.reloginUrl = window.location.pathname;
     this.playlistTracksGlobal = [];
     this.topTracks = null;
     this.topTracksVk = [];
@@ -582,15 +583,11 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
 SettingsManager.prototype.bindListeners = function () {
     var self = this;
 
+    self._getUserTracks(self.provider, self.reloginUrl);
+
     $(document).on('PlaylistAdded', function (playlist) { // TODO Remove event triggering on document object
         self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         self.$searchPlaylistInput.trigger('input');
-    });
-
-    $('.providerBtn').click(function (e) {
-        self.provider = $(e.target).data('provider');
-        var reloginUrl = $(e.target).data('reloginurl');
-        self._getUserTracks(self.provider, reloginUrl);
     });
 
     self.$getUserTracksBtn.click(function(e) {

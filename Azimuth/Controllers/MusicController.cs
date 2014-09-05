@@ -2,7 +2,7 @@
 
 namespace Azimuth.Controllers
 {
-    public class MusicListController : Controller
+    public class MusicController : Controller
     {
         public ActionResult Index()
         {
