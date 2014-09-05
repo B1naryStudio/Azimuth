@@ -147,7 +147,13 @@
                 } else {
 
                     if (!$currentItem.children().hasClass('vk-item') && $element.parent().attr('id') == 'playlistTracks' && !$('.draggable-stub').is(':hidden') && moveEnable) {
-                        moveTrackToNewPosition($currentItem, $draggableStub);
+
+                        $currentItem.children().insertAfter($draggableStub);
+                        $draggableStub.detach();
+                        moveTrackToNewPosition($rootElement.find('.draggable-list'));
+                        _clearContainer();
+                        moveEnable = false;
+                        return;
                     }
                     moveEnable = false;
 
@@ -176,9 +182,11 @@
                         }
                         $currentItem.trigger('OnDropped', [movingInfo, $draggableStub.parent().attr("name")]);
                         movingInfo.data.length = 0;
-                        $currentItem.children().insertAfter($draggableStub);
-                        $currentItem.trigger('AfterDropped', [movingInfo, $draggableStub.parent().attr("name")]);
-                        _clearContainer();
+                        if ($currentItem.children().length > 0) {
+                            $currentItem.children().insertAfter($draggableStub);
+                            $currentItem.trigger('AfterDropped', [movingInfo, $draggableStub.parent().attr("name")]);
+                            _clearContainer();
+                        }
                     }
                 }
             }
@@ -544,6 +552,9 @@
             if ($elem.closest('.draggable-list').find('.draggable-item').length === 0) {
                 return $elem.closest('.draggable-list');
             }
+
+            if ($elem.attr('id') == "playlistTracks")
+                return $($elem.children()[0]);
             return $elem.closest('.draggable-item:not(.dragging.draggable-stub)');
         }
 

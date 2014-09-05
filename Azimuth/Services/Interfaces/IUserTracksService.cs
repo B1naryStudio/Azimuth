@@ -17,8 +17,8 @@ namespace Azimuth.Services.Interfaces
         void PutTrackToPlaylist(int id, Track track);
         Task CopyTrackToAnotherPlaylist(long playlistId, List<long> trackIds);
         Task DeleteTracksFromPlaylist(long playlistId, List<long> trackIds);
-        //Task<List<VkTrackData.Track>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider);
         Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider);
+        void UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId);
 
     }
 }
