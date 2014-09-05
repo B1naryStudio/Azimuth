@@ -14,7 +14,10 @@ namespace Azimuth.DataAccess.Repositories
 
         public User GetFullUserData(long id)
         {
-            return _session.Query<User>().Fetch(x => x.Followers).FirstOrDefault(x => x.Id == id);
+            return _session.Query<User>()
+                .Fetch(x => x.Followers)
+                .Fetch(x => x.Following)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public void Remove(User user)

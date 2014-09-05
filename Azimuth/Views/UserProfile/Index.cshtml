@@ -19,6 +19,14 @@
                 <div class="user-listen-label">Listening</div>
             </li>
         </ul>
+        <div>
+            @Html.LabelFor(x => x.Followers)
+            @Html.DisplayFor(x => x.Followers)
+        </div>
+        <div>
+            @Html.LabelFor(x => x.Following)
+            @Html.DisplayFor(x => x.Following)
+        </div>
         @Html.Partial("_FollowUserPartial", Model)
     </div>
     <div id="user-info">
