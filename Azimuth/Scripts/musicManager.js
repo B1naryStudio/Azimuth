@@ -472,6 +472,7 @@ SettingsManager.prototype.showTracks = function (tracks) {
         }
     }
     self.audioManager.bindPlayBtnListeners();
+    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
 
 };
 
@@ -711,6 +712,7 @@ SettingsManager.prototype.bindListeners = function () {
     });
 
     $('#listenTopBtn').click(function () {
+        $('.modal-body').text('');
         if (self.topTracks != null) {
             $('#vkMusic-header-title').text('');
             
