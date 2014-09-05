@@ -487,9 +487,9 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         callbacks: {
             onTotalScroll: function () {
                 self.$friendsLoadingSpinner.fadeIn('normal');
-                var provider = $('.tab-pane.active').attr('id');
+                //var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
-                    url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+                    url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {
                         self.showFriends(friendsData, true);
                         self.friendsOffset += friendsData.length;
@@ -680,9 +680,9 @@ SettingsManager.prototype.bindListeners = function () {
         if (self.$friendsBody.is(':visible')) {
             self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
-            var provider = $('.tab-pane.active').attr('id');
+            //var provider = $('.tab-pane.active').attr('id');
             $.ajax({
-                url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+                url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                 async: true,
                 success: function (friends) {
                     self.showFriends(friends);
