@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
-using Azimuth.Shared.Dto;
 
 namespace Azimuth.Controllers
 {
@@ -15,20 +14,10 @@ namespace Azimuth.Controllers
         }
         //
         // GET: /UserProfile/
-        public ActionResult Index(int? id)
+        public ActionResult Index(long? id)
         {
-            UserDto data;
-            if (id == null)
-            {
-                var email = AzimuthIdentity.Current.UserCredential.Email;
-                data = _userService.GetUserInfo(email);
-            }
-            else
-            {
-                data = _userService.GetUserInfo((int)id);    
-            }
-            
-            return View(data);
+            var user = _userService.GetUserInfo(id ?? AzimuthIdentity.Current.UserCredential.Id);
+            return View(user);
         }
     }
 }

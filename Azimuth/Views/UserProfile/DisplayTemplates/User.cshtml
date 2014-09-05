@@ -1,0 +1,8 @@
+﻿@model Azimuth.DataAccess.Entities.User
+
+@{
+    Layout = null;
+}
+<div title="@Html.DisplayFor(modelItem => Model.Name)">
+    <a href="@Url.Action("Index", "UserProfile", new {id = @Model.Id})"><img src="@Model.Photo" width="25" height="25" /></a>
+</div>
