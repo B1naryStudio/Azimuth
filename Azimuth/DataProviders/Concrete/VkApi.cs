@@ -21,6 +21,7 @@ namespace Azimuth.DataProviders.Concrete
         private readonly IWebClient _webClient;
         private const string BaseUri = "https://api.vk.com/method/";
         private const int MaxCntTracksPerReq = 6000;
+        private const string PublicId = "76704311";
 
         public VkApi(IWebClient webClient)
         {
@@ -240,6 +241,14 @@ namespace Azimuth.DataProviders.Concrete
                 }
             }
             return searchedTracks;
+        }
+
+        public async Task<string> AddTrack(string id, string audioId, string accessToken)
+        {
+            string url = BaseUri + "audio.add?owner_id=" + id + "&audio_id=" + audioId + "&v=5.24&access_token=" +
+                         accessToken;
+            var createdAudioId = await _webClient.GetWebData(url);
+            return createdAudioId;
         }
     }
 }

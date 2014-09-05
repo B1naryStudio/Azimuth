@@ -731,7 +731,9 @@ SettingsManager.prototype.bindListeners = function () {
         $('.modal-body').text('');
         if (self.topTracks != null) {
             $('#vkMusic-header-title').text('');
-            
+            self.$vkMusicLoadingSpinner.show();
+            $('.vkMusicList').find('.track').remove();
+
             if (self.topTracks != null) {
                 var tracks = JSON.stringify({ trackdata: self.topTracks });
                 $.ajax({
@@ -748,6 +750,16 @@ SettingsManager.prototype.bindListeners = function () {
                             }
                         });
                         self.showTracks(self.topTracksVk);
+                        self.$vkMusicTable.makeDraggable({
+                            contextMenu: [
+                                { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
+                                { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
+                                { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
+                                { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction },
+                                { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
+                            ]
+                        });
+                        self.$vkMusicLoadingSpinner.hide();
                     }
                 });
             }

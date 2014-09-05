@@ -4,11 +4,10 @@
     <id name="Id" column="TrackId">
       <generator class="native"/>
     </id>
-    <property name="Lyrics" />
     <property name="Genre" />
     <property name="Duration" />
     <property name="Name" />
-    <property name="Url" />
+    <property name="ThirdPartId" />
     <many-to-one name="Album" column="AlbumId" />
     <set name="Playlists" table="PlaylistTracks" lazy="true" inverse="true" cascade="save-update">
       <key column="TrackId" />

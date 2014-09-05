@@ -152,7 +152,6 @@ namespace Azimuth.Infrastructure.Concrete
             tracksDto.Artist = track.Album.Artist.Name;
             tracksDto.Duration = track.Duration;
             tracksDto.Genre = track.Genre;
-            tracksDto.Url = track.Url;
         }
 
         private static void UserMap(User user, UserDto userDto)
