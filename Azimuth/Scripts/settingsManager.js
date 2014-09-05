@@ -26,15 +26,14 @@ var SettingsManager = function (manager) {
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
     this.$getFriendInfoBtn = $('#get-friends-info-btn');
     this.$friendsLoadingSpinner = $('#friends-header-spinner');
+    this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
 
     this._getTracks = function (plId) {
-        self.$playlistsTitle.text('platlist\'re loading');
         self.$playlistsLoadingSpinner.fadeIn('normal');
-        console.log(self.playlistsGlobal);
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
             playlistId = plId;
@@ -42,8 +41,8 @@ var SettingsManager = function (manager) {
         $.ajax({
             url: "/api/usertracks?playlistId=" + playlistId, // TODO replace with class playlistID
             type: 'GET',
-            async: false,
             success: function (tracksData) {
+                self.$playlistsLoadingSpinner.hide();
                 for (var i = 0; i < tracksData.length; i++) {
                     tracksData[i].Duration = Math.floor(tracksData[i].Duration / 60) + ":" + (tracksData[i].Duration % 60 < 10 ? "0" + tracksData[i].Duration % 60 : tracksData[i].Duration % 60);
                 }
@@ -59,19 +58,14 @@ var SettingsManager = function (manager) {
                     onMoveTrackToNewPosition: self._moveTrackToNewPosition
                 });
                 self.$searchPlaylistInput.val('');
-                console.log(playlistId);
-                var temp = self.playlistsGlobal.filter(function(index) {
-                    console.log(index);
-
-                    return index.Id == playlistId;
-                })[0].Name;
-                console.log(temp);
-                self.$playlistsTitle.text(temp);
-                self.$playlistsLoadingSpinner.fadeOut('normal');
             }
         });
         //}
         //$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
+        var temp = self.playlistsGlobal.filter(function (index) {
+            return index.Id == playlistId;
+        })[0].Name;
+        self.$playlistsTitle.text(temp);
         $('#playlistsTable').hide();
         $('#backToPlaylistsBtn').show();
         $('#playlistTracks').show();
@@ -271,8 +265,9 @@ var SettingsManager = function (manager) {
 
     this._getUserTracks = function (provider, reloginUrl) {
         
-        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        self.$vkMusicTitle.text('Loading...');
         self.$vkMusicLoadingSpinner.fadeIn('normal');
+        $('.vkMusicList').hide();
         $.ajax({
             url: '/api/usertracks?provider=' + provider,
             success: function (tracks) {
@@ -304,10 +299,12 @@ var SettingsManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
                 self.$vkMusicLoadingSpinner.hide();
+                $('.vkMusicList').show();
             },
             error: function () {
                 $('#vkMusicTable > .tableTitle').text("Error has occurred");
                 self.$vkMusicLoadingSpinner.hide();
+                $('.vkMusicList').show();
             }
         });
     };
@@ -316,10 +313,12 @@ var SettingsManager = function (manager) {
         var $self = $(this);
         var author = $self.parent().children('.track-description').children('.track-info');
         var trackName = $self.parent().children('.track-description').children('.track-title');
+        self.$infoLoadingSpinner.show();
         $.ajax({
             url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
             async: true,
-            success: function(trackInfo) {
+            success: function (trackInfo) {
+                self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
                 var $trackInfoContainer = $('.modal-body');
@@ -348,8 +347,9 @@ var SettingsManager = function (manager) {
         $currentItem.toggleClass('active', true);
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
-        self.$vkMusicTitle.text('Pls wait, tracks\'re loading');
+        self.$vkMusicTitle.text('Loading...');
         self.$vkMusicLoadingSpinner.fadeIn('normal');
+        $('.vkMusicList').hide();
         $.ajax({
             url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
             success: function (tracks) {
@@ -380,7 +380,7 @@ var SettingsManager = function (manager) {
                 }
                 self.audioManager.bindPlayBtnListeners();
                 self.$vkMusicLoadingSpinner.hide();
-
+                $('.vkMusicList').show();
                 $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
             },
             error: function (thrownException) {
@@ -396,6 +396,7 @@ var SettingsManager = function (manager) {
                 });
                 $accessDenied.show();
                 self.$vkMusicLoadingSpinner.hide();
+                $('.vkMusicList').show();
                 var timerId = null;
                 clearTimeout(timerId);
                 timerId = setTimeout(function () {
@@ -532,14 +533,13 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     //self.$playlistsTable.find(".tableHeader").remove();
     self.$playlistsTitle.text('My playlists');
-    self.$playlistsLoadingSpinner.fadeIn("normal");
+    self.$playlistsLoadingSpinner.show();
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
         $.ajax({
             url: '/api/playlists',
             success: function (playlistsData) {
                 console.log(playlistsData.Message);
                 if (typeof playlistsData.Message === 'undefined') {
-                    
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     self.playlists = playlistsData;
@@ -562,7 +562,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
-                self.$playlistsLoadingSpinner.fadeOut("normal");
+                self.$playlistsLoadingSpinner.hide();
                 $('.accordion .tableRow').on("click", self._getTracks);
             }
         });
@@ -575,11 +575,8 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                 self._setNewImage(tmpl);
                 self._setChangingPlaylistImage(tmpl);
             }
-        } else {
-            self.$createNewPlaylistBtn.show();
-            self.$createNewPlaylistBtn.text(this.stringForCreateBtn + this.$searchPlaylistInput.val());
         }
-        self.$playlistsLoadingSpinner.fadeOut("normal");
+        self.$playlistsLoadingSpinner.hide();
     }
 };
 
@@ -625,10 +622,9 @@ SettingsManager.prototype.bindListeners = function () {
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || isGenre);
             });
 
-            if (foundedPlaylist.length == 0) {
+            if (foundedPlaylist.length == 0 && searchParam != "") {
                 self.$createNewPlaylistLbl.show();
                 if (e.keyCode == 13) {
-                    console.log(e);
                     self._createPlaylist();
                     self.playlistsGlobal = [];
                     $(this).val("");

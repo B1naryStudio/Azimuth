@@ -14,16 +14,13 @@
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <div id ="playlist-header" class="table-header">
                 <div id="playlist-header-title" class="table-title"></div>
-                <div id="playlist-header-spinner" class="spinner"></div>
-                
             </div>
             <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
+            <div id="playlist-header-spinner" class="spinner"></div>
             <div class="list accordion" id="playlistsTable">
 
-                
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
-
             
             <div id="playlistTracks" style="display: none;" class="draggable-list"></div>
         </div>
@@ -92,6 +89,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Track info</h4>
                 </div>
+                <div id="info-header-spinner" class="spinner"></div>
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">

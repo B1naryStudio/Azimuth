@@ -395,20 +395,49 @@ div.draggable-list{
 #friends-body {
     position: absolute;
     width: 300px;
-    min-height: 80%;
+    min-height: 83%;
     z-index: 800;
     border: 2px solid black;
     margin-left: 64%;
     background: lightgrey;
 }
 
+#vkMusic-header-spinner.spinner {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-top: 10%;
+}
+
+#friends-header.table-header {
+    margin-bottom: 5px;
+}
+
 .spinner {
-    float: left;
     display: none;
-    background: url(../Images/spinner_loading.gif) no-repeat;
+    background: url(../Images/spinner_loading_circle.gif) no-repeat;
     background-size: contain;
+}
+
+#info-header-spinner.spinner {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-top: 10%;
+}
+
+#friends-header-spinner.spinner {
+    float: left;
     width: 20px;
     height: 20px;
+    margin-left: 10px;
+}
+
+#playlist-header-spinner.spinner {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    margin-top: 20%;
 }
 
 #friends-container {
@@ -416,7 +445,7 @@ div.draggable-list{
     width: 300px;
     min-height: 50%;
     z-index: 1000;
-    height: 95%;
+    height: 94%;
 }
 
 div.friend {
