@@ -8,289 +8,41 @@
 }
 
 <div>
-    <div id="mainRow" class="row">
-        <div id="playlists" class="stuck draggable">
-            <h3>Playlists</h3>
-            <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
-            <div id ="playlist-header" class="table-header">
-                <div id="playlist-header-title" class="table-title"></div>
-            </div>
-            <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
-            <div id="playlist-header-spinner" class="spinner"></div>
-            <div class="list accordion" id="playlistsTable">
+    <div class="row" style="margin-left: 10%; width: 80%; height: 90%;">
+        <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
+            <p id="error"> Your time has expired, please login again. </p>
+            @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+        </div>
+        <div class="tabbable">
+            <ul class="nav nav-tabs" style="width: 90%">
+                <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
+                @foreach (var sn in Model.ConnectedNetworks)
+                {
+                    <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
+                }
+            </ul>
 
-            </div>
-            <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
-            
-            <div id="playlistTracks" style="display: none;" class="draggable-list"></div>
-        </div>
-        <div id="separator" class="stuck">
-            <div id="buttons">
-                <img class="btn btn-primary" id="prevTrackBtn" src="~/Images/media_prev.png" />
-                <div class="spacer"></div>
-                <span id="playTrackBtn" class="btn btn-primary"></span>
-                <div class="spacer"></div>
-                <img class="btn btn-primary" id="nextTrackBtn" src="~/Images/media_next.png" />
-            </div>
-            <span id="volumeImg"></span>
-            <div id="volumeSlider"></div>
-        </div>
-        <div id="SN" class="stuck">
-            <div id="friends-body" style="display: none">
-                <div id="friends-header" class="table-header">
-                    <div id="friends-header-title" class="table-title">Friends</div>
-                    <div id="friends-header-spinner" class="spinner"></div>
-                </div>
-                <div id="friends-container"></div>
-            </div>
-            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
-                <p id="error"> Your time has expired, please login again. </p>
-                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
-            </div>
-            
-            <h3>Tracks</h3>
-            <div class="tabbable">
-                <ul class="nav nav-tabs" style="width: 90%">
-                    <li class="active"><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
-                    @foreach (var sn in Model.ConnectedNetworks)
+            <div class="tab-content" style="margin-top: 10px">
+                <div class="tab-pane fade active in" id="user-accounts">
+                    @foreach (var sn in Model.AvailableNetworks)
                     {
-                        <li><a href="#@sn.Name" data-toggle="tab" data-provider="@sn.Name" data-reloginurl="@Url.Action("ConnectAccount", "Account", new { provider = @sn.Name, returnUrl = @Url.Action("Index", "Settings") })" class="providerBtn">@sn.Name</a></li>
+                        @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large", @style="margin-left: 5px"})
                     }
-                </ul>
-
-                <div class="tab-content" style="margin-top: 10px">
-                    <div class="tab-pane fade active in" id="user-accounts">
-                        @foreach (var sn in Model.AvailableNetworks)
+                </div>
+                @foreach (var sn in Model.ConnectedNetworks)
+                {
+                    <div class="tab-pane fade" id="@sn.Name">
+                        @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
                         {
-                            @Html.ActionLink(sn.Name, "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-primary btn-large", @style="margin-left: 5px"})
-                        }
+                            @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                        }            
                     </div>
-                    @foreach (var sn in Model.ConnectedNetworks)
-                    {
-                        <div class="tab-pane fade" id="@sn.Name">
-                            @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
-                            {
-                                @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
-                            }            
-                            @Html.Partial("_UserTracksPartial", new { provider = sn.Name })
-                        </div>
-                    }
-                </div>
+                }
             </div>
         </div>
     </div>
-    <div class="itemsContainer tableRow" id="itemsContainer" ></div>
-    <div class="trackInfoContainer" id="trackInfoContainer"></div>
-
-    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Track info</h4>
-                </div>
-                <div id="info-header-spinner" class="spinner"></div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="listenTopBtn" data-dismiss="modal" disabled>Listen top tracks</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Enter Playlist Name For Selected Tracks</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="playlistNameToCreate" placeholder="Enter Playlist Name" />
-                    <select class="form-control" id="newPlaylistAccessibility">
-                        <option value="Public">Public</option>
-                        <option value="Private">Private</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="okPlaylistCreateModalBtn" data-dimiss="modal">OK</button>
-                    <button type="button" class="btn btn-default" id="cancelModalBtn" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
-    <script type="text/javascript" src="../../Scripts/settingsManager.js"></script>
-    <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
-    <script type="text/javascript" src="../../Scripts/work.with.playlist.js"></script>
-    <script type="" src="../../Scripts/drag&drop.js"></script>
-    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="../../Scripts/sliderController.js"></script>
-
-    <script id="trackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item track vk-item">
-            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description" data-title="${artist} ${title}">
-                <div class="track-info">${artist}</div>
-                <div class="track-title nowrap">${title}</div>
-            </div>
-
-            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
-            <div class="track-duration">${duration}</div>
-            <div class="track-remaining" style="display: none"></div>
-            <div style="display: none" class="track-url">${url}</div>
-            <div style="display: none" class="trackId">${id}</div>
-        </div>
-    </script>
-
-    <script id="playlistTrackTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow draggable-item track">
-            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description" data-title="${Artist} ${Name}">
-                <div class="track-info">${Artist}</div>
-                <div class="track-title nowrap" style="text-overflow: ellipsis">${Name}</div>
-            </div>
-            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
-            <div class="track-duration nowrap">${Duration}</div>
-            <div class="track-remaining" style="display: none"></div>
-            <div style="display: none" class="track-url">${Url}</div>
-            <div style="display: none" class="trackId">${Id}</div>
-        </div>
-    </script>
-    
-    <script id="friendsTemplate" type="text/x-jQuery-tmpl">
-        <div class="friend">
-            <div class="friend-photo">
-                <img src="${photo_100}" width="100" height="100" />
-            </div>
-            <div class="friend-initials">
-                <span>${last_name}</span>
-                <span>${first_name}</span>
-            </div>
-            <div class="friend-bdate">Birthdate: ${bdate}</div>
-            <div сlass="friend-inhabitation">
-                <span>${city}</span>
-                <span>${country}</span>
-            </div>
-            <div style="display: none" class="friend-id">${id}</div>
-        </div> 
-    </script>
-
-    <script id="playlistTemplate" type="text/x-jQuery-tmpl">
-        <div class="tableRow playlist">
-            <div class="playlist-logo">
-                <img src="http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg" width="100" height="100" />
-            </div>
-            <div class="playlist-title">${Name}</div>
-            <div class="playlist-info">
-                <span>Duration: ${Duration}</span>
-                <span>Songs: ${ItemsCount}</span>
-            </div>
-            <div class="playlist-genres">
-                <span class="label label-danger">${Genres[0]}</span>
-                <span class="label label-warning">${Genres[1]}</span>
-                <span class="label label-info">${Genres[2]}</span>
-                <span class="label label-success">${Genres[3]}</span>
-                <span class="label label-default">${Genres[4]}</span>
-            </div>
-            <span style="display: none" class="playlistId">${Id}</span>
-        </div>
-        <div id="playlistTracksTable" class="draggable-list" style="display: none"></div>
-    </script>
-    
-    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
-        <div class="tableRow">
-            <div id="${id}" class="contextMenuActionName">${name}</div>
-            <div class="contextMenuExpander"></div>
-        </div>
-    </script>
-    
-    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
-        <div class="tableRow">
-            <div class="contextMenuActionName">${name}</div>
-            <span class="playlistId" style="display: none">${id}</span>
-        </div>
-    </script>
-    
-    <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
-        <div id="trackInfo">
-            <div class="tableRow" id="artistData">
-                <div class="descriptionPhoto">
-                    {{if ArtistImage != null}}
-                    <img src=${ArtistImage}>
-                    {{/if}}
-                </div>
-                <div class="infoDescription">
-                    <div class="trackTitle">
-                        {{if Title != null}}
-                        Title: <a href=${TrackLastfmUrl}>${Title}</a>
-                        {{/if}}
-                    </div>
-                    <div class="Artist">Artist:
-                        {{if Artist != null}}
-                        <a href=${ArtistLastfmUrl}>${Artist}</a> 
-                        {{/if}}
-                    </div>
-                    {{if ArtistFans != 0}}
-                    <div>Fans count: ${ArtistFans}</div> 
-                    {{/if}}
-                   
-                </div>
-            </div>
-            <div class="tableRow" id="albumData">
-                {{if AlbumCover != null}}
-                <div class="descriptionPhoto"><img src=${AlbumCover}></div>
-                {{/if}}
-                <div class="infoDescription">
-                    {{if AlbumTitle != null}}
-                    <div>Album: <a href="${AlbumLastfmUrl}">${AlbumTitle}</a></div>
-                    {{/if}}
-                    {{if AlbumFans != 0}}
-                    <div>Fans count: ${AlbumFans}</div>
-                    {{/if}}
-                    {{if AlbumRelease != null}}
-                    <div>Year: ${AlbumRelease}</div>
-                    {{/if}}
-                </div>
-            </div>
-            {{if Lyric!= null}}
-            <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapseLyrics">
-                            Lyrics
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseLyrics" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="trackLyric"></div>
-                    </div>
-                </div>
-            </div>
-            {{/if}}
-            
-            {{if Summary != null}}
-            <div class="tableRow panel panel-primary" id="summaryData" style="display: block">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapseSummary">
-                            Summary
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseSummary" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="trackSummary"></div>
-                    </div>
-                </div>
-            </div>
-            {{/if}}
-        </div>
-    </script>
 }

@@ -9,7 +9,7 @@ namespace Azimuth.Controllers
         {
             if (AzimuthIdentity.Current != null && AzimuthIdentity.Current.IsAuthenticated)
             {
-                return RedirectToAction("Index", "MusicList");
+                return RedirectToAction("Index", "Music");
             }
             else
             {

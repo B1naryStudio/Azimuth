@@ -4,7 +4,8 @@ var SettingsManager = function (manager) {
     this.tracksGlobal = [];
     this.playlistsGlobal = [];
     this.friendsOffset = 0;
-    this.provider = "";
+    this.provider = "Vkontakte";
+    this.reloginUrl = window.location.pathname;
     this.playlistTracksGlobal = [];
     this.topTracks = null;
     this.topTracksVk = [];
@@ -486,9 +487,9 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
         callbacks: {
             onTotalScroll: function () {
                 self.$friendsLoadingSpinner.fadeIn('normal');
-                var provider = $('.tab-pane.active').attr('id');
+                //var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
-                    url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+                    url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {
                         self.showFriends(friendsData, true);
                         self.friendsOffset += friendsData.length;
@@ -582,15 +583,11 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
 SettingsManager.prototype.bindListeners = function () {
     var self = this;
 
+    self._getUserTracks(self.provider, self.reloginUrl);
+
     $(document).on('PlaylistAdded', function (playlist) { // TODO Remove event triggering on document object
         self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         self.$searchPlaylistInput.trigger('input');
-    });
-
-    $('.providerBtn').click(function (e) {
-        self.provider = $(e.target).data('provider');
-        var reloginUrl = $(e.target).data('reloginurl');
-        self._getUserTracks(self.provider, reloginUrl);
     });
 
     self.$getUserTracksBtn.click(function(e) {
@@ -683,9 +680,9 @@ SettingsManager.prototype.bindListeners = function () {
         if (self.$friendsBody.is(':visible')) {
             self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
-            var provider = $('.tab-pane.active').attr('id');
+            //var provider = $('.tab-pane.active').attr('id');
             $.ajax({
-                url: '/api/user/friends/' + provider + "?offset=" + self.friendsOffset + "&count=10",
+                url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                 async: true,
                 success: function (friends) {
                     self.showFriends(friends);
