@@ -402,51 +402,39 @@ namespace Azimuth.DataGenerator
             {
                 new Track
                 {
-                    Lyrics = "First Track LA LA LA",
                     Duration = "10",
                     Genre = "Pop",
                     Name = "FirstTrack",
-                    Url = "cs.first.mp3"
                 },
                 new Track
                 {
-                    Lyrics = "Second Track LA LA LA",
                     Duration = "20",
                     Genre = "Rock",
                     Name = "SecondTrack",
-                    Url = "cs.second.mp3"
                 },
                 new Track
                 {
-                    Lyrics = "Third Track LA LA LA",
                     Duration = "30",
                     Genre = "Jazz",
                     Name = "ThirdTrack",
-                    Url = "cs.third.mp3"
                 },
                 new Track
                 {
-                    Lyrics = "Fourth Track LA LA LA",
                     Duration = "40",
                     Genre = "Blues",
                     Name = "FourthTrack",
-                    Url = "cs.fourth.mp3"
                 },
                 new Track
                 {
-                    Lyrics = "Fifth Track Lya lya",
                     Duration = "40",
                     Genre = "Pop",
                     Name = "Fifth",
-                    Url = "cs.fifth.mp3"
                 },
                 new Track
                 {
-                    Lyrics = "Sixth Track Lya lya",
                     Duration = "40",
                     Genre = "Rock",
                     Name = "Sixth",
-                    Url = "cs.sixth.mp3"
                 }
 
             };

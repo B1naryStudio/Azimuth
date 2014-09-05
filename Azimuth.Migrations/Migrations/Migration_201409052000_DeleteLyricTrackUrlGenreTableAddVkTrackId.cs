@@ -10,16 +10,23 @@ namespace Azimuth.Migrations
         {
             Delete.Column("Lyrics").FromTable("Tracks");
             Delete.Column("Url").FromTable("Tracks");
-            Delete.Column("Genre").FromTable("Tracks");
-            Alter.Table("Tracks").AddColumn("ThirdPartId").AsString().NotNullable().WithDefaultValue("");
+            Alter.Table("Tracks").AddColumn("ThirdPartId").AsString().NotNullable();
+            Delete.Table("Genres");
         }
 
         public override void Down()
         {
             Alter.Table("Tracks").AddColumn("Lyrics").AsString(10000).WithDefaultValue("");
-            Alter.Table("Tracks").AddColumn("Url").AsString().WithDefaultValue("");
-            Alter.Table("Tracks").AddColumn("Genre").AsString().WithDefaultValue("");
+            Alter.Table("Tracks").AddColumn("Url").AsString();
             Delete.Column("ThirdPartId").FromTable("Tracks");
+            Create.Table("Genres")
+                .WithColumn("GenreId")
+                .AsInt64()
+                .NotNullable()
+                .PrimaryKey("GenreId")
+                .WithColumn("Name")
+                .AsString()
+                .NotNullable();
         }
     }
 }

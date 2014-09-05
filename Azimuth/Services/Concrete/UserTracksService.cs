@@ -121,8 +121,6 @@ namespace Azimuth.Services.Concrete
                         Id = s.Identifier.Track.Id,
                         Name = s.Identifier.Track.Name,
                         Duration = s.Identifier.Track.Duration,
-                        Genre = s.Identifier.Track.Genre,
-                        Url = s.Identifier.Track.Url,
                         Album = s.Identifier.Track.Album.Name,
                         Artist = s.Identifier.Track.Album.Artist.Name
                     }).ToList();
@@ -146,8 +144,6 @@ namespace Azimuth.Services.Concrete
                         {
                             Name = track.Name,
                             Duration = track.Duration,
-                            Genre = track.Genre,
-                            Url = track.Url,
                             Album = track.Album.Name,
                             Artist = track.Album.Artist.Name
                         }).ToList();
@@ -333,9 +329,9 @@ namespace Azimuth.Services.Concrete
                             //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
                             //            socialNetworkData.AccessToken),
                             Name = trackData.Title,
-                            Url = trackData.Url,
-                            Genre = trackData.GenreId.ToString(),
-                            Album = album
+                            Album = album,
+                            ThirdPartId = Convert.ToString(trackData.OwnerId),
+                            Genre = trackData.GenreId.ToString()
                         };
 
                         track.Playlists.Add(playlist);
