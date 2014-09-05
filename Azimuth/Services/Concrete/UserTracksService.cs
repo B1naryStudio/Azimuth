@@ -206,6 +206,22 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        public void UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId)
+        {
+            using (_unitOfWork)
+            {
+                var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+
+                playlist.ForEach(item =>
+                {
+                    pt.Where(track => track.Identifier.Track.Id == item.TrackId)
+                        .Select(pos => pos.TrackPosition = item.TrackPosition).ToList();
+                });
+                
+                _unitOfWork.Commit();
+            }
+        }
+
         public void MoveTrackBetweenPlaylists(long playlistId, long trackId)
         {
             using (_unitOfWork)
