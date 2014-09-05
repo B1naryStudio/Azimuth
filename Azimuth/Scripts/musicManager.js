@@ -54,7 +54,9 @@ var SettingsManager = function (manager) {
 						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
 						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._copyTrackToPlaylistAction },
                         { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true, "callback": self._moveTracksBetweenPlaylistsAction },
-						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true, "callback": self._removeSelectedTracksAction }
+						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true, "callback": self._removeSelectedTracksAction },
+                        { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
+
                     ],
                     onMoveTrackToNewPosition: self._moveTrackToNewPosition
                 });
@@ -146,6 +148,13 @@ var SettingsManager = function (manager) {
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8'
         });
+    };
+
+    this._shuffleTracksAction = function ($currentItem) {
+        var elems = $currentItem.children('.tableRow');
+        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+        $currentItem.children().detach('.tableRow');
+        $currentItem.prepend(elems);
     };
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
@@ -287,7 +296,8 @@ var SettingsManager = function (manager) {
                             { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
                             { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
                             { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction },
+                            { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
                         ]
                     });
                 } else {

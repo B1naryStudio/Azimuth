@@ -17,6 +17,7 @@
         var hideAction = null;
         var removeAction = null;
         var saveVkTrackToPlaylist = null;
+        var shuffleTracks = null;
         // Containers and pointers for working with drag items
         var $currentItem = null;
         //var $draggableStub = $('#draggableStub');
@@ -214,6 +215,9 @@
                     createPlaylistAction = contextMenu[i].callback;
                     object.children('#createplaylist').attr('data-toggle', 'modal');
                     object.children('#createplaylist').attr('data-target', '#createPlaylistModal');
+                    break;
+                case 'trackshuffle':
+                    shuffleTracks = contextMenu[i].callback;
             }
 
             if (contextMenu[i].hasSubMenu == true) {
@@ -312,6 +316,9 @@
                                     $("#playlistNameToCreate").focus();
                                 });
                             }
+                            break;
+                        case 'trackshuffle':
+                            shuffleTracks($rootElement.find('.draggable-list'));
                     }
                 }
             }
