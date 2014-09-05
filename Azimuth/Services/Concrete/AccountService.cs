@@ -149,6 +149,7 @@ namespace Azimuth.Services.Concrete
                                 userSn.UserName = (user.Name.FirstName ??
                                     String.Empty) + ((user.Name.LastName != null) ? (" " + user.Name.LastName) : String.Empty);
                             }
+                            user.Id = userSn.User.Id;
                         }
                     }
                     else
@@ -214,6 +215,7 @@ namespace Azimuth.Services.Concrete
         {
             identity.AddClaim(new Claim(ClaimTypes.Name, userInfo.Name.FirstName + " " + userInfo.Name.LastName));
             identity.AddClaim(new Claim(AzimuthClaims.PHOTO_BIG, userInfo.Photo));
+            identity.AddClaim(new Claim(AzimuthClaims.ID, userInfo.Id.ToString()));
             identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider",
                 identity.UserCredential.SocialNetworkName, Rights.PossessProperty));
 

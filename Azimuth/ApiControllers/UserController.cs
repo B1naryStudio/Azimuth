@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -48,6 +49,24 @@ namespace Azimuth.ApiControllers
         {
             var data = await _userService.GetFriendsTracks(provider, friendId);
             return Request.CreateResponse(HttpStatusCode.OK, data);
+        }
+
+        [HttpPut]
+        [Route("follow")]
+        public HttpResponseMessage Follow(long followerId)
+        {
+            var updatedUser = _userService.FollowPerson(followerId);
+            var userFollowers = updatedUser.Followers.Select(x => x.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, userFollowers);
+        }
+
+        [HttpPut]
+        [Route("unfollow")]
+        public HttpResponseMessage Unfollow(long followerId)
+        {
+            var updatedUser = _userService.UnfollowPerson(followerId);
+            var userFollowers = updatedUser.Followers.Select(x => x.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, userFollowers);
         }
     }
 }

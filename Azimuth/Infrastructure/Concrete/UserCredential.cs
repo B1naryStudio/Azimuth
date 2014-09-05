@@ -19,5 +19,7 @@
         public string Email { get; set; }
 
         public string PhotoBig { get; set; }
+
+        public long Id { get; set; }
     }
 }
