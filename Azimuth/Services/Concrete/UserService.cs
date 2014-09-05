@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -21,7 +22,6 @@ namespace Azimuth.Services.Concrete
         public UserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
         }
         public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count)
@@ -64,30 +64,34 @@ namespace Azimuth.Services.Concrete
             return await _socialNetworkApi.GetTracks(friendId, socialNetworkData.AccessToken);
         }
 
-        public UserDto GetUserInfo(int id)
+        public User GetUserInfo(long id)
         {
-            var userDto = new UserDto();
             using (_unitOfWork)
             {
-                var user = _userRepository.GetOne(u => u.Id == id);
-                Mapper.Map(user, userDto);
-
+                var user = _userRepository.GetFullUserData(id);
                 _unitOfWork.Commit();
+                return user;
             }
-            return userDto;
         }
 
-        public UserDto GetUserInfo(string email)
+        public User GetUserInfo(string email)
         {
-            var userDto = new UserDto();
             using (_unitOfWork)
             {
                 var user = _userRepository.GetOne(u => u.Email == email);
-                Mapper.Map(user, userDto);
-
                 _unitOfWork.Commit();
+                return user;
             }
-            return userDto;
+        }
+
+        public User FollowPerson(long followerId)
+        {
+            return FollowOperation(followerId, true);
+        }
+
+        public User UnfollowPerson(long followerId)
+        {
+            return FollowOperation(followerId, false);
         }
 
         private UserSocialNetwork GetSocialNetworkData(string provider)
@@ -97,6 +101,30 @@ namespace Azimuth.Services.Concrete
                 s =>
                     (s.SocialNetwork.Name == provider) &&
                     (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
+        }
+
+        private User FollowOperation(long followerId, bool isFollow)
+        {
+            using (_unitOfWork)
+            {
+                var user = _userRepository.GetFullUserData(followerId);
+                var loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                if (user == null || loggedUser == null)
+                {
+                    throw new EndUserException("Something wrong during unfollowing operation.");
+                }
+                if (isFollow)
+                {
+                    user.Followers.Add(loggedUser);
+                }
+                else
+                {
+                    user.Followers.Remove(loggedUser);
+                }
+                
+                _unitOfWork.Commit();
+                return user;
+            }
         }
     }
 }

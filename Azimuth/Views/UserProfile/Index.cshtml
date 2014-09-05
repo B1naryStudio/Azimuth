@@ -1,11 +1,9 @@
-﻿@model Azimuth.Shared.Dto.UserDto
-
-@using Azimuth.Infrastructure.Concrete
+﻿@model Azimuth.DataAccess.Entities.User
 @{
     ViewBag.Title = "User profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="user-info-container">
+<div class="container">
     <div id="user-logo">
         <div class="user-photo">
             <img src="@Model.Photo" width="220" height="300"/>
@@ -20,24 +18,33 @@
                 <div class="user-listen-count">2</div>
                 <div class="user-listen-label">Listening</div>
             </li>
-        </ul>    
+        </ul>
+        <div>
+            @Html.LabelFor(x => x.Followers)
+            @Html.DisplayFor(x => x.Followers)
+        </div>
+        <div>
+            @Html.LabelFor(x => x.Following)
+            @Html.DisplayFor(x => x.Following)
+        </div>
+        @Html.Partial("_FollowUserPartial", Model)
     </div>
     <div id="user-info">
         <div class="user-initials">
             <span class="info-label">Full name:</span>
-            <span>@Model.LastName</span>
-            <span>@Model.FirstName</span>
+            <span>@Model.Name.FirstName</span>
+            <span>@Model.Name.LastName</span>
         </div>
         <div class="user-gender">
             <span class="info-label">Gender:</span><span>@Model.Gender</span>
         </div>
         <div class="user-birthdate">
-            <span>Birthdate:</span><span>@Model.Birthdate</span>
+            <span>Birthdate:</span><span>@Model.Birthday</span>
         </div>
         <div class="user-location">
             <span class="info-label">Location:</span>
-            <span>@Model.City</span>,
-            <span>@Model.Country</span>
+            <span>@Model.Location.City</span>,
+            <span>@Model.Location.Country</span>
         </div>
         <div class="user-email">
             <span>Email:</span>
@@ -45,16 +52,3 @@
         </div>
     </div>
 </div>
-@section scripts
-{
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $.ajax({
-                url: '/api/user',
-                success: function (userData) {
-                    console.log(userData);
-                }
-            });
-        });
-    </script>
-}

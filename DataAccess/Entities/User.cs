@@ -15,10 +15,14 @@ namespace Azimuth.DataAccess.Entities
         public virtual string Email { get; set; }
 
         public virtual ICollection<UserSocialNetwork> SocialNetworks { get; set; }
+        public virtual ICollection<User> Followers { get; set; }
+        public virtual ICollection<User> Following { get; set; }
 
         public User()
         {
             SocialNetworks = new List<UserSocialNetwork>();
+            Followers = new List<User>();
+            Following = new List<User>();
         }
         public override string ToString()
         {

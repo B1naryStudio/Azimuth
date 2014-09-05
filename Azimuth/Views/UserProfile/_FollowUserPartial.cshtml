@@ -1,0 +1,42 @@
+﻿@using Azimuth.Infrastructure.Concrete
+@model Azimuth.DataAccess.Entities.User
+@{
+    var loggedUser = AzimuthIdentity.Current.UserCredential;
+}
+@if (loggedUser.Id != Model.Id)
+{
+    var isFollower = Model.Followers.FirstOrDefault(x => x.Id == loggedUser.Id) != null;
+    var action = isFollower ? "Unfollow" : "Follow";
+    <button id="follow-button" class="btn btn-success" data-follower="@isFollower">@action</button>
+
+    <script type="text/javascript">
+        setTimeout(function() {
+            var isFollower = "@isFollower" === "True";
+            $('#follow-button').click(function() {
+                var followButton = $('#follow-button');
+                var action = isFollower ? 'unfollow' : 'follow';
+                var url = "/api/user/" + action + '?followerId=@Model.Id';
+                var loggedUserId = @loggedUser.Id;
+                $.ajax({
+                    url: url,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(followers) {
+                        if (followers.indexOf(loggedUserId) !== -1) {
+                            isFollower = true;
+                            followButton.text('Unfollow');
+                        } else {
+                            isFollower = false;
+                            followButton.text('Follow');
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            });
+        }, 0);
+
+</script>
+}

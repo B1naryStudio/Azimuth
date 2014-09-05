@@ -24,11 +24,16 @@ namespace Azimuth
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
                       "~/Content/settings.css",
                       "~/Content/userprofile.css",
                       "~/Content/Loading.css",
-                      "~/Content/jquery.mCustomScrollbar.css"));
+                      "~/Content/jquery.mCustomScrollbar.css",
+                      "~/Content/contextmenu.css",
+                      "~/Content/draggable.css",
+                      "~/Content/friends.css",
+                      "~/Content/playlist.css",
+                      "~/Content/track.css",
+                      "~/Content/site.css"));
         }
     }
 }

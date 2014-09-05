@@ -101,63 +101,13 @@ input[type="checkbox"].input-validation-error {
     box-shadow: 0 0 8px black;
 }
 
-.draggable-item {
-    top: 0;
-	left: 0;
-	width: 100px;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
-}
-.draggable-btn {
-	height:30px;
-	cursor: pointer;
-}
-.draggable-btn.add {
-	width:40%;
-}
-.draggable-btn.sort {
-	width: 30%;
-}
-.draggable-item:hover {
-	background: aquamarine;
-	cursor: pointer;
-}
-.draggable-item.dragging {
-	position: absolute;
-	z-index: 1000;
-}
-.draggable-list {
-	float: left;
-	/*border: 1px lightsteelblue solid;*/
-	min-height: 30px;
-	min-width: 150px;
-}
-.draggable-list-empty{
-	height: 30px;
-	width: 100%;
-	border: 1px lightsteelblue solid;
-}
-/*.draggable-item-selected {
-	background: aquamarine;
-}*/
 #itemsContainer {
 	position: absolute;
     opacity: 0.5;
 	z-index: 1000;
     display: block;
 }
-.draggable{
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	-moz-user-select:
-	-moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
+
 .delete-area{
 	width: 200px;
 	height: 200px;
@@ -170,17 +120,21 @@ input[type="checkbox"].input-validation-error {
 	width: 100%;
 	border-bottom: solid 1px #c4c4c4;
 }
+
 div.accordion > div.tableRow{
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border-bottom: none;
 	cursor: pointer;
 }
+
 div.accordion > div.dropdown {
     background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
 }
+
 .accordion .tableRow:hover {
 	background-color: #e3e2e2;
 }
+
 .accordion .tableRow.active {
 	background-position: right 0;
 }
@@ -201,26 +155,9 @@ div.tableHeader{
     width: 100%;
 }
 
-div.playlist {
-    height: 110px;
-}
-
 div.tableRow{
 	clear: left;
     width: 100%;
-}
-
-.playBtn {
-    position: relative;
-    top: 10px;
-    width: 40px;
-    height: 30px;
-    left: 20px;
-}
-
-div.draggable-list{
-	width: 100%;
-	display: block;
 }
 
 .vkMusicTable {
@@ -232,7 +169,6 @@ div.draggable-list{
     float: none;
     height: 20px;
 }
-
 
 .table-title {
     width: auto;
@@ -251,162 +187,6 @@ div.draggable-list{
 .right {
     position: absolute;
     right: 10px;
-}
-
-.playlistsContainer {
-    display: block;
-    float: left;
-    width: 23%;
-}
-
-.tracksContainer {
-    display: block;
-    float: left;
-    width: 75%;
-    margin-left: 20px;
-    vertical-align: top;
-}
-
-.track {
-    display: block;
-    height: 50px;
-    width: 100%;
-    -moz-min-width: 250px;
-    -ms-min-width: 250px;
-    -o-min-width: 250px;
-    -webkit-min-width: 250px;
-    min-width: 250px;
-    background-color: #F0F0F0;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    -ms-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.track:hover {
-    background-color: #E0E0E0;
-}
-
-.track-description {
-    display: inline;
-    height: 80%;
-    width: 70%;
-    left: 10%;
-    font-size: 12px;
-}
-
-.track-description:hover::after { 
-    content: attr(data-title); 
-    position: absolute; 
-    left: 40%;
-    z-index: 1; 
-    background: #e0e0e0; 
-    font-family: Arial, sans-serif; 
-    font-size: 11px; 
-    padding: 5px 10px; 
-    border: 1px solid #333;
-    border-radius: 20px;
-}
-
-.track-info {
-    display: block;
-    float: left;
-    height: 30%;
-    width: 50%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 3px;
-}
-
-.track-info-btn {
-    float: left;
-    margin-left: 2%;
-    vertical-align: middle;
-    margin-top: 15px;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    padding: 0 0;
-    font-size: 12px;
-    line-height: 1.42;
-    -ms-border-radius: 15px;
-    border-radius: 15px;
-}
-
-.track-title {
-    display: block;
-    float: left;
-    height: 25%;
-    width: 50%;
-}
-
-.track-genre {
-    display: inline;
-    float: left;
-    margin-top: 10px;
-    width: 15%;
-}
-
-.track-duration {
-    display: block;
-    float: right;
-    margin-top: 10px;
-    margin-right: 20px;
-}
-
-.track-remaining {
-    display: block;
-    float: right;
-    margin-top: 10px;
-    margin-right: 20px;
-}
-
-.track-play-btn {
-    display: inline;
-    float: left;
-    width: 30px;
-    height: 60%;
-    margin-left: 5px;
-    margin-right: 10px;
-    margin-top: 4px;
-    padding-left: 8px;
-}
-
-.playlist-info {
-    float: left;
-    font-size: 11px;
-}
-
-.playlist-genres {
-    vertical-align: bottom;
-    height: 50%;
-    margin-top: 20px;
-}
-
-.playlist-logo {
-    float: left;
-    margin: 5px;
-}
-.playlist-title {
-    padding-top: 5px;
-}
-
-#friends-body {
-    position: absolute;
-    width: 300px;
-    min-height: 83%;
-    z-index: 800;
-    border: 2px solid black;
-    margin-left: 61.6%;
-    background: lightgrey;
-}
-
-#vkMusic-header-spinner.spinner {
-}
-
-#friends-header.table-header {
-    margin-bottom: 5px;
 }
 
 .spinner {
@@ -460,6 +240,7 @@ span.label {
 
 .login-container {
     background: url("../Images/login_bg.jpeg") 100% 100% no-repeat;
+    -ms-background-size: cover;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -475,6 +256,10 @@ span.label {
     right: 0;
     bottom: 0;
     margin: auto;
+    -moz-min-width: 400px;
+    -ms-min-width: 400px;
+    -o-min-width: 400px;
+    -webkit-min-width: 400px;
     min-width: 400px;
 }
 
@@ -489,15 +274,20 @@ span.label {
     background: transparent;
     color: #555;
     padding: 5px 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
 .providers i.sn-btn:hover {
     color: #1f1f1f;
+    -webkit-transition: color .512s linear;
+    -moz-transition: color .512s linear;
+    -ms-transition: color .512s linear;
+    -o-transition: color .512s linear;
     transition: color .512s linear;
     cursor: pointer;
 }
-
 
 .logo {
     text-align: center;
@@ -518,61 +308,13 @@ hr {
 	background: aquamarine;
 }
 
-.contextMenu {
-    display: none;
-    position: absolute;
-    border: 1px solid lightgray;
-    background: white;
-    width: 150px;
-}
-
-.contextMenu .tableRow{
-    height: 20px;
-}
-
-.contextMenu .tableRow:hover {
-    background: #3399FF;
-	cursor: pointer;
-}
-.contextMenuActionName {
-    font-family: "Arial";
-    font-size: 10pt;
-    font-style: normal;
-    padding: 3px 10px 3px 10px;
-    float: left;
-    width: 90%;
-}
-.contextMenuExpander {
-    width: 10%
-}
-.subContextMenu {
-    display: none;
-    position: absolute;
-    border: 1px solid lightgray;
-    background: white;
-    width: 150px;
-}
-.subContextMenu .tableRow{
-    height: 20px;
-}
-.subContextMenu .tableRow:hover {
-    background: #3399FF;
-	cursor: pointer;
-}
-
-.unactiveContextMenuAction .contextMenuActionName{
-    color: gray;
-}
-
 #trackInfoContainer {
     border: solid black 1px;
     position: absolute;
     top: 400px;
     display: none;
 }
-/*#trackInfoContainer div {
-    float: left;
-}*/
+
 #trackInfoContainer div img {
     float: left;
 }

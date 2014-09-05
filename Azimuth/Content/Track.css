@@ -1,0 +1,123 @@
+﻿.tracksContainer {
+    display: block;
+    float: left;
+    width: 75%;
+    margin-left: 20px;
+    vertical-align: top;
+}
+
+.track {
+    display: block;
+    height: 50px;
+    width: 100%;
+    -moz-min-width: 250px;
+    -ms-min-width: 250px;
+    -o-min-width: 250px;
+    -webkit-min-width: 250px;
+    min-width: 250px;
+    background-color: #F0F0F0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.track:hover {
+    background-color: #E0E0E0;
+}
+
+.track-description {
+    display: inline;
+    height: 80%;
+    width: 70%;
+    left: 10%;
+    font-size: 12px;
+}
+
+.track-description:hover::after {
+    content: attr(data-title); 
+    position: absolute; 
+    left: 40%;
+    z-index: 1; 
+    background: #e0e0e0; 
+    font-family: Arial, sans-serif; 
+    font-size: 11px; 
+    padding: 5px 10px; 
+    border: 1px solid #333;
+    -ms-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.track-info {
+    display: block;
+    float: left;
+    height: 30%;
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    margin-top: 3px;
+}
+
+.track-info-btn {
+    float: left;
+    margin-left: 2%;
+    vertical-align: middle;
+    margin-top: 15px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding: 0 0;
+    font-size: 12px;
+    line-height: 1.42;
+    -ms-border-radius: 15px;
+    border-radius: 15px;
+}
+
+.track-title {
+    display: block;
+    float: left;
+    height: 25%;
+    width: 50%;
+}
+
+.track-genre {
+    display: inline;
+    float: left;
+    margin-top: 10px;
+    width: 15%;
+}
+
+.track-duration {
+    display: block;
+    float: right;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.track-remaining {
+    display: block;
+    float: right;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.track-play-btn {
+    display: inline;
+    float: left;
+    width: 30px;
+    height: 60%;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-top: 4px;
+    padding-left: 8px;
+}
+
+.playBtn {
+    position: relative;
+    top: 10px;
+    width: 40px;
+    height: 30px;
+    left: 20px;
+}

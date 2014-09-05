@@ -1,0 +1,29 @@
+﻿.playlistsContainer {
+    display: block;
+    float: left;
+    width: 23%;
+}
+
+div.playlist {
+    height: 110px;
+}
+
+.playlist-info {
+    float: left;
+    font-size: 11px;
+}
+
+.playlist-genres {
+    vertical-align: bottom;
+    height: 50%;
+    margin-top: 20px;
+}
+
+.playlist-logo {
+    float: left;
+    margin: 5px;
+}
+
+.playlist-title {
+    padding-top: 5px;
+}
