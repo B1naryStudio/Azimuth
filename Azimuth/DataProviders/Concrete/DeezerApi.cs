@@ -30,7 +30,7 @@ namespace Azimuth.DataProviders.Concrete
 
             trackJson = await _webClient.GetWebData(searchUrl);
             resultSearch = JsonConvert.DeserializeObject<DeezerTrackData.Track>(trackJson);
-            trackData = resultSearch.Tracks.Datas.FirstOrDefault();
+            trackData = resultSearch.Tracks.Datas.FirstOrDefault(author => author.Artist.Name.ToLower() == artist.ToLower());
             if (trackData == null)
             {
                 searchUrl = BaseUri + "search/" + "autocomplete?q=" + Uri.EscapeDataString(artist);
@@ -49,19 +49,23 @@ namespace Azimuth.DataProviders.Concrete
             artistUrl = BaseUri + "artist/" + trackData.Artist.Id;
             artistJson = await _webClient.GetWebData(artistUrl);
             trackData.Artist = JsonConvert.DeserializeObject<DeezerTrackData.Artist>(artistJson);
-
-            //string trackListJson = await _webClient.GetWebData(trackData.Artist.TrackListUrl);
-            //var trackList = JsonConvert.DeserializeObject<DeezerTrackData.Data>(trackListJson);
-            //trackData.Artist.TopTrackList = trackList.Datas;
-
             albumUrl = BaseUri + "album/" + trackData.Album.Id;
             albumJson = await _webClient.GetWebData(albumUrl);
             trackData.Album = JsonConvert.DeserializeObject<DeezerTrackData.Album>(albumJson);
 
-            var topTracksUrl = BaseUri + "artist/" + trackData.Artist.Id + "/top?limit=10";
+            var topTracksUrl = BaseUri + "artist/" + trackData.Artist.Id + "/top?limit=50";
             var topTracks = await _webClient.GetWebData(topTracksUrl);
-            trackData.TopTracks = JsonConvert.DeserializeObject<List<DeezerTrackData.TrackData>>((JObject.Parse(topTracks))["data"].ToString());
 
+            var topTrackList = JsonConvert.DeserializeObject<List<DeezerTrackData.TrackData>>((JObject.Parse(topTracks))["data"].ToString());
+
+            foreach (var topItem in topTrackList)
+            {
+                if (trackData.TopTracks.Any(s => s.Title == topItem.Title))
+                    continue;
+                trackData.TopTracks.Add(topItem);
+                if (trackData.TopTracks.Count >= 10)
+                    break;
+            }
             return trackData;
         }
     }

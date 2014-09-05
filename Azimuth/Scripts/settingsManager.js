@@ -530,7 +530,6 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 
 SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
-    //self.$playlistsTable.find(".tableHeader").remove();
     self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.fadeIn("normal");
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
@@ -650,7 +649,6 @@ SettingsManager.prototype.bindListeners = function () {
         }
     });
 
-
     $('#backToPlaylistsBtn').click(function () {
         $('#backToPlaylistsBtn').hide();
         $('#playlistTracks').empty();
@@ -714,21 +712,12 @@ SettingsManager.prototype.bindListeners = function () {
             $('#vkMusic-header-title').text('');
             
             if (self.topTracks != null) {
-                //var info = [];
-                //for (var i = 0; i < 3; i++) {
-                //    var item = {
-                //        artist: trackInfo.ArtistTopTrackList[i].artist.name,
-                //        track: trackInfo.ArtistTopTrackList[i].title
-                //    }
-                //    info.push(item);
-                //}
                 var tracks = JSON.stringify({ trackdata: self.topTracks });
                 $.ajax({
-                    url: '/api/usertracks/tracksearch?provider=' + "Vkontakte",
-                    type: 'GET',
+                    url: '/api/usertracks/tracksearch?provider=Vkontakte&infoForSearch=' + tracks,
+                    type: 'POST',
                     dataType: 'json',
-                    data: { "infoForSearch": tracks },
-                    contentType: 'application/json; charset=utf-8',
+                    contentType: 'application/json;',
                     success: function (data) {
                         self.topTracksVk = [];
                         $(data).each(function () {
@@ -738,7 +727,6 @@ SettingsManager.prototype.bindListeners = function () {
                             }
                         });
                         self.showTracks(self.topTracksVk);
-                        //$('#listenTopBtn').attr('disabled', false);
                     }
                 });
             }

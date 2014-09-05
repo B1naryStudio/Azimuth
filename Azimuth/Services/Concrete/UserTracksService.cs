@@ -250,7 +250,6 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        //public async Task<List<VkTrackData.Track>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider)
         public async Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
