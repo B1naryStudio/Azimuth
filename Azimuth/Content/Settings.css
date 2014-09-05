@@ -66,7 +66,7 @@
 #buttons {
     position: absolute; 
     background-color: #428bca; 
-    top: 25%; 
+    top: 20%; 
     height: 196px; 
     width: 100%; 
     border: 3px solid white; 
@@ -86,7 +86,7 @@
     position: absolute; 
     width: 40px;
     height: 40px;
-    top: 68%; 
+    top: 60%; 
     left: 50%;
     margin-left: -16px;
     background: url("../Images/media_volume.png") no-repeat 0 0;
@@ -95,7 +95,7 @@
 .volumeBar {
     position: relative;
     width: 10px;
-    top: 75%;
+    top: 70%;
     left: 50%;
     margin-left: -5px;
     height: 100px;
