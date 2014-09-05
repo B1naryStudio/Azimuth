@@ -312,7 +312,7 @@ div.draggable-list{
     display: block;
     float: left;
     height: 30%;
-    width: 60%;
+    width: 50%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -337,7 +337,7 @@ div.draggable-list{
 .track-title {
     display: block;
     float: left;
-    height: 30%;
+    height: 25%;
     width: 50%;
 }
 
