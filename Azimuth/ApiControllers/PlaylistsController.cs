@@ -109,6 +109,21 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpGet]
+        [Route("share/{id:int}")]
+        public async Task<HttpResponseMessage> GetSharedPlaylist(int id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetSharedPlaylist(id));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+
+            }
+        }
+
         [HttpDelete]
         [Route("delete/{id:int}")]
         public HttpResponseMessage DeletePlaylistById(int id)

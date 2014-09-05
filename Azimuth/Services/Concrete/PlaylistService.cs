@@ -24,6 +24,7 @@ namespace Azimuth.Services.Concrete
         private readonly LastfmApi _lastfmApi;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
+        private readonly UserRepository _userRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
         {
@@ -33,6 +34,7 @@ namespace Azimuth.Services.Concrete
             _lastfmApi = musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
+            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
         }
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -288,6 +290,57 @@ namespace Azimuth.Services.Concrete
             }
 
             return image;
+        }
+
+        public Task<string> GetSharedPlaylist(int playlistId)
+        {
+            return Task.Run(() =>
+            {
+                string guid;
+                using (_unitOfWork)
+                {
+                    var currentPlaylist = _playlistRepository.GetOne(p => p.Id == playlistId);
+                    var sysUser = _userRepository.GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+
+                    guid = Guid.NewGuid().ToString();
+                    var fakePlaylist = new Playlist
+                    {
+                        Name = "Share_" + guid,
+                        Creator = sysUser,
+                        Accessibilty = Accessibilty.Public
+                    };
+
+                    foreach (var track in currentPlaylist.Tracks)
+                    {
+                        fakePlaylist.Tracks.Add(track);
+                    }
+
+                    _playlistRepository.AddItem(fakePlaylist);
+
+                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
+                    var sharedPlaylist = new SharedPlaylist
+                    {
+                        Guid = guid,
+                        Playlist = fakePlaylist
+                    };
+                    sharedRepo.AddItem(sharedPlaylist);
+
+                    _unitOfWork.Commit();
+                }
+                return guid;
+            });
+        }
+
+        public List<TracksDto> GetSharedTracks(string id)
+        {
+            List<TracksDto> tracks = null;
+            using (_unitOfWork)
+            {
+                
+                _unitOfWork.Commit();
+            }
+
+            return null;
         }
     }
 }
