@@ -167,7 +167,7 @@ var SettingsManager = function (manager) {
         }).get();
 
         $.ajax({
-            url: '/api/usertracks?provider=' + provider + "&index=" + index + "&friendId=" + friendId,
+            url: '/api/usertracks?provider=' + 'Vkontakte' + "&index=" + index + "&friendId=" + friendId,
             type: 'POST',
             data: JSON.stringify({
                 "Id": playlistId,
