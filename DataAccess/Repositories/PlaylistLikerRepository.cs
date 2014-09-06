@@ -9,10 +9,9 @@ using NHibernate;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class PlaylistListenersRepository : BaseRepository<PlaylistListener>
+    public class PlaylistLikerRepository:BaseRepository<PlaylistLike>
     {
-        public PlaylistListenersRepository(ISession session)
-            : base(session)
+        public PlaylistLikerRepository(ISession session) : base(session)
         {
         }
     }

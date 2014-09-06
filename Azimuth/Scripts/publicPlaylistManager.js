@@ -12,6 +12,7 @@
     self.$listeners = $('#listeners');
     self.$backToPlaylistsBtn = $('#backToPlaylistsBtn');
     self.currentPlaylist = null;
+    self.$likeBtn = $('#likeBtn');
 
     self.addCurrentUserAsListener = function(playlist) {
         var self = this;
@@ -86,6 +87,7 @@
 
 PublicPlaylistManager.prototype.bindListeners = function () {
     var self = this;
+    self.$likeBtn.find('.icon').toggleClass("fa-thumbs-o-up");
     self.$backToPlaylistsBtn.click(function () {
         self.currentPlaylist = null;
         self.$playlistsArea.show();
@@ -94,7 +96,7 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         self.removeCurrentUserAsListener();
     });
     self.$playlists.click(function (event) {
-
+        
         self.$playlistsArea.hide();
         self.$tracksArea.show();
         self.$backToPlaylistsBtn.show();
@@ -109,6 +111,10 @@ PublicPlaylistManager.prototype.bindListeners = function () {
     });
     $(document).on('newListenerAdded', function (event, data) {
         self.$listeners.text(self.addCurrentUserAsListener(data));
+    });
+
+    self.$likeBtn.click(function() {
+        //this.toggleClass("")
     });
 };
 

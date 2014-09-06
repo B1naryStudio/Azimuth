@@ -6,16 +6,24 @@
         <div id="playlists-plated"></div>
     </div>
     <div id="progressSlider" style="display: none"></div>
-    <div id="tracksArea">
-        <h2 id="playlistName"></h2>
+    <div id="tracksArea" style="display: none; margin-top:10px">
+        <div style ="display: inline; font-size:25px;">
+            <div id="playlistName" style="display: block; float:left; margin-right:20px;"></div>
+            <div class="btn  btn-default" id="likeBtn"><span class="fa icon"></span></div>
+        </div>
         <h3 id="listeners"></h3>
         <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
         <div id="playlist-info">
+            
             <div id="tracks"></div>
             <div class="listeners"></div>
         </div>
     </div>
 </div>
+@section styles
+{
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+}
 @section scripts
 {
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
@@ -23,7 +31,7 @@
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/workWithPublicPlaylists.js"></script>
     <script type="text/javascript" src="../../Scripts/publicPlaylistManager.js"></script>
-    <script type="" src="../../Scripts/drag&drop.js"></script>
+    <script type="" src="../../Scripts/dragndrop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
     <script id="playlistTemplate" type="text/x-jQuery-tmpl">

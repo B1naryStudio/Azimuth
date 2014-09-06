@@ -143,7 +143,7 @@ namespace Azimuth.DataGenerator
         {
             using (var unitOfWork = _kernel.Get<IUnitOfWork>())
             {
-                var listenerRepo = unitOfWork.GetRepository<PlaylistListeners>();
+                var listenerRepo = unitOfWork.GetRepository<PlaylistListener>();
                 var listeners = listenerRepo.GetAll();
                 foreach (var playlistListenerse in listeners)
                 {

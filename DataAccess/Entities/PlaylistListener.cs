@@ -7,7 +7,7 @@ using Azimuth.DataAccess.Infrastructure;
 
 namespace Azimuth.DataAccess.Entities
 {
-    public class PlaylistListeners:BaseEntity
+    public class PlaylistListener:BaseEntity
     {
         public virtual Playlist Playlist { get; set; }
         public virtual User Listener { get; set; }
