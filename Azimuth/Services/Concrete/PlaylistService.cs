@@ -300,6 +300,11 @@ namespace Azimuth.Services.Concrete
                 using (_unitOfWork)
                 {
                     var currentPlaylist = _playlistRepository.GetOne(p => p.Id == playlistId);
+                    if (currentPlaylist == null)
+                    {
+                        return "";
+                    }
+                    
                     var sysUser = _userRepository.GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
 
                     guid = Guid.NewGuid().ToString();
