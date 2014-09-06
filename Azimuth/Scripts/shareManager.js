@@ -76,4 +76,9 @@ ShareManager.prototype.bindListeners = function () {
     var self = this;
 
     self.audioManager.bindPlayBtnListeners();
+
+    $('#infoModal').on('hidden.bs.modal', function () {
+        $('#infoModal .modal-body').text('');
+        $('#listenTopBtn').attr('disabled', true);
+    });
 };
