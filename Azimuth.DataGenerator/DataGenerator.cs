@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -139,6 +140,46 @@ namespace Azimuth.DataGenerator
             
         }
 
+        public void AddSharing()
+        {
+            using (var unitOfWork = _kernel.Get<IUnitOfWork>())
+            {
+                var playlistRepo = unitOfWork.GetRepository<Playlist>();
+                var userRepo = unitOfWork.GetRepository<User>();
+
+                var sysUser = new User
+                {
+                    Name = new Name{FirstName = "Admin", LastName = "Admin"}
+                };
+                userRepo.AddItem(sysUser);
+
+                var playlist = playlistRepo.GetAll().First();
+
+                var fakePlaylist = new Playlist
+                {
+                    Creator = sysUser, Name = "Fake", Accessibilty = Accessibilty.Public
+                };
+
+                foreach (var track in playlist.Tracks)
+                {
+                    fakePlaylist.Tracks.Add(track);
+                }
+
+                playlistRepo.AddItem(fakePlaylist);
+
+                var sharedPlaylist = new SharedPlaylist
+                {
+                    Guid = Guid.NewGuid().ToString(), Playlist = fakePlaylist
+                };
+
+                var spRepo = unitOfWork.GetRepository<SharedPlaylist>();
+
+                spRepo.AddItem(sharedPlaylist);
+
+                unitOfWork.Commit();
+            }
+        }
+
         public void ClearDatabase()
         {
             using (var unitOfWork = _kernel.Get<IUnitOfWork>())
@@ -157,6 +198,13 @@ namespace Azimuth.DataGenerator
                     artistsRepo.DeleteItem(track);
                 }
 
+                var spRepo = unitOfWork.GetRepository<SharedPlaylist>();
+                var sharedPlaylists = spRepo.GetAll();
+                foreach (var sharedPlaylist in sharedPlaylists)
+                {
+                    spRepo.DeleteItem(sharedPlaylist);
+                }
+
                 var playlistRepo = unitOfWork.GetRepository<Playlist>();
                 var playlists = playlistRepo.GetAll();
                 foreach (var playlist in playlists)
@@ -164,6 +212,8 @@ namespace Azimuth.DataGenerator
                     playlistRepo.DeleteItem(playlist);
                 }
 
+                
+    
                 var snRepo = unitOfWork.GetRepository<SocialNetwork>();
                 var sns = snRepo.GetAll();
                 foreach (var socialNetwork in sns)

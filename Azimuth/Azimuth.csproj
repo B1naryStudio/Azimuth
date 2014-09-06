@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />
     <Compile Include="DataProviders\Concrete\MusicServiceWorkUnit.cs" />
@@ -363,6 +364,7 @@
     <Content Include="Views\UserProfile\Index.cshtml" />
     <Content Include="Views\UserProfile\_FollowUserPartial.cshtml" />
     <Content Include="Views\UserProfile\DisplayTemplates\User.cshtml" />
+    <Content Include="Views\Share\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
