@@ -12,7 +12,7 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual Album Album { get; set; }
         public virtual string ThirdPartId { get; set; }
-
+        public virtual string OwnerId { get; set; }
         public virtual ICollection<Playlist> Playlists { get; set; }
         public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; }
 

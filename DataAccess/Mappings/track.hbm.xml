@@ -8,6 +8,7 @@
     <property name="Duration" />
     <property name="Name" />
     <property name="ThirdPartId" />
+    <property name="OwnerId" />
     <many-to-one name="Album" column="AlbumId" />
     <set name="Playlists" table="PlaylistTracks" lazy="true" inverse="true" cascade="save-update">
       <key column="TrackId" />

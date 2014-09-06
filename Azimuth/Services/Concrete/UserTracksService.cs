@@ -330,7 +330,8 @@ namespace Azimuth.Services.Concrete
                             //            socialNetworkData.AccessToken),
                             Name = trackData.Title,
                             Album = album,
-                            ThirdPartId = Convert.ToString(trackData.OwnerId),
+                            ThirdPartId = Convert.ToString(trackData.Id),
+                            OwnerId = Convert.ToString(trackData.OwnerId),
                             Genre = trackData.GenreId.ToString()
                         };
 
