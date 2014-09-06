@@ -436,9 +436,6 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
 
 MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
     var self = this;
-
-
-
     $('#playlistTracks').find('.track').remove();
     for (var i = 0; i < tracks.length; i++) {
         var tmpl = self.playlistTrackTemplate.tmpl(tracks[i]);
@@ -461,6 +458,8 @@ MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
     }
     self.audioManager.bindPlayBtnListeners();
     $('#playlistTracks').append('<div style="display: none" class="playlistId">' + playlistId + '</div>');
+
+    $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showPlaylists = function (playlists) {
