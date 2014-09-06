@@ -32,7 +32,6 @@ var SettingsManager = function (manager) {
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
-    this.$shareMusic = $('#sharedmusic');
 
     this._getTracks = function (plId) {
         self.$playlistsLoadingSpinner.fadeIn('normal');
@@ -185,7 +184,8 @@ var SettingsManager = function (manager) {
                             { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
                             { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
                             { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                            { 'id': 'sharetracks', 'name': 'Share tracks', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
                         ],
                         manager: self
                     });
@@ -697,23 +697,5 @@ SettingsManager.prototype.bindListeners = function() {
             }
         }
 
-    });
-
-    this.$shareMusic.mousedown(function () {
-        var tracksIds = [];
-        $('.draggable-item-selected').each(function () {
-            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-
-        $.ajax({
-            url: '/api/playlists/share',
-            type: 'PUT',
-            dataType: 'json',
-            data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8',
-            success: function(guid) {
-                console.log(guid);
-            }
-        });
     });
 };

@@ -135,6 +135,36 @@
             }
         });
     }
+
+    this._sharePlaylist = function(playlistId) {
+        $.ajax({
+            url: 'api/playlists/share/' + playlistId,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                var some = 1 + 2;
+            }
+        });
+    }
+
+    this._shareTracks = function() {
+        var tracksIds = [];
+        $('.draggable-item-selected').each(function() {
+            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
+        }).get();
+        $.ajax({
+            url: '/api/playlists/share',
+            type: 'PUT',
+            dataType: 'json',
+            data: JSON.stringify(tracksIds),
+            contentType: 'application/json; charset=utf-8',
+            success: function(guid) {
+                console.log(guid);
+            }
+
+        });
+    }
 };
 
 ContextMenu.prototype.initializeContextMenu = function (contextId, contextmenuoptions, currentList, manager) {
@@ -257,6 +287,11 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     self._changePlaylistAccessibility(playlistId, 'Public');
                     break;
                 case 'shareplaylist':
+                    var playlistId = $('.playlist.selected').find('.playlistId').text();
+                    self._sharePlaylist(playlistId);
+                    break;
+                case 'sharetracks':
+                    self._shareTracks();
                     break;
                 case 'removeplaylist':
                     var playlistId = $('.playlist.selected').find('.playlistId').text();
