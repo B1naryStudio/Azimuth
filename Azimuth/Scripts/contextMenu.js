@@ -16,6 +16,7 @@
     this.musicList = null;
     this.timerId = null;
     this.provider = 'Vkontakte';
+    this.host = "https://localhost:44300/"; //TODO: Changed to host address
 
     this._shuffleTracksAction = function($currentItem) {
         var elems = $currentItem.children('.tableRow');
@@ -137,22 +138,32 @@
     }
 
     this._sharePlaylist = function(playlistId) {
+        $('#sharingLinkModal').modal({
+            show: true
+        });
+        $('#sharingLink').val("");
+
         $.ajax({
             url: '/api/playlists/share/' + playlistId,
             type: 'GET',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                var some = 1 + 2;
+            success: function (data) {
+                $('#sharingLink').val(self.host + "Share/Index?guid=" + data);
             }
         });
-    }
+    };
 
     this._shareTracks = function() {
         var tracksIds = [];
         $('.draggable-item-selected').each(function() {
             tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
+        $('#sharingLinkModal').modal({
+            show: true
+        });
+        $('#sharingLink').val("");
+
         $.ajax({
             url: '/api/playlists/share',
             type: 'PUT',
@@ -160,11 +171,10 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function(guid) {
-                console.log(guid);
+                $('#sharingLink').val(self.host + "Share/Index?guid=" + data);
             }
-
         });
-    }
+    };
 };
 
 ContextMenu.prototype.initializeContextMenu = function (contextId, contextmenuoptions, currentList, manager) {
