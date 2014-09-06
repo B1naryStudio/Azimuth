@@ -33,6 +33,7 @@ namespace Azimuth
                       "~/Content/friends.css",
                       "~/Content/playlist.css",
                       "~/Content/track.css",
+                      "~/Content/share.css",
                       "~/Content/site.css"));
         }
     }

@@ -350,7 +350,7 @@ namespace Azimuth.Services.Concrete
 
                 var sharedPlaylist = sharedPlaylistRepo.GetOne(sp => sp.Guid == guid);
 
-                if (sharedPlaylist.Playlist != null)
+                if (sharedPlaylist != null && sharedPlaylist.Playlist != null)
                 {
                     var tracks = sharedPlaylist.Playlist.Tracks;
 
