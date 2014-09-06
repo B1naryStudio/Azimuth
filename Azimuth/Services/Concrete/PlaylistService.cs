@@ -331,16 +331,80 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public List<TracksDto> GetSharedTracks(string id)
+        public List<TracksDto> GetSharedTracks(string guid)
         {
-            List<TracksDto> tracks = null;
+            if(string.IsNullOrEmpty(guid))
+            {
+                return null;
+            }
+
+            var tracksDto = new List<TracksDto>();
             using (_unitOfWork)
             {
+                var sharedPlaylistRepo = _unitOfWork.GetRepository<SharedPlaylist>();
+
+                var sharedPlaylist = sharedPlaylistRepo.GetOne(sp => sp.Guid == guid);
+
+                if (sharedPlaylist.Playlist != null)
+                {
+                    var tracks = sharedPlaylist.Playlist.Tracks;
+
+                    foreach (var track in tracks)
+                    {
+                        var trackDto = new TracksDto();
+                        Mapper.Map(track, trackDto);
+
+                        tracksDto.Add(trackDto);
+                    }    
+                }
                 
                 _unitOfWork.Commit();
             }
 
-            return null;
+            return tracksDto;
+        }
+
+        public Task<string> GetSharedPlaylist(List<long> tracksId)
+        {
+            return Task.Run(() =>
+            {
+                string guid;
+
+                using (_unitOfWork)
+                {
+                    var tracks = _trackRepository.Get(tr => tracksId.Contains(tr.Id)).ToList();
+                    guid = Guid.NewGuid().ToString();
+
+                    var sysUser = _userRepository.GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+
+                    var fakePlaylist = new Playlist
+                    {
+                        Name = "Share_" + guid,
+                        Creator = sysUser,
+                        Accessibilty = Accessibilty.Public
+                    };
+
+                    foreach (var track in tracks)
+                    {
+                        fakePlaylist.Tracks.Add(track);
+                    }
+
+                    _playlistRepository.AddItem(fakePlaylist);
+
+                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
+                    var sharedPlaylist = new SharedPlaylist
+                    {
+                        Guid = guid,
+                        Playlist = fakePlaylist
+                    };
+
+                    sharedRepo.AddItem(sharedPlaylist);
+
+                    _unitOfWork.Commit();
+                }
+
+                return guid;
+            });
         }
     }
 }

@@ -1,12 +1,15 @@
-﻿﻿using System.IdentityModel;﻿
+﻿﻿using System.Collections.Generic;
+﻿using System.IdentityModel;﻿
 using System;
 using System.Management.Instrumentation;
 ﻿using System.Net;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
 ﻿using System.Web.Http;
+﻿using Azimuth.DataAccess.Entities;
 ﻿using Azimuth.Services.Interfaces;
 ﻿using Azimuth.Shared.Enums;
+﻿using NHibernate.Mapping;
 
 namespace Azimuth.ApiControllers
 {
@@ -121,6 +124,20 @@ namespace Azimuth.ApiControllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
 
+            }
+        }
+
+        [HttpPut]
+        [Route("share")]
+        public async Task<HttpResponseMessage> GetSharedPlaylist(List<long> tracksId)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetSharedPlaylist(tracksId));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
 

@@ -16,6 +16,7 @@ namespace Azimuth.Services.Interfaces
         void RemoveTrackFromPlaylist(int trackId, int playlistId);
         Task<string> GetImageById(int id);
         Task<string> GetSharedPlaylist(int playlistId);
-        List<TracksDto> GetSharedTracks(string id);
+        List<TracksDto> GetSharedTracks(string guid);
+        Task<string> GetSharedPlaylist(List<long> tracksId);
     }
 }
