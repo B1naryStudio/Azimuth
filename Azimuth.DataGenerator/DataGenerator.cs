@@ -228,8 +228,6 @@ namespace Azimuth.DataGenerator
                     userRepo.DeleteItem(user);
                 }
 
-                
-
                 unitOfWork.Commit();
             }
         } 
@@ -455,38 +453,49 @@ namespace Azimuth.DataGenerator
                     Duration = "10",
                     Genre = "Pop",
                     Name = "FirstTrack",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 },
                 new Track
                 {
                     Duration = "20",
                     Genre = "Rock",
                     Name = "SecondTrack",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 },
                 new Track
                 {
                     Duration = "30",
                     Genre = "Jazz",
                     Name = "ThirdTrack",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 },
                 new Track
                 {
                     Duration = "40",
                     Genre = "Blues",
                     Name = "FourthTrack",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 },
                 new Track
                 {
                     Duration = "40",
                     Genre = "Pop",
                     Name = "Fifth",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 },
                 new Track
                 {
                     Duration = "40",
                     Genre = "Rock",
                     Name = "Sixth",
+                    OwnerId = "123",
+                    ThirdPartId = "311"
                 }
-
             };
             return tracks;
         }

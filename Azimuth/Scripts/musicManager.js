@@ -1,4 +1,4 @@
-var SettingsManager = function (manager) {
+var MusicManager = function (manager) {
     var self = this;
     this.audioManager = manager;
     this.tracksGlobal = [];
@@ -367,7 +367,7 @@ var SettingsManager = function (manager) {
     };
 };
 
-SettingsManager.prototype.showTracks = function (tracks) {
+MusicManager.prototype.showTracks = function (tracks) {
     var self = this;
 
     $('.vkMusicList').find('.track').remove();
@@ -395,7 +395,7 @@ SettingsManager.prototype.showTracks = function (tracks) {
 
 };
 
-SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized) {
+MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
     var self = this;
 
     for (var i = 0; i < friends.length; i++) {
@@ -433,7 +433,7 @@ SettingsManager.prototype.showFriends = function (friends, scrollbarInitialized)
     $('.friend').click(self._getFriendTracks);
 };
 
-SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
+MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
     var self = this;
 
 
@@ -462,7 +462,7 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
     $('#playlistTracks').append('<div style="display: none" class="playlistId">' + playlistId + '</div>');
 };
 
-SettingsManager.prototype.showPlaylists = function (playlists) {
+MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.show();
@@ -512,7 +512,7 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
     }
 };
 
-SettingsManager.prototype.bindListeners = function() {
+MusicManager.prototype.bindListeners = function() {
     var self = this;
 
     self._getUserTracks(self.provider, self.reloginUrl);

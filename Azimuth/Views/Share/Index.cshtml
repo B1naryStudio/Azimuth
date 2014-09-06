@@ -7,15 +7,23 @@
 {
     <div class="tableRow draggable-item track">
         <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-        <div class="track-description">
-            <div class="track-info">
-                <span class="nowrap">@track.Album</span>
-            </div>
+        <div class="track-description" data-title="@track.Artist @track.Name">
+            <div class="track-info">@track.Artist</div>
             <div class="track-title nowrap">@track.Name</div>
         </div>
-        <div class="track-duration nowrap">@track.Duration</div>
+
+        <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
+        <div class="track-duration">@track.Duration</div>
         <div class="track-remaining" style="display: none"></div>
         <div style="display: none" class="track-url">@track.Url</div>
         <div style="display: none" class="trackId">@track.Id</div>
-    </div>    
+    </div>
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
+    <script type="text/javascript" src="../../Scripts/shareManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/workWithShare.js"></script>
 }

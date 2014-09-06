@@ -1,8 +1,8 @@
 ﻿$(document).ready(function () {
     var volumeSlider = new SliderController({
-        sliderSelector: '#volumeSlider', 
-        sliderBarClass: 'volumeBar', 
-        sliderClass: 'volume', 
+        sliderSelector: '#volumeSlider',
+        sliderBarClass: 'volumeBar',
+        sliderClass: 'volume',
         dirrection: 'vertical'
     });
     var progressSlider = new SliderController({
@@ -14,8 +14,8 @@
     });
 
     var audioManager = new AudioManager(volumeSlider, progressSlider);
-    var manager = new MusicManager(audioManager);
-    
+    var manager = new ShareManager(audioManager);
+
     manager.showPlaylists();
     manager.bindListeners();
     audioManager.bindListeners();
