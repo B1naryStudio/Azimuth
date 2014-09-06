@@ -2,6 +2,7 @@
     var self = this;
     this.audioManager = manager;
     this.tracksGlobal = [];
+    this.$infoLoadingSpinner = $('#info-header-spinner');
 
     this._toFormattedTime = function (input, roundSeconds) {
         if (roundSeconds) {
@@ -50,7 +51,7 @@
                 var object = $trackInfoTemplate.tmpl(trackInfo);
                 var $trackInfoContainer = $('.modal-body');
                 $trackInfoContainer.text('');
-                object.appendTo($trackInfoContainer);
+                object.appendTo($trackInfoContainer);   
                 if (trackInfo.Lyric != null) {
                     for (var i = 0; i < trackInfo.Lyric.length; i++) {
                         var $p = $('<p>');
@@ -66,64 +67,13 @@
             }
         });
     };
+
+
+    $('#musicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
 };
-
-ShareManager.prototype.showTracks = function (tracks) {
-    var self = this;
-
-    $('.vkMusicList').find('.track').remove();
-    for (var i = 0; i < tracks.length; i++) {
-        var tmpl = self.trackTemplate.tmpl(tracks[i]);
-        tmpl.appendTo('.vkMusicList');
-        if (self.audioManager.$currentTrack !== null
-            && self.audioManager.$currentTrack.children('.trackId').html() == tracks[i].id) {
-            tmpl.toggleClass('.draggable-item-selected');
-            self.audioManager.$currentTrack = tmpl;
-            tmpl.append(self.audioManager.progressSlider.getSlider());
-            if (self.audioManager.audio.paused) {
-                self.audioManager._setPlayImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').show();
-                self.audioManager.$currentTrack.find('.track-remaining').hide();
-            } else {
-                self.audioManager._setPauseImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').hide();
-                self.audioManager.$currentTrack.find('.track-remaining').show();
-            }
-        }
-    }
-    self.audioManager.bindPlayBtnListeners();
-    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
-
-};
-
-
-ShareManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
-    var self = this;
-    $('#playlistTracks').find('.track').remove();
-    for (var i = 0; i < tracks.length; i++) {
-        var tmpl = self.playlistTrackTemplate.tmpl(tracks[i]);
-        tmpl.appendTo('#playlistTracks');
-        if (self.audioManager.$currentTrack !== null
-            && self.audioManager.$currentTrack.children('.track-url').html() == tracks[i].Url) {
-            tmpl.toggleClass('.draggable-item-selected');
-            self.audioManager.$currentTrack = tmpl;
-            tmpl.append(self.audioManager.progressSlider.getSlider());
-            if (self.audioManager.audio.paused) {
-                self.audioManager._setPlayImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').show();
-                self.audioManager.$currentTrack.find('.track-remaining').hide();
-            } else {
-                self.audioManager._setPauseImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').hide();
-                self.audioManager.$currentTrack.find('.track-remaining').show();
-            }
-        }
-    }
-    self.audioManager.bindPlayBtnListeners();
-    $('#playlistTracks').append('<div style="display: none" class="playlistId">' + playlistId + '</div>');
-};
-
 
 ShareManager.prototype.bindListeners = function () {
     var self = this;
+
+    self.audioManager.bindPlayBtnListeners();
 };

@@ -138,7 +138,7 @@
 
     this._sharePlaylist = function(playlistId) {
         $.ajax({
-            url: 'api/playlists/share/' + playlistId,
+            url: '/api/playlists/share/' + playlistId,
             type: 'GET',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',

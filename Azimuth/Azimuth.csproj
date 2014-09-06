@@ -333,8 +333,10 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\musicManager.js" />
+    <Content Include="Scripts\shareManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\workWithMusic.js" />
+    <Content Include="Scripts\workWithShare.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

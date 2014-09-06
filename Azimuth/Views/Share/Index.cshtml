@@ -3,27 +3,129 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@foreach (var track in Model)
-{
-    <div class="tableRow draggable-item track">
-        <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-        <div class="track-description" data-title="@track.Artist @track.Name">
-            <div class="track-info">@track.Artist</div>
-            <div class="track-title nowrap">@track.Name</div>
-        </div>
+<div id="musicList">
+    <div id="progressSlider" style="display: none"></div>
+    @foreach (var track in Model)
+    {
+        <div class="tableRow draggable-item track">
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description" data-title="@track.Artist @track.Name">
+                <div class="track-info">@track.Artist</div>
+                <div class="track-title nowrap">@track.Name</div>
+            </div>
 
-        <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
-        <div class="track-duration">@track.Duration</div>
-        <div class="track-remaining" style="display: none"></div>
-        <div style="display: none" class="track-url">@track.Url</div>
-        <div style="display: none" class="trackId">@track.Id</div>
+            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
+            <div class="track-duration">@track.Duration</div>
+            <div class="track-remaining" style="display: none"></div>
+            <div style="display: none" class="track-url">@track.Url</div>
+            <div style="display: none" class="trackId">@track.Id</div>
+        </div>
+    }    
+</div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Track info</h4>
+            </div>
+            <div id="info-header-spinner" class="spinner loader"></div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="listenTopBtn" data-dismiss="modal" disabled>Listen top tracks</button>
+            </div>
+        </div>
     </div>
-}
+</div>
 
 @section scripts
 {
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
     <script type="text/javascript" src="../../Scripts/shareManager.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/workWithShare.js"></script>
+    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="../../Scripts/sliderController.js"></script>
+
+    <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
+        <div id="trackInfo">
+            <div class="tableRow" id="artistData">
+                <div class="descriptionPhoto">
+                    {{if ArtistImage != null}}
+                    <img src=${ArtistImage}>
+                    {{/if}}
+                </div>
+                <div class="infoDescription">
+                    <div class="trackTitle">
+                        {{if Title != null}}
+                        Title: <a href=${TrackLastfmUrl}>${Title}</a>
+                        {{/if}}
+                    </div>
+                    <div class="Artist">
+                        Artist:
+                        {{if Artist != null}}
+                        <a href=${ArtistLastfmUrl}>${Artist}</a>
+                        {{/if}}
+                    </div>
+                    {{if ArtistFans != 0}}
+                    <div>Fans count: ${ArtistFans}</div>
+                    {{/if}}
+
+                </div>
+            </div>
+            <div class="tableRow" id="albumData">
+                {{if AlbumCover != null}}
+                <div class="descriptionPhoto"><img src=${AlbumCover}></div>
+                {{/if}}
+                <div class="infoDescription">
+                    {{if AlbumTitle != null}}
+                    <div>Album: <a href="${AlbumLastfmUrl}">${AlbumTitle}</a></div>
+                    {{/if}}
+                    {{if AlbumFans != 0}}
+                    <div>Fans count: ${AlbumFans}</div>
+                    {{/if}}
+                    {{if AlbumRelease != null}}
+                    <div>Year: ${AlbumRelease}</div>
+                    {{/if}}
+                </div>
+            </div>
+            {{if Lyric!= null}}
+            <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseLyrics">
+                            Lyrics
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseLyrics" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackLyric"></div>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+
+            {{if Summary != null}}
+            <div class="tableRow panel panel-primary" id="summaryData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseSummary">
+                            Summary
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseSummary" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackSummary"></div>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </script>
 }
