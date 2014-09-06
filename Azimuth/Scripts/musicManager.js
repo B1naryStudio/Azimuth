@@ -51,19 +51,18 @@ var SettingsManager = function (manager) {
                 self.showPlaylistTracks(tracksData, playlistId);
                 self.$playlistsTable.parents('.draggable').makeDraggable({
                     contextMenu: [
-						{ 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
-						{ 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._copyTrackToPlaylistAction },
-                        { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true, "callback": self._moveTracksBetweenPlaylistsAction },
-						{ 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true, "callback": self._removeSelectedTracksAction },
-                        { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
-
+                        { 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
+                        { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
+                        { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true },
+                        { 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true },
+                        { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false }
                     ],
-                    onMoveTrackToNewPosition: self._moveTrackToNewPosition
-                });
+                    onMoveTrackToNewPosition: self._moveTrackToNewPosition,
+                    manager: self
+            });
                 self.$searchPlaylistInput.val('');
             }
         });
-        //}
         //$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
         var temp = self.playlistsGlobal.filter(function (index) {
             return index.Id == playlistId;
@@ -81,9 +80,9 @@ var SettingsManager = function (manager) {
     $('#okPlaylistCreateModalBtn').click(function () {
 
         $('#createPlaylistModal').modal('hide');
-
         $('#createPlaylistModal').on('hidden.bs.modal', function () {
-            $('.modal-body').text('');
+            $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected")
         });
 
         var playlistName = $('#playlistNameToCreate').val();
@@ -94,10 +93,40 @@ var SettingsManager = function (manager) {
             contentType: 'application/json',
             async: false,
             success: function (playlistId) {
-                self._saveTrackFromVkToPlaylist($('.draggable-item-selected'), -1, playlistId);
+                self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
             }
         });
     });
+
+    this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
+        var tracks = [];
+        var friendId = $('.friend.active').children('.friend-id').text();
+        $currentItem.children().toggleClass('vk-item', false);
+        $currentItem.children('.tableRow').each(function () {
+            tracks.push($(this).closest('.tableRow').find('.trackId').text());
+        }).get();
+        $currentItem.empty();
+        $.ajax({
+            url: '/api/usertracks?provider=' + self.provider + "&index=" + index + "&friendId=" + friendId,
+            type: 'POST',
+            data: JSON.stringify({
+                "Id": playlistId,
+                "TrackIds": tracks
+            }),
+            contentType: 'application/json',
+            success: function () {
+                if ($('#playlistTracks').children().length > 0) {
+                    var playlistId = $('#playlistTracks').find('.playlistId').text();
+                    $('#playlistTracks').children().remove();
+                    self.manager._getTracks(playlistId);
+                }
+
+                $('.tableRow.playlist').remove();
+                self.playlistsGlobal.length = 0;
+                self.showPlaylists();
+            }
+        });
+    };
 
     this._toFormattedTime = function (input, roundSeconds) {
         if (roundSeconds) {
@@ -132,161 +161,6 @@ var SettingsManager = function (manager) {
         return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
     };
 
-    this._moveTrackToNewPosition = function (playlist) {
-        var playlistId = $('#playlistTracks').children('.playlistId').text();
-        var $tracks = $(playlist).children('.tableRow');
-        var wholePlaylist = [];
-        for (var i = 0; i < $tracks.length; i++) {
-            if (!$($tracks[i]).hasClass('draggable-stub')) {
-                wholePlaylist.push({
-                    'trackId': $($tracks[i]).find('.trackId').text(),
-                    'trackPosition': i
-                });
-            }
-        }
-
-        // Realisation without rewriting whole list
-        //var playlistId = $('.playlist.active').children('.playlistId').text();
-        //var tracksIds = [];
-        //$currentItem.children().each(function () {
-        //    tracksIds.push($(this).find('.trackId').text());
-        //}).get();
-        //var index = $draggableStub.index();
-
-        $.ajax({
-            url: '/api/usertracks/put?playlistId=' + playlistId,
-            type: 'PUT',
-            dataType: 'json',
-            data: JSON.stringify(wholePlaylist),
-            contentType: 'application/json; charset=utf-8'
-        });
-    };
-
-    this._shuffleTracksAction = function ($currentItem) {
-        var elems = $currentItem.children('.tableRow');
-        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
-        $currentItem.children().detach('.tableRow');
-        $currentItem.prepend(elems);
-
-        self._moveTrackToNewPosition($currentItem);
-    };
-
-    this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
-        var provider = $('.tab-pane.active').attr('id');
-        var tracks = [];
-        var friendId = $('.friend.active').children('.friend-id').text();
-        $currentItem.children().toggleClass('vk-item', false);
-        $('.draggable-item-selected').each(function () {
-            tracks.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-
-        $.ajax({
-            url: '/api/usertracks?provider=' + self.provider + "&index=" + index + "&friendId=" + friendId,
-            type: 'POST',
-            data: JSON.stringify({
-                "Id": playlistId,
-                "TrackIds": tracks
-            }),
-            contentType: 'application/json',
-            success: function () {
-                if ($('#playlistTracks').children().length > 0) {
-                    var playlistId = $('#playlistTracks').find('.playlistId').text();
-                    $('#playlistTracks').children().remove();
-                    self._getTracks(playlistId);
-                }
-
-                $('.tableRow.playlist').remove();
-                self.playlistsGlobal.length = 0;
-                self.showPlaylists();
-            }
-        });
-    };
-
-    this._selectAllTracksAction = function (list) {
-        list.toggleClass('draggable-item-selected', true);
-    };
-
-    this._removeSelectedTracksAction = function ($currentItem, playlistId) {
-        var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
-            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-        $.ajax({
-            url: '/api/usertracks/delete?playlistId=' + playlistId,
-            type: 'DELETE',
-            data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8',
-            success: function () {
-                var playlistId = $('#playlistTracks').find('.playlistId').text();
-                $('#playlistTracks').children().remove();
-                self._getTracks(playlistId);
-
-                $('.tableRow.playlist').remove();
-                self.playlistsGlobal.length = 0;
-                self.showPlaylists();
-            }
-        });
-    };
-
-    this._hideSelectedTracksAction = function (list) {
-        list.detach();
-        list.toggleClass('draggable-item-selected', false);
-        self.audioManager.refreshTracks();
-    };
-
-    this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
-        var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
-            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-        $.ajax({
-            url: '/api/usertracks/copy?playlistId=' + newPlaylist,
-            type: 'POST',
-            data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8',
-            success: function () {
-                $.ajax({
-                    url: '/api/usertracks/delete?playlistId=' + oldPlaylist,
-                    type: 'DELETE',
-                    data: JSON.stringify(tracksIds),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function () {
-                        $('#playlistTracks').children().remove();
-                        self._getTracks(oldPlaylist);
-
-                        $('.tableRow.playlist').remove();
-                        self.playlistsGlobal.length = 0;
-                        self.showPlaylists();
-                    }
-                });
-            }
-        });
-    };
-
-    this._copyTrackToPlaylistAction = function ($currentItem, playlistId) {
-        var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
-            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-        $.ajax({
-            url: '/api/usertracks/copy?playlistId=' + playlistId,
-            type: 'POST',
-            data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8',
-            success: function () {
-                if ($('#playlistTracks').children().length > 0) {
-                    var playlistId = $('#playlistTracks').find('.playlistId').text();
-                    $('#playlistTracks').children().remove();
-                    self._getTracks(playlistId);
-                }
-
-                $('.tableRow.playlist').remove();
-                self.playlistsGlobal.length = 0;
-                self.showPlaylists();
-            }
-        });
-    };
-
     this._getUserTracks = function (provider, reloginUrl) {
         
         self.$vkMusicTitle.text('Loading...');
@@ -307,12 +181,12 @@ var SettingsManager = function (manager) {
                     self.showTracks(tracks);
                     self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
-                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction },
-                            { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
-                        ]
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
+                        ],
+                        manager: self
                     });
                 } else {
                     self.$reloginForm.show();
@@ -392,10 +266,10 @@ var SettingsManager = function (manager) {
                     self.showTracks(tracks);
                     self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._shideSelectedTracksAction },
-                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction }
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false},
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true},
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true},
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true}
                         ]
                     });
                 } else {
@@ -458,6 +332,36 @@ var SettingsManager = function (manager) {
                 });
                 $logo.fadeIn(500);
             }
+        });
+    };
+
+    this._moveTrackToNewPosition = function (playlist) {
+        var playlistId = $('#playlistTracks').children('.playlistId').text();
+        var $tracks = $(playlist).children('.tableRow');
+        var wholePlaylist = [];
+        for (var i = 0; i < $tracks.length; i++) {
+            if (!$($tracks[i]).hasClass('draggable-stub')) {
+                wholePlaylist.push({
+                    'trackId': $($tracks[i]).find('.trackId').text(),
+                    'trackPosition': i
+                });
+            }
+        }
+
+        // Realisation without rewriting whole list
+        //var playlistId = $('.playlist.active').children('.playlistId').text();
+        //var tracksIds = [];
+        //$currentItem.children().each(function () {
+        //    tracksIds.push($(this).find('.trackId').text());
+        //}).get();
+        //var index = $draggableStub.index();
+
+        $.ajax({
+            url: '/api/usertracks/put?playlistId=' + playlistId,
+            type: 'PUT',
+            dataType: 'json',
+            data: JSON.stringify(wholePlaylist),
+            contentType: 'application/json; charset=utf-8'
         });
     };
 };
@@ -607,12 +511,12 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
     }
 };
 
-SettingsManager.prototype.bindListeners = function () {
+SettingsManager.prototype.bindListeners = function() {
     var self = this;
 
     self._getUserTracks(self.provider, self.reloginUrl);
 
-    $(document).on('PlaylistAdded', function (playlist) { // TODO Remove event triggering on document object
+    $(document).on('PlaylistAdded', function(playlist) { // TODO Remove event triggering on document object
         self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         self.$searchPlaylistInput.trigger('input');
     });
@@ -621,22 +525,22 @@ SettingsManager.prototype.bindListeners = function () {
         self._getUserTracks(self.provider);
     });
 
-    this.$searchTrackInput.keyup(function (e) {
+    this.$searchTrackInput.keyup(function(e) {
         var searchParam = $(this).val().toLocaleLowerCase();
 
-        self.showTracks(self.tracksGlobal.filter(function (index) {
+        self.showTracks(self.tracksGlobal.filter(function(index) {
             self.$searchTrackInput.next().next().children().remove();
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
         self.audioManager.refreshTracks();
     });
 
-    this.$searchPlaylistInput.keyup(function (e) {
+    this.$searchPlaylistInput.keyup(function(e) {
         var searchParam = $(this).val().toLocaleLowerCase();
 
         if (self.$playlistsTable.css('visibility') != 'hidden' && self.$playlistsTable.css('display') != 'none') {
 
-            var foundedPlaylist = self.playlistsGlobal.filter(function (index) {
+            var foundedPlaylist = self.playlistsGlobal.filter(function(index) {
                 self.$searchPlaylistInput.next().children().remove();
                 var isGenre = false;
                 for (var i = 0; i < index.Genres.length && isGenre == false; i++) {
@@ -661,7 +565,7 @@ SettingsManager.prototype.bindListeners = function () {
             $('.accordion .tableRow').on("click", self._getTracks);
         } else {
             console.log('nothing to do here');
-            self.showPlaylistTracks(self.playlistTracksGlobal.filter(function (index) {
+            self.showPlaylistTracks(self.playlistTracksGlobal.filter(function(index) {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
@@ -669,7 +573,7 @@ SettingsManager.prototype.bindListeners = function () {
         }
     });
 
-    $('#backToPlaylistsBtn').click(function () {
+    $('#backToPlaylistsBtn').click(function() {
         $('#backToPlaylistsBtn').hide();
         $('#playlistTracks').empty();
 
@@ -690,7 +594,7 @@ SettingsManager.prototype.bindListeners = function () {
         advanced: { updateOnSelectorChange: "true" }
     });
 
-    this._createPlaylist = function () {
+    this._createPlaylist = function() {
         var playlistName = self.$searchPlaylistInput.val();
         $.ajax({
             url: '/api/playlists?name=' + playlistName + '&accessibilty=Public',
@@ -703,7 +607,7 @@ SettingsManager.prototype.bindListeners = function () {
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
     };
 
-    this.$getFriendInfoBtn.click(function (e) {
+    this.$getFriendInfoBtn.click(function(e) {
         if (self.$friendsBody.is(':visible')) {
             self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
@@ -711,7 +615,7 @@ SettingsManager.prototype.bindListeners = function () {
             $.ajax({
                 url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                 async: true,
-                success: function (friends) {
+                success: function(friends) {
                     self.showFriends(friends);
                     self.$friendsBody.show('slow');
                     self.friendsOffset += friends.length;
@@ -723,11 +627,11 @@ SettingsManager.prototype.bindListeners = function () {
     });
 
     $('#infoModal').on('hidden.bs.modal', function() {
-        $('.modal-body').text('');
+        $('#infoModal .modal-body').text('');
         $('#listenTopBtn').attr('disabled', true);
     });
 
-    $('#listenTopBtn').click(function () {
+    $('#listenTopBtn').click(function() {
         $('.modal-body').text('');
         if (self.topTracks != null) {
             $('#vkMusic-header-title').text('');
@@ -741,9 +645,9 @@ SettingsManager.prototype.bindListeners = function () {
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json;',
-                    success: function (data) {
+                    success: function(data) {
                         self.topTracksVk = [];
-                        $(data).each(function () {
+                        $(data).each(function() {
                             this.duration = self._toFormattedTime(this.duration, true);
                             if ((typeof (this.artist) != 'undefined') && (typeof (this.title) != 'undefined')) {
                                 self.topTracksVk.push(this);
@@ -752,11 +656,11 @@ SettingsManager.prototype.bindListeners = function () {
                         self.showTracks(self.topTracksVk);
                         self.$vkMusicTable.makeDraggable({
                             contextMenu: [
-                                { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false, "callback": self._selectAllTracksAction },
-                                { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._hideSelectedTracksAction },
-                                { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true, "callback": self._saveTrackFromVkToPlaylist },
-                                { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true, "callback": self._createPlaylistAction },
-                                { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false, 'callback': self._shuffleTracksAction }
+                                { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
+                                { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                                { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
+                                { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                                { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false }
                             ]
                         });
                         self.$vkMusicLoadingSpinner.hide();
