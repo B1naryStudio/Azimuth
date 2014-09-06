@@ -79,14 +79,16 @@ namespace Azimuth.Services.Concrete
             if (lyricData == null || !lyricData.Any() || (lyricData.Count() == 1 && String.IsNullOrEmpty(lyricData[0])))
             {
                 _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
-                UserSocialNetwork socialNetworkData;
+                UserSocialNetwork socialNetworkData = null;
                 using (_unitOfWork)
                 {
                     socialNetworkData = GetSocialNetworkData("Vkontakte");
                     _unitOfWork.Commit();
                 }
-
-                lyricData = await _socialNetworkApi.GetTrackLyricByArtistAndName(artist, trackName, socialNetworkData.AccessToken, socialNetworkData.ThirdPartId);
+                if (socialNetworkData != null)
+                {
+                    lyricData = await _socialNetworkApi.GetTrackLyricByArtistAndName(artist, trackName, socialNetworkData.AccessToken, socialNetworkData.ThirdPartId);
+                }
             }
 
             if (deezerData != null)
@@ -436,10 +438,18 @@ namespace Azimuth.Services.Concrete
         private UserSocialNetwork GetSocialNetworkData(string provider)
         {
             var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
-            return userSocialNetworkRepo.GetOne(
+            if (AzimuthIdentity.Current != null)
+            {
+                return userSocialNetworkRepo.GetOne(
                 s =>
                     (s.SocialNetwork.Name == provider) &&
-                    (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
+                    (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));    
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }
