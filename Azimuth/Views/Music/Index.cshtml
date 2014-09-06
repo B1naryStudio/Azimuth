@@ -9,7 +9,6 @@
 
 <div>
     <div id="mainRow" class="row">
-        <button id="sharedmusic" class="btn btn-default">Share</button>
         
         <div id="playlists" class="stuck draggable">
             <h3>Playlists</h3>
@@ -180,11 +179,11 @@
             <div class="playlist-logo">
                 <img src="http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg" width="100" height="100" />
             </div>
-            <div class="playlist-title">${Name}</div>
-            <div class="playlist-info">
-                <span>Duration: ${Duration}</span>
-                <span>Songs: ${ItemsCount}</span>
+            <div class="playlist-title">Name: ${Name}</div>
+            <div class="playlist-accessibility">Accessibility: ${Accessibilty}
             </div>
+            <div>Duration: ${Duration}</div>
+            <div>Songs: ${ItemsCount}</div>
             <div class="playlist-genres">
                 <span class="label label-danger">${Genres[0]}</span>
                 <span class="label label-warning">${Genres[1]}</span>

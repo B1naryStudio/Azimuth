@@ -32,7 +32,6 @@ var MusicManager = function (manager) {
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
-    this.$shareMusic = $('#sharedmusic');
 
     this._getTracks = function (plId) {
         self.$playlistsLoadingSpinner.fadeIn('normal');
@@ -185,7 +184,8 @@ var MusicManager = function (manager) {
                             { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
                             { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
                             { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                            { 'id': 'sharetracks', 'name': 'Share tracks', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
                         ],
                         manager: self
                     });
@@ -267,11 +267,12 @@ var MusicManager = function (manager) {
                     self.showTracks(tracks);
                     self.$vkMusicTable.makeDraggable({
                         contextMenu: [
-                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false},
-                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true},
-                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true},
-                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true}
-                        ]
+                            { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
+                            { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
+                            { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
+                            { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
+                        ],
+                        manager: self
                     });
                 } else {
                     self.$reloginForm.show();
@@ -464,6 +465,7 @@ MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 
 MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
+    $('.playlist').remove();
     self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.show();
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
@@ -478,9 +480,9 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     for (var i = 0; i < self.playlists.length; i++) {
                         var playlist = self.playlists[i];
                         if (playlist.Accessibilty === 1) {
-                            playlist.Accessibilty = "public";
+                            playlist.Accessibilty = "Public";
                         } else {
-                            playlist.Accessibilty = "private";
+                            playlist.Accessibilty = "Private";
                         }
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
                         self.playlistsGlobal.push(playlist);
@@ -488,6 +490,31 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                         self._setNewImage(tmpl);
                         self.$playlistsTable.append(tmpl);
                         self._setChangingPlaylistImage(tmpl);
+
+
+                        var ctxMenu = new ContextMenu();
+                        var contextMenuActions = [
+                            { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                            { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                            { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
+                        ];
+                    
+                        ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+                        $('.playlist').off('mousedown').mousedown(function (event) {
+                            if (event.which == 3) {
+                                $('.playlist.selected').toggleClass('selected', false);
+                                var $target = $(event.target).parent('.playlist');
+                                $target.toggleClass('selected', true);
+                                ctxMenu.drawContextMenu(event);
+                            }
+                        });
+
+                        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+                            ctxMenu.$contextMenuContainer.hide();
+                            ctxMenu.selectAction($('.playlist.selected'));
+                        });
+
                     }
                 } else {
                     self.$reloginForm.show();
@@ -670,23 +697,5 @@ MusicManager.prototype.bindListeners = function() {
             }
         }
 
-    });
-
-    this.$shareMusic.mousedown(function () {
-        var tracksIds = [];
-        $('.draggable-item-selected').each(function () {
-            tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
-        }).get();
-
-        $.ajax({
-            url: '/api/playlists/share',
-            type: 'PUT',
-            dataType: 'json',
-            data: JSON.stringify(tracksIds),
-            contentType: 'application/json; charset=utf-8',
-            success: function(guid) {
-                console.log(guid);
-            }
-        });
     });
 };

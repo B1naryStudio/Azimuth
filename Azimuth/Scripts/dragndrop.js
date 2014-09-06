@@ -179,23 +179,20 @@
             if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
                 mousedownOnProgressBar = true;
             }
-            if (!$target.parents().hasClass('draggable-list')) {
+            //if (!$target.parents().hasClass('draggable-list')) {
+            if (!$target.parents().hasClass('draggable-list') && !$target.parents().hasClass('list')) {
                 document.oncontextmenu = function () {
                     return true;
                 }
             }
             if (!$target.hasClass('contextMenuActionName') && event.which != 3) {
-                contextMenu.$contextMenuContainer.detach();
-                contextMenu.$subContextMenuContainer.detach();
+                $('.contextMenu').detach();
             }
         });
 
         function _makeDraggable(event) {
             mouseClickPosition = { x: event.clientX, y: event.clientY };
             if (event.which == 3) {
-                document.oncontextmenu = function () {
-                    return false;
-                }
 
                 var $currentList = $(event.target);
                 $currentList = $currentList.parents('.draggable-list');
