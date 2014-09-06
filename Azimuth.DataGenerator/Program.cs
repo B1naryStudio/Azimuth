@@ -12,6 +12,7 @@ namespace Azimuth.DataGenerator
             var dg = new DataGenerator(kernel);
             dg.ClearDatabase();
             dg.GenerateData();          
+            dg.AddSharing();
         }
     }
 }

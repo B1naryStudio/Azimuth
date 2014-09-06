@@ -60,6 +60,7 @@
     <Compile Include="Migrations\Migration_201409010308_AddFollowers.cs" />
     <Compile Include="Migrations\Migration_201409052000_DeleteLyricTrackUrlGenreTableAddVkTrackId.cs" />
     <Compile Include="Migrations\Migration_201409061130_AddOwnerIdColumnToTracks.cs" />
+    <Compile Include="Migrations\Migration_201409052047_AddSharing.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

@@ -1,0 +1,21 @@
+﻿@model List<Azimuth.Shared.Dto.TracksDto>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@foreach (var track in Model)
+{
+    <div class="tableRow draggable-item track">
+        <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+        <div class="track-description">
+            <div class="track-info">
+                <span class="nowrap">@track.Album</span>
+            </div>
+            <div class="track-title nowrap">@track.Name</div>
+        </div>
+        <div class="track-duration nowrap">@track.Duration</div>
+        <div class="track-remaining" style="display: none"></div>
+        <div style="display: none" class="track-url">@track.Url</div>
+        <div style="display: none" class="trackId">@track.Id</div>
+    </div>    
+}
