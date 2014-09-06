@@ -464,6 +464,7 @@ SettingsManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 
 SettingsManager.prototype.showPlaylists = function (playlists) {
     var self = this;
+    $('.playlist').remove();
     self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.show();
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
@@ -478,9 +479,9 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                     for (var i = 0; i < self.playlists.length; i++) {
                         var playlist = self.playlists[i];
                         if (playlist.Accessibilty === 1) {
-                            playlist.Accessibilty = "public";
+                            playlist.Accessibilty = "Public";
                         } else {
-                            playlist.Accessibilty = "private";
+                            playlist.Accessibilty = "Private";
                         }
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
                         self.playlistsGlobal.push(playlist);
@@ -488,6 +489,31 @@ SettingsManager.prototype.showPlaylists = function (playlists) {
                         self._setNewImage(tmpl);
                         self.$playlistsTable.append(tmpl);
                         self._setChangingPlaylistImage(tmpl);
+
+
+                        var ctxMenu = new ContextMenu();
+                        var contextMenuActions = [
+                            { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                            { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                            { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
+                        ];
+                    
+                        ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+                        $('.playlist').off('mousedown').mousedown(function (event) {
+                            if (event.which == 3) {
+                                $('.playlist.selected').toggleClass('selected', false);
+                                var $target = $(event.target).parent('.playlist');
+                                $target.toggleClass('selected', true);
+                                ctxMenu.drawContextMenu(event);
+                            }
+                        });
+
+                        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+                            ctxMenu.$contextMenuContainer.hide();
+                            ctxMenu.selectAction($('.playlist.selected'));
+                        });
+
                     }
                 } else {
                     self.$reloginForm.show();

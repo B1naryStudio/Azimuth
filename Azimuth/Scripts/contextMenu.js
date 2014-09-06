@@ -1,4 +1,4 @@
-﻿var ContextMenu = function () {
+﻿var ContextMenu = function() {
     var self = this;
     // Context menu container creation
     this.$contextMenuContainer = $('<div>');
@@ -17,26 +17,26 @@
     this.timerId = null;
     this.provider = 'Vkontakte';
 
-    this._shuffleTracksAction = function ($currentItem) {
+    this._shuffleTracksAction = function($currentItem) {
         var elems = $currentItem.children('.tableRow');
-        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+        elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
         $currentItem.children().detach('.tableRow');
         $currentItem.prepend(elems);
 
         self._moveTrackToNewPosition($currentItem);
     };
 
-    this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
+    this._saveTrackFromVkToPlaylist = function($currentItem, index, playlistId) {
         self.manager._saveTrackFromVkToPlaylist($currentItem, index, playlistId);
     };
 
-    this._selectAllTracksAction = function (list) {
+    this._selectAllTracksAction = function(list) {
         list.toggleClass('draggable-item-selected', true);
     };
 
-    this._removeSelectedTracksAction = function ($currentItem, playlistId) {
+    this._removeSelectedTracksAction = function($currentItem, playlistId) {
         var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
+        $currentItem.children('.draggable-item-selected').each(function() {
             tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
         $.ajax({
@@ -44,7 +44,7 @@
             type: 'DELETE',
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
-            success: function () {
+            success: function() {
                 var playlistId = $('#playlistTracks').find('.playlistId').text();
                 $('#playlistTracks').children().remove();
                 self.manager._getTracks(playlistId);
@@ -56,15 +56,15 @@
         });
     };
 
-    this._hideSelectedTracksAction = function (list) {
+    this._hideSelectedTracksAction = function(list) {
         list.detach();
         list.toggleClass('draggable-item-selected', false);
         self.audioManager.refreshTracks();
     };
 
-    this._moveTracksBetweenPlaylistsAction = function ($currentItem, newPlaylist, oldPlaylist) {
+    this._moveTracksBetweenPlaylistsAction = function($currentItem, newPlaylist, oldPlaylist) {
         var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
+        $currentItem.children('.draggable-item-selected').each(function() {
             tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
         $.ajax({
@@ -72,13 +72,13 @@
             type: 'POST',
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
-            success: function () {
+            success: function() {
                 $.ajax({
                     url: '/api/usertracks/delete?playlistId=' + oldPlaylist,
                     type: 'DELETE',
                     data: JSON.stringify(tracksIds),
                     contentType: 'application/json; charset=utf-8',
-                    success: function () {
+                    success: function() {
                         $('#playlistTracks').children().remove();
                         self.manager._getTracks(oldPlaylist);
 
@@ -91,9 +91,9 @@
         });
     };
 
-    this._copyTrackToPlaylistAction = function ($currentItem, playlistId) {
+    this._copyTrackToPlaylistAction = function($currentItem, playlistId) {
         var tracksIds = [];
-        $currentItem.children('.draggable-item-selected').each(function () {
+        $currentItem.children('.draggable-item-selected').each(function() {
             tracksIds.push($(this).closest('.tableRow').find('.trackId').text());
         }).get();
         $.ajax({
@@ -101,7 +101,7 @@
             type: 'POST',
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
-            success: function () {
+            success: function() {
                 if ($('#playlistTracks').children().length > 0) {
                     var playlistId = $('#playlistTracks').find('.playlistId').text();
                     $('#playlistTracks').children().remove();
@@ -114,6 +114,27 @@
             }
         });
     };
+
+    this._changePlaylistAccessibility = function(playlistId, accessibility) {
+        $.ajax({
+            url: 'api/playlists?id=' + playlistId + '&accessibilty=' + accessibility,
+            type: 'PUT',
+            contentType: 'application/json; charset=utf-8',
+            success: function() {
+                self.manager.showPlaylists();
+            }
+        });
+    };
+
+    this._removePlaylist = function(playlistId) {
+        $.ajax({
+            url: 'api/playlists/delete/' + playlistId,
+            type: 'DELETE',
+            success: function() {
+                self.manager.showPlaylists();
+            }
+        });
+    }
 };
 
 ContextMenu.prototype.initializeContextMenu = function (contextId, contextmenuoptions, currentList, manager) {
@@ -230,6 +251,17 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     break;
                 case 'trackshuffle':
                     self._shuffleTracksAction(self.musicList.find('.draggable-list'));
+                    break;
+                case 'makepublic':
+                    var playlistId = $('.playlist.selected').find('.playlistId').text();
+                    self._changePlaylistAccessibility(playlistId, 'Public');
+                    break;
+                case 'shareplaylist':
+                    break;
+                case 'removeplaylist':
+                    var playlistId = $('.playlist.selected').find('.playlistId').text();
+                    self._removePlaylist(playlistId);
+                    break;
             }
         }
     }
@@ -237,6 +269,10 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
 
 ContextMenu.prototype.drawContextMenu = function (event) {
     var self = this;
+
+    document.oncontextmenu = function () {
+        return false;
+    }
     var anotherContextMenu = $('.contextMenu');
     if (anotherContextMenu.length > 0) {
         anotherContextMenu.detach();

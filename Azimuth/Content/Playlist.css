@@ -5,7 +5,7 @@
 }
 
 div.playlist {
-    height: 110px;
+    height: 220%;
 }
 
 .playlist-info {
@@ -16,7 +16,7 @@ div.playlist {
 .playlist-genres {
     vertical-align: bottom;
     height: 50%;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
 }
 
 .playlist-logo {
@@ -26,4 +26,8 @@ div.playlist {
 
 .playlist-title {
     padding-top: 5px;
+}
+
+.playlist div {
+    padding-top: 5px
 }
