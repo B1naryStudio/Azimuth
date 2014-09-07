@@ -207,7 +207,9 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             });
         } else {
             self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
-            self._loadNextTracks($currentTrack);
+            if (!$(this).parent().hasClass('vk-item')) {
+                self._loadNextTracks($currentTrack);
+            }
 
             if (self.audio.paused || self.audio.src != url) {
                 if (self.audio.src != url) {
