@@ -15,14 +15,14 @@ namespace Azimuth.Services.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<PlaylistListener> _listenerRepository;
         private readonly UserRepository _userRepository;
-        private readonly IRepository<UnauthorizedListeners> _unauthorizedListenersRepository;
+        private readonly IRepository<PlaylistListened> _unauthorizedListenersRepository;
         private readonly IRepository<Playlist> _playlistRepository;
 
         public ListenersService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _listenerRepository = _unitOfWork.GetRepository<PlaylistListener>();
-            _unauthorizedListenersRepository = _unitOfWork.GetRepository<UnauthorizedListeners>();
+            _unauthorizedListenersRepository = _unitOfWork.GetRepository<PlaylistListened>();
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
         }
@@ -102,7 +102,7 @@ namespace Azimuth.Services.Concrete
                     }
                     else
                     {
-                        _unauthorizedListenersRepository.AddItem(new UnauthorizedListeners
+                        _unauthorizedListenersRepository.AddItem(new PlaylistListened
                         {
                             Amount = 1,
                             Playlist = playlist
@@ -144,6 +144,7 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        
         public void RemoveListener(int playlistId, int userId)
         {
             Task.Run(() =>

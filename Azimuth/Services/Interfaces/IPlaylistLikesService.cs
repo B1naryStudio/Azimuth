@@ -11,5 +11,6 @@ namespace Azimuth.Services.Concrete
         void AddCurrentUserAsLiker(int playlistId);
         void RemoveCurrentUserAsLiker(int playlistId);
         void RemoveLike(int playlistId, int userId);
+        Task<bool> IsLiked(int id);
     }
 }

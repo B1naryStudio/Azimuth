@@ -14,12 +14,13 @@
     self.currentPlaylist = null;
     self.$likeBtn = $('#likeBtn');
     self.$likesCounter = $('.likesCounter');
+    self.currentLikeStatus = null;
 
     self.addCurrentUserAsListener = function (playlist) {
         $.ajax({
             cache: false,
             type: "POST",
-            url: "/api/listeners/" + playlist.Id,
+            url: "/api/listened/" + playlist.Id,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -28,23 +29,23 @@
         });
     };
 
-    self.removeCurrentUserAsListener = function () {
-        console.log('remove');
-        console.log(self.currentPlaylist);
-        var playlist = self.currentPlaylist;
-        $.ajax({
-            cache: false,
-            type: "delete",
-            url: "/api/listeners/" + playlist.Id,
-            dataType: "json",
-            success: function (data) {
-                //var playlist = self.currentPlaylist;
-                console.log('remove');
-                console.log(playlist);
-                self.$listeners.text(self.getPlaylistListeners(playlist));
-            }
-        });
-    };
+    //self.removeCurrentUserAsListener = function () {
+    //    console.log('remove');
+    //    console.log(self.currentPlaylist);
+    //    var playlist = self.currentPlaylist;
+    //    $.ajax({
+    //        cache: false,
+    //        type: "delete",
+    //        url: "/api/listeners/" + playlist.Id,
+    //        dataType: "json",
+    //        success: function (data) {
+    //            //var playlist = self.currentPlaylist;
+    //            console.log('remove');
+    //            console.log(playlist);
+    //            self.$listeners.text(self.getPlaylistListeners(playlist));
+    //        }
+    //    });
+    //};
 
     self.getPlaylistListeners = function (playlist) {
         if (playlist == null)
@@ -54,7 +55,7 @@
         $.ajax({
             cache: false,
             type: "GET",
-            url: "/api/listeners/" + playlist.Id,
+            url: "/api/listened/" + playlist.Id,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -71,7 +72,6 @@
             url: "/api/likes/" + self.currentPlaylist.Id,
             dataType: "json",
             success: function (data) {
-                console.log('Likes shown');
                 self.$likesCounter.text(data);
             }
         });
@@ -99,18 +99,48 @@
         $(this).toggleClass("active");
     }
 
+    self.setLikeBtnIcon = function () {
+        console.log(self.currentLikeStatus);
+        self.$likeBtn.find('.icon').removeClass('fa-thumbs-o-up').removeClass('fa-thumbs-up');
+        if (!self.currentLikeStatus) {
+            self.$likeBtn.find('.icon').toggleClass('fa-thumbs-up');
+            self.$likeBtn.css({
+                'background-color': 'rgb(100,120,255)'
+            });
+        } else {
+            self.$likeBtn.find('.icon').toggleClass('fa-thumbs-o-up');
+            self.$likeBtn.css({
+                'background-color': 'white'
+            });
+        }
+    }
+
+    self.isLiked = function (playlist) {
+        $.ajax({
+            url: "/api/likes/status/" + playlist.Id,
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                self.currentLikeStatus = data^true;
+            }
+        });
+        return self.currentLikeStatus;
+    }
+
 };
 
 
 PublicPlaylistManager.prototype.bindListeners = function () {
     var self = this;
-    self.$likeBtn.find('.icon').toggleClass("fa-thumbs-o-up");
+    //self.currentLikeStatus = 0;
+    //self.$likeBtn.find('.icon').toggleClass("fa-thumbs-o-up");
     console.log('likBTN');
     console.log(self.$likeBtn);
     self.$backToPlaylistsBtn.click(function () {
-        self.removeCurrentUserAsListener();
+        //self.removeCurrentUserAsListener(); was needed when it worked with listeners
         
         self.$playlistsArea.show();
+        self.showPlaylists();
         self.$tracksArea.hide();
         self.$backToPlaylistsBtn.hide();
         self.currentPlaylist = null;
@@ -131,26 +161,37 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         self.showTracks(self.currentPlaylist);
         self.showLikes();
         $(document).trigger('newListenerAdded', [self.currentPlaylist]);
+        self.isLiked(self.currentPlaylist);
+        self.setLikeBtnIcon();
     });
     
     self.$likeBtn.click(function () {
-        console.log('I\' here');
+        var action = null;
+        if (self.isLiked(self.currentPlaylist))
+            action = "POST";
+        else 
+            action = "DELETE";
+            
         $.ajax({
             cache: false,
-            type: "POST",
+            type: action,
             url: "/api/likes/" + self.currentPlaylist.Id,
             dataType: "json",
+            async:false,
             success: function (data) {
-                $(document).trigger('newLikeAdded');
+                $(document).trigger('likeStatusChanged');
             }
         });
+        self.isLiked(self.currentPlaylist);//TODO donno why, but I doing wasted request to server
+        self.setLikeBtnIcon();
+        
     });
-    $(document).on('newLikeAdded',function() {
+    $(document).on('likeStatusChanged', function () {
         self.showLikes();
     });
     $(document).on('newListenerAdded', function (event, playlist) {
         self.addCurrentUserAsListener(playlist);
-        self.$listeners.text('This playlist listening ' + self.getPlaylistListeners(playlist) + ' people');
+        self.$listeners.text('This playlist listened ' + self.getPlaylistListeners(playlist) + ' people');
     });
 };
 

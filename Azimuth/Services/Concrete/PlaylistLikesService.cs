@@ -131,5 +131,29 @@ namespace Azimuth.Services.Concrete
 
             });
         }
+
+        public Task<bool> IsLiked(int id)
+        {
+            var dop = AzimuthIdentity.Current;
+            return Task.Run(() =>
+            {
+                using (_unitOfWork)
+                {
+                    var playlist = _playlistRepository.Get(id);
+                    if (playlist == null)
+                    {
+                        throw new BadRequestException("Playlist with Id does not exist");
+                    }
+                    if (dop != null)
+                    {
+                        var userId =
+                            _userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
+                        var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == id && pair.Liker.Id == userId);
+                        return liker != null;
+                    }
+                    return false;
+                }
+            });
+        }
     }
 }

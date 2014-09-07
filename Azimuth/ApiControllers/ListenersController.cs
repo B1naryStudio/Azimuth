@@ -52,8 +52,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                var test = _listenersService.GetListenersByPlaylistId(id).Result;
-                return Request.CreateResponse(HttpStatusCode.OK, test.Count);
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    _listenersService.GetListenersByPlaylistId(id).Result.Count);
             }
             catch (BadRequestException ex)
             {

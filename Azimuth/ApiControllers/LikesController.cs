@@ -57,6 +57,22 @@ namespace Azimuth.ApiControllers
             
         }
 
+        [HttpGet]
+        [Route("status/{id:int}")]
+        public async Task<HttpResponseMessage> DoYouLikeIt(int id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    _likesService.IsLiked(id).Result);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+
+        }
+
         [HttpPost]
         [Route("{playlistId:int}/{userId:int}")]
         public async Task<HttpResponseMessage> AddLiker(int playlistId, int userId)
@@ -102,5 +118,7 @@ namespace Azimuth.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
+
+        
     }
 }
