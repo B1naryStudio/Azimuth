@@ -21,6 +21,7 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<DeezerTrackData.TrackData, TrackInfoDto>(DeezerDataMap);
             AddMapp<LastfmTrackData, TrackInfoDto>(LastfmDataMap);
             AddMapp<string[], TrackInfoDto>(ChartLyricMap);
+            AddMapp<TrackData.Audio, TracksDto>(VkTrackToTrackDto);
         }
 
         
@@ -152,6 +153,8 @@ namespace Azimuth.Infrastructure.Concrete
             tracksDto.Artist = track.Album.Artist.Name;
             tracksDto.Duration = track.Duration;
             tracksDto.Genre = track.Genre;
+            tracksDto.ThirdPartId = track.ThirdPartId;
+            tracksDto.OwnerId = track.OwnerId;
         }
 
         private static void UserMap(User user, UserDto userDto)
@@ -234,6 +237,17 @@ namespace Azimuth.Infrastructure.Concrete
             {
                 trackInfoDto.Lyric = lyric;
             }
+        }
+
+        private static void VkTrackToTrackDto(TrackData.Audio vk, TracksDto dto)
+        {
+            dto.Name = vk.Title;
+            dto.OwnerId = vk.OwnerId.ToString();
+            dto.ThirdPartId = vk.Id.ToString();
+            dto.Genre = vk.GenreId.ToString();
+            dto.Url = vk.Url;
+            dto.Duration = vk.Duration.ToString();
+            dto.Artist = vk.Artist;
         }
     }
 }

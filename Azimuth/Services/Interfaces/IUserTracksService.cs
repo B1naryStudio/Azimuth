@@ -20,6 +20,7 @@ namespace Azimuth.Services.Interfaces
         Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider);
         void UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId);
         Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider);
+        Task<List<TracksDto>> MakeSearch(string searchText, string criteria);
 
     }
 }

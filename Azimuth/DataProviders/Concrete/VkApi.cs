@@ -220,7 +220,7 @@ namespace Azimuth.DataProviders.Concrete
             return null;
         }
 
-        public async Task<List<TrackData.Audio>> SearchTracks(List<TrackSearchInfo.SearchData> tracks, string accessToken)
+        public async Task<List<TrackData.Audio>> SearchTracksForLyric(List<TrackSearchInfo.SearchData> tracks, string accessToken)
         {
             var searchedTracks = new List<TrackData.Audio>();
             if (tracks != null)
@@ -243,6 +243,16 @@ namespace Azimuth.DataProviders.Concrete
                 }
             }
             return searchedTracks;
+        }
+
+
+        public async Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken)
+        {
+            var url = BaseUri + "audio.search?q=" + searchText +
+                      "&auto_complete=1&sort=2&offset=0&count=10&v=5.24&access_token=" + accessToken;
+            var trackJson = await _webClient.GetWebData(url);
+            var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
+            return track.Response.Audios;
         }
 
         public async Task<string> AddTrack(string id, string audioId, string accessToken)
