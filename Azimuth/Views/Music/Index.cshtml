@@ -10,6 +10,7 @@
 <div>
     <div id="mainRow" class="row">
         <div id="playlists" class="stuck draggable">
+            
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <div id="playlist-header" class="table-header">
@@ -189,6 +190,7 @@
                 <span class="label label-success">${Genres[3]}</span>
                 <span class="label label-default">${Genres[4]}</span>
             </div>
+            <span style="display: none" class="readonly">${readonly}</span>
             <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" style="display: none"></div>

@@ -212,6 +212,7 @@ PublicPlaylistManager.prototype.showPlaylists = function () {
                 var secs = ('0' + (playlist.Duration % 60)).slice(-2);
                 playlist.Duration = mins + ':' + secs;
                 playlist.Creator = playlist.Creator.Name;
+                playlist.CreatorId = playlist.Creator.Id;
                 var $playlist = $('#playlistTemplate').tmpl(playlist);
                 self.$playlists.append($playlist);
                 var $listener = $playlist.find('.listeners');
