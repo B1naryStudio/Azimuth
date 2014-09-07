@@ -150,6 +150,8 @@ namespace Azimuth.Infrastructure.Concrete
             tracksDto.Name = track.Name;
             tracksDto.Album = track.Album.Name;
             tracksDto.Artist = track.Album.Artist.Name;
+            tracksDto.OwnerId = track.OwnerId;
+            tracksDto.ThirdPartId = track.ThirdPartId;
             tracksDto.Duration = track.Duration;
             tracksDto.Genre = track.Genre;
         }
@@ -176,19 +178,19 @@ namespace Azimuth.Infrastructure.Concrete
                 info.AlbumFans = deezerData.Album.Fans;
                 info.AlbumRank = deezerData.Album.Rating;
                 info.AlbumRelease = deezerData.Album.ReleaseDate;
-                info.AlbumTitle = deezerData.Album.Title;
+                info.AlbumTitle = info.AlbumTitle ?? deezerData.Album.Title;
                 if (deezerData.Album.Genres != null)
                     deezerData.Album.Genres.Data.ForEach(genre => info.Genres.Add(genre.Name));
             }
             if (deezerData.Artist != null)
             {
-                info.Artist = deezerData.Artist.Name;
+                info.Artist = info.Artist ?? deezerData.Artist.Name;
                 info.ArtistFans = deezerData.Artist.FansNumber;
                 info.ArtistImage = deezerData.Artist.Picture;
                 info.ArtistTopTracksUrl = deezerData.Artist.TrackListUrl; // TOP?
             }
 
-            info.Title = deezerData.Title;
+            info.Title = info.Title ?? deezerData.Title;
             info.TrackRank = deezerData.Rank;
             info.TrackDeezerUrl = deezerData.Link;
 

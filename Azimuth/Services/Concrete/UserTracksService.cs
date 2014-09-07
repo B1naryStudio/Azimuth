@@ -91,13 +91,13 @@ namespace Azimuth.Services.Concrete
                 }
             }
 
-            if (deezerData != null)
-            {
-                Mapper.Map(deezerData, trackData);
-            }
             if (lastfmData.Track != null)
             {
                 Mapper.Map(lastfmData, trackData);
+            }
+            if (deezerData != null)
+            {
+                Mapper.Map(deezerData, trackData);
             }
             if (lyricData != null)
             {

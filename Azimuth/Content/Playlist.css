@@ -9,8 +9,8 @@ div.playlist {
 }
 
 .playlist-info {
-    float: left;
     font-size: 11px;
+    
 }
 
 .playlist-genres {
@@ -25,9 +25,9 @@ div.playlist {
 }
 
 .playlist-title {
-    padding-top: 5px;
+    padding-top: 2px;
 }
 
 .playlist div {
-    padding-top: 5px
+    padding-top: 2px
 }

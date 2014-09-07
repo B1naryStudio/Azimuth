@@ -177,7 +177,7 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                 ]
             };
             $.ajax({
-                url: 'api/usertracks/trackurl?provider=Vkontakte',
+                url: '/api/usertracks/trackurl?provider=Vkontakte',
                 type: 'GET',
                 dataType: 'json',
                 data: { trackData: JSON.stringify(trackInfo) },

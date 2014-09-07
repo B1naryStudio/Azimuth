@@ -194,19 +194,22 @@
             <div class="playlist-logo">
                 <img src="http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg" width="100" height="100" />
             </div>
-            <div class="playlist-title">Name: ${Name}</div>
-            <div class="playlist-accessibility">Accessibility: ${Accessibilty}
+            <div class="playlist-info">
+                <div class="playlist-title">Name: ${Name}</div>
+                <div class="playlist-accessibility">
+                    Accessibility: ${Accessibilty}
+                </div>
+                <div>Duration: ${Duration}</div>
+                <div>Songs: ${ItemsCount}</div>
+                <div class="playlist-genres">
+                    <span class="label label-danger">${Genres[0]}</span>
+                    <span class="label label-warning">${Genres[1]}</span>
+                    <span class="label label-info">${Genres[2]}</span>
+                    <span class="label label-success">${Genres[3]}</span>
+                    <span class="label label-default">${Genres[4]}</span>
+                </div>
+                <span style="display: none" class="playlistId">${Id}</span>
             </div>
-            <div>Duration: ${Duration}</div>
-            <div>Songs: ${ItemsCount}</div>
-            <div class="playlist-genres">
-                <span class="label label-danger">${Genres[0]}</span>
-                <span class="label label-warning">${Genres[1]}</span>
-                <span class="label label-info">${Genres[2]}</span>
-                <span class="label label-success">${Genres[3]}</span>
-                <span class="label label-default">${Genres[4]}</span>
-            </div>
-            <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" style="display: none"></div>
     </script>
