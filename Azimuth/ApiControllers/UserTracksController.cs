@@ -106,12 +106,9 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> Post(PlaylistData playlistData, string provider, int index, string friendId)
+        public async Task<HttpResponseMessage> Post(DataForTrackSaving tracksInfo, string provider, int index)
         {
-            if (playlistData.TrackIds.Any())
-            {
-                await _userTracksService.SetPlaylist(playlistData, provider, index, friendId);
-            }
+            await _userTracksService.SetPlaylist(tracksInfo, provider, index);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

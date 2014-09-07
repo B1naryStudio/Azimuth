@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -179,26 +178,48 @@ namespace Azimuth.Services.Concrete
         {
             List<TracksDto> trackDtos = new List<TracksDto>();
             List<Track> tracks = new List<Track>();
+            List<TrackData.Audio> findInVk = new List<TrackData.Audio>();
             using (_unitOfWork)
             {
+                var socialNetworkData = GetSocialNetworkData("Vkontakte");
+                _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+
                 switch (criteria)
                 {
-                    case "Genre":
-                        tracks = _trackRepository.Get(track => track.Genre.ToLower().Contains(searchText.ToLower())).ToList();
+                    case "genre":
+                        tracks = _trackRepository.Get(track => track.Genre.ToLower().Contains(searchText)).ToList();
                         break;
-                    case "Artist":
-                        tracks = _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText.ToLower())).ToList();
+                    case "artist":
+                        tracks = _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText)).ToList();
                         break;
-                    case "Song":
-                        tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText.ToLower())).ToList();
+                    case "song":
+                        tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
                         break;
-                    case "Vkontakte":
-                        var accessToken = GetSocialNetworkData("Vkontakte").AccessToken;
-                        _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
-                        var find = await _socialNetworkApi.SearchTracks(searchText, accessToken);
-                        if (find.Count > 0)
+                    case "vk":
+                        findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0);
+                        if (findInVk.Count > 0)
                         {
-                            find.ForEach(item =>
+                            findInVk.ForEach(item =>
+                            {
+                                TracksDto dto = new TracksDto();
+                                Mapper.Map(item, dto);
+                                trackDtos.Add(dto);
+                            });
+                        }
+                        break;
+                    case "myvklist":
+                        findInVk =
+                            await
+                                _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
+                        findInVk =
+                            findInVk.Where(
+                                s =>
+                                    s.Title.ToLower().Contains(searchText) || s.GenreId.ToString().ToLower().Contains(searchText) ||
+                                    s.Artist.ToLower().Contains(searchText)).ToList();
+
+                        if (findInVk.Count > 0)
+                        {
+                            findInVk.ForEach(item =>
                             {
                                 TracksDto dto = new TracksDto();
                                 Mapper.Map(item, dto);
@@ -347,7 +368,7 @@ namespace Azimuth.Services.Concrete
             return searchedTracks;
         }
 
-        public async Task SetPlaylist(PlaylistData playlistData, string provider, int index, string friendId)
+        public async Task SetPlaylist(DataForTrackSaving tracksInfo, string provider, int index)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
@@ -355,26 +376,15 @@ namespace Azimuth.Services.Concrete
 
             using (_unitOfWork)
             {
-                List<TrackData.Audio> trackDatas = null;
+                List<VkTrackResponse.Audio> trackDatas = null;
                 //get checked tracks
                 var socialNetworkData = GetSocialNetworkData(provider);
-                if (!String.IsNullOrEmpty(friendId) && !String.IsNullOrWhiteSpace(friendId))
-                {
-                    trackDatas = await _socialNetworkApi.GetSelectedTracks(friendId,
-                    playlistData.TrackIds,
-                    socialNetworkData.AccessToken);
-                }
-                else
-                {
-                    trackDatas = await _socialNetworkApi.GetSelectedTracks(socialNetworkData.ThirdPartId,
-                    playlistData.TrackIds,
-                    socialNetworkData.AccessToken);
-                }
+                trackDatas = await _socialNetworkApi.GetSelectedTracks(tracksInfo, socialNetworkData.AccessToken);
 
                 if (trackDatas.Any())
                 {
-                    var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistData.Id);
-                    playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistData.Id).ToList();
+                    var playlist = _playlistRepository.GetOne(pl => pl.Id == tracksInfo.PlaylistId);
+                    playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == tracksInfo.PlaylistId).ToList();
 
                     int i = 0;
                     //create Track objects
@@ -416,7 +426,7 @@ namespace Azimuth.Services.Concrete
                                 Album = album,
                                 ThirdPartId = Convert.ToString(trackData.Id),
                                 OwnerId = Convert.ToString(trackData.OwnerId),
-                                Genre = trackData.GenreId.ToString()
+                                Genre = trackData.GenreId.ToString(),
                             };
 
                             track.Playlists.Add(playlist);
@@ -447,7 +457,7 @@ namespace Azimuth.Services.Concrete
                     {
                         var s = exp;
                     }
-                    
+
 
                     if (tracksToEnd == false)
                     {

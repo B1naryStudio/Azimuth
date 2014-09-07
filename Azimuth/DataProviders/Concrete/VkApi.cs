@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Helpers;
-using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
-using Hammock.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using WebGrease.Css.Extensions;
 
 namespace Azimuth.DataProviders.Concrete
 {
@@ -88,33 +83,28 @@ namespace Azimuth.DataProviders.Concrete
              
             return tracks.Response.Audios;
         }
-
-        public async Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken)
+        public async Task<List<VkTrackResponse.Audio>> GetSelectedTracks(DataForTrackSaving tracksInfo, string accessToken)
         {
-            var result = new List<TrackData.Audio>();
+            var result = new List<VkTrackResponse.Audio>();
 
-            for (int offset = 0; offset < trackIds.Count; offset += 100)
+            for (int offset = 0; offset < tracksInfo.TrackInfos.Count; offset += 100)
             {
-                var url = BaseUri + "audio.get" +
-                      "?owner_id=" + userId +
-                      "&audio_ids=";
-
-                url = trackIds.Skip(offset).Take(100).Aggregate(url, (current, trackId) => current + (trackId + ","));
+                var url = BaseUri + "audio.getById?audios=";
+                url = tracksInfo.TrackInfos.Skip(offset)
+                    .Take(100)
+                    .Aggregate(url, (current, track) => current + (track.OwnerId + "_" + track.ThirdPartId + ","));
                 url = url.Remove(url.Length - 1);
-                url += "&need_user=0" +
-                       "&count=" + MaxCntTracksPerReq +
-                       "&v=5.24" +
-                       "&access_token=" + accessToken;
+                url += "&itunes=0&v=5.24&access_token=" + accessToken;
 
                 var json = await _webClient.GetWebData(url);
-                var tracks = JsonConvert.DeserializeObject<TrackData>(json);
+                var tracks = JsonConvert.DeserializeObject<VkTrackResponse>(json);
 
                 if (tracks.Response == null)
                 {
                     var error = JsonConvert.DeserializeObject<ErrorData>(json);
                     if (error.Error == null && tracks.Response != null)
                     {
-                        return tracks.Response.Audios;
+                        return tracks.Response;
                     }
                     int code = error.Error.ErrorCode;
                     string message = error.Error.ErrorMessage;
@@ -137,7 +127,7 @@ namespace Azimuth.DataProviders.Concrete
                     }
                 }
 
-                result.AddRange(tracks.Response.Audios);
+                result.AddRange(tracks.Response);
             }
 
             return result;
@@ -250,13 +240,14 @@ namespace Azimuth.DataProviders.Concrete
                 }
             }
             return searchedTracks;
-        }
+ 
+     }
 
 
-        public async Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken)
-        {
+        public async Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken, byte inUserTracks)
+        {   
             var url = BaseUri + "audio.search?q=" + searchText +
-                      "&auto_complete=1&sort=2&offset=0&count=10&v=5.24&access_token=" + accessToken;
+                      "&auto_complete=1&lyrics=0&performer_only=0&sort=2&search_own=" + inUserTracks + "&offset=0&count=10&v=5.24&access_token=" + accessToken;
             var trackJson = await _webClient.GetWebData(url);
             var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
             return track.Response.Audios;
@@ -272,11 +263,7 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string accessToken)
         {
-            var url = BaseUri + "audio.getById?audios=";
-            foreach (var trackSocialInfo in tracks.Tracks)
-            {
-                url += trackSocialInfo.OwnerId + "_" + trackSocialInfo.ThirdPartId + ",";
-            }
+            var url = tracks.Tracks.Aggregate(BaseUri + "audio.getById?audios=", (current, trackSocialInfo) => current + (trackSocialInfo.OwnerId + "_" + trackSocialInfo.ThirdPartId + ","));
             url = url.Remove(url.Length - 1);
             url += "&access_token=" + accessToken;
             var trackJson = await _webClient.GetWebData(url);

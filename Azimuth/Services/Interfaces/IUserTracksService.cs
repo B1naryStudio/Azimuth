@@ -10,7 +10,7 @@ namespace Azimuth.Services.Interfaces
         Task<List<TrackData.Audio>> GetTracks(string provider);
         Task<TrackInfoDto> GetTrackInfo(string author, string trackName);
         Task<ICollection<TracksDto>> GetTracksByPlaylistId(int id);
-        Task SetPlaylist(PlaylistData playlistData, string provider, int index, string friendId);
+        Task SetPlaylist(DataForTrackSaving tracksInfo, string provider, int index);
         Task<ICollection<TracksDto>> GetUserTracks();
         void UpdateTrackPlaylistPosition(long playlistId, int newIndex, List<long> trackId);
         void MoveTrackBetweenPlaylists(long playlistId, long trackId);
