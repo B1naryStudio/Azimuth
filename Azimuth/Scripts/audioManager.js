@@ -231,18 +231,25 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
         var trackInfo = [];
         var curIndex = $currentTrack.index();
         var howMuchTracksLeft = ($currentTrack.parent().children().length - curIndex - 2);
-        if (howMuchTracksLeft > 0) {
-            if (howMuchTracksLeft < 2) {
+            if (howMuchTracksLeft == 1) {
                 trackInfo = {
                     trackData: [
-                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() }
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() },
+                        { ownerId: $($currentTrack.parent().children()[0]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[0]).find('.thirdPartId').text() }
+                    ]
+                };
+            } else if(howMuchTracksLeft >= 2) {
+                trackInfo = {
+                    trackData: [
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() },
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 2]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 2]).find('.thirdPartId').text() }
                     ]
                 };
             } else {
                 trackInfo = {
                     trackData: [
-                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() },
-                        { ownerId: $($currentTrack.parent().children()[curIndex + 2]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 2]).find('.thirdPartId').text() }
+                        { ownerId: $($currentTrack.parent().children()[0]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[0]).find('.thirdPartId').text() },
+                        { ownerId: $($currentTrack.parent().children()[1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[1]).find('.thirdPartId').text() }
                     ]
                 };
             }
@@ -254,11 +261,16 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                 success: function (tracks) {
                     for (var i = 0; i < tracks.length; i++) {
                         var tempUrl = tracks[i];
-                        $($currentTrack.parent().children()[curIndex + i + 1]).find('.track-url').text(tempUrl);
+                        var index = curIndex + i + 1;
+                        var listTracksCount = $currentTrack.parent().children().length;
+                        var diff = index - listTracksCount + 1;
+                        if (diff >= 0) {
+                            index = diff;
+                        }
+                        $($currentTrack.parent().children()[index]).find('.track-url').text(tempUrl);
                     }
                 }
             });
-        }
     };
 
     $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
