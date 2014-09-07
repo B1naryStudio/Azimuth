@@ -9,5 +9,7 @@
         public string Url { get; set; }
         public string Album { get; set; }
         public string Artist { get; set; }
+        public string ThirdPartId { get; set; }
+        public string OwnerId { get; set; }
     }
 }

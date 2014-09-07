@@ -13,5 +13,6 @@ namespace Azimuth.DataProviders.Interfaces
         Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId);
         Task<List<TrackData.Audio>> SearchTracks(List<TrackSearchInfo.SearchData> tracks, string accessToken);
         Task<string> AddTrack(string id, string audioId, string accessToken);
+        Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string accessToken);
     }
 }

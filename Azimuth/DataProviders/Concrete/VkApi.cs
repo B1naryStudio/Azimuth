@@ -5,11 +5,13 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
+using Hammock.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebGrease.Css.Extensions;
@@ -250,5 +252,19 @@ namespace Azimuth.DataProviders.Concrete
             var createdAudioId = await _webClient.GetWebData(url);
             return createdAudioId;
         }
+
+        public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string accessToken)
+        {
+            var url = BaseUri + "audio.getById?audios=";
+            foreach (var trackSocialInfo in tracks.Tracks)
+            {
+                url += trackSocialInfo.OwnerId + "_" + trackSocialInfo.ThirdPartId + ",";
+            }
+            url = url.Remove(url.Length - 1);
+            url += "&access_token=" + accessToken;
+            var trackJson = await _webClient.GetWebData(url);
+                var track = JsonConvert.DeserializeObject<VkTrackResponse>(trackJson).Response.Select(list => list.Url).ToList();
+                return track;
+        } 
     }
 }

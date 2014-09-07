@@ -58,10 +58,12 @@
     <Compile Include="Dto\TrackInPlaylist.cs" />
     <Compile Include="Dto\TracksDto.cs" />
     <Compile Include="Dto\TrackSearchInfo.cs" />
+    <Compile Include="Dto\TrackSocialInfo.cs" />
     <Compile Include="Dto\UserBrief.cs" />
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Dto\TrackData.cs" />
     <Compile Include="Dto\VkFriendData.cs" />
+    <Compile Include="Dto\VkTrackResponse.cs" />
     <Compile Include="Dto\VkUserData.cs" />
     <Compile Include="Enums\Accessibilty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

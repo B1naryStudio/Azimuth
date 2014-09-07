@@ -124,7 +124,9 @@ namespace Azimuth.Services.Concrete
                         Name = s.Identifier.Track.Name,
                         Duration = s.Identifier.Track.Duration,
                         Album = s.Identifier.Track.Album.Name,
-                        Artist = s.Identifier.Track.Album.Artist.Name
+                        Artist = s.Identifier.Track.Album.Artist.Name,
+                        ThirdPartId = s.Identifier.Track.ThirdPartId,
+                        OwnerId = s.Identifier.Track.OwnerId
                     }).ToList();
 
                     _unitOfWork.Commit();
@@ -147,7 +149,9 @@ namespace Azimuth.Services.Concrete
                             Name = track.Name,
                             Duration = track.Duration,
                             Album = track.Album.Name,
-                            Artist = track.Album.Artist.Name
+                            Artist = track.Album.Artist.Name,
+                            ThirdPartId = track.ThirdPartId,
+                            OwnerId = track.OwnerId
                         }).ToList();
 
                     _unitOfWork.Commit();
@@ -155,6 +159,20 @@ namespace Azimuth.Services.Concrete
                 }
             });
         }
+
+        public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider)
+        {
+            string accessToken;
+            _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
+            using (_unitOfWork)
+            {
+                accessToken = GetSocialNetworkData(provider).AccessToken;
+                _unitOfWork.Commit();
+            }
+
+            return await _socialNetworkApi.GetTrackUrl(tracks, accessToken);
+
+        } 
 
         public void UpdateTrackPlaylistPosition(long playlistId, int newIndex, List<long> trackId)
         {

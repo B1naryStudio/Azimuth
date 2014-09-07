@@ -167,23 +167,97 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             self.$currentTrack.find('.track-duration').show();
             self.$currentTrack.find('.track-remaining').hide();
         }
-
-        self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
+        var $currentTrack = $(this).parents('.track');
+        var onPlayBtnClickThis = this;
         var url = $(this).parent().children('.track-url').text();
-        if (self.audio.paused || self.audio.src != url) {
-            if (self.audio.src != url) {
-                self._setAttribute(url);
-                self.progressSlider.setPosition(0);
-                self.progressSlider.setBackgroundPosition(0);
-            }
-            self.$currentTrack = $(this).parent();
-            self.play();
-            self._setPauseImgButton($(this).parent());
-            $('#playTrackBtn').css('background-position', '8px -50px');
+        if (!url) {
+            var trackInfo = {
+                trackData: [
+                    { ownerId: $currentTrack.find('.ownerId').text(), thirdPartId: $currentTrack.find('.thirdPartId').text() }
+                ]
+            };
+            $.ajax({
+                url: 'api/usertracks/trackurl?provider=Vkontakte',
+                type: 'GET',
+                dataType: 'json',
+                data: { trackData: JSON.stringify(trackInfo) },
+                success: function(track) {
+                    url = track[0];
+                    $currentTrack.find('.track-url').text(url);
+
+                    self.tracksGlobal = $(onPlayBtnClickThis).parent().parent().children('.track').children('.track-url');
+                    if (self.audio.paused || self.audio.src != url) {
+                    if (self.audio.src != url) {
+                        self._setAttribute(url);
+                        self.progressSlider.setPosition(0);
+                        self.progressSlider.setBackgroundPosition(0);
+                    }
+                    self.$currentTrack = $(onPlayBtnClickThis).parent();
+                    self.play();
+                    self._setPauseImgButton($(onPlayBtnClickThis).parent());
+                    $('#playTrackBtn').css('background-position', '8px -50px');
+                    } else {
+                        self.pause();
+                        self._setPlayImgButton($(onPlayBtnClickThis).parent());
+                        $('#playTrackBtn').css('background-position', '8px 0');
+                    }
+                    self._loadNextTracks($currentTrack);
+
+                }
+            });
         } else {
-            self.pause();
-            self._setPlayImgButton($(this).parent());
-            $('#playTrackBtn').css('background-position', '8px 0');
+            self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
+            self._loadNextTracks($currentTrack);
+
+            if (self.audio.paused || self.audio.src != url) {
+                if (self.audio.src != url) {
+                    self._setAttribute(url);
+                    self.progressSlider.setPosition(0);
+                    self.progressSlider.setBackgroundPosition(0);
+                }
+                self.$currentTrack = $(this).parent();
+                self.play();
+                self._setPauseImgButton($(this).parent());
+                $('#playTrackBtn').css('background-position', '8px -50px');
+            } else {
+                self.pause();
+                self._setPlayImgButton($(this).parent());
+                $('#playTrackBtn').css('background-position', '8px 0');
+            }
+        }
+    };
+
+    this._loadNextTracks = function ($currentTrack) {
+        var trackInfo = [];
+        var curIndex = $currentTrack.index();
+        var howMuchTracksLeft = ($currentTrack.parent().children().length - curIndex - 2);
+        if (howMuchTracksLeft > 0) {
+            if (howMuchTracksLeft < 2) {
+                trackInfo = {
+                    trackData: [
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() }
+                    ]
+                };
+            } else {
+                trackInfo = {
+                    trackData: [
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 1]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 1]).find('.thirdPartId').text() },
+                        { ownerId: $($currentTrack.parent().children()[curIndex + 2]).find('.ownerId').text(), thirdPartId: $($currentTrack.parent().children()[curIndex + 2]).find('.thirdPartId').text() }
+                    ]
+                };
+            }
+            $.ajax({
+                url: 'api/usertracks/trackurl?provider=Vkontakte',
+                type: 'GET',
+                dataType: 'json',
+                data: { trackData: JSON.stringify(trackInfo) },
+                success: function (tracks) {
+                    for (var i = 0; i < tracks.length; i++) {
+                        var tempUrl = tracks[i];
+                        $($currentTrack.parent().children()[curIndex + i + 1]).find('.track-url').text(tempUrl);
+                    }
+                }
+            });
         }
     };
 

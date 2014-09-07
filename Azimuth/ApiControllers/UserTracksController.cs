@@ -57,6 +57,22 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("trackurl")]
+        public async Task<HttpResponseMessage> GetTrackUrl(string provider, string trackData)
+        {
+            try
+            {
+                var tracks = JsonConvert.DeserializeObject<TrackSocialInfo>(trackData);
+                var data = await _userTracksService.GetTrackUrl(tracks, provider);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+            
+        [HttpGet]
         public async Task<HttpResponseMessage> Get(string provider)
         {
             try

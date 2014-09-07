@@ -34,6 +34,11 @@ namespace Azimuth.Shared.Dto
             public int Count { get; set; }
             [JsonProperty(PropertyName = "items")]
             public List<Audio> Audios { get; set; }
+
+            public VkAudioResponse()
+            {
+                Audios = new List<Audio>();
+            }
         }
 
         public enum Genres //https://vk.com/dev/audio_genres
