@@ -53,8 +53,15 @@
             <div>
                 <button id="get-friends-info-btn" class="btn btn-default">Get friends info</button>
                 <button id="get-user-tracks" class="btn btn-default">Get user tracks</button>
-
                 <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
+                <select id="searchcriteria">
+                    <option selected="selected" value="myvklist">My VK list</option>
+                    <option value="song">Song</option>
+                    <option value="genre">Genre</option>
+                    <option value="artist">Artist</option>
+                    <option value="vk">Vkontakte</option>
+                </select>
+
                 <div id="vk-track-list">
                     <div id="vkMusic-header" class="table-header">
                         <div id="vkMusic-header-title" class="table-title">User Tracks</div>
@@ -150,7 +157,25 @@
             <div class="track-duration">${duration}</div>
             <div class="track-remaining" style="display: none"></div>
             <div style="display: none" class="track-url">${url}</div>
-            <div style="display: none" class="trackId">${id}</div>
+            <div style="display: none" class="thirdPartId">${id}</div>
+            <div style="display: none" class="ownerId">${owner_id}</div>
+        </div>
+    </script>
+    
+    <script id="searchTrackTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow draggable-item track vk-item">
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="track-description" data-title="${artist} ${title}">
+                <div class="track-info">${Artist}</div>
+                <div class="track-title nowrap">${Name}</div>
+            </div>
+
+            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
+            <div class="track-duration">${Duration}</div>
+            <div class="track-remaining" style="display: none"></div>
+            <div style="display: none" class="track-url">${Url}</div>
+            <div style="display: none" class="thirdPartId">${ThirdPartId}</div>
+            <div style="display: none" class="ownerId">${OwnerId}</div>
         </div>
     </script>
 
