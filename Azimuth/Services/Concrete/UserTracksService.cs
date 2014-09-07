@@ -173,7 +173,56 @@ namespace Azimuth.Services.Concrete
 
             return await _socialNetworkApi.GetTrackUrl(tracks, accessToken);
 
-        } 
+        }
+
+        public async Task<List<TracksDto>> MakeSearch(string searchText, string criteria)
+        {
+            List<TracksDto> trackDtos = new List<TracksDto>();
+            List<Track> tracks = new List<Track>();
+            using (_unitOfWork)
+            {
+                switch (criteria)
+                {
+                    case "Genre":
+                        tracks = _trackRepository.Get(track => track.Genre.ToLower().Contains(searchText.ToLower())).ToList();
+                        break;
+                    case "Artist":
+                        tracks = _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText.ToLower())).ToList();
+                        break;
+                    case "Song":
+                        tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText.ToLower())).ToList();
+                        break;
+                    case "Vkontakte":
+                        var accessToken = GetSocialNetworkData("Vkontakte").AccessToken;
+                        _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+                        var find = await _socialNetworkApi.SearchTracks(searchText, accessToken);
+                        if (find.Count > 0)
+                        {
+                            find.ForEach(item =>
+                            {
+                                TracksDto dto = new TracksDto();
+                                Mapper.Map(item, dto);
+                                trackDtos.Add(dto);
+                            });
+                        }
+                        break;
+                }
+
+                if (tracks.Count > 0)
+                {
+                    tracks.ForEach(item =>
+                    {
+                        TracksDto dto = new TracksDto();
+                        Mapper.Map(item, dto);
+                        trackDtos.Add(dto);
+                    });
+                }
+
+                _unitOfWork.Commit();
+            }
+
+            return trackDtos;
+        }
 
         public void UpdateTrackPlaylistPosition(long playlistId, int newIndex, List<long> trackId)
         {
@@ -291,7 +340,7 @@ namespace Azimuth.Services.Concrete
             using (_unitOfWork)
             {
                 var socialNetworkData = GetSocialNetworkData(provider);
-                searchedTracks = await _socialNetworkApi.SearchTracks(tracksDescription, socialNetworkData.AccessToken);
+                searchedTracks = await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);
                 _unitOfWork.Commit();
             }
 
