@@ -491,29 +491,29 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                         self.$playlistsTable.append(tmpl);
                         self._setChangingPlaylistImage(tmpl);
 
+                        self._createContextMenuForPlaylists();
+                        //var ctxMenu = new ContextMenu();
+                        //var contextMenuActions = [
+                        //    { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                        //    { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                        //    { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
+                        //];
 
-                        var ctxMenu = new ContextMenu();
-                        var contextMenuActions = [
-                            { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
-                            { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
-                            { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
-                        ];
-                    
-                        ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+                        //ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
-                        $('.playlist').off('mousedown').mousedown(function (event) {
-                            if (event.which == 3) {
-                                $('.playlist.selected').toggleClass('selected', false);
-                                var $target = $(event.target).parent('.playlist');
-                                $target.toggleClass('selected', true);
-                                ctxMenu.drawContextMenu(event);
-                            }
-                        });
+                        //$('.playlist').off('mousedown').mousedown(function (event) {
+                        //    if (event.which == 3) {
+                        //        $('.playlist.selected').toggleClass('selected', false);
+                        //        var $target = $(event.target).parent('.playlist');
+                        //        $target.toggleClass('selected', true);
+                        //        ctxMenu.drawContextMenu(event);
+                        //    }
+                        //});
 
-                        ctxMenu.$contextMenuContainer.mousedown(function (event) {
-                            ctxMenu.$contextMenuContainer.hide();
-                            ctxMenu.selectAction($('.playlist.selected'));
-                        });
+                        //ctxMenu.$contextMenuContainer.mousedown(function (event) {
+                        //    ctxMenu.$contextMenuContainer.hide();
+                        //    ctxMenu.selectAction($('.playlist.selected'));
+                        //});
 
                     }
                 } else {
@@ -535,7 +535,33 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 self._setChangingPlaylistImage(tmpl);
             }
         }
+        self._createContextMenuForPlaylists();
         self.$playlistsLoadingSpinner.hide();
+    }
+
+    this._createContextMenuForPlaylists = function() {
+        var ctxMenu = new ContextMenu();
+        var contextMenuActions = [
+            { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+            { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+            { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
+        ];
+
+        ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+        $('.playlist').off('mousedown').mousedown(function (event) {
+            if (event.which == 3) {
+                $('.playlist.selected').toggleClass('selected', false);
+                var $target = $(event.target).parent('.playlist');
+                $target.toggleClass('selected', true);
+                ctxMenu.drawContextMenu(event);
+            }
+        });
+
+        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+            ctxMenu.$contextMenuContainer.hide();
+            ctxMenu.selectAction($('.playlist.selected'));
+        });
     }
 };
 

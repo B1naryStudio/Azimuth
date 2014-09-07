@@ -121,7 +121,8 @@
             url: 'api/playlists?id=' + playlistId + '&accessibilty=' + accessibility,
             type: 'PUT',
             contentType: 'application/json; charset=utf-8',
-            success: function() {
+            success: function () {
+                self.manager.playlistsGlobal.length = 0;
                 self.manager.showPlaylists();
             }
         });
@@ -131,7 +132,8 @@
         $.ajax({
             url: 'api/playlists/delete/' + playlistId,
             type: 'DELETE',
-            success: function() {
+            success: function () {
+                self.manager.playlistsGlobal.length = 0;
                 self.manager.showPlaylists();
             }
         });
