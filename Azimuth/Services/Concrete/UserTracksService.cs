@@ -329,6 +329,7 @@ namespace Azimuth.Services.Concrete
                     int i = 0;
                     //create Track objects
                     var artistRepo = _unitOfWork.GetRepository<Artist>();
+                    
                     foreach (var trackData in trackDatas)
                     {
                         var artist = new Artist

@@ -321,7 +321,7 @@ var MusicManager = function (manager) {
     };
 
     this._setNewImage = function (playlist) {
-        var id = playlist.children('.playlist-info').children('.playlistId').html();
+        var id = playlist.children('.playlistId').html();
         $.ajax({
             url: '/api/playlists/image/' + id,
             success: function (image) {

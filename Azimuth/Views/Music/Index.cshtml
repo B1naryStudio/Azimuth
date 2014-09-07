@@ -46,7 +46,7 @@
             </div>
             <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
                 <p id="error"> Your time has expired, please login again. </p>
-                @Html.ActionLink("OK", "ConnectAccount", "Account", null, new { @class = "btn btn-danger btn-large" })
+                @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-danger btn-large" })
             </div>
 
             <h3>Tracks</h3>
@@ -194,22 +194,20 @@
             <div class="playlist-logo">
                 <img src="http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg" width="100" height="100" />
             </div>
-            <div class="playlist-info">
-                <div class="playlist-title">Name: ${Name}</div>
-                <div class="playlist-accessibility">
-                    Accessibility: ${Accessibilty}
-                </div>
-                <div>Duration: ${Duration}</div>
-                <div>Songs: ${ItemsCount}</div>
-                <div class="playlist-genres">
-                    <span class="label label-danger">${Genres[0]}</span>
-                    <span class="label label-warning">${Genres[1]}</span>
-                    <span class="label label-info">${Genres[2]}</span>
-                    <span class="label label-success">${Genres[3]}</span>
-                    <span class="label label-default">${Genres[4]}</span>
-                </div>
-                <span style="display: none" class="playlistId">${Id}</span>
+            <div class="playlist-title playlist-info">Name: ${Name}</div>
+            <div class="playlist-accessibility playlist-info">
+                Accessibility: ${Accessibilty}
             </div>
+            <div class="playlist-info">Duration: ${Duration}</div>
+            <div class="playlist-info">Songs: ${ItemsCount}</div>
+            <div class="playlist-genres">
+                <span class="label label-danger">${Genres[0]}</span>
+                <span class="label label-warning">${Genres[1]}</span>
+                <span class="label label-info">${Genres[2]}</span>
+                <span class="label label-success">${Genres[3]}</span>
+                <span class="label label-default">${Genres[4]}</span>
+            </div>
+            <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" style="display: none"></div>
     </script>

@@ -91,49 +91,56 @@ namespace Azimuth.DataProviders.Concrete
 
         public async Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken)
         {
-            var url = BaseUri + "audio.get" +
+            var result = new List<TrackData.Audio>();
+
+            for (int offset = 0; offset < trackIds.Count; offset += 100)
+            {
+                var url = BaseUri + "audio.get" +
                       "?owner_id=" + userId +
                       "&audio_ids=";
 
-            url = trackIds.Aggregate(url, (current, trackId) => current + (trackId + ","));
-            url = url.Remove(url.Length - 1);
-            url += "&need_user=0" +
-                   "&count=" + MaxCntTracksPerReq +
-                   "&v=5.24" +
-                   "&access_token=" + accessToken;
+                url = trackIds.Skip(offset).Take(100).Aggregate(url, (current, trackId) => current + (trackId + ","));
+                url = url.Remove(url.Length - 1);
+                url += "&need_user=0" +
+                       "&count=" + MaxCntTracksPerReq +
+                       "&v=5.24" +
+                       "&access_token=" + accessToken;
 
-            var json = await _webClient.GetWebData(url);
-            var tracks = JsonConvert.DeserializeObject<TrackData>(json);
+                var json = await _webClient.GetWebData(url);
+                var tracks = JsonConvert.DeserializeObject<TrackData>(json);
 
-            if (tracks.Response == null)
-            {
-                var error = JsonConvert.DeserializeObject<ErrorData>(json);
-                if (error.Error == null && tracks.Response != null)
+                if (tracks.Response == null)
                 {
-                    return tracks.Response.Audios;
+                    var error = JsonConvert.DeserializeObject<ErrorData>(json);
+                    if (error.Error == null && tracks.Response != null)
+                    {
+                        return tracks.Response.Audios;
+                    }
+                    int code = error.Error.ErrorCode;
+                    string message = error.Error.ErrorMessage;
+                    switch (code)
+                    {
+                        case 1:
+                            throw new UnknownErrorException(message, code);
+                        case 2:
+                            throw new ApplicationDisabledException(message, code);
+                        case 4:
+                            throw new IncorrectSignatureException(message, code);
+                        case 5:
+                            throw new UserAuthorizationException(message, code);
+                        case 6:
+                            throw new ManyRequestException(message, code);
+                        case 100:
+                            throw new BadParametersException(message, code);
+                        default:
+                            throw new VkApiException(message, code);
+                    }
                 }
-                int code = error.Error.ErrorCode;
-                string message = error.Error.ErrorMessage;
-                switch (code)
-                {
-                    case 1:
-                        throw new UnknownErrorException(message, code);
-                    case 2:
-                        throw new ApplicationDisabledException(message, code);
-                    case 4:
-                        throw new IncorrectSignatureException(message, code);
-                    case 5:
-                        throw new UserAuthorizationException(message, code);
-                    case 6:
-                        throw new ManyRequestException(message, code);
-                    case 100:
-                        throw new BadParametersException(message, code);
-                    default:
-                        throw new VkApiException(message, code);
-                }
+
+                result.AddRange(tracks.Response.Audios);
             }
 
-            return tracks.Response.Audios;
+            return result;
         }
 
         public async Task<string> GetLyricsById(string userId, long lyricsId, string accessToken)
