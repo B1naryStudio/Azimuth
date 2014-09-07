@@ -13,7 +13,7 @@ namespace Azimuth.Migrations.Migrations
         public override void Up()
         {
             Create.Table("Likes")
-                .WithColumn("Id").AsInt64().NotNullable().PrimaryKey()
+                .WithColumn("Id").AsInt64().NotNullable().Identity().PrimaryKey()
                 .WithColumn("PlaylistId").AsInt64().NotNullable().ForeignKey("Playlists", "PlaylistsId")
                 .WithColumn("UserId").AsInt64().NotNullable().ForeignKey("Users", "Id");
         }

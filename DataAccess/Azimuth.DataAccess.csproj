@@ -146,7 +146,7 @@
     <EmbeddedResource Include="Mappings\playlistlisteners.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Mappings\Likes.hbm.xml" />
+    <EmbeddedResource Include="Mappings\likes.hbm.xml" />
     <Content Include="Mappings\unauthorizedusers.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

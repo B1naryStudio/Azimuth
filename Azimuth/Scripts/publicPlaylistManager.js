@@ -13,37 +13,42 @@
     self.$backToPlaylistsBtn = $('#backToPlaylistsBtn');
     self.currentPlaylist = null;
     self.$likeBtn = $('#likeBtn');
+    self.$likesCounter = $('.likesCounter');
 
-    self.addCurrentUserAsListener = function(playlist) {
-        var self = this;
+    self.addCurrentUserAsListener = function (playlist) {
         $.ajax({
             cache: false,
-            type: "Post",
+            type: "POST",
             url: "/api/listeners/" + playlist.Id,
             dataType: "json",
             async: false,
-            success: function(data) {
-                self.$listeners.text('This album listening ' + self.getPlaylistListeners(playlist) + ' people');
+            success: function (data) {
+                
             }
         });
     };
 
     self.removeCurrentUserAsListener = function () {
-        var self = this;
+        console.log('remove');
+        console.log(self.currentPlaylist);
+        var playlist = self.currentPlaylist;
         $.ajax({
             cache: false,
             type: "delete",
-            url: "/api/listeners/" + self.currentPlaylist.Id,
+            url: "/api/listeners/" + playlist.Id,
             dataType: "json",
-            async: false,
-            success: function(data) {
-                self.$listeners.text(self.getPlaylistListeners(self.currentPlaylist));
+            success: function (data) {
+                //var playlist = self.currentPlaylist;
+                console.log('remove');
+                console.log(playlist);
+                self.$listeners.text(self.getPlaylistListeners(playlist));
             }
         });
     };
 
     self.getPlaylistListeners = function (playlist) {
-        var self = this;
+        if (playlist == null)
+            playlist = self.currentPlaylist;
         self.$listeners.empty();
         var res = -1;
         $.ajax({
@@ -52,11 +57,24 @@
             url: "/api/listeners/" + playlist.Id,
             dataType: "json",
             async: false,
-            success: function(data) {
+            success: function (data) {
                 res = data;
             }
         });
         return res;
+    };
+
+    self.showLikes = function() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/api/likes/" + self.currentPlaylist.Id,
+            dataType: "json",
+            success: function (data) {
+                console.log('Likes shown');
+                self.$likesCounter.text(data);
+            }
+        });
     };
 
     self.showTracks = function (playlist) {
@@ -65,8 +83,7 @@
         self.$tracks.empty();
         $.ajax({
             url: "/api/usertracks?playlistId=" + playlist.Id, // TODO replace with class playlistID
-            type: 'GET',
-            async: false,
+            type: 'GET',            
             success: function(tracksData) {
                 var tracks = tracksData;
                 for (var i = 0; i < tracks.length; ++i) {
@@ -88,33 +105,52 @@
 PublicPlaylistManager.prototype.bindListeners = function () {
     var self = this;
     self.$likeBtn.find('.icon').toggleClass("fa-thumbs-o-up");
+    console.log('likBTN');
+    console.log(self.$likeBtn);
     self.$backToPlaylistsBtn.click(function () {
-        self.currentPlaylist = null;
+        self.removeCurrentUserAsListener();
+        
         self.$playlistsArea.show();
         self.$tracksArea.hide();
         self.$backToPlaylistsBtn.hide();
-        self.removeCurrentUserAsListener();
+        self.currentPlaylist = null;
     });
     self.$playlists.click(function (event) {
         
         self.$playlistsArea.hide();
         self.$tracksArea.show();
         self.$backToPlaylistsBtn.show();
+        
         var $playlist = $(event.target).closest('.playlist-plated');
 
         var playlistName = $playlist.find('.playlist-plated-info-name').text();
         self.currentPlaylist = self.playlists_global.filter(function (index) {
             return index.Name.valueOf() == playlistName;
         })[0];
+        
         self.showTracks(self.currentPlaylist);
+        self.showLikes();
         $(document).trigger('newListenerAdded', [self.currentPlaylist]);
     });
-    $(document).on('newListenerAdded', function (event, data) {
-        self.$listeners.text(self.addCurrentUserAsListener(data));
+    
+    self.$likeBtn.click(function () {
+        console.log('I\' here');
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/api/likes/" + self.currentPlaylist.Id,
+            dataType: "json",
+            success: function (data) {
+                $(document).trigger('newLikeAdded');
+            }
+        });
     });
-
-    self.$likeBtn.click(function() {
-        //this.toggleClass("")
+    $(document).on('newLikeAdded',function() {
+        self.showLikes();
+    });
+    $(document).on('newListenerAdded', function (event, playlist) {
+        self.addCurrentUserAsListener(playlist);
+        self.$listeners.text('This playlist listening ' + self.getPlaylistListeners(playlist) + ' people');
     });
 };
 
@@ -126,7 +162,6 @@ PublicPlaylistManager.prototype.showPlaylists = function () {
         type: "GET",
         url: "/api/playlists/public",
         dataType: "json",
-        async: false,
         success: function(data) {
             var playlists = data;
             self.playlists_global = playlists;

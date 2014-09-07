@@ -5,6 +5,6 @@
       <generator class="native"/>
     </id>
     <many-to-one name="Playlist" column="PlaylistId" />
-    <many-to-one name="Listener" column="Id" />
+    <many-to-one name="Listener" column="ListenerId" />
   </class>
 </hibernate-mapping>
