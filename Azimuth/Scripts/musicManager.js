@@ -84,7 +84,7 @@ var MusicManager = function (manager) {
         $('#createPlaylistModal').modal('hide');
         $('#createPlaylistModal').on('hidden.bs.modal', function () {
             $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
-            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected")
+            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
         });
 
         var playlistName = $('#playlistNameToCreate').val();

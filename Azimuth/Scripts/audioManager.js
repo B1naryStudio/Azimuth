@@ -207,11 +207,13 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             });
         } else {
             self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
-            if (!$(this).parent().hasClass('vk-item')) {
-                self._loadNextTracks($currentTrack);
-            }
 
             if (self.audio.paused || self.audio.src != url) {
+
+                if (!$(this).parent().hasClass('vk-item') && !self.audio.paused) {
+                    self._loadNextTracks($currentTrack);
+                }
+
                 if (self.audio.src != url) {
                     self._setAttribute(url);
                     self.progressSlider.setPosition(0);
@@ -264,8 +266,8 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                     for (var i = 0; i < tracks.length; i++) {
                         var tempUrl = tracks[i];
                         var index = curIndex + i + 1;
-                        var listTracksCount = $currentTrack.parent().children().length;
-                        var diff = index - listTracksCount + 1;
+                        var listTracksCount = $currentTrack.parent().children('.track').length;
+                        var diff = index - listTracksCount;
                         if (diff >= 0) {
                             index = diff;
                         }
