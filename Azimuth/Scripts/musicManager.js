@@ -521,7 +521,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
         $('.playlist').off('mousedown').mousedown(function (event) {
             if (event.which == 3) {
                 $('.playlist.selected').toggleClass('selected', false);
-                var $target = $(event.target).parent('.playlist');
+                var $target = $(event.target).parents('.playlist');
                 $target.toggleClass('selected', true);
                 ctxMenu.drawContextMenu(event);
             }

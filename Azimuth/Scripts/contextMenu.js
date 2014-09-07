@@ -173,7 +173,7 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function(guid) {
-                $('#sharingLink').val(self.host + "Share/Index?guid=" + data);
+                $('#sharingLink').val(self.host + "Share/Index?guid=" + guid);
             }
         });
     };
