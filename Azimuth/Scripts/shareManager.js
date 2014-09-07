@@ -70,6 +70,12 @@
 
 
     $('#musicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+    $('.track-duration').each(function() {
+        var $this = $(this);
+        var oldDuration = $this.html();
+        var formattedDuration = self._toFormattedTime(oldDuration, true);
+        $this.html(formattedDuration);
+    });
 };
 
 ShareManager.prototype.bindListeners = function () {

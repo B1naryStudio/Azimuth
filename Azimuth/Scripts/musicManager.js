@@ -45,7 +45,7 @@ var MusicManager = function (manager) {
             success: function (tracksData) {
                 self.$playlistsLoadingSpinner.hide();
                 for (var i = 0; i < tracksData.length; i++) {
-                    tracksData[i].Duration = Math.floor(tracksData[i].Duration / 60) + ":" + (tracksData[i].Duration % 60 < 10 ? "0" + tracksData[i].Duration % 60 : tracksData[i].Duration % 60);
+                    tracksData[i].Duration = self._toFormattedTime(tracksData[i].Duration, true);
                 }
                 self.playlistTracksGlobal = tracksData;
                 self.showPlaylistTracks(tracksData, playlistId);
@@ -321,7 +321,7 @@ var MusicManager = function (manager) {
     };
 
     this._setNewImage = function (playlist) {
-        var id = playlist.children('.playlistId').html();
+        var id = playlist.children('.playlist-info').children('.playlistId').html();
         $.ajax({
             url: '/api/playlists/image/' + id,
             success: function (image) {

@@ -38,7 +38,7 @@
     content: attr(data-title); 
     position: absolute; 
     left: 40%;
-    z-index: 1; 
+    z-index: 1002; 
     background: #e0e0e0; 
     font-family: Arial, sans-serif; 
     font-size: 11px; 
