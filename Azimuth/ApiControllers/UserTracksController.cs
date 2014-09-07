@@ -57,6 +57,21 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("globalsearch")]
+        public async Task<HttpResponseMessage> GetSearchedTracks(string searchText, string criteria)
+        {
+            try
+            {
+                var data = await _userTracksService.MakeSearch(searchText, criteria);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, exception);
+            }
+        }
+
+        [HttpGet]
         [Route("trackurl")]
         public async Task<HttpResponseMessage> GetTrackUrl(string provider, string trackData)
         {

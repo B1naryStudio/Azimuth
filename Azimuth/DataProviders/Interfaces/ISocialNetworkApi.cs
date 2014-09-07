@@ -11,7 +11,8 @@ namespace Azimuth.DataProviders.Interfaces
         Task<List<TrackData.Audio>> GetSelectedTracks(string userId, List<string> trackIds, string accessToken);
         Task<string> GetLyricsById(string userId, long lyricsId, string accessToken);
         Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId);
-        Task<List<TrackData.Audio>> SearchTracks(List<TrackSearchInfo.SearchData> tracks, string accessToken);
+        Task<List<TrackData.Audio>> SearchTracksForLyric(List<TrackSearchInfo.SearchData> tracks, string accessToken);
+        Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken);
         Task<string> AddTrack(string id, string audioId, string accessToken);
         Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string accessToken);
     }
