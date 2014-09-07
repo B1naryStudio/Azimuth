@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -329,56 +330,75 @@ namespace Azimuth.Services.Concrete
                     int i = 0;
                     //create Track objects
                     var artistRepo = _unitOfWork.GetRepository<Artist>();
-                    
-                    foreach (var trackData in trackDatas)
+
+                    try
                     {
-                        var artist = new Artist
+                        foreach (var trackData in trackDatas)
                         {
-                            Name = trackData.Artist
-                        };
-                        var album = new Album
-                        {
-                            Name = "",
-                            Artist = artist,
-                        };
-                        artist.Albums.Add(album);
-                        artistRepo.AddItem(artist);
-                        var track = new Track
-                        {
-                            Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
-                            //Lyrics =
-                            //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
-                            //            socialNetworkData.AccessToken),
-                            Name = trackData.Title,
-                            Album = album,
-                            ThirdPartId = Convert.ToString(trackData.Id),
-                            OwnerId = Convert.ToString(trackData.OwnerId),
-                            Genre = trackData.GenreId.ToString()
-                        };
-
-                        track.Playlists.Add(playlist);
-                        album.Tracks.Add(track);
-                        _trackRepository.AddItem(track);
-
-                        if (index == -1)
-                        {
-                            index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
-                        }
-
-                        var playlistTrack = new PlaylistTrack
-                        {
-                            Identifier = new PlaylistTracksIdentifier
+                            if (trackData.Artist.Length > 50)
                             {
-                                Playlist = playlist,
-                                Track = track
-                            },
-                            TrackPosition = index + i++
-                        };
+                                trackData.Artist = trackData.Artist.Substring(0, 50);
+                            }
+                            if (trackData.Title.Length > 50)
+                            {
+                                trackData.Title = trackData.Title.Substring(0, 50);
+                            }
 
-                        _playlistTrackRepository.AddItem(playlistTrack);
+                            var artist = new Artist
+                            {
+                                Name = trackData.Artist
+                            };
+                            var album = new Album
+                            {
+                                Name = "",
+                                Artist = artist,
+                            };
 
-                        playlist.PlaylistTracks.Add(playlistTrack);
+                            artist.Albums.Add(album);
+                            artistRepo.AddItem(artist);
+
+                            var track = new Track
+                            {
+                                Duration = trackData.Duration.ToString(CultureInfo.InvariantCulture),
+                                //Lyrics =
+                                //    await _socialNetworkApi.GetLyricsById(socialNetworkData.ThirdPartId, trackData.Id,
+                                //            socialNetworkData.AccessToken),
+                                Name = trackData.Title,
+                                Album = album,
+                                ThirdPartId = Convert.ToString(trackData.Id),
+                                OwnerId = Convert.ToString(trackData.OwnerId),
+                                Genre = trackData.GenreId.ToString()
+                            };
+
+                            track.Playlists.Add(playlist);
+                            album.Tracks.Add(track);
+                            _trackRepository.AddItem(track);
+
+                            if (index == -1)
+                            {
+                                index = (playlist.Tracks.Any()) ? playlist.Tracks.Count() : 0;
+                            }
+
+                            var playlistTrack = new PlaylistTrack
+                            {
+                                Identifier = new PlaylistTracksIdentifier
+                                {
+                                    Playlist = playlist,
+                                    Track = track
+                                },
+                                TrackPosition = index + i++
+                            };
+
+                            _playlistTrackRepository.AddItem(playlistTrack);
+
+                            playlist.PlaylistTracks.Add(playlistTrack);
+                        }
                     }
+                    catch (Exception exp)
+                    {
+                        var s = exp;
+                    }
+                    
 
                     if (tracksToEnd == false)
                     {

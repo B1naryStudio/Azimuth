@@ -1,4 +1,6 @@
-﻿using Azimuth.DataAccess.Infrastructure;
+﻿using System;
+using System.Text.RegularExpressions;
+using Azimuth.DataAccess.Infrastructure;
 using Ninject;
 
 namespace Azimuth.DataGenerator
@@ -11,7 +13,7 @@ namespace Azimuth.DataGenerator
 
             var dg = new DataGenerator(kernel);
             dg.ClearDatabase();
-            dg.GenerateData();          
+            dg.GenerateData();
             dg.AddSharing();
         }
     }
