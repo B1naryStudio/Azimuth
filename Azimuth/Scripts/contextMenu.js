@@ -16,7 +16,7 @@
     this.musicList = null;
     this.timerId = null;
     this.provider = 'Vkontakte';
-    this.host = "https://localhost:44300/"; //TODO: Changed to host address
+    this.host = "https://max.com:44300/"; //TODO: Changed to host address
 
     this._shuffleTracksAction = function($currentItem) {
         var elems = $currentItem.children('.tableRow');
@@ -139,11 +139,15 @@
         });
     }
 
-    this._sharePlaylist = function(playlistId) {
+    this._sharePlaylist = function (playlistId) {
+        var $sharingLink = $('#sharingLink');
+        var $sharingPlaylist = $('#sharing-playlist');
+
         $('#sharingLinkModal').modal({
             show: true
         });
-        $('#sharingLink').val("");
+        $sharingLink.val("");
+        $sharingPlaylist.val("");
 
         $.ajax({
             url: '/api/playlists/share/' + playlistId,
@@ -151,9 +155,17 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                $('#sharingLink').val(self.host + "Share/Index?guid=" + data);
+                $sharingLink.val(self.host + "Share/Index?guid=" + data);
+                $sharingPlaylist.val("Share_" + data);
+                $('#playlist-guid').html(data);
+                $sharingPlaylist.focusout(self._changePlaylistName);
+                self._initClipboard($sharingLink);
+                $sharingPlaylist.focus();
+                $sharingPlaylist.select();
             }
         });
+        
+        
     };
 
     this._shareTracks = function() {
@@ -164,8 +176,11 @@
         $('#sharingLinkModal').modal({
             show: true
         });
-        $('#sharingLink').val("");
 
+        var $sharingLink = $('#sharingLink');
+        var $sharingPlaylist = $('#sharing-playlist');
+        $sharingLink.val("");
+        $sharingPlaylist.val("");
         $.ajax({
             url: '/api/playlists/share',
             type: 'PUT',
@@ -173,7 +188,36 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function(guid) {
-                $('#sharingLink').val(self.host + "Share/Index?guid=" + guid);
+                $sharingLink.val(self.host + "Share/Index?guid=" + guid);
+                $sharingPlaylist.val("Share_" + data);
+                $('#playlist-guid').html(guid);
+                $sharingPlaylist.focusout(self._changePlaylistName);
+                self._initClipboard($sharingLink);
+                $sharingPlaylist.focus();
+                $sharingPlaylist.select();
+            }
+        });
+    };
+
+    this._initClipboard = function($sharingLink) {
+        $('#copy-to-clipboard').clipboard({
+            path: '/Scripts/jquery.clipboard.swf',
+            copy: function () {
+                alert($sharingLink.val());
+                return $sharingLink.val();
+            }
+        });
+    };
+
+    this._changePlaylistName = function() {
+        var playlistName = $('#sharing-playlist').val();
+        var azimuthPlaylist = $('#playlist-guid').html();
+        $.ajax({
+            url: '/api/playlists/share?azimuthPlaylist=' + azimuthPlaylist + '&playlistName=' + playlistName,
+            async: true,
+            type: 'GET',
+            success: function (newName) {
+                $('#sharing-playlist').val(newName);
             }
         });
     };
