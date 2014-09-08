@@ -263,7 +263,6 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             success: function (track) {
                 url = track[0];
                 $currentTrack.find('.track-url').text(url);
-                //self.tracksGlobal = $(onPlayBtnClickThis).parent().parent().children('.track').children('.track-url');
                 self.tracksGlobal = $currentTrack.parent().find('.track-url');
                 if (self.audio.paused || self.audio.src != url) {
                     if (self.audio.src != url) {
@@ -273,7 +272,6 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                     }
                     self.$currentTrack = $currentTrack;
                     self.play();
-                    //self._setPauseImgButton($(onPlayBtnClickThis).parent());
                     self._setPauseImgButton($($currentTrack));
                     $('#playTrackBtn').css('background-position', '8px -50px');
                 } else {
