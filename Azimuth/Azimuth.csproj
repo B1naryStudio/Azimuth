@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />

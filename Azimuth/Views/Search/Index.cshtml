@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Search";
+}
+
+<div style="margin-top: 10px; margin-left: 10%;">
+    <input class="form-control" id="search" value="@Request.QueryString["searchParam"]">
+    <ul class="nav nav-tabs" role="tablist" style="margin-top: 10px;">
+        <li class="active"><a href="#" data-toggle="tab">Song</a></li>
+        <li><a href="#" data-toggle="tab">Genre</a></li>
+        <li><a href="#" data-toggle="tab">Artist</a></li>
+        <li><a href="#" data-toggle="tab">Vkontakte</a></li>
+    </ul>
+</div>
