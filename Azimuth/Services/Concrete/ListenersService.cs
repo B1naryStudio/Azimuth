@@ -13,16 +13,16 @@ namespace Azimuth.Services.Concrete
     public class ListenersService : IListenersService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly PlaylistListenersRepository _listenersRepository;
+        private readonly IRepository<PlaylistListener> _listenerRepository;
         private readonly UserRepository _userRepository;
-        private readonly IRepository<UnauthorizedListeners> _unauthorizedListenersRepository;
+        private readonly IRepository<PlaylistListened> _unauthorizedListenersRepository;
         private readonly IRepository<Playlist> _playlistRepository;
 
         public ListenersService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _listenersRepository = _unitOfWork.GetRepository<PlaylistListeners>() as PlaylistListenersRepository;
-            _unauthorizedListenersRepository = _unitOfWork.GetRepository<UnauthorizedListeners>();
+            _listenerRepository = _unitOfWork.GetRepository<PlaylistListener>();
+            _unauthorizedListenersRepository = _unitOfWork.GetRepository<PlaylistListened>();
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
         }
@@ -33,7 +33,7 @@ namespace Azimuth.Services.Concrete
             {
                 using (_unitOfWork)
                 {
-                    var listeners = _listenersRepository.Get(list => list.Playlist.Id == id).Select(list=>list.Listener).ToList();
+                    var listeners = _listenerRepository.Get(list => list.Playlist.Id == id).Select(list=>list.Listener).ToList();
                     return listeners;
                 }
                 
@@ -57,7 +57,7 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new BadRequestException("Playlist with Id does not exist");
                     }
-                    _listenersRepository.AddItem(new PlaylistListeners
+                    _listenerRepository.AddItem(new PlaylistListener
                     {
                         Listener = user,
                         Playlist = playlist
@@ -85,7 +85,7 @@ namespace Azimuth.Services.Concrete
                     var user = _userRepository.Get(userId);
 
                         
-                    _listenersRepository.AddItem(new PlaylistListeners
+                    _listenerRepository.AddItem(new PlaylistListener
                     {
                         Listener = user,
                         Playlist = playlist
@@ -102,7 +102,7 @@ namespace Azimuth.Services.Concrete
                     }
                     else
                     {
-                        _unauthorizedListenersRepository.AddItem(new UnauthorizedListeners
+                        _unauthorizedListenersRepository.AddItem(new PlaylistListened
                         {
                             Amount = 1,
                             Playlist = playlist
@@ -126,8 +126,8 @@ namespace Azimuth.Services.Concrete
                 {
                     var userId =
                         _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                    var listener = _listenersRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
-                    _listenersRepository.DeleteItem(listener);
+                    var listener = _listenerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
+                    _listenerRepository.DeleteItem(listener);
                 }
                 else
                 {
@@ -144,18 +144,19 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        
         public void RemoveListener(int playlistId, int userId)
         {
             Task.Run(() =>
             {
                 using (_unitOfWork)
                 {
-                    var listener = _listenersRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
+                    var listener = _listenerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
                     if (listener == null)
                     {
                         throw new BadRequestException("This listener pair does not exist");
                     }
-                    _listenersRepository.DeleteItem(listener);
+                    _listenerRepository.DeleteItem(listener);
                     _unitOfWork.Commit();
                 }
 

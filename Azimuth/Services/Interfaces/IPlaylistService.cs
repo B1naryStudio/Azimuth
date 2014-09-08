@@ -9,6 +9,8 @@ namespace Azimuth.Services.Interfaces
     {
         Task<List<PlaylistData>> GetPublicPlaylists();
         Task<List<PlaylistData>> GetUsersPlaylists();
+        Task<List<PlaylistData>> GetLikedPlaylists();
+        Task<List<PlaylistData>> GetNotOwnedLikedPlaylists();
         void SetAccessibilty(int id, Accessibilty accessibilty);
         long CreatePlaylist(string name, Accessibilty accessibilty);
         Task<PlaylistData> GetPlaylistById(int id);
@@ -18,5 +20,6 @@ namespace Azimuth.Services.Interfaces
         Task<string> GetSharedPlaylist(int playlistId);
         List<TracksDto> GetSharedTracks(string guid);
         Task<string> GetSharedPlaylist(List<long> tracksId);
+        Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName);
     }
 }

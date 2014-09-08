@@ -7,13 +7,9 @@ using Azimuth.DataAccess.Infrastructure;
 
 namespace Azimuth.DataAccess.Entities
 {
-    public class PlaylistListeners:BaseEntity
+    public class PlaylistListened:BaseEntity
     {
         public virtual Playlist Playlist { get; set; }
-        public virtual User Listener { get; set; }
-        public override string ToString()
-        {
-            return String.Format("PlaylistId = {0}:ListenerId = {1}", Playlist.Id, Listener.Id);
-        }
+        public virtual int Amount { get; set; }
     }
 }

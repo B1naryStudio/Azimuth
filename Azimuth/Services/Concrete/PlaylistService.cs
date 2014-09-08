@@ -5,6 +5,7 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
+using System.Web.UI;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -14,6 +15,7 @@ using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
+using Microsoft.Ajax.Utilities;
 
 namespace Azimuth.Services.Concrete
 {
@@ -24,7 +26,9 @@ namespace Azimuth.Services.Concrete
         private readonly LastfmApi _lastfmApi;
         private readonly PlaylistRepository _playlistRepository;
         private readonly TrackRepository _trackRepository;
+        private readonly PlaylistLikerRepository _likesRepository;
         private readonly UserRepository _userRepository;
+        private readonly SharedPlaylistRepository _sharedPlaylistRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
         {
@@ -34,7 +38,10 @@ namespace Azimuth.Services.Concrete
             _lastfmApi = musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
+            _likesRepository = _unitOfWork.GetRepository<PlaylistLike>() as PlaylistLikerRepository;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+            _sharedPlaylistRepository =
+                _unitOfWork.GetRepository<SharedPlaylist>() as SharedPlaylistRepository;
         }
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -66,6 +73,46 @@ namespace Azimuth.Services.Concrete
                 }).ToList();
 
                 return playlists;
+            });
+        }
+
+        public async Task<List<PlaylistData>> GetLikedPlaylists()
+        {
+            return await Task.Run(() =>
+            {
+                if (AzimuthIdentity.Current != null)
+                {
+                    
+                    var userId =
+                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var currentUser = _userRepository.Get(userId);
+                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id).Select(item=>item.Playlist).ToList();
+                    var playlists = _playlistRepository.Get(i => likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
+                    return playlists;
+                }
+                return new List<PlaylistData> {};
+              
+            });
+        }
+
+        public async Task<List<PlaylistData>> GetNotOwnedLikedPlaylists()
+        {
+            var dop = AzimuthIdentity.Current;
+            return await Task.Run(() =>
+            {
+                if (dop != null)
+                {
+
+                    var userId =
+                        _userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
+                    var currentUser = _userRepository.Get(userId);
+                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id).Select(item => item.Playlist).ToList();
+                    var playlists = _playlistRepository.Get(i => (i.Creator.Id != currentUser.Id) && 
+                        likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
+                    return playlists;
+                }
+                return new List<PlaylistData> { };
+
             });
         }
 
@@ -135,22 +182,7 @@ namespace Azimuth.Services.Concrete
                     }
 
                     _unitOfWork.Commit();
-
-                    return new PlaylistData
-                    {
-                        Id = playlist.Id,
-                        Name = playlist.Name,
-                        Accessibilty = playlist.Accessibilty,
-                        Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                        Genres = playlist.Tracks.Select(x => x.Genre)
-                                                .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
-                                                .OrderByDescending(x => x.Count)
-                                                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
-                                                .Select(x => x.Name)
-                                                .Take(5)
-                                                .ToList(),
-                        ItemsCount = playlist.Tracks.Count,
-                    };
+                    return Mapper.Map(playlist, new PlaylistData()); ;
                 }
             });
         }
@@ -169,21 +201,7 @@ namespace Azimuth.Services.Concrete
                     }
                     var userId = userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
 
-                    var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => new PlaylistData
-                    {
-                        Id = playlist.Id,
-                        Name = playlist.Name,
-                        Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                        Genres = playlist.Tracks.Select(x => x.Genre)
-                                                .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
-                                                .OrderByDescending(x => x.Count)
-                                                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
-                                                .Select(x => x.Name)
-                                                .Take(5)
-                                                .ToList(),
-                        ItemsCount = playlist.Tracks.Count,
-                        Accessibilty = playlist.Accessibilty
-                    }).ToList();
+                    var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
                 }
             });
@@ -322,13 +340,12 @@ namespace Azimuth.Services.Concrete
 
                     _playlistRepository.AddItem(fakePlaylist);
 
-                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
                     var sharedPlaylist = new SharedPlaylist
                     {
                         Guid = guid,
                         Playlist = fakePlaylist
                     };
-                    sharedRepo.AddItem(sharedPlaylist);
+                    _sharedPlaylistRepository.AddItem(sharedPlaylist);
 
                     _unitOfWork.Commit();
                 }
@@ -346,9 +363,8 @@ namespace Azimuth.Services.Concrete
             var tracksDto = new List<TracksDto>();
             using (_unitOfWork)
             {
-                var sharedPlaylistRepo = _unitOfWork.GetRepository<SharedPlaylist>();
 
-                var sharedPlaylist = sharedPlaylistRepo.GetOne(sp => sp.Guid == guid);
+                var sharedPlaylist = _sharedPlaylistRepository.GetOne(sp => sp.Guid == guid);
 
                 if (sharedPlaylist != null && sharedPlaylist.Playlist != null)
                 {
@@ -396,19 +412,36 @@ namespace Azimuth.Services.Concrete
 
                     _playlistRepository.AddItem(fakePlaylist);
 
-                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
                     var sharedPlaylist = new SharedPlaylist
                     {
                         Guid = guid,
                         Playlist = fakePlaylist
                     };
 
-                    sharedRepo.AddItem(sharedPlaylist);
+                    _sharedPlaylistRepository.AddItem(sharedPlaylist);
 
                     _unitOfWork.Commit();
                 }
 
                 return guid;
+            });
+        }
+
+        public Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
+        {
+            return Task.Run(() =>
+            {
+                using (_unitOfWork)
+                {
+                    var guid = azimuthPlaylist;
+                    var sharedPlaylist = _sharedPlaylistRepository.GetOne(sp => sp.Guid == guid);
+
+                    sharedPlaylist.Playlist.Name = playlistName;
+
+                    _unitOfWork.Commit();
+                }
+
+                return playlistName;
             });
         }
     }

@@ -3,7 +3,7 @@
 @model Azimuth.ViewModels.SettingsViewModel
 
 @{
-    ViewBag.Title = "Settings";
+    ViewBag.Title = "My music";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,6 +11,7 @@
     <div id="mainRow" class="row">
         
         <div id="playlists" class="stuck draggable">
+            
             <h3>Playlists</h3>
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <div id="playlist-header" class="table-header">
@@ -36,6 +37,7 @@
             <span id="volumeImg"></span>
             <div id="volumeSlider"></div>
         </div>
+        
         <div id="SN" class="stuck">
             <div id="friends-body" style="display: none">
                 <div id="friends-header" class="table-header">
@@ -44,13 +46,12 @@
                 </div>
                 <div id="friends-container"></div>
             </div>
-            <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
-                <p id="error"> Your time has expired, please login again. </p>
-                @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-danger btn-large" })
-            </div>
-
             <h3>Tracks</h3>
             <div>
+                <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
+                    <p id="error"> Your time has expired, please login again. </p>
+                    @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-danger btn-large" })
+                </div>
                 <button id="get-friends-info-btn" class="btn btn-default">Get friends info</button>
                 <button id="get-user-tracks" class="btn btn-default">Get user tracks</button>
                 <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
@@ -124,10 +125,20 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Sharing link</h4>
+                    <h4 class="modal-title" id="myModalLabel">Shared playlist</h4>
                 </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="sharingLink"/>
+                <div class="modal-body" style="text-align: center">
+                    <div style="display:block">
+                        @Html.Label("Name:")
+                        <input type="text" class="form-control" id="sharing-playlist" style="display: inline" />
+                        <button id="change-sharedplaylist-name" class="btn btn-default">OK</button>
+                    </div>
+                    <div>
+                        @Html.Label("Link:")
+                        <input type="text" class="form-control" id="sharingLink" style="display: inline" readonly />
+                        <button id="copy-to-clipboard" class="btn btn-default btn-success">Copy</button>
+                        <div id="playlist-guid" style="display: none"></div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,6 +154,7 @@
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/workWithMusic.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="../../Scripts/jquery.clipboard.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
 
     <script id="trackTemplate" type="text/x-jQuery-tmpl">
@@ -165,7 +177,7 @@
     <script id="searchTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description" data-title="${artist} ${title}">
+            <div class="track-description" data-title="${Artist} ${Name}">
                 <div class="track-info">${Artist}</div>
                 <div class="track-title nowrap">${Name}</div>
             </div>
@@ -232,6 +244,7 @@
                 <span class="label label-success">${Genres[3]}</span>
                 <span class="label label-default">${Genres[4]}</span>
             </div>
+            <span style="display: none" class="readonly">${readonly}</span>
             <span style="display: none" class="playlistId">${Id}</span>
         </div>
         <div id="playlistTracksTable" style="display: none"></div>

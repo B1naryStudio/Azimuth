@@ -95,6 +95,34 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("liked")]
+        public async Task<HttpResponseMessage> GetLiked()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetLikedPlaylists());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("liked/notOwned")]
+        public async Task<HttpResponseMessage> GetNowOwnedLiked()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetNotOwnedLikedPlaylists());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         [Route("image/{id:int}")]
         public async Task<HttpResponseMessage> GetPlaylistImageById(int id)
         {
@@ -134,6 +162,20 @@ namespace Azimuth.ApiControllers
             try
             {
                 return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetSharedPlaylist(tracksId));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("share")]
+        public async Task<HttpResponseMessage> SetPlaylistName(string azimuthPlaylist, string playlistName)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.SetPlaylistName(azimuthPlaylist, playlistName));
             }
             catch (Exception ex)
             {

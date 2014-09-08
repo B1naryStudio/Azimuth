@@ -10,7 +10,7 @@ namespace Azimuth.Migrations
         {
             Delete.Column("Lyrics").FromTable("Tracks");
             Delete.Column("Url").FromTable("Tracks");
-            Alter.Table("Tracks").AddColumn("ThirdPartId").AsString().NotNullable();
+            Alter.Table("Tracks").AddColumn("ThirdPartId").AsString().NotNullable().WithDefaultValue(0);
             Delete.Table("Genres");
         }
 
