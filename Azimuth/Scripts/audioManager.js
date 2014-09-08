@@ -48,6 +48,8 @@
         }
         self.$currentTrack = trackItem;
 
+        self._loadNextTracks(self.$currentTrack);
+
         self._setPauseImgButton(trackItem);
 
         self._setTrackTo('next');
@@ -67,6 +69,10 @@
             trackItem = self.$currentTrack.parent().children('.tableRow').last();
         }
         self.$currentTrack = trackItem;
+        var url = self.$currentTrack.find('.track-url').text();
+        if (!url) {
+            self._getCurrentTrackUrl(self.$currentTrack, url);
+        }
 
         self._setPauseImgButton(trackItem);
 
@@ -168,43 +174,9 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
             self.$currentTrack.find('.track-remaining').hide();
         }
         var $currentTrack = $(this).parents('.track');
-        var onPlayBtnClickThis = this;
         var url = $(this).parent().children('.track-url').text();
         if (!url) {
-            var trackInfo = {
-                trackData: [
-                    { ownerId: $currentTrack.find('.ownerId').text(), thirdPartId: $currentTrack.find('.thirdPartId').text() }
-                ]
-            };
-            $.ajax({
-                url: '/api/usertracks/trackurl?provider=Vkontakte',
-                type: 'GET',
-                dataType: 'json',
-                data: { trackData: JSON.stringify(trackInfo) },
-                success: function(track) {
-                    url = track[0];
-                    $currentTrack.find('.track-url').text(url);
-
-                    self.tracksGlobal = $(onPlayBtnClickThis).parent().parent().children('.track').children('.track-url');
-                    if (self.audio.paused || self.audio.src != url) {
-                    if (self.audio.src != url) {
-                        self._setAttribute(url);
-                        self.progressSlider.setPosition(0);
-                        self.progressSlider.setBackgroundPosition(0);
-                    }
-                    self.$currentTrack = $(onPlayBtnClickThis).parent();
-                    self.play();
-                    self._setPauseImgButton($(onPlayBtnClickThis).parent());
-                    $('#playTrackBtn').css('background-position', '8px -50px');
-                    } else {
-                        self.pause();
-                        self._setPlayImgButton($(onPlayBtnClickThis).parent());
-                        $('#playTrackBtn').css('background-position', '8px 0');
-                    }
-                    self._loadNextTracks($currentTrack);
-
-                }
-            });
+            self._getCurrentTrackUrl($currentTrack, url);
         } else {
             self.tracksGlobal = $(this).parent().parent().children('.track').children('.track-url');
 
@@ -276,6 +248,44 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                 }
             });
     };
+
+    this._getCurrentTrackUrl = function ($currentTrack, url) {
+        var trackInfo = {
+            trackData: [
+                { ownerId: $currentTrack.find('.ownerId').text(), thirdPartId: $currentTrack.find('.thirdPartId').text() }
+            ]
+        };
+        $.ajax({
+            url: '/api/usertracks/trackurl?provider=Vkontakte',
+            type: 'GET',
+            dataType: 'json',
+            data: { trackData: JSON.stringify(trackInfo) },
+            success: function (track) {
+                url = track[0];
+                $currentTrack.find('.track-url').text(url);
+                //self.tracksGlobal = $(onPlayBtnClickThis).parent().parent().children('.track').children('.track-url');
+                self.tracksGlobal = $currentTrack.parent().find('.track-url');
+                if (self.audio.paused || self.audio.src != url) {
+                    if (self.audio.src != url) {
+                        self._setAttribute(url);
+                        self.progressSlider.setPosition(0);
+                        self.progressSlider.setBackgroundPosition(0);
+                    }
+                    self.$currentTrack = $currentTrack;
+                    self.play();
+                    //self._setPauseImgButton($(onPlayBtnClickThis).parent());
+                    self._setPauseImgButton($($currentTrack));
+                    $('#playTrackBtn').css('background-position', '8px -50px');
+                } else {
+                    self.pause();
+                    self._setPlayImgButton($($currentTrack));
+                    $('#playTrackBtn').css('background-position', '8px 0');
+                }
+                self._loadNextTracks($currentTrack);
+
+            }
+        });
+    }
 
     $('.track-play-btn:not(.bind-play-btn)').addClass('bind-play-btn').on('click', onPlayBtnClick);
 };
