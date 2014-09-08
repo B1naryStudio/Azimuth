@@ -156,6 +156,7 @@ SearchManager.prototype.bindListeners = function () {
                         });
                         self._showTracks(self.topTracksVk, $('#trackTemplate'));
                         self.audioManager.bindPlayBtnListeners();
+                        $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
                         //self.$vkMusicTable.makeDraggable({
                         //    contextMenu: [
                         //        { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
