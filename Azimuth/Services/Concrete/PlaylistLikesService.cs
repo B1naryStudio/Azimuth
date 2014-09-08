@@ -32,7 +32,7 @@ namespace Azimuth.Services.Concrete
             {
                 using (_unitOfWork)
                 {
-                    var listeners = _likerRepository.Get(list => list.Playlist.Id == id).Select(list=>list.Liker).ToList();
+                    var listeners = _likerRepository.Get(list => list.Playlist.Id == id && list.IsLiked).Select(list=>list.Liker).ToList();
                     return listeners;
                 }
                 
@@ -56,11 +56,20 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new BadRequestException("Playlist with Id does not exist");
                     }
-                    _likerRepository.AddItem(new PlaylistLike
+                    var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
+                    if (atemp == null)
+                        _likerRepository.AddItem(new PlaylistLike
+                        {
+                            Liker = user,
+                            Playlist = playlist,
+                            IsLiked = true,
+                            IsFavorite = false
+                        });
+                    else
                     {
-                        Liker = user,
-                        Playlist = playlist
-                    });
+                        atemp.IsLiked = true;
+                        _likerRepository.UpdateItem(atemp);
+                    }
                     _unitOfWork.Commit();
                 }
 
@@ -83,12 +92,21 @@ namespace Azimuth.Services.Concrete
                         _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var user = _userRepository.Get(userId);
 
-                        
-                    _likerRepository.AddItem(new PlaylistLike
+
+                    var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
+                    if (atemp == null)
+                        _likerRepository.AddItem(new PlaylistLike
+                        {
+                            Liker = user,
+                            Playlist = playlist,
+                            IsLiked = true,
+                            IsFavorite = false
+                        });
+                    else
                     {
-                        Liker = user,
-                        Playlist = playlist
-                    });
+                        atemp.IsLiked = true;
+                        _likerRepository.UpdateItem(atemp);
+                    }
                 }
                 _unitOfWork.Commit();
             }
@@ -107,8 +125,11 @@ namespace Azimuth.Services.Concrete
                 {
                     var userId =
                         _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                    var listener = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
-                    _likerRepository.DeleteItem(listener);
+                    var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
+                    if (liker != null)
+                    {
+                        liker.IsLiked = false;
+                    }
                 }
                 _unitOfWork.Commit();
             }
@@ -120,12 +141,11 @@ namespace Azimuth.Services.Concrete
             {
                 using (_unitOfWork)
                 {
-                    var listener = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
-                    if (listener == null)
+                    var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
+                    if (liker != null)
                     {
-                        throw new BadRequestException("This listener pair does not exist");
+                        liker.IsLiked = false;
                     }
-                    _likerRepository.DeleteItem(listener);
                     _unitOfWork.Commit();
                 }
 
@@ -149,7 +169,7 @@ namespace Azimuth.Services.Concrete
                         var userId =
                             _userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                         var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == id && pair.Liker.Id == userId);
-                        return liker != null;
+                        return (liker != null) && liker.IsLiked;
                     }
                     return false;
                 }
