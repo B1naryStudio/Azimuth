@@ -334,6 +334,8 @@
     <Content Include="Scripts\jquery.clipboard.swf" />
     <Content Include="Scripts\jquery.mCustomScrollbar.concat.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -343,7 +345,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\musicManager.js" />
-    <Content Include="Scripts\searchManager.js" />
     <Content Include="Scripts\shareManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\workWithMusic.js" />
@@ -380,6 +381,7 @@
     <Content Include="Views\UserProfile\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Share\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\UserProfile\_UserFollowInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

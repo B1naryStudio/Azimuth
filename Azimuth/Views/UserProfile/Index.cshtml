@@ -1,8 +1,11 @@
 ﻿@model Azimuth.DataAccess.Entities.User
+@using Azimuth.Infrastructure.Concrete
 @{
     ViewBag.Title = "User profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var loggedUser = AzimuthIdentity.Current.UserCredential;
 }
+
 <div class="container">
     <div id="user-logo">
         <div class="user-photo">
@@ -19,15 +22,29 @@
                 <div class="user-listen-label">Listening</div>
             </li>
         </ul>
-        <div>
-            @Html.LabelFor(x => x.Followers)
-            @Html.DisplayFor(x => x.Followers)
-        </div>
-        <div>
-            @Html.LabelFor(x => x.Following)
-            @Html.DisplayFor(x => x.Following)
-        </div>
-        @Html.Partial("_FollowUserPartial", Model)
+
+        @using (@Ajax.BeginForm("_FollowInfo", "UserProfile", new AjaxOptions
+        {
+            HttpMethod = "Post",
+            OnSuccess = "changeButton",
+            UpdateTargetId = "user-follow-info",
+            InsertionMode = InsertionMode.Replace,
+        }))
+        {
+            if (loggedUser.Id != Model.Id)
+            {
+                var isFollower = Model.Followers.FirstOrDefault(x => x.Id == loggedUser.Id) != null;
+                var action = isFollower ? "Unfollow" : "Follow";
+                ViewBag.isFollower = isFollower.ToString();
+                <button id="follow-button" class="btn btn-success" data-follo type="@isFollower">@action</button>
+                <input type="hidden" name="userId" value=@Model.Id />
+                <input type="hidden" name="isFollower" id="isFollower" value=@isFollower.ToString() />
+            }
+        }
+        
+        <div id="user-follow-info">
+            @{ Html.RenderPartial("_UserFollowInfo"); }
+        </div> 
     </div>
     <div id="user-info">
         <div class="user-initials">
