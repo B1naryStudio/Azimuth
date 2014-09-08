@@ -59,6 +59,8 @@
     <Compile Include="Migrations\Migration_201408291506_AddIdToAlbumListeners.cs" />
     <Compile Include="Migrations\Migration_201409010308_AddFollowers.cs" />
     <Compile Include="Migrations\Migration_201409052000_DeleteLyricTrackUrlGenreTableAddVkTrackId.cs" />
+    <Compile Include="Migrations\Migration_201409052047_AddSharing.cs" />
+    <Compile Include="Migrations\Migration_201409061130_AddOwnerIdColumnToTracks.cs" />
     <Compile Include="Migrations\Migration_20140906_CreateFavoritePlaylists.cs" />
     <Compile Include="Migrations\Migration_201409071636_ChangeNameOfUnauthorizedListenersToListened.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
