@@ -158,7 +158,7 @@
                 $sharingLink.val(self.host + "Share/Index?guid=" + data);
                 $sharingPlaylist.val("Share_" + data);
                 $('#playlist-guid').html(data);
-                $('#change-sharedplaylist-name').click(self._changePlaylistName);
+                $sharingPlaylist.focusout(self._changePlaylistName);
                 self._initClipboard($sharingLink);
                 $sharingPlaylist.focus();
                 $sharingPlaylist.select();
@@ -191,8 +191,10 @@
                 $sharingLink.val(self.host + "Share/Index?guid=" + guid);
                 $sharingPlaylist.val("Share_" + data);
                 $('#playlist-guid').html(guid);
-                $('#change-sharedplaylist-name').click(self._changePlaylistName);
+                $sharingPlaylist.focusout(self._changePlaylistName);
                 self._initClipboard($sharingLink);
+                $sharingPlaylist.focus();
+                $sharingPlaylist.select();
             }
         });
     };
