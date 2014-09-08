@@ -7,10 +7,11 @@ namespace Azimuth.Services.Concrete
     public interface IPlaylistLikesService
     {
         Task<List<User>> GetLikersByPlaylistId(int id);
-        void AddNewLike(int playlistId, int userId);
         void AddCurrentUserAsLiker(int playlistId);
+        void AddCurrentUserAsFavorite(int playlistId);
         void RemoveCurrentUserAsLiker(int playlistId);
-        void RemoveLike(int playlistId, int userId);
+        void RemoveCurrentUserAsFavorite(int playlistId);
         Task<bool> IsLiked(int id);
+        Task<bool> IsFavorite(int id);
     }
 }

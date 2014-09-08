@@ -95,12 +95,12 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
-        [Route("liked")]
-        public async Task<HttpResponseMessage> GetLiked()
+        [Route("favorite")]
+        public async Task<HttpResponseMessage> GetFavorites()
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetLikedPlaylists());
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetFavoritePlaylists());
             }
             catch (Exception ex)
             {
@@ -109,12 +109,12 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
-        [Route("liked/notOwned")]
-        public async Task<HttpResponseMessage> GetNowOwnedLiked()
+        [Route("favorite/notOwned")]
+        public async Task<HttpResponseMessage> GetNowOwnedFavorites()
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetNotOwnedLikedPlaylists());
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetNotOwnedFavoritePlaylists());
             }
             catch (Exception ex)
             {

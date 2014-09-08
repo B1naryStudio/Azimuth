@@ -73,7 +73,7 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public async Task<List<PlaylistData>> GetLikedPlaylists()
+        public async Task<List<PlaylistData>> GetFavoritePlaylists()
         {
             return await Task.Run(() =>
             {
@@ -83,7 +83,7 @@ namespace Azimuth.Services.Concrete
                     var userId =
                         _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
-                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id).Select(item=>item.Playlist).ToList();
+                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item=>item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
                 }
@@ -92,7 +92,7 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public async Task<List<PlaylistData>> GetNotOwnedLikedPlaylists()
+        public async Task<List<PlaylistData>> GetNotOwnedFavoritePlaylists()
         {
             var dop = AzimuthIdentity.Current;
             return await Task.Run(() =>
@@ -103,7 +103,7 @@ namespace Azimuth.Services.Concrete
                     var userId =
                         _userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
-                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id).Select(item => item.Playlist).ToList();
+                    var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item => item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => (i.Creator.Id != currentUser.Id) && 
                         likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;

@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="ApiControllers\LikesController.cs" />
     <Compile Include="ApiControllers\PlaylistListenedController.cs" />

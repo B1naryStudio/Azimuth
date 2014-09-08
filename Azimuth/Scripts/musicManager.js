@@ -505,7 +505,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             }
         });
         $.ajax({
-            url: '/api/playlists/liked/notOwned',
+            url: '/api/playlists/favorite/notOwned',
             success: function (playlistsData) {
                 console.log('Hi');
                 if (typeof playlistsData.Message === 'undefined') {

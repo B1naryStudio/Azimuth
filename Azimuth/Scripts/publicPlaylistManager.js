@@ -13,8 +13,10 @@
     self.$backToPlaylistsBtn = $('#backToPlaylistsBtn');
     self.currentPlaylist = null;
     self.$likeBtn = $('#likeBtn');
+    self.$favoriteBtn = $('#favoriteBtn');
     self.$likesCounter = $('.likesCounter');
     self.currentLikeStatus = null;
+    self.currentFavoriteStatus = null;
 
     this._setNewImage = function ($playlist, id) {
         $.ajax({
@@ -120,7 +122,6 @@
     }
 
     self.setLikeBtnIcon = function () {
-        console.log(self.currentLikeStatus);
         self.$likeBtn.find('.icon').removeClass('fa-thumbs-o-up').removeClass('fa-thumbs-up');
         if (!self.currentLikeStatus) {
             self.$likeBtn.find('.icon').toggleClass('fa-thumbs-up');
@@ -135,6 +136,20 @@
         }
     }
 
+    self.setFavoriteBtnIcon = function () {
+        if (!self.currentFavoriteStatus) {
+            self.$favoriteBtn.css({
+                'background-color': 'rgb(100,120,255)',
+                'color' : 'white'
+            });
+        } else {
+            self.$favoriteBtn.css({
+                'background-color': 'white',
+                'color' : 'black'
+            });
+        }
+    }
+
     self.isLiked = function (playlist) {
         $.ajax({
             url: "/api/likes/status/" + playlist.Id,
@@ -145,6 +160,18 @@
             }
         });
         return self.currentLikeStatus;
+    }
+
+    self.isFavorite = function (playlist) {
+        $.ajax({
+            url: "/api/favorite/status/" + playlist.Id,
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                self.currentFavoriteStatus = data ^ true;
+            }
+        });
+        return self.currentFavoriteStatus;
     }
 
 };
@@ -183,6 +210,8 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         $(document).trigger('newListenerAdded', [self.currentPlaylist]);
         self.isLiked(self.currentPlaylist);
         self.setLikeBtnIcon();
+        self.isFavorite(self.currentPlaylist);
+        self.setFavoriteBtnIcon();
     });
     
     self.$likeBtn.click(function () {
@@ -205,6 +234,25 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         self.isLiked(self.currentPlaylist);//TODO donno why, but I doing wasted request to server
         self.setLikeBtnIcon();
         
+    });
+    self.$favoriteBtn.click(function () {
+        var action = null;
+        if (self.isFavorite(self.currentPlaylist))
+            action = "POST";
+        else
+            action = "DELETE";
+        $.ajax({
+            cache: false,
+            type: action,
+            url: "/api/favorite/" + self.currentPlaylist.Id,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+            }
+        });
+        self.isFavorite(self.currentPlaylist);//TODO donno why, but I doing wasted request to server
+        self.setFavoriteBtnIcon();
+
     });
     $(document).on('likeStatusChanged', function () {
         self.showLikes();

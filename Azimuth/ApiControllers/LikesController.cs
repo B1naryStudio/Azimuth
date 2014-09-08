@@ -74,21 +74,6 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpPost]
-        [Route("{playlistId:int}/{userId:int}")]
-        public async Task<HttpResponseMessage> AddLiker(int playlistId, int userId)
-        {
-            try
-            {
-                _likesService.AddNewLike(playlistId, userId);
-                return Request.CreateResponse(HttpStatusCode.OK, "Ok");
-            }
-            catch (BadRequestException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-        }
-
-        [HttpPost]
         [Route("{playlistId:int}")]
         public async Task<HttpResponseMessage> AddCurrentUserAsLiker(int playlistId)
         {
