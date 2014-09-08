@@ -48,7 +48,12 @@
         }
         self.$currentTrack = trackItem;
 
-        self._loadNextTracks(self.$currentTrack);
+        var url = self.$currentTrack.find('.track-url').text();
+        if (!url) {
+            self._getCurrentTrackUrl(self.$currentTrack, url);
+        } else {
+            self._loadNextTracks(self.$currentTrack);
+        }
 
         self._setPauseImgButton(trackItem);
 

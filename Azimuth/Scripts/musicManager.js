@@ -339,9 +339,11 @@ var MusicManager = function (manager) {
         $.ajax({
             url: '/api/usertracks/put?playlistId=' + playlistId,
             type: 'PUT',
-            dataType: 'json',
             data: JSON.stringify(wholePlaylist),
-            contentType: 'application/json; charset=utf-8'
+            contentType: 'application/json; charset=utf-8',
+            success: function() {
+                self.audioManager.refreshPlaylistTracks();
+            }
         });
     };
 };
