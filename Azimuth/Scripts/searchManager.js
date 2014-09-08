@@ -7,12 +7,13 @@
 
     this._search = function() {
         var searchParam = $('#search').val().toLocaleLowerCase();
+        $('.vkMusicList').find('.track').remove();
+        self.$vkMusicLoadingSpinner.fadeIn('normal');
         $.ajax({
             url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
             type: 'GET',
             dataType: 'json',
             success: function (tracks) {
-                $('.vkMusicList').find('.track').remove();
                 for (var i = 0; i < tracks.length; i++) {
                     tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
                 }
@@ -28,6 +29,7 @@
                     autoHideScrollbar: true,
                     advanced: { updateOnSelectorChange: "true" }
                 });
+                self.$vkMusicLoadingSpinner.hide();
             }
         });
     };
