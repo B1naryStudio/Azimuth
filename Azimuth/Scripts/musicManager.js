@@ -102,7 +102,11 @@ var MusicManager = function (manager) {
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
         var tracks = [];
-        var friendId = $('.friend.active').children('.friend-id').text();
+        // $('.playlist').find('.playlistId:contains('+ playlistId +')')
+
+        var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+        if (currentPlaylist.find('.readonly').text() == 'true')
+            return;
         $currentItem.children().toggleClass('vk-item', false);
         $currentItem.children('.tableRow').each(function () {
             tracks.push({
@@ -325,6 +329,9 @@ var MusicManager = function (manager) {
 
     this._moveTrackToNewPosition = function (playlist) {
         var playlistId = $('#playlistTracks').children('.playlistId').text();
+        var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+        if (currentPlaylist.find('.readonly').text() == 'true')
+            return;
         var $tracks = $(playlist).children('.tableRow');
         var wholePlaylist = [];
         for (var i = 0; i < $tracks.length; i++) {
