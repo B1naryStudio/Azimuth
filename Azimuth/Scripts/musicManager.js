@@ -479,7 +479,40 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                         } else {
                             playlist.Accessibilty = "Private";
                         }
+                        
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                        playlist.readonly = false;
+                        self.playlistsGlobal.push(playlist);
+                        var tmpl = self.playlistTemplate.tmpl(playlist);
+                        self._setNewImage(tmpl);
+                        self.$playlistsTable.append(tmpl);
+                        self._setChangingPlaylistImage(tmpl);
+                    }
+                } else {
+                    self.$reloginForm.show();
+                    self.$reloginForm.find('a').attr('href', reloginUrl);
+                    self.$vkMusicTable.hide();
+                }
+                
+            }
+        });
+        $.ajax({
+            url: '/api/playlists/liked/notOwned',
+            success: function (playlistsData) {
+                console.log('Hi');
+                if (typeof playlistsData.Message === 'undefined') {
+                    self.$reloginForm.hide();
+                    self.$vkMusicTable.show();
+                    self.playlists = playlistsData;
+                    for (var i = 0; i < self.playlists.length; i++) {
+                        var playlist = self.playlists[i];
+                        if (playlist.Accessibilty === 1) {
+                            playlist.Accessibilty = "public";
+                        } else {
+                            playlist.Accessibilty = "private";
+                        }
+                        playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                        playlist.readonly = true;
                         self.playlistsGlobal.push(playlist);
                         var tmpl = self.playlistTemplate.tmpl(playlist);
                         self._setNewImage(tmpl);
