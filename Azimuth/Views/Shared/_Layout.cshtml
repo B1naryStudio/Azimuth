@@ -67,6 +67,12 @@
         $('#searchBtn').click(function() {
             window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
         });
+        $('#searchText').keypress(function(e) {
+            if (e.which == 13) {
+                window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
+                return false;
+            }
+        });
     </script>
 </body>
 </html>
