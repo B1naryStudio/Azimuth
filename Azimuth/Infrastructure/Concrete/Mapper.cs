@@ -22,6 +22,7 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<LastfmTrackData, TrackInfoDto>(LastfmDataMap);
             AddMapp<string[], TrackInfoDto>(ChartLyricMap);
             AddMapp<TrackData.Audio, TracksDto>(VkTrackToTrackDto);
+            AddMapp<Playlist, PlaylistData>(PlaylistMap);
         }
 
         
@@ -251,5 +252,27 @@ namespace Azimuth.Infrastructure.Concrete
             dto.Duration = vk.Duration.ToString();
             dto.Artist = vk.Artist;
         }
+
+        private static void PlaylistMap(Playlist playlist, PlaylistData playlistData)
+        {
+            var creator = playlist.Creator;
+            playlistData.Id = playlist.Id;
+            playlistData.Name = playlist.Name;
+            playlistData.Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration));
+            playlistData.Genres = playlist.Tracks.Select(x => x.Genre)
+                .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
+                .OrderByDescending(x => x.Count)
+                .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                .Select(x => x.Name)
+                .Take(5)
+                .ToList();
+            playlistData.Creator = new UserBrief
+            {
+                Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
+                Email = creator.Email
+            };
+            playlistData.ItemsCount = playlist.Tracks.Count;
+        }
+
     }
 }

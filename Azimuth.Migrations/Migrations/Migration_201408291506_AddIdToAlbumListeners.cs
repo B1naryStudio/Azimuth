@@ -9,10 +9,7 @@ namespace Azimuth.Migrations
         {
             Delete.PrimaryKey("PK_PlaylistListeners").FromTable("PlaylistListeners");
             Alter.Table("PlaylistListeners")
-                .AddColumn("Id").AsInt64().NotNullable().Identity();
-            Create.PrimaryKey("PK_PlaylistListeners_1")
-                .OnTable("PlaylistListeners")
-                .Column("Id");
+                .AddColumn("Id").AsInt64().NotNullable().Identity().PrimaryKey();
         }
 
         public override void Down()

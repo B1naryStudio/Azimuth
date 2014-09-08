@@ -53,14 +53,14 @@
     <Compile Include="Migrations\Migration_201408111122_UpdateTracks.cs" />
     <Compile Include="Migrations\Migration_201408121200_ChangeUserSocialNetworksTable.cs" />
     <Compile Include="Migrations\Migration_201408130949_AddConstraints.cs" />
-    <Compile Include="Migrations\Migration_201408131104.cs" />
+    <Compile Include="Migrations\Migration_201408131104_CreateUnauthorizedListenersTable.cs" />
     <Compile Include="Migrations\Migration_201408141633_IncreaseLyricsField.cs" />
     <Compile Include="Migrations\Migration_201408281315_AddTrackPositionColumn.cs" />
     <Compile Include="Migrations\Migration_201408291506_AddIdToAlbumListeners.cs" />
     <Compile Include="Migrations\Migration_201409010308_AddFollowers.cs" />
     <Compile Include="Migrations\Migration_201409052000_DeleteLyricTrackUrlGenreTableAddVkTrackId.cs" />
-    <Compile Include="Migrations\Migration_201409061130_AddOwnerIdColumnToTracks.cs" />
-    <Compile Include="Migrations\Migration_201409052047_AddSharing.cs" />
+    <Compile Include="Migrations\Migration_20140906_CreateFavoritePlaylists.cs" />
+    <Compile Include="Migrations\Migration_201409071636_ChangeNameOfUnauthorizedListenersToListened.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

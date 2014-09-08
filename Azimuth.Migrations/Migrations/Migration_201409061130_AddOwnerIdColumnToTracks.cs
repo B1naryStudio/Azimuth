@@ -8,7 +8,7 @@ namespace Azimuth.Migrations.Migrations
     {
         public override void Up()
         {
-            Alter.Table("Tracks").AddColumn("OwnerId").AsString().NotNullable();
+            Alter.Table("Tracks").AddColumn("OwnerId").AsString().NotNullable().WithDefaultValue(0);
         }
 
         public override void Down()
