@@ -339,6 +339,7 @@
     <Content Include="Scripts\shareManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\workWithMusic.js" />
+    <Content Include="Scripts\workWithSearch.js" />
     <Content Include="Scripts\workWithShare.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
