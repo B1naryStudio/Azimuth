@@ -102,7 +102,11 @@ var MusicManager = function (manager) {
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
         var tracks = [];
-        var friendId = $('.friend.active').children('.friend-id').text();
+        // $('.playlist').find('.playlistId:contains('+ playlistId +')')
+
+        var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+        if (currentPlaylist.find('.readonly').text() == 'true')
+            return;
         $currentItem.children().toggleClass('vk-item', false);
         $currentItem.children('.tableRow').each(function () {
             tracks.push({
@@ -325,6 +329,9 @@ var MusicManager = function (manager) {
 
     this._moveTrackToNewPosition = function (playlist) {
         var playlistId = $('#playlistTracks').children('.playlistId').text();
+        var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+        if (currentPlaylist.find('.readonly').text() == 'true')
+            return;
         var $tracks = $(playlist).children('.tableRow');
         var wholePlaylist = [];
         for (var i = 0; i < $tracks.length; i++) {
@@ -339,9 +346,11 @@ var MusicManager = function (manager) {
         $.ajax({
             url: '/api/usertracks/put?playlistId=' + playlistId,
             type: 'PUT',
-            dataType: 'json',
             data: JSON.stringify(wholePlaylist),
-            contentType: 'application/json; charset=utf-8'
+            contentType: 'application/json; charset=utf-8',
+            success: function() {
+                self.audioManager.refreshPlaylistTracks();
+            }
         });
     };
 };
@@ -477,7 +486,40 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                         } else {
                             playlist.Accessibilty = "Private";
                         }
+                        
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                        playlist.readonly = false;
+                        self.playlistsGlobal.push(playlist);
+                        var tmpl = self.playlistTemplate.tmpl(playlist);
+                        self._setNewImage(tmpl);
+                        self.$playlistsTable.append(tmpl);
+                        self._setChangingPlaylistImage(tmpl);
+                    }
+                } else {
+                    self.$reloginForm.show();
+                    self.$reloginForm.find('a').attr('href', reloginUrl);
+                    self.$vkMusicTable.hide();
+                }
+                
+            }
+        });
+        $.ajax({
+            url: '/api/playlists/liked/notOwned',
+            success: function (playlistsData) {
+                console.log('Hi');
+                if (typeof playlistsData.Message === 'undefined') {
+                    self.$reloginForm.hide();
+                    self.$vkMusicTable.show();
+                    self.playlists = playlistsData;
+                    for (var i = 0; i < self.playlists.length; i++) {
+                        var playlist = self.playlists[i];
+                        if (playlist.Accessibilty === 1) {
+                            playlist.Accessibilty = "public";
+                        } else {
+                            playlist.Accessibilty = "private";
+                        }
+                        playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                        playlist.readonly = true;
                         self.playlistsGlobal.push(playlist);
                         var tmpl = self.playlistTemplate.tmpl(playlist);
                         self._setNewImage(tmpl);
