@@ -500,6 +500,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
+                $('.accordion .tableRow').on("click", self._getTracks);
                 
             }
         });

@@ -16,6 +16,26 @@
     self.$likesCounter = $('.likesCounter');
     self.currentLikeStatus = null;
 
+    this._setNewImage = function ($playlist, id) {
+        $.ajax({
+            url: '/api/playlists/image/' + id,
+            success: function (image) {
+                var $logo = $playlist;
+                $logo.fadeOut(500, function() {
+                    if (image != "") {
+                        $logo.css({
+                            "background-image":'url('+image+')'});
+                    } else {
+                        $logo.css({
+                            "background-image": 'url(http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg)'
+                        });
+                    }
+                });
+                $logo.fadeIn(500);
+            }
+        });
+    };
+
     self.addCurrentUserAsListener = function (playlist) {
         $.ajax({
             cache: false,
@@ -217,6 +237,7 @@ PublicPlaylistManager.prototype.showPlaylists = function () {
                 self.$playlists.append($playlist);
                 var $listener = $playlist.find('.listeners');
                 var returnVal = self.getPlaylistListeners(playlist);
+                self._setNewImage($playlist, playlist.Id);
                 $listener.text('Listening ' + returnVal + ' people');
             }
         }
