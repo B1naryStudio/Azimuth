@@ -184,6 +184,13 @@ namespace Azimuth.DataGenerator
         {
             using (var unitOfWork = _kernel.Get<IUnitOfWork>())
             {
+                #region Migration_201409071636_ChangeNameOfUnauthorizedListenersToListened
+                var likesRepo = unitOfWork.GetRepository<PlaylistLike>();
+                foreach (var playlistLike in likesRepo.GetAll())
+                    likesRepo.DeleteItem(playlistLike);
+                #endregion
+                ////TODO something here should be added
+                #region prev
                 var listenerRepo = unitOfWork.GetRepository<PlaylistListener>();
                 var listeners = listenerRepo.GetAll();
                 foreach (var playlistListenerse in listeners)
@@ -212,8 +219,8 @@ namespace Azimuth.DataGenerator
                     playlistRepo.DeleteItem(playlist);
                 }
 
-                
-    
+
+
                 var snRepo = unitOfWork.GetRepository<SocialNetwork>();
                 var sns = snRepo.GetAll();
                 foreach (var socialNetwork in sns)
@@ -227,7 +234,7 @@ namespace Azimuth.DataGenerator
                 {
                     userRepo.DeleteItem(user);
                 }
-
+                #endregion
                 unitOfWork.Commit();
             }
         } 
