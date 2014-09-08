@@ -20,6 +20,14 @@
                 self.audioManager.refreshTracks();
                 self.audioManager.bindPlayBtnListeners();
                 $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                $('.vkMusicTable').mCustomScrollbar({
+                    theme: 'dark-3',
+                    scrollButtons: { enable: true },
+                    updateOnContentResize: true,
+                    scrollInertia: 0,
+                    autoHideScrollbar: true,
+                    advanced: { updateOnSelectorChange: "true" }
+                });
             }
         });
     };
