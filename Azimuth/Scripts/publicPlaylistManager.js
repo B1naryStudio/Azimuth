@@ -11,7 +11,7 @@
     self.$playlistName = $('#playlistName');
     self.$listeners = $('#listeners');
     self.$backToPlaylistsBtn = $('#backToPlaylistsBtn');
-    self.currentPlaylist = null;
+    self.currentPlaylistId = 0;
     self.$likeBtn = $('#likeBtn');
     self.$favoriteBtn = $('#favoriteBtn');
     self.$likesCounter = $('.likesCounter');
@@ -23,7 +23,7 @@
             url: '/api/playlists/image/' + id,
             success: function (image) {
                 var $logo = $playlist;
-                $logo.fadeOut(500, function() {
+                $logo.fadeOut(200, function() {
                     if (image != "") {
                         $logo.css({
                             "background-image":'url('+image+')'});
@@ -33,16 +33,16 @@
                         });
                     }
                 });
-                $logo.fadeIn(500);
+                $logo.fadeIn(200);
             }
         });
     };
 
-    self.addCurrentUserAsListener = function (playlist) {
+    self.addCurrentUserAsListener = function () {
         $.ajax({
             cache: false,
             type: "POST",
-            url: "/api/listened/" + playlist.Id,
+            url: "/api/listened/" + self.currentPlaylistId,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -69,15 +69,13 @@
     //    });
     //};
 
-    self.getPlaylistListeners = function (playlist) {
-        if (playlist == null)
-            playlist = self.currentPlaylist;
+    self.getPlaylistListeners = function () {
         self.$listeners.empty();
         var res = -1;
         $.ajax({
             cache: false,
             type: "GET",
-            url: "/api/listened/" + playlist.Id,
+            url: "/api/listened/" + self.currentPlaylistId,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -91,7 +89,7 @@
         $.ajax({
             cache: false,
             type: "GET",
-            url: "/api/likes/" + self.currentPlaylist.Id,
+            url: "/api/likes/" + self.currentPlaylistId,
             dataType: "json",
             success: function (data) {
                 self.$likesCounter.text(data);
@@ -101,10 +99,10 @@
 
     self.showTracks = function (playlist) {
         var self = this;
-        self.$playlistName.text(playlist.Name);
+        self.$playlistName.text(playlist.find('.playlistName').text());
         self.$tracks.empty();
         $.ajax({
-            url: "/api/usertracks?playlistId=" + playlist.Id, // TODO replace with class playlistID
+            url: "/api/usertracks?playlistId=" + playlist.find('.playlistId').text(), // TODO replace with class playlistID
             type: 'GET',            
             success: function(tracksData) {
                 var tracks = tracksData;
@@ -150,9 +148,9 @@
         }
     }
 
-    self.isLiked = function (playlist) {
+    self.isLiked = function () {
         $.ajax({
-            url: "/api/likes/status/" + playlist.Id,
+            url: "/api/likes/status/" + self.currentPlaylistId,
             type: 'GET',
             async: false,
             success: function (data) {
@@ -162,9 +160,9 @@
         return self.currentLikeStatus;
     }
 
-    self.isFavorite = function (playlist) {
+    self.isFavorite = function () {
         $.ajax({
-            url: "/api/favorite/status/" + playlist.Id,
+            url: "/api/favorite/status/" + self.currentPlaylistId,
             type: 'GET',
             async: false,
             success: function (data) {
@@ -190,33 +188,26 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         self.showPlaylists();
         self.$tracksArea.hide();
         self.$backToPlaylistsBtn.hide();
-        self.currentPlaylist = null;
     });
     self.$playlists.click(function (event) {
         
         self.$playlistsArea.hide();
         self.$tracksArea.show();
         self.$backToPlaylistsBtn.show();
-        
         var $playlist = $(event.target).closest('.playlist-plated');
-
-        var playlistName = $playlist.find('.playlist-plated-info-name').text();
-        self.currentPlaylist = self.playlists_global.filter(function (index) {
-            return index.Name.valueOf() == playlistName;
-        })[0];
-        
-        self.showTracks(self.currentPlaylist);
+        self.showTracks($playlist);
         self.showLikes();
-        $(document).trigger('newListenerAdded', [self.currentPlaylist]);
-        self.isLiked(self.currentPlaylist);
+        $(document).trigger('newListenerAdded');
+        self.currentPlaylistId = $playlist.find('.playlistId').text();
+        self.isLiked();
         self.setLikeBtnIcon();
-        self.isFavorite(self.currentPlaylist);
+        self.isFavorite();
         self.setFavoriteBtnIcon();
     });
     
     self.$likeBtn.click(function () {
         var action = null;
-        if (self.isLiked(self.currentPlaylist))
+        if (self.isLiked())
             action = "POST";
         else 
             action = "DELETE";
@@ -224,42 +215,42 @@ PublicPlaylistManager.prototype.bindListeners = function () {
         $.ajax({
             cache: false,
             type: action,
-            url: "/api/likes/" + self.currentPlaylist.Id,
+            url: "/api/likes/" + self.currentPlaylistId,
             dataType: "json",
             async:false,
             success: function (data) {
                 $(document).trigger('likeStatusChanged');
             }
         });
-        self.isLiked(self.currentPlaylist);//TODO donno why, but I doing wasted request to server
+        self.isLiked();//TODO donno why, but I doing wasted request to server
         self.setLikeBtnIcon();
         
     });
     self.$favoriteBtn.click(function () {
         var action = null;
-        if (self.isFavorite(self.currentPlaylist))
+        if (self.isFavorite())
             action = "POST";
         else
             action = "DELETE";
         $.ajax({
             cache: false,
             type: action,
-            url: "/api/favorite/" + self.currentPlaylist.Id,
+            url: "/api/favorite/" + self.currentPlaylistId,
             dataType: "json",
             async: false,
             success: function (data) {
             }
         });
-        self.isFavorite(self.currentPlaylist);//TODO donno why, but I doing wasted request to server
+        self.isFavorite();//TODO donno why, but I doing wasted request to server
         self.setFavoriteBtnIcon();
 
     });
     $(document).on('likeStatusChanged', function () {
         self.showLikes();
     });
-    $(document).on('newListenerAdded', function (event, playlist) {
-        self.addCurrentUserAsListener(playlist);
-        self.$listeners.text('This playlist listened ' + self.getPlaylistListeners(playlist) + ' people');
+    $(document).on('newListenerAdded', function (event) {
+        self.addCurrentUserAsListener();
+        self.$listeners.text('This playlist listened ' + self.getPlaylistListeners() + ' people');
     });
 };
 
@@ -270,11 +261,13 @@ PublicPlaylistManager.prototype.showPlaylists = function () {
         cache: false,
         type: "GET",
         url: "/api/playlists/public",
+        async:false,
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             var playlists = data;
             self.playlists_global = playlists;
             for (var i = 0; i < playlists.length; i++) {
+                
                 var playlist = playlists[i];
                 var mins = Math.floor(playlist.Duration / 60);
                 var secs = ('0' + (playlist.Duration % 60)).slice(-2);
@@ -283,11 +276,26 @@ PublicPlaylistManager.prototype.showPlaylists = function () {
                 playlist.CreatorId = playlist.Creator.Id;
                 var $playlist = $('#playlistTemplate').tmpl(playlist);
                 self.$playlists.append($playlist);
-                var $listener = $playlist.find('.listeners');
-                var returnVal = self.getPlaylistListeners(playlist);
-                self._setNewImage($playlist, playlist.Id);
-                $listener.text('Listening ' + returnVal + ' people');
+                console.log(self.$playlists.length);
             }
+        },
+        error:function() {
+            console.log('wtf is it?!');
         }
     });
+    var $playlists = self.$playlists.find('.playlist-plated');
+    for (var i = 0; i < $playlists.length; ++i) {
+        var $playlist = $($playlists[i]);
+        var $listener = $playlist.find('.listeners');
+        self.currentPlaylistId = $playlist.find('.playlistId').text();
+        console.log("id");
+        console.log(self.currentPlaylistId);
+        $listener.text('Listening ' + self.getPlaylistListeners() + ' people');
+    }
+
+    for (i = 0; i < $playlists.length; ++i) {
+        $playlist = $($playlists[i]);
+        self.currentPlaylistId = $playlist.find('.playlistId').text();
+        self._setNewImage($playlist, self.currentPlaylistId);
+    }
 };
