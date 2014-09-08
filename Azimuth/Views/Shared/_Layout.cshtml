@@ -29,6 +29,7 @@
                     
                         <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
                     </ul>
+                    
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a id="user-settings" href="@Url.Action("Index", "Settings")">
@@ -38,6 +39,17 @@
                         <li id="user-name-item">
                             <div id="user-name">@User.Identity.GetUserName()</div>
                             @Html.ActionLink("Log off", "LogOff", "Account", null, new {id = "log-off-link"})
+                        </li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav" style="width: 15%; float: right; margin-top: 15px; margin-right: 10px;">
+                        <li>
+                            <span class="input-group">
+                                <span class="input-group-btn">
+                                    <button id="searchBtn" class="btn btn-default glyphicon glyphicon-search" type="button" style="height: 22px; width: 20px; border-color: black; background-color: #66757f; margin-top: -2px; padding-top: 2px; padding-left: 2px;" ></button>
+                                </span>
+                                <input id="searchText" type="text" class="form-control" style="height: 22px; border-color: black; background-color: #66757f; border-left: 0; color: white;" />
+                            </span>
                         </li>
                     </ul>
                 }
@@ -51,5 +63,16 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script>
+        $('#searchBtn').click(function() {
+            window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
+        });
+        $('#searchText').keypress(function(e) {
+            if (e.which == 13) {
+                window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>
