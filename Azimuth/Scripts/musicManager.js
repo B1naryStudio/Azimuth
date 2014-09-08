@@ -737,7 +737,6 @@ MusicManager.prototype.bindListeners = function() {
                     }
                 });
             }
-        }
-
+        }        
     });
 };

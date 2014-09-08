@@ -28,6 +28,7 @@ namespace Azimuth.Services.Concrete
         private readonly TrackRepository _trackRepository;
         private readonly PlaylistLikerRepository _likesRepository;
         private readonly UserRepository _userRepository;
+        private readonly SharedPlaylistRepository _sharedPlaylistRepository;
 
         public PlaylistService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
         {
@@ -39,6 +40,8 @@ namespace Azimuth.Services.Concrete
             _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
             _likesRepository = _unitOfWork.GetRepository<PlaylistLike>() as PlaylistLikerRepository;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+            _sharedPlaylistRepository =
+                _unitOfWork.GetRepository<SharedPlaylist>() as SharedPlaylistRepository;
         }
 
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -337,13 +340,12 @@ namespace Azimuth.Services.Concrete
 
                     _playlistRepository.AddItem(fakePlaylist);
 
-                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
                     var sharedPlaylist = new SharedPlaylist
                     {
                         Guid = guid,
                         Playlist = fakePlaylist
                     };
-                    sharedRepo.AddItem(sharedPlaylist);
+                    _sharedPlaylistRepository.AddItem(sharedPlaylist);
 
                     _unitOfWork.Commit();
                 }
@@ -361,9 +363,8 @@ namespace Azimuth.Services.Concrete
             var tracksDto = new List<TracksDto>();
             using (_unitOfWork)
             {
-                var sharedPlaylistRepo = _unitOfWork.GetRepository<SharedPlaylist>();
 
-                var sharedPlaylist = sharedPlaylistRepo.GetOne(sp => sp.Guid == guid);
+                var sharedPlaylist = _sharedPlaylistRepository.GetOne(sp => sp.Guid == guid);
 
                 if (sharedPlaylist != null && sharedPlaylist.Playlist != null)
                 {
@@ -411,19 +412,36 @@ namespace Azimuth.Services.Concrete
 
                     _playlistRepository.AddItem(fakePlaylist);
 
-                    var sharedRepo = _unitOfWork.GetRepository<SharedPlaylist>();
                     var sharedPlaylist = new SharedPlaylist
                     {
                         Guid = guid,
                         Playlist = fakePlaylist
                     };
 
-                    sharedRepo.AddItem(sharedPlaylist);
+                    _sharedPlaylistRepository.AddItem(sharedPlaylist);
 
                     _unitOfWork.Commit();
                 }
 
                 return guid;
+            });
+        }
+
+        public Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
+        {
+            return Task.Run(() =>
+            {
+                using (_unitOfWork)
+                {
+                    var guid = azimuthPlaylist;
+                    var sharedPlaylist = _sharedPlaylistRepository.GetOne(sp => sp.Guid == guid);
+
+                    sharedPlaylist.Playlist.Name = playlistName;
+
+                    _unitOfWork.Commit();
+                }
+
+                return playlistName;
             });
         }
     }

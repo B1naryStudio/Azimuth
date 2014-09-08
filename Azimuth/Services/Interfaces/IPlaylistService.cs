@@ -20,5 +20,6 @@ namespace Azimuth.Services.Interfaces
         Task<string> GetSharedPlaylist(int playlistId);
         List<TracksDto> GetSharedTracks(string guid);
         Task<string> GetSharedPlaylist(List<long> tracksId);
+        Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName);
     }
 }
