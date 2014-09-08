@@ -201,9 +201,12 @@ namespace Azimuth.Services.Concrete
                         {
                             findInVk.ForEach(item =>
                             {
-                                TracksDto dto = new TracksDto();
+                                var dto = new TracksDto();
                                 Mapper.Map(item, dto);
-                                trackDtos.Add(dto);
+                                if (!trackDtos.Any(track => (track.Artist == dto.Artist) && (track.Name == dto.Name)))
+                                {
+                                    trackDtos.Add(dto);
+                                }
                             });
                         }
                         break;
@@ -221,9 +224,12 @@ namespace Azimuth.Services.Concrete
                         {
                             findInVk.ForEach(item =>
                             {
-                                TracksDto dto = new TracksDto();
+                                var dto = new TracksDto();
                                 Mapper.Map(item, dto);
-                                trackDtos.Add(dto);
+                                if (!trackDtos.Any(track => (track.Artist == dto.Artist) && (track.Name == dto.Name)))
+                                {
+                                    trackDtos.Add(dto);
+                                }
                             });
                         }
                         break;
@@ -233,9 +239,12 @@ namespace Azimuth.Services.Concrete
                 {
                     tracks.ForEach(item =>
                     {
-                        TracksDto dto = new TracksDto();
+                        var dto = new TracksDto();
                         Mapper.Map(item, dto);
-                        trackDtos.Add(dto);
+                        if (!trackDtos.Any(track => (track.Artist == dto.Artist) && (track.Name == dto.Name)))
+                        {
+                            trackDtos.Add(dto);
+                        }
                     });
                 }
 
