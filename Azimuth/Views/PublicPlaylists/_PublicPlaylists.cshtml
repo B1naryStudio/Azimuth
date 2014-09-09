@@ -1,0 +1,89 @@
+﻿@using Azimuth.DataAccess.Entities
+@model List<Azimuth.Shared.Dto.PlaylistData>
+@{
+    var playlistFollowData = ViewData["playlistFollowing"] as IEnumerable<PlaylistLike>;
+    var temp = playlistFollowData.ToList();
+}
+@foreach (var playlist in Model)
+{
+         <div class="playlist-plated">
+             <div class="playlist-plated-info">
+                 <div class="playlistName"> @playlist.Name</div>
+                 <div class="duration">@playlist.Duration</div>
+                 <div class="creator">Created by: @playlist.Creator.Name</div>
+                 <div class="genres">Genres: 
+                     @foreach (var genre in @playlist.Genres)
+                     {
+                         @genre
+                     }
+               
+                 </div>
+                 
+                 @{
+                     var curPlaylistFollowData = temp.FirstOrDefault(s => s.Playlist.Id == playlist.Id);
+                 }
+
+                 <input type="hidden" class="playlistId" value="@playlist.Id.ToString()"/>
+                 @if (curPlaylistFollowData != null)
+                 {
+                     <input type="hidden" class="isLiked" value="@curPlaylistFollowData.IsLiked.ToString()"/>
+                     <input type="hidden" class="isFavourited" value="@curPlaylistFollowData.IsFavorite.ToString()" />
+                 }
+                 else
+                 {
+                    <input type="hidden" class="isLiked" value="False"/>
+                    <input type="hidden" class="isFavourited" value="False" />
+                 }
+             </div>
+         </div>
+}
+
+<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#tracksArea').hide();
+        $('#playlist-plated').show();
+    });
+
+    $('.playlist-plated').click(function() {
+        $.ajax({
+            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + $(this).find('.playlistId').val() + "&isLiked=" +
+                $(this).find('.isLiked').val() + "&isFavourited=" + $(this).find('.isFavourited').val(),
+            type: 'GET',
+            success: function(data) {
+                $(data).appendTo($('#tracksArea'));
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var self = this;
+
+    this._setNewImage = function ($playlist, id) {
+        $.ajax({
+            url: '/api/playlists/image/' + id,
+            success: function (image) {
+                var $logo = $playlist;
+                $logo.fadeOut(200, function () {
+                    if (image != "") {
+                        $logo.css({
+                            "background-image": 'url(' + image + ')'
+                        });
+                    } else {
+                        $logo.css({
+                            "background-image": 'url(http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg)'
+                        });
+                    }
+                });
+                $logo.fadeIn(200);
+            }
+        });
+    };
+
+    $('.playlist-plated').each(function() {
+        self._setNewImage($(this), $(this).find('.playlistId').val());
+    });
+</script>

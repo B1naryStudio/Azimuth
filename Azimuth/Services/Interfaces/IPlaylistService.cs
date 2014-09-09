@@ -8,6 +8,7 @@ namespace Azimuth.Services.Interfaces
     public interface IPlaylistService
     {
         Task<List<PlaylistData>> GetPublicPlaylists();
+        List<PlaylistData> GetPublicPlaylistsSync();
         Task<List<PlaylistData>> GetUsersPlaylists();
         Task<List<PlaylistData>> GetFavoritePlaylists();
         Task<List<PlaylistData>> GetNotOwnedFavoritePlaylists();

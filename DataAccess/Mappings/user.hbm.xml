@@ -29,6 +29,10 @@
       <key column="FollowerId" />
       <many-to-many column="FollowingId" class="User" />
     </set>
+    <set name="PlaylistFollowing" table="Likes" cascade="save-update" lazy="false">
+      <key column="UserId" />
+      <one-to-many class="PlaylistLike"/>
+    </set>
     <property name="Email" unique="true"/>
   </class>
 </hibernate-mapping>

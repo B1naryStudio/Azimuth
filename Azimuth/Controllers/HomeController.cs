@@ -13,7 +13,8 @@ namespace Azimuth.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction("Index", "PublicPlaylists");
+                //return View();
             }
         }
     }

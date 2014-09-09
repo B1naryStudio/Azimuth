@@ -119,7 +119,6 @@ var MusicManager = function (manager) {
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
         var tracks = [];
-        // $('.playlist').find('.playlistId:contains('+ playlistId +')')
 
         var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
         if (currentPlaylist.find('.readonly').text() == 'true')
@@ -438,7 +437,6 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
         callbacks: {
             onTotalScroll: function () {
                 self.$friendsLoadingSpinner.fadeIn('normal');
-                //var provider = $('.tab-pane.active').attr('id');
                 $.ajax({
                     url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
                     success: function (friendsData) {

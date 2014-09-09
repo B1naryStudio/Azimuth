@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Azimuth.DataAccess.Infrastructure;
 
 namespace Azimuth.DataAccess.Entities
@@ -17,12 +18,14 @@ namespace Azimuth.DataAccess.Entities
         public virtual ICollection<UserSocialNetwork> SocialNetworks { get; set; }
         public virtual ICollection<User> Followers { get; set; }
         public virtual ICollection<User> Following { get; set; }
+        public virtual ICollection<PlaylistLike> PlaylistFollowing  { get; set; }
 
         public User()
         {
             SocialNetworks = new List<UserSocialNetwork>();
             Followers = new List<User>();
             Following = new List<User>();
+            PlaylistFollowing = new List<PlaylistLike>();
         }
         public override string ToString()
         {
