@@ -50,12 +50,27 @@ namespace Azimuth.Services.Concrete
                 {
                     var notifications = _notificationRepository.GetAll(n => n.User.Id == userId);
 
-                    notificationsDto.AddRange(notifications.Select(notification => new NotificationDto
+                    foreach (var notification in notifications)
                     {
-                        RecentlyPlaylistId = (notification.RecentlyPlaylist != null) ? notification.RecentlyPlaylist.Id : -1,
-                        RecentlyUserId = (notification.RecentlyUser != null) ? notification.RecentlyUser.Id : -1,
-                        Message = GetMessage(notification)
-                    }));
+                        var notifDto = new NotificationDto();
+                        if (notification.RecentlyUser != null)
+                        {
+                            notifDto.RecentlyUserId = notification.RecentlyUser.Id;
+                            notifDto.RecentlyUserFirstName = notification.RecentlyUser.Name.FirstName;
+                            notifDto.RecentlyUserLastName = notification.RecentlyUser.Name.LastName;
+                        }
+                        if (notification.RecentlyPlaylist != null)
+                        {
+                            if (notification.RecentlyPlaylist.Accessibilty == Accessibilty.Public)
+                            {
+                                notifDto.RecentlyPlaylistId = notification.RecentlyPlaylist.Id;
+                            }
+                            notifDto.RecentlyPlaylistName = notification.RecentlyPlaylist.Name;
+                        }
+                        notifDto.Message = GetMessage(notification);
+
+                        notificationsDto.Add(notifDto);
+                    }
                 }
 
                 return notificationsDto;
@@ -70,67 +85,36 @@ namespace Azimuth.Services.Concrete
                 case Notifications.AddedNewListener:
                     break;
                 case Notifications.ChangedPlaylistAccessebilty:
-                    message = string.Format("User {0} {1} changed accessebilty for playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "changed accessebilty for playlist";
                     break;
                 case Notifications.FavoritedPlaylist:
-                    message = string.Format("User {0} {1} favorited playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "favorited playlist ";
                     break;
                 case Notifications.Followed:
-                    message = string.Format("User {0} {1} followed to {2} {3}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyUser.Name.FirstName,
-                        notification.RecentlyUser.Name.LastName);
+                    message = "followed to";
                     break;
                 case Notifications.LikedPlaylist:
-                    message = string.Format("User {0} {1} liked playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "liked playlist";
                     break;
                 case Notifications.PlaylistCreated:
-                    message = string.Format("User {0} {1} created new playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "created new playlist";
                     break;
                 case Notifications.PlaylistRemoved:
-                    message = string.Format("User {0} {1} removed playlist",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName);
+                    message = "removed playlist";
                     break;
                 case Notifications.PlaylistShared:
-                    message = string.Format("User {0} {1} shared playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "shared playlist";
                     break;
                 case Notifications.RemovedListener:
                     break;
                 case Notifications.UnfavoritedPlaylist:
-                    message = string.Format("User {0} {1} unfavorited playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "unfavorited playlist";
                     break;
                 case Notifications.Unfollowed:
-                    message = string.Format("User {0} {1} unfollowed to {2} {3}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyUser.Name.FirstName,
-                        notification.RecentlyUser.Name.LastName);
+                    message = "unfollowed to";
                     break;
                 case Notifications.UnlikedPlaylist:
-                    message = string.Format("User {0} {1} unliked playlist {2}",
-                        notification.User.Name.FirstName,
-                        notification.User.Name.LastName,
-                        notification.RecentlyPlaylist.Name);
+                    message = "unliked playlist";
                     break;
             }
 
