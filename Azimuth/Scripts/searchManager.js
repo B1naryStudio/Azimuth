@@ -5,16 +5,19 @@
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
 
-    $.ajax({
-        url: 'api/playlists/',
-        type: 'GET',
-        dataType: 'json',
-        success: function (playlists) {
-            $(playlists).each(function () {
-                $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
-            });
-        }
-    });
+    this._updatePlaylists = function() {
+        $.ajax({
+            url: 'api/playlists/',
+            type: 'GET',
+            dataType: 'json',
+            success: function (playlists) {
+                $('#playlistsTable').empty();
+                $(playlists).each(function () {
+                    $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
+                });
+            }
+        });
+    };
 
     this._search = function() {
         var searchParam = $('#search').val().toLocaleLowerCase();
@@ -192,6 +195,7 @@
         });
     };
 
+    this._updatePlaylists();
     this._search();
 };
 
@@ -266,5 +270,6 @@ SearchManager.prototype.bindListeners = function () {
                 self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
             }
         });
+        self._updatePlaylists();
     });
 };
