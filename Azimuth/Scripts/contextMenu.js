@@ -419,9 +419,9 @@ ContextMenu.prototype.drawContextMenu = function (event) {
                 for (var j = 0; j < $playlists.length; j++) {
                     var currentplaylist = $('.playlist.active').find('.playlistId').text();
                     var takenPlaylistId = $($playlists[j]).find('.playlistId').text();
-                    if (currentplaylist == takenPlaylistId && self.musicList.find('.vkMusicTable').length == 0) {
-                        continue;
-                    }
+                    //if (currentplaylist == takenPlaylistId && self.musicList.find('.vkMusicTable').length == 0) {
+                    //    continue;
+                    //}
                     var playlist = {
                         "name": $($playlists[j]).children('.playlist-title').text(),
                         "id": $($playlists[j]).children('.playlistId').text()

@@ -5,6 +5,17 @@
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
 
+    $.ajax({
+        url: 'api/playlists/',
+        type: 'GET',
+        dataType: 'json',
+        success: function (playlists) {
+            $(playlists).each(function () {
+                $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
+            });
+        }
+    });
+
     this._search = function() {
         var searchParam = $('#search').val().toLocaleLowerCase();
         $('.vkMusicList').find('.track').remove();
@@ -13,7 +24,7 @@
             url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
             type: 'GET',
             dataType: 'json',
-            success: function (tracks) {
+            success: function(tracks) {
                 for (var i = 0; i < tracks.length; i++) {
                     tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
                 }
@@ -29,6 +40,7 @@
                     autoHideScrollbar: true,
                     advanced: { updateOnSelectorChange: "true" }
                 });
+                self._createContextMenu();
                 self.$vkMusicLoadingSpinner.hide();
             }
         });
@@ -128,6 +140,30 @@
             timer = setTimeout(callback, ms);
         }
     })();
+
+    this._createContextMenu = function() {
+        var ctxMenu = new ContextMenu();
+        var contextMenuActions = [
+            { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
+            { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+        ];
+
+        ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+        $('.track').off('mousedown').mousedown(function (event) {
+            if (event.which == 3) {
+                $('.track.selected').toggleClass('selected', false);
+                var $target = $(event.target).parents('.track');
+                $target.toggleClass('selected', true);
+                ctxMenu.drawContextMenu(event);
+            }
+        });
+
+        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+            ctxMenu.$contextMenuContainer.hide();
+            ctxMenu.selectAction($('.track.selected'));
+        });
+    };
 
     this._search();
 };

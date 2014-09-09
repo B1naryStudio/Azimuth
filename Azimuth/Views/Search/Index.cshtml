@@ -41,6 +41,30 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Enter Playlist Name For Selected Tracks</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="playlistNameToCreate" placeholder="Enter Playlist Name" />
+                    <select class="form-control" id="newPlaylistAccessibility">
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="okPlaylistCreateModalBtn" data-dimiss="modal">OK</button>
+                    <button type="button" class="btn btn-default" id="cancelModalBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="playlistsTable" style="display: none;"></div>
+    <div class="itemsContainer tableRow" id="itemsContainer"></div>
 </div>
 
 
@@ -158,10 +182,25 @@
         </div>
     </script>
     
+    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div id="${id}" class="contextMenuActionName">${name}</div>
+            <div class="contextMenuExpander"></div>
+        </div>
+    </script>
+    
+    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div class="contextMenuActionName">${name}</div>
+            <span class="playlistId" style="display: none">${id}</span>
+        </div>
+    </script>
+    
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="../../Scripts/searchManager.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/sliderController.js"></script>
     <script type="text/javascript" src="../../Scripts/workWithSearch.js"></script>
+    <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
 }
