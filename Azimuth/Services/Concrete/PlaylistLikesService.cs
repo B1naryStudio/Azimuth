@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IdentityModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure.Concrete;
+using Azimuth.Services.Interfaces;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Services.Concrete
 {
@@ -17,13 +17,15 @@ namespace Azimuth.Services.Concrete
         private readonly IRepository<PlaylistLike> _likerRepository;
         private readonly UserRepository _userRepository;
         private readonly IRepository<Playlist> _playlistRepository;
+        private readonly INotificationService _notificationService;
 
-        public PlaylistLikesService(IUnitOfWork unitOfWork)
+        public PlaylistLikesService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _likerRepository = _unitOfWork.GetRepository<PlaylistLike>();
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
+            _notificationService = notificationService;
         }
 
         public Task<List<User>> GetLikersByPlaylistId(int id)
@@ -58,6 +60,7 @@ namespace Azimuth.Services.Concrete
 
                     var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
                     if (atemp == null)
+                    {
                         _likerRepository.AddItem(new PlaylistLike
                         {
                             Liker = user,
@@ -65,11 +68,15 @@ namespace Azimuth.Services.Concrete
                             IsLiked = true,
                             IsFavorite = false
                         });
+                        _notificationService.CreateNotification(Notifications.LikedPlaylist, user);
+                    }
+                        
                     else
                     {
                         atemp.IsLiked = true;
                         _likerRepository.UpdateItem(atemp);
                     }
+
                 }
                 _unitOfWork.Commit();
             }
@@ -93,6 +100,7 @@ namespace Azimuth.Services.Concrete
 
                     var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
                     if (atemp == null)
+                    {
                         _likerRepository.AddItem(new PlaylistLike
                         {
                             Liker = user,
@@ -100,6 +108,9 @@ namespace Azimuth.Services.Concrete
                             IsLiked = false,
                             IsFavorite = true
                         });
+                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user);
+                    }
+                        
                     else
                     {
                         atemp.IsFavorite = true;
@@ -121,13 +132,17 @@ namespace Azimuth.Services.Concrete
                 }
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                     //   _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
                     if (liker != null)
                     {
                         liker.IsLiked = false;
                     }
+
+                    var user = _userRepository.GetOne(u => u.Id == userId);
+
+                    _notificationService.CreateNotification(Notifications.UnlikedPlaylist, user);
                 }
                 _unitOfWork.Commit();
             }
@@ -144,13 +159,17 @@ namespace Azimuth.Services.Concrete
                 }
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Liker.Id == userId);
                     if (liker != null)
                     {
                         liker.IsFavorite = false;
                     }
+
+                    var user = _userRepository.GetOne(u => u.Id == userId);
+
+                    _notificationService.CreateNotification(Notifications.UnfavoritedPlaylist, user);
                 }
                 _unitOfWork.Commit();
             }

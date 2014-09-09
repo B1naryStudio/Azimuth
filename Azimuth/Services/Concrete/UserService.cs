@@ -10,6 +10,7 @@ using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Services.Concrete
 {
@@ -18,11 +19,13 @@ namespace Azimuth.Services.Concrete
         private ISocialNetworkApi _socialNetworkApi;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserRepository _userRepository;
+        private readonly INotificationService _notificationService;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+            _notificationService = notificationService;
         }
         public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count)
         {
@@ -116,10 +119,12 @@ namespace Azimuth.Services.Concrete
                 if (isFollow)
                 {
                     user.Followers.Add(loggedUser);
+                    _notificationService.CreateNotification(Notifications.Followed, loggedUser);
                 }
                 else
                 {
                     user.Followers.Remove(loggedUser);
+                    _notificationService.CreateNotification(Notifications.Unfollowed, loggedUser);
                 }
                 
                 _unitOfWork.Commit();

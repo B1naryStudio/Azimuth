@@ -7,5 +7,12 @@
         Followed,
         Unfollowed,
         PlaylistRemoved,
+        ChangedPlaylistAccessebilty,
+        AddedNewListener,
+        RemovedListener,
+        LikedPlaylist,
+        UnlikedPlaylist,
+        FavoritedPlaylist,
+        UnfavoritedPlaylist
     }
 }

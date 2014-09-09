@@ -1,4 +1,7 @@
 ﻿using Azimuth.ApiControllers;
+using Azimuth.DataAccess.Entities;
+using Azimuth.DataAccess.Infrastructure;
+using Azimuth.DataAccess.Repositories;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Interfaces;
@@ -19,6 +22,7 @@ namespace Azimuth.Infrastructure.Concrete
             Bind<IListenersService>().To<ListenersService>();
             Bind<IPlaylistLikesService>().To<PlaylistLikesService>();
             Bind<IPlaylistListenedService>().To<PlaylistListenedService>();
+            Bind<INotificationService>().To<NotificationService>();
             Bind<IWebClient>().To<WebClient>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VkAccountProvider>().Named("Vkontakte");
