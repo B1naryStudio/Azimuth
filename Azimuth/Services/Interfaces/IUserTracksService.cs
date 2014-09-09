@@ -21,6 +21,7 @@ namespace Azimuth.Services.Interfaces
         void UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId);
         Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider);
         Task<List<TracksDto>> MakeSearch(string searchText, string criteria);
+        Task<List<TracksDto>> VkontakteSearch(string searchText, int offset);
 
     }
 }

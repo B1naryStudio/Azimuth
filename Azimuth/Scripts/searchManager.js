@@ -1,9 +1,26 @@
 ﻿var SearchManager = function(manager) {
     var self = this;
+    this.offset = 0;
     this.audioManager = manager;
     this.topTracksVk = [];
+    this.searchTracks = [];
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
+
+    this._uploadNewSongs = function () {
+        if ($('.btn-primary.searchBtn').text() == 'Vkontakte' && this.mcs.topPct >= 75) {
+            self.offset += 20;
+            $.ajax({
+                url: 'api/search/vkontakte?searchText=' + searchParam + "&offset=" + self.offset,
+                type: 'GET',
+                dataType: 'json',
+                success: function (tracks) {
+                    searchTracks += tracks;
+
+                }
+            });
+        }
+    };
 
     this._updatePlaylists = function() {
         $.ajax({
@@ -28,11 +45,12 @@
                 url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
                 type: 'GET',
                 dataType: 'json',
-                success: function(tracks) {
+                success: function (tracks) {
+                    self.searchTracks = tracks;
                     for (var i = 0; i < tracks.length; i++) {
                         tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
                     }
-                    self._showTracks(tracks, $('#searchTrackTemplate'));
+                    self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
                     self.audioManager.refreshTracks();
                     self.audioManager.bindPlayBtnListeners();
                     $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
@@ -42,7 +60,8 @@
                         updateOnContentResize: true,
                         scrollInertia: 0,
                         autoHideScrollbar: true,
-                        advanced: { updateOnSelectorChange: "true" }
+                        advanced: { updateOnSelectorChange: "true" },
+                        callbacks: {whileScrolling: self._uploadNewSongs}
                     });
                     self._createContextMenu();
                     self.$vkMusicLoadingSpinner.hide();

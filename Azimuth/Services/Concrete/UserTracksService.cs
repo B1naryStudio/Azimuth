@@ -174,6 +174,28 @@ namespace Azimuth.Services.Concrete
 
         }
 
+        public async Task<List<TracksDto>> VkontakteSearch(string searchText, int offset)
+        {
+            var trackDtos = new List<TracksDto>();
+            var findInVk = new List<TrackData.Audio>();
+            _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+            var socialNetworkData = GetSocialNetworkData("Vkontakte");
+            findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, offset, 20);
+            if (findInVk.Count > 0)
+            {
+                findInVk.ForEach(item =>
+                {
+                    var dto = new TracksDto();
+                    Mapper.Map(item, dto);
+                    if (!trackDtos.Any(track => (track.Artist == dto.Artist) && (track.Name == dto.Name)))
+                    {
+                        trackDtos.Add(dto);
+                    }
+                });
+            }
+            return trackDtos;
+        }
+
         public async Task<List<TracksDto>> MakeSearch(string searchText, string criteria)
         {
             var trackDtos = new List<TracksDto>();
@@ -196,7 +218,7 @@ namespace Azimuth.Services.Concrete
                         tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
                         break;
                     case "vkontakte":
-                        findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0);
+                        findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, 0, 20);
                         if (findInVk.Count > 0)
                         {
                             findInVk.ForEach(item =>
