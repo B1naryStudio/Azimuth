@@ -152,9 +152,9 @@
 
         $('.track').off('mousedown').mousedown(function (event) {
             if (event.which == 3) {
-                $('.track.selected').toggleClass('selected', false);
+                $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
                 var $target = $(event.target).parents('.track');
-                $target.toggleClass('selected', true);
+                $target.toggleClass('draggable-item-selected', true);
                 ctxMenu.drawContextMenu(event);
             }
         });
@@ -162,6 +162,31 @@
         ctxMenu.$contextMenuContainer.mousedown(function (event) {
             ctxMenu.$contextMenuContainer.hide();
             ctxMenu.selectAction($('.track.selected'));
+        });
+    };
+
+    this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
+        var tracks = [];
+
+        var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+        if (currentPlaylist.find('.readonly').text() == 'true')
+            return;
+        $currentItem.children().toggleClass('vk-item', false);
+        $currentItem.children('.tableRow').each(function () {
+            tracks.push({
+                ThirdPartId: $(this).closest('.tableRow').find('.thirdPartId').text(),
+                OwnerId: $(this).closest('.tableRow').find('.ownerId').text()
+            });
+        }).get();
+        $currentItem.empty();
+        $.ajax({
+            url: '/api/usertracks?provider=Vkontakte&index=' + index,
+            type: 'POST',
+            data: JSON.stringify({
+                "PlaylistId": playlistId,
+                "TrackInfos": tracks
+            }),
+            contentType: 'application/json'
         });
     };
 
@@ -213,19 +238,31 @@ SearchManager.prototype.bindListeners = function () {
                         self._showTracks(self.topTracksVk, $('#trackTemplate'));
                         self.audioManager.bindPlayBtnListeners();
                         $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
-                        //self.$vkMusicTable.makeDraggable({
-                        //    contextMenu: [
-                        //        { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
-                        //        { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
-                        //        { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
-                        //        { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
-                        //        { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false }
-                        //    ]
-                        //});
                         self.$vkMusicLoadingSpinner.hide();
                     }
                 });
             }
         }
+    });
+
+    $('#okPlaylistCreateModalBtn').click(function () {
+
+        $('#createPlaylistModal').modal('hide');
+        $('#createPlaylistModal').on('hidden.bs.modal', function () {
+            $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
+        });
+
+        var playlistName = $('#playlistNameToCreate').val();
+        var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+        $.ajax({
+            url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+            type: 'POST',
+            contentType: 'application/json',
+            async: false,
+            success: function (playlistId) {
+                self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+            }
+        });
     });
 };
