@@ -4,19 +4,23 @@
     this.audioManager = manager;
     this.topTracksVk = [];
     this.searchTracks = [];
+    this.searching = false;
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
 
     this._uploadNewSongs = function () {
-        if ($('.btn-primary.searchBtn').text() == 'Vkontakte' && this.mcs.topPct >= 75) {
+        if ($('.btn-primary.searchBtn').text() == 'Vkontakte' && this.mcs.topPct >= 75 && !self.searching) {
+            self.searching = true;
+            var searchParam = $('#search').val().toLocaleLowerCase();
             self.offset += 20;
             $.ajax({
                 url: 'api/search/vkontakte?searchText=' + searchParam + "&offset=" + self.offset,
                 type: 'GET',
                 dataType: 'json',
                 success: function (tracks) {
-                    searchTracks += tracks;
-
+                    self.searchTracks = $.merge(self.searchTracks, tracks);
+                    self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
+                    self.searching = false;
                 }
             });
         }
@@ -47,36 +51,23 @@
                 dataType: 'json',
                 success: function (tracks) {
                     self.searchTracks = tracks;
-                    for (var i = 0; i < tracks.length; i++) {
-                        tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
-                    }
                     self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
-                    self.audioManager.refreshTracks();
-                    self.audioManager.bindPlayBtnListeners();
-                    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
-                    $('.vkMusicTable').mCustomScrollbar({
-                        theme: 'dark-3',
-                        scrollButtons: { enable: true },
-                        updateOnContentResize: true,
-                        scrollInertia: 0,
-                        autoHideScrollbar: true,
-                        advanced: { updateOnSelectorChange: "true" },
-                        callbacks: {whileScrolling: self._uploadNewSongs}
-                    });
-                    self._createContextMenu();
-                    self.$vkMusicLoadingSpinner.hide();
                 }
             });
         }
     };
 
-    this._showTracks = function(tracks, template) {
-        $('.vkMusicList').find('.track').detach();
+    this._showTracks = function (tracks, template) {
+        var correctedTracks = $.extend(true, [], tracks);
         for (var i = 0; i < tracks.length; i++) {
-            var tmpl = template.tmpl(tracks[i]);
+            correctedTracks[i].Duration = self._toFormattedTime(correctedTracks[i].Duration, true);
+        }
+        $('.vkMusicList').find('.track').detach();
+        for (var i = 0; i < correctedTracks.length; i++) {
+            var tmpl = template.tmpl(correctedTracks[i]);
             tmpl.appendTo('.vkMusicList');
             if (self.audioManager.$currentTrack !== null
-                && self.audioManager.$currentTrack.children('.trackId').html() == tracks[i].id) {
+                && self.audioManager.$currentTrack.children('.trackId').html() == correctedTracks[i].id) {
                 tmpl.toggleClass('.draggable-item-selected');
                 self.audioManager.$currentTrack = tmpl;
                 tmpl.append(self.audioManager.progressSlider.getSlider());
@@ -91,6 +82,21 @@
                 }
             }
         }
+
+        self.audioManager.refreshTracks();
+        self.audioManager.bindPlayBtnListeners();
+        $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+        $('.vkMusicTable').mCustomScrollbar({
+            theme: 'dark-3',
+            scrollButtons: { enable: true },
+            updateOnContentResize: true,
+            scrollInertia: 0,
+            autoHideScrollbar: true,
+            advanced: { updateOnSelectorChange: "true" },
+            callbacks: { whileScrolling: self._uploadNewSongs }
+        });
+        self._createContextMenu();
+        self.$vkMusicLoadingSpinner.hide();
     };
 
     this._getTrackInfo = function () {
