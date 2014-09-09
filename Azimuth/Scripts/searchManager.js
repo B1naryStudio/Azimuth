@@ -19,31 +19,33 @@
     this._search = function() {
         var searchParam = $('#search').val().toLocaleLowerCase();
         $('.vkMusicList').find('.track').remove();
-        self.$vkMusicLoadingSpinner.fadeIn('normal');
-        $.ajax({
-            url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
-            type: 'GET',
-            dataType: 'json',
-            success: function(tracks) {
-                for (var i = 0; i < tracks.length; i++) {
-                    tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
+        if (searchParam != '') {
+            self.$vkMusicLoadingSpinner.fadeIn('normal');
+            $.ajax({
+                url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
+                type: 'GET',
+                dataType: 'json',
+                success: function(tracks) {
+                    for (var i = 0; i < tracks.length; i++) {
+                        tracks[i].Duration = self._toFormattedTime(tracks[i].Duration, true);
+                    }
+                    self._showTracks(tracks, $('#searchTrackTemplate'));
+                    self.audioManager.refreshTracks();
+                    self.audioManager.bindPlayBtnListeners();
+                    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                    $('.vkMusicTable').mCustomScrollbar({
+                        theme: 'dark-3',
+                        scrollButtons: { enable: true },
+                        updateOnContentResize: true,
+                        scrollInertia: 0,
+                        autoHideScrollbar: true,
+                        advanced: { updateOnSelectorChange: "true" }
+                    });
+                    self._createContextMenu();
+                    self.$vkMusicLoadingSpinner.hide();
                 }
-                self._showTracks(tracks, $('#searchTrackTemplate'));
-                self.audioManager.refreshTracks();
-                self.audioManager.bindPlayBtnListeners();
-                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
-                $('.vkMusicTable').mCustomScrollbar({
-                    theme: 'dark-3',
-                    scrollButtons: { enable: true },
-                    updateOnContentResize: true,
-                    scrollInertia: 0,
-                    autoHideScrollbar: true,
-                    advanced: { updateOnSelectorChange: "true" }
-                });
-                self._createContextMenu();
-                self.$vkMusicLoadingSpinner.hide();
-            }
-        });
+            });
+        }
     };
 
     this._showTracks = function(tracks, template) {
