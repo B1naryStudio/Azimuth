@@ -12,9 +12,9 @@ namespace Azimuth.Controllers
         }
         //
         // GET: /Share/
-        public ActionResult Index(string guid)
+        public ActionResult Index(string azimuth_playlist)
         {
-            var tracks = _playlistService.GetSharedTracks(guid);
+            var tracks = _playlistService.GetSharedTracks(azimuth_playlist);
 
             return View(tracks);
         }

@@ -155,7 +155,7 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                $sharingLink.val(self.host + "Share/Index?guid=" + data);
+                $sharingLink.val(self.host + "Share/Index?azimuth_playlist=" + data);
                 $sharingPlaylist.val("Share_" + data);
                 $('#playlist-guid').html(data);
                 $sharingPlaylist.focusout(self._changePlaylistName);
@@ -188,7 +188,7 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function(guid) {
-                $sharingLink.val(self.host + "Share/Index?guid=" + guid);
+                $sharingLink.val(self.host + "Share/Index?azimuth_playlist=" + guid);
                 $sharingPlaylist.val("Share_" + data);
                 $('#playlist-guid').html(guid);
                 $sharingPlaylist.focusout(self._changePlaylistName);
