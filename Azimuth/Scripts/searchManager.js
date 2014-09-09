@@ -65,7 +65,7 @@
         $.ajax({
             url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
             async: true,
-            success: function (trackInfo) {
+            success: function(trackInfo) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
@@ -121,6 +121,14 @@
         return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
     };
 
+    this._delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        }
+    })();
+
     this._search();
 };
 
@@ -128,7 +136,9 @@ SearchManager.prototype.bindListeners = function () {
     var self = this;
 
     $('#search').keyup(function () {
-        self._search();
+        self._delay(function() {
+            self._search();
+        }, 1000);
     });
 
     $('.searchBtn').click(function () {
