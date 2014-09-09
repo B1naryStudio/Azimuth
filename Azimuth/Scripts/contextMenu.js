@@ -16,7 +16,7 @@
     this.musicList = null;
     this.timerId = null;
     this.provider = 'Vkontakte';
-    this.host = "https://max.com:44300/"; //TODO: Changed to host address
+    this.host = "https://localhost:44300/"; //TODO: Changed to host address
 
     this._shuffleTracksAction = function($currentItem) {
         var elems = $currentItem.children('.tableRow');
@@ -189,7 +189,7 @@
             contentType: 'application/json; charset=utf-8',
             success: function(guid) {
                 $sharingLink.val(self.host + "Share/Index?azimuth_playlist=" + guid);
-                $sharingPlaylist.val("Share_" + data);
+                $sharingPlaylist.val("Share_" + guid);
                 $('#playlist-guid').html(guid);
                 $sharingPlaylist.focusout(self._changePlaylistName);
                 self._initClipboard($sharingLink);

@@ -35,6 +35,11 @@ namespace Azimuth.DataAccess.Infrastructure
             return _session.Query<T>();
         }
 
+        public IEnumerable<T> GetAll(Func<T, Boolean> filter)
+        {
+            return _session.Query<T>().Where(filter);
+        }
+
         public void AddItem(T item)
         {
             _session.Save(item);

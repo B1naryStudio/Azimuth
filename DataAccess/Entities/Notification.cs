@@ -9,6 +9,10 @@ namespace Azimuth.DataAccess.Entities
         public virtual User User { get; set; }
 
         public virtual Notifications NotificationType { get; set; }
+
+        public virtual User RecentlyUser { get; set; }
+
+        public virtual Playlist RecentlyPlaylist { get; set; }
     }
 
     public class NotificationType : EnumStringType<Notifications>

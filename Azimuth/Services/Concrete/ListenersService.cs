@@ -68,7 +68,7 @@ namespace Azimuth.Services.Concrete
                         Playlist = playlist
                     });
 
-                    _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator);
+                    _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
                     
                     _unitOfWork.Commit();
                 }
@@ -117,7 +117,7 @@ namespace Azimuth.Services.Concrete
                         });
                     }
                 }
-                _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator);
+                _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
 
                 _unitOfWork.Commit();
             }

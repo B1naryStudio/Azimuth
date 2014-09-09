@@ -54,6 +54,7 @@
     <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\GoogleUserData.cs" />
     <Compile Include="Dto\LastFMTrackData.cs" />
+    <Compile Include="Dto\NotificationDto.cs" />
     <Compile Include="Dto\PlaylistData.cs" />
     <Compile Include="Dto\TrackInfoDto.cs" />
     <Compile Include="Dto\TrackInPlaylist.cs" />

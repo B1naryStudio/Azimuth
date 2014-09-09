@@ -5,6 +5,8 @@
       <generator class="native"/>
     </id>
     <many-to-one name="User" column="UserId"/>
+    <many-to-one name="RecentlyUser" column="RecentlyUserId"/>
+    <many-to-one name="RecentlyPlaylist" column="RecentlyPlaylistId"/>
     <property name="NotificationType" type="NotificationType"/>
   </class>
 </hibernate-mapping>

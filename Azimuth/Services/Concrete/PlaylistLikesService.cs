@@ -53,8 +53,8 @@ namespace Azimuth.Services.Concrete
                     }
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var user = _userRepository.Get(userId);
 
 
@@ -68,7 +68,7 @@ namespace Azimuth.Services.Concrete
                             IsLiked = true,
                             IsFavorite = false
                         });
-                        _notificationService.CreateNotification(Notifications.LikedPlaylist, user);
+                        _notificationService.CreateNotification(Notifications.LikedPlaylist, user, recentlyPlaylist: playlist);
                     }
                         
                     else
@@ -93,8 +93,8 @@ namespace Azimuth.Services.Concrete
                 }
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                       // _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var user = _userRepository.Get(userId);
 
 
@@ -108,7 +108,7 @@ namespace Azimuth.Services.Concrete
                             IsLiked = false,
                             IsFavorite = true
                         });
-                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user);
+                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user, recentlyPlaylist: playlist);
                     }
                         
                     else
@@ -142,7 +142,7 @@ namespace Azimuth.Services.Concrete
 
                     var user = _userRepository.GetOne(u => u.Id == userId);
 
-                    _notificationService.CreateNotification(Notifications.UnlikedPlaylist, user);
+                    _notificationService.CreateNotification(Notifications.UnlikedPlaylist, user, recentlyPlaylist: playlist);
                 }
                 _unitOfWork.Commit();
             }
@@ -169,7 +169,7 @@ namespace Azimuth.Services.Concrete
 
                     var user = _userRepository.GetOne(u => u.Id == userId);
 
-                    _notificationService.CreateNotification(Notifications.UnfavoritedPlaylist, user);
+                    _notificationService.CreateNotification(Notifications.UnfavoritedPlaylist, user, recentlyPlaylist: playlist);
                 }
                 _unitOfWork.Commit();
             }

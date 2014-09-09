@@ -60,12 +60,18 @@
         </div>
         <div class="user-location">
             <span class="info-label">Location:</span>
-            <span>@Model.Location.City</span>,
-            <span>@Model.Location.Country</span>
+            @if (Model.Location != null)
+            {
+                <span>@Model.Location.City</span>
+                <span>@Model.Location.Country</span>
+            }
         </div>
         <div class="user-email">
             <span>Email:</span>
             <span>@Model.Email</span>
         </div>
+    </div>
+    <div id="recent-activity">
+        Hello
     </div>
 </div>

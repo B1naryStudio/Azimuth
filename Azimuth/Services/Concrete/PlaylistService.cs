@@ -131,7 +131,7 @@ namespace Azimuth.Services.Concrete
                 }
                 playlist.Accessibilty = accessibilty;
 
-                _notificationService.CreateNotification(Notifications.ChangedPlaylistAccessebilty, playlist.Creator);
+                _notificationService.CreateNotification(Notifications.ChangedPlaylistAccessebilty, playlist.Creator, recentlyPlaylist: playlist);
 
                 _unitOfWork.Commit();
             }
@@ -170,7 +170,7 @@ namespace Azimuth.Services.Concrete
                 playlistId = playlist.Id;
 
 
-                _notificationService.CreateNotification(Notifications.PlaylistCreated, user);
+                _notificationService.CreateNotification(Notifications.PlaylistCreated, user, recentlyPlaylist: playlist);
                 _unitOfWork.Commit();
             }
             return playlistId;
@@ -332,8 +332,19 @@ namespace Azimuth.Services.Concrete
                     {
                         return "";
                     }
-                    
-                    var sysUser = _userRepository.GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+
+                    var sysUser = _userRepository
+                        .GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+                    if (sysUser == null)
+                    {
+                        sysUser = new User
+                        {
+                            Name = new Name { FirstName = "Admin", LastName = "Admin" },
+                            Email = "sys@gmail.com"
+                        };
+                        _userRepository.AddItem(sysUser);
+                    }
+                                  
 
                     guid = Guid.NewGuid().ToString();
                     var fakePlaylist = new Playlist
@@ -356,6 +367,9 @@ namespace Azimuth.Services.Concrete
                         Playlist = fakePlaylist
                     };
                     _sharedPlaylistRepository.AddItem(sharedPlaylist);
+
+                    _notificationService.CreateNotification(Notifications.PlaylistShared, currentPlaylist.Creator,
+                        recentlyPlaylist: fakePlaylist);
 
                     _unitOfWork.Commit();
                 }
@@ -397,6 +411,7 @@ namespace Azimuth.Services.Concrete
 
         public Task<string> GetSharedPlaylist(List<long> tracksId)
         {
+            var currentUser = AzimuthIdentity.Current;
             return Task.Run(() =>
             {
                 string guid;
@@ -406,7 +421,17 @@ namespace Azimuth.Services.Concrete
                     var tracks = _trackRepository.Get(tr => tracksId.Contains(tr.Id)).ToList();
                     guid = Guid.NewGuid().ToString();
 
-                    var sysUser = _userRepository.GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+                    var sysUser = _userRepository
+                        .GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
+                    if (sysUser == null)
+                    {
+                        sysUser = new User
+                        {
+                            Name = new Name { FirstName = "Admin", LastName = "Admin" },
+                            Email = "sys@gmail.com"
+                        };
+                        _userRepository.AddItem(sysUser);
+                    }
 
                     var fakePlaylist = new Playlist
                     {
@@ -430,6 +455,10 @@ namespace Azimuth.Services.Concrete
 
                     _sharedPlaylistRepository.AddItem(sharedPlaylist);
 
+                    var user = _userRepository.GetOne(u => u.Id == currentUser.UserCredential.Id);
+
+                    _notificationService.CreateNotification(Notifications.PlaylistShared, user,
+                        recentlyPlaylist: fakePlaylist);
                     _unitOfWork.Commit();
                 }
 

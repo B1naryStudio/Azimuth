@@ -119,12 +119,12 @@ namespace Azimuth.Services.Concrete
                 if (isFollow)
                 {
                     user.Followers.Add(loggedUser);
-                    _notificationService.CreateNotification(Notifications.Followed, loggedUser);
+                    _notificationService.CreateNotification(Notifications.Followed, loggedUser, user);
                 }
                 else
                 {
                     user.Followers.Remove(loggedUser);
-                    _notificationService.CreateNotification(Notifications.Unfollowed, loggedUser);
+                    _notificationService.CreateNotification(Notifications.Unfollowed, loggedUser, user);
                 }
                 
                 _unitOfWork.Commit();

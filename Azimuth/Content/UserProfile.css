@@ -47,3 +47,8 @@ ul.user-listen-info > li {
     float: left;
     margin: 5px;
 }
+
+#recent-activity {
+    background: blue;
+    margin: 5% 30%;
+}
