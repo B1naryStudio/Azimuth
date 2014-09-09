@@ -30,5 +30,19 @@ namespace Azimuth.ApiControllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
+
+        [HttpGet]
+        [Route("followers/{id:int}")]
+        public async Task<HttpResponseMessage> GetFollowersActivity(int id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetFollowersActivity(id));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
     }
 }

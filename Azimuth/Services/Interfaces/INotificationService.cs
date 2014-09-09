@@ -9,6 +9,7 @@ namespace Azimuth.Services.Interfaces
     public interface INotificationService
     {
         Task CreateNotification(Notifications type, User user, User recentlyUser = null, Playlist recentlyPlaylist = null);
-        Task<List<NotificationDto>> GetRecentActivity(int userId);
+        Task<List<NotificationDto>> GetRecentActivity(long userId);
+        Task<List<NotificationDto>> GetFollowersActivity(long userId);
     }
 }

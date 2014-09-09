@@ -49,6 +49,10 @@ ul.user-listen-info > li {
 }
 
 #recent-activity {
-    background: blue;
-    margin: 5% 30%;
+    margin-left: 20%;
+    height: 60%;
+}
+
+.notification {
+    margin: 10px 0;
 }

@@ -11,6 +11,7 @@
         <div class="user-photo">
             <img src="@Model.Photo" width="220" height="300"/>
         </div>
+        <div id="user-id" style="display: none">@Model.Id</div>
         <div class="user-screen-name">@Model.ScreenName</div>
         <ul class="user-listen-info">
             <li class="user-listeners">
@@ -71,7 +72,27 @@
             <span>@Model.Email</span>
         </div>
     </div>
-    <div id="recent-activity">
-        
+    <div id="notification-container">
+        <div id="recent-activity"></div>
     </div>
 </div>
+
+@section scripts
+{
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/userProfileManager.js"></script>
+    <script type="text/javascript" src="../../Scripts/workWithUserProfile.js"></script>
+    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script id="notificationTemplate" type="text/x-jQuery-tmpl">
+        <div class="notification">
+            <div class="message">
+                <span>User</span>
+                <a href="/UserProfile/Index/@loggedUser.Id">${UserFirstName}&nbsp;${UserLastName}</a>
+                <span>${Message}</span>
+                <a href="/UserProfile/Index/${RecentlyUserId}">${RecentlyUserFirstName}&nbsp;${RecentlyUserLastName}</a>
+                <a href="/PublicPlaylist/Index/${RecentlyPlaylistId}">${RecentlyPlaylistName}</a>
+            </div>
+        </div>
+    </script>
+}

@@ -13,12 +13,14 @@ namespace Azimuth.Services.Concrete
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationRepository _notificationRepository; 
+        private readonly NotificationRepository _notificationRepository;
+        private readonly UserRepository _userRepository;
 
         public NotificationService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
+            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
         }
         public Task CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
         {
@@ -41,18 +43,23 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public Task<List<NotificationDto>> GetRecentActivity(int userId)
+        public Task<List<NotificationDto>> GetRecentActivity(long userId)
         {
             return Task.Run(() =>
             {
                 var notificationsDto = new List<NotificationDto>();
                 using (_unitOfWork)
                 {
-                    var notifications = _notificationRepository.GetAll(n => n.User.Id == userId);
+                    var notifications = _notificationRepository.GetAll(n => n.User.Id == userId).ToList().OrderByDescending(s => s.Id).Take(15);
 
                     foreach (var notification in notifications)
                     {
-                        var notifDto = new NotificationDto();
+                        var notifDto = new NotificationDto
+                        {
+                            UserFirstName = notification.User.Name.FirstName,
+                            UserLastName = notification.User.Name.LastName,
+                            Message = GetMessage(notification)
+                        };
                         if (notification.RecentlyUser != null)
                         {
                             notifDto.RecentlyUserId = notification.RecentlyUser.Id;
@@ -67,7 +74,6 @@ namespace Azimuth.Services.Concrete
                             }
                             notifDto.RecentlyPlaylistName = notification.RecentlyPlaylist.Name;
                         }
-                        notifDto.Message = GetMessage(notification);
 
                         notificationsDto.Add(notifDto);
                     }
@@ -75,6 +81,19 @@ namespace Azimuth.Services.Concrete
 
                 return notificationsDto;
             });
+        }
+
+        public async Task<List<NotificationDto>> GetFollowersActivity(long userId)
+        {
+            var notifications = new List<NotificationDto>();
+            var user = _userRepository.GetOne(u => u.Id == userId);
+
+            foreach (var follower in user.Followers)
+            {
+                notifications.AddRange(await GetRecentActivity(follower.Id));
+            }
+
+            return notifications;
         }
 
         private string GetMessage(Notification notification)
