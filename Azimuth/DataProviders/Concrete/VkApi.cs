@@ -244,10 +244,10 @@ namespace Azimuth.DataProviders.Concrete
      }
 
 
-        public async Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken, byte inUserTracks)
+        public async Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken, byte inUserTracks, int offset = 0, int count = 10)
         {   
             var url = BaseUri + "audio.search?q=" + searchText +
-                      "&auto_complete=1&lyrics=0&performer_only=0&sort=2&search_own=" + inUserTracks + "&offset=0&count=10&v=5.24&access_token=" + accessToken;
+                      "&auto_complete=1&lyrics=0&performer_only=0&sort=2&search_own=" + inUserTracks + "&offset=" + offset + "&count=" + count + "&v=5.24&access_token=" + accessToken;
             var trackJson = await _webClient.GetWebData(url);
             var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
             return track.Response.Audios;

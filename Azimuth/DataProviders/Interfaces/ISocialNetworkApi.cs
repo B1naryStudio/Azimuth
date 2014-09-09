@@ -12,7 +12,7 @@ namespace Azimuth.DataProviders.Interfaces
         Task<string> GetLyricsById(string userId, long lyricsId, string accessToken);
         Task<string[]> GetTrackLyricByArtistAndName(string artist, string trackName, string accessToken, string userId);
         Task<List<TrackData.Audio>> SearchTracksForLyric(List<TrackSearchInfo.SearchData> tracks, string accessToken);
-        Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken, byte inUserTracks);
+        Task<List<TrackData.Audio>> SearchTracks(string searchText, string accessToken, byte inUserTracks, int offset = 0, int count = 10);
         Task<string> AddTrack(string id, string audioId, string accessToken);
         Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string accessToken);
     }

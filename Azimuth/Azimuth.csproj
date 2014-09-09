@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\NotificationController.cs" />
+    <Compile Include="ApiControllers\SearchController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
