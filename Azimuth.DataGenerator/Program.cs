@@ -12,9 +12,10 @@ namespace Azimuth.DataGenerator
             IKernel kernel = new StandardKernel(new DataAccessModule());
 
             var dg = new DataGenerator(kernel);
-            dg.ClearDatabase();
+            //dg.ClearDatabase();
             //dg.GenerateData();
             //dg.AddSharing();
+            dg.AddNotifications();
         }
     }
 }

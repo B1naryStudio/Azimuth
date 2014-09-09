@@ -67,6 +67,7 @@
     <Compile Include="Dto\VkTrackResponse.cs" />
     <Compile Include="Dto\VkUserData.cs" />
     <Compile Include="Enums\Accessibilty.cs" />
+    <Compile Include="Enums\Notifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

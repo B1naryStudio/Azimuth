@@ -39,6 +39,7 @@ namespace Azimuth.DataAccess.Infrastructure
             Bind<IRepository<PlaylistListened>, BaseRepository<PlaylistListened>>().To<PlaylistListenedRepository>();
             Bind<IRepository<SharedPlaylist>, BaseRepository<SharedPlaylist>>().To<SharedPlaylistRepository>();
             Bind<IRepository<PlaylistLike>, BaseRepository<PlaylistLike>>().To<PlaylistLikerRepository>();
+            Bind<IRepository<Notification>, BaseRepository<Notification>>().To<NotificationRepository>();
         }
     }
 
