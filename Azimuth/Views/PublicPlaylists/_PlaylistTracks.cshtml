@@ -1,0 +1,59 @@
+﻿@model ICollection<Azimuth.Shared.Dto.TracksDto>
+
+@{ Html.RenderPartial("_ChangeLikeStatus");}
+
+<button class="btn btn-default" type="button" id="backToPlaylistsBtn">Back</button>
+
+@foreach (var track in Model)
+{
+    <div class="tableRow draggable-item track">
+    <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+    <div class="track-description">
+        <div class="track-info">
+            <span class="nowrap">@track.Artist</span>
+        </div>
+        <div class="track-title nowrap">@track.Name</div>
+    </div>
+        <div class="track-duration nowrap">
+            @{
+                var duration = Convert.ToDecimal(track.Duration);
+                var minutes = Math.Floor(duration/60);
+                var seconds = (duration%60);
+                string forrmattedDuration = minutes + ":" + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
+            } 
+            @forrmattedDuration
+        </div>
+    <div class="track-remaining" style="display: none"></div>
+    <div style="display: none" class="track-url">@track.Url</div>
+    <div style="display: none" class="trackId">@track.Id</div>
+    <div style="display: none" class="ownerId">@track.OwnerId</div>
+    <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
+</div>
+}
+
+<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../../Scripts/audioManager.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#playlists-plated').hide();
+        $('#tracksArea').show();
+        $('button#backToPlaylistsBtn').off('click').click(function () {
+            $('#tracksArea').empty();
+            $('#playlists-plated').show();
+        });
+
+        var progressSlider = new SliderController({
+            sliderSelector: '#progressSlider',
+            sliderBarClass: 'progressBar',
+            sliderClass: 'progress',
+            backgroundSliderClass: 'cache',
+            dirrection: 'horizontall'
+        });
+        var audioManager = new AudioManager(null, progressSlider);
+
+        audioManager.refreshTracks();
+        audioManager.bindPlayBtnListeners();
+
+    });
+</script>

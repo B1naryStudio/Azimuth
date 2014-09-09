@@ -385,6 +385,9 @@
     <Content Include="Views\Share\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\UserProfile\_UserFollowInfo.cshtml" />
+    <Content Include="Views\PublicPlaylists\_PublicPlaylists.cshtml" />
+    <Content Include="Views\PublicPlaylists\_PlaylistTracks.cshtml" />
+    <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

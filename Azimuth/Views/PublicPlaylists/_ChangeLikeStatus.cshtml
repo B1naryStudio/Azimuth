@@ -1,0 +1,40 @@
+﻿@{
+    var plailistId = ViewBag.playlistId;
+    var isLiked = ViewBag.isLiked;
+    var isFavourited = ViewBag.isFavourited;
+    var likeAction = isLiked ? "Unlike" : "Like";
+    var favouriteAction = isFavourited ? "Unfavourite" : "Favourite"; 
+}
+
+
+<div id="playlistFollowActions">
+    @if (@Request.IsAuthenticated)
+    {
+        using (@Ajax.BeginForm("_ChangeLikeStatus", "PublicPlaylists", new AjaxOptions
+        {
+            HttpMethod = "Post",
+            UpdateTargetId = "playlistFollowActions",
+            InsertionMode = InsertionMode.Replace
+        }))
+        {
+            <button class="btn btn-default" name="buttonType" id="likeBtn" value="like">@likeAction</button>
+            <button class="btn btn-default" name="buttonType" id="favouriteBtn" value="favourite">@favouriteAction</button>
+            <input type="hidden" name="playlistId" id="playlistId" value="@plailistId" />
+            <input type="hidden" name="isLiked" id="isLiked" value="@isLiked.ToString()" />
+            <input type="hidden" name="isFavourited" value="@isFavourited.ToString()" />
+
+        }
+    }
+    else
+    {
+        using (@Html.BeginForm("NeedLogIn", "PublicPlaylists", FormMethod.Post))
+        {
+            <div id="playlistFollowActions">
+                <button class="btn btn-default">Like</button>
+                <div class="btn  btn-default" id="favouriteBtn">Favorite</div>
+            </div>
+        }
+    }
+</div>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>

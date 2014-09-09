@@ -135,6 +135,31 @@ namespace Azimuth.Services.Concrete
             });
         }
 
+        public ICollection<TracksDto> GetTracksByPlaylistIdSync(int id)
+        {
+                using (_unitOfWork)
+                {
+                    var pt =
+                        _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                            .OrderBy(o => o.TrackPosition)
+                            .ToList();
+
+                    ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
+                    {
+                        Id = s.Identifier.Track.Id,
+                        Name = s.Identifier.Track.Name,
+                        Duration = s.Identifier.Track.Duration,
+                        Album = s.Identifier.Track.Album.Name,
+                        Artist = s.Identifier.Track.Album.Artist.Name,
+                        ThirdPartId = s.Identifier.Track.ThirdPartId,
+                        OwnerId = s.Identifier.Track.OwnerId
+                    }).ToList();
+
+                    _unitOfWork.Commit();
+                    return tracks;
+                }
+        }
+
         public async Task<ICollection<TracksDto>> GetUserTracks()
         {
             return await Task.Run(() =>

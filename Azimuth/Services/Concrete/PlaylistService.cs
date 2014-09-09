@@ -76,6 +76,36 @@ namespace Azimuth.Services.Concrete
             });
         }
 
+        public List<PlaylistData> GetPublicPlaylistsSync()
+        {
+
+            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public).Select(playlist =>
+            {
+                var creator = playlist.Creator;
+                return new PlaylistData
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                    Genres = playlist.Tracks.Select(x => x.Genre)
+                        .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
+                        .OrderByDescending(x => x.Count)
+                        .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                        .Select(x => x.Name)
+                        .Take(5)
+                        .ToList(),
+                    Creator = new UserBrief
+                    {
+                        Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
+                        Email = creator.Email
+                    },
+                    ItemsCount = playlist.Tracks.Count,
+                };
+            }).ToList();
+
+            return playlists;
+        }
+
         public async Task<List<PlaylistData>> GetFavoritePlaylists()
         {
             return await Task.Run(() =>

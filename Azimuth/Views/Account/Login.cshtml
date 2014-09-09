@@ -1,5 +1,5 @@
 ﻿
-@{
+@*@{
     ViewBag.Title = "Log in";
 }
 
@@ -13,4 +13,49 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+@{
+    Layout = null;
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Azimuth</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body class="landing-page">
+    @{
+        var action = "ExternalLogin";
+        var returnUrl = "";
+    }
+    <div class="login-container">
+        @using (Html.BeginForm(action, "Account", new { ReturnUrl = returnUrl }, FormMethod.Post, new { id = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="provider" id="provider" />
+            <div class="login-form">
+                <div class="logo">Azimuth</div>
+                <div class="providers">
+                    <i class="sn-btn fa fa-vk" data-provider="Vkontakte"></i>
+                    <i class="sn-btn fa fa-google-plus" data-provider="Google"></i>
+                    <i class="sn-btn fa fa-facebook" data-provider="Facebook"></i>
+                    <i class="sn-btn fa fa-twitter" data-provider="Twitter"></i>
+                </div>
+            </div>
+        }
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.sn-btn').click(function () {
+                var provider = $(this).data('provider');
+                $('#provider').val(provider);
+                $('#form').submit();
+            });
+        });
+    </script>
+</body>
+</html>
