@@ -54,6 +54,7 @@
     <Compile Include="Dto\FacebookUserData.cs" />
     <Compile Include="Dto\GoogleUserData.cs" />
     <Compile Include="Dto\LastFMTrackData.cs" />
+    <Compile Include="Dto\NotificationDto.cs" />
     <Compile Include="Dto\PlaylistData.cs" />
     <Compile Include="Dto\TrackInfoDto.cs" />
     <Compile Include="Dto\TrackInPlaylist.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Dto\VkTrackResponse.cs" />
     <Compile Include="Dto\VkUserData.cs" />
     <Compile Include="Enums\Accessibilty.cs" />
+    <Compile Include="Enums\Notifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

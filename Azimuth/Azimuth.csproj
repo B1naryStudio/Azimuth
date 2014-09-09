@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\NotificationController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
@@ -216,6 +217,8 @@
     <Compile Include="DataProviders\Interfaces\IChartLyricsApi.cs" />
     <Compile Include="DataProviders\Interfaces\IMusicServiceWorkUnit.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
+    <Compile Include="Services\Concrete\NotificationService.cs" />
+    <Compile Include="Services\Interfaces\INotificationService.cs" />
     <Compile Include="Services\Interfaces\IPlaylistListenedService.cs" />
     <Compile Include="Services\Concrete\PlaylistListenedService.cs" />
     <Compile Include="Services\Interfaces\IPlaylistLikesService.cs" />
@@ -349,10 +352,12 @@
     <Content Include="Scripts\musicManager.js" />
     <Content Include="Scripts\shareManager.js" />
     <Content Include="Scripts\sliderController.js" />
+    <Content Include="Scripts\userProfileManager.js" />
     <Content Include="Scripts\workWithMusic.js" />
     <Content Include="Scripts\workWithSearch.js" />
     <Content Include="Scripts\workWithShare.js" />
     <Content Include="Scripts\workWithPublicPlaylists.js" />
+    <Content Include="Scripts\workWithUserProfile.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

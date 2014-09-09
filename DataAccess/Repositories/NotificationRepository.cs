@@ -4,9 +4,9 @@ using NHibernate;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class PlaylistLikerRepository:BaseRepository<PlaylistLike>
+    public class NotificationRepository : BaseRepository<Notification>
     {
-        public PlaylistLikerRepository(ISession session) : base(session)
+        public NotificationRepository(ISession session) : base(session)
         {
         }
     }

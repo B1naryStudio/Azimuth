@@ -7,6 +7,8 @@ using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure.Concrete;
+using Azimuth.Services.Interfaces;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Services.Concrete
 {
@@ -17,14 +19,17 @@ namespace Azimuth.Services.Concrete
         private readonly UserRepository _userRepository;
         private readonly IRepository<PlaylistListened> _unauthorizedListenersRepository;
         private readonly IRepository<Playlist> _playlistRepository;
+        private readonly INotificationService _notificationService;
 
-        public ListenersService(IUnitOfWork unitOfWork)
+        public ListenersService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _listenerRepository = _unitOfWork.GetRepository<PlaylistListener>();
             _unauthorizedListenersRepository = _unitOfWork.GetRepository<PlaylistListened>();
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
+
+            _notificationService = notificationService;
         }
 
         public Task<List<User>> GetListenersByPlaylistId(int id)
@@ -62,6 +67,9 @@ namespace Azimuth.Services.Concrete
                         Listener = user,
                         Playlist = playlist
                     });
+
+                    _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
+                    
                     _unitOfWork.Commit();
                 }
 
@@ -109,6 +117,8 @@ namespace Azimuth.Services.Concrete
                         });
                     }
                 }
+                _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
+
                 _unitOfWork.Commit();
             }
         }
@@ -140,6 +150,8 @@ namespace Azimuth.Services.Concrete
                     unListeners.Amount--;
                     _unauthorizedListenersRepository.UpdateItem(unListeners);
                 }
+                _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
+
                 _unitOfWork.Commit();
             }
         }
@@ -157,6 +169,10 @@ namespace Azimuth.Services.Concrete
                         throw new BadRequestException("This listener pair does not exist");
                     }
                     _listenerRepository.DeleteItem(listener);
+
+                    var playlist = _playlistRepository.GetOne(p => p.Id == playlistId);
+                    _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
+
                     _unitOfWork.Commit();
                 }
 

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="Azimuth.DataAccess" namespace="Azimuth.DataAccess.Entities">
+  <class name="Notification" table ="Notifications">
+    <id name="Id">
+      <generator class="native"/>
+    </id>
+    <many-to-one name="User" column="UserId"/>
+    <many-to-one name="RecentlyUser" column="RecentlyUserId"/>
+    <many-to-one name="RecentlyPlaylist" column="RecentlyPlaylistId"/>
+    <property name="NotificationType" type="NotificationType"/>
+  </class>
+</hibernate-mapping>

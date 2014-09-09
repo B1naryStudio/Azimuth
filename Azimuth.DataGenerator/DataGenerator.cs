@@ -180,6 +180,35 @@ namespace Azimuth.DataGenerator
             }
         }
 
+        public void AddNotifications()
+        {
+            using (var unitOfWork = _kernel.Get<IUnitOfWork>())
+            {
+                var usersRepo = unitOfWork.GetRepository<User>();
+
+                var firstUser = usersRepo.GetAll().First();
+
+                var notification = new Notification
+                {
+                    NotificationType = Notifications.PlaylistCreated,
+                    User = firstUser
+                };
+
+                var secondNotification = new Notification
+                {
+                    NotificationType = Notifications.Followed,
+                    User = firstUser
+                };
+
+                var notificationRepo = unitOfWork.GetRepository<Notification>();
+
+                notificationRepo.AddItem(notification);
+                notificationRepo.AddItem(secondNotification);
+
+                unitOfWork.Commit();
+            }
+        }
+
         public void ClearDatabase()
         {
             using (var unitOfWork = _kernel.Get<IUnitOfWork>())
