@@ -13,8 +13,8 @@ namespace Azimuth.Migrations.Migrations
         public override void Up()
         {
             Alter.Table("Likes")
-                .AddColumn("IsLiked").AsBoolean().NotNullable()
-                .AddColumn("IsFavorite").AsBoolean().NotNullable();
+                .AddColumn("IsLiked").AsBoolean().NotNullable().WithDefaultValue(0)
+                .AddColumn("IsFavorite").AsBoolean().NotNullable().WithDefaultValue(0);
             Create.UniqueConstraint("UC1")
                 .OnTable("Likes")
                 .Columns(new[] {"UserId", "PlaylistId"});

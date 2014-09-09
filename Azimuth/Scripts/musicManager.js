@@ -49,19 +49,36 @@ var MusicManager = function (manager) {
                 }
                 self.playlistTracksGlobal = tracksData;
                 self.showPlaylistTracks(tracksData, playlistId);
-                self.$playlistsTable.parents('.draggable').makeDraggable({
-                    contextMenu: [
-                        { 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
-                        { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
-                        { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true },
-                        { 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true },
-                        { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false },
-                        { 'id': 'sharetracks', 'name': 'Share tracks', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
 
-                    ],
-                    onMoveTrackToNewPosition: self._moveTrackToNewPosition,
-                    manager: self
-            });
+                var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
+                if (currentPlaylist.find('.readonly').text() == 'true') {
+                    var ctxMenu = new ContextMenu();
+                    var contextMenuActions = [
+                        { id: 'selectall', name: 'Select All', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                        { id: 'copytoplaylist', name: 'Copy to another playlist', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
+                        { id: 'movetoplaylist', name: 'Move to another plylist', isNewSection: false, hasSubMenu: true, needSelectedItems: true },
+                        { id: 'removeselected', name: 'Remove selected', isNewSection: true, hasSubMenu: false, needSelectedItems: true },
+                        { id: 'trackshuffle', name: 'Shuffle', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                        { id: 'sharetracks', name: 'Share tracks', isNewSection: false, hasSubMenu: false, needSelectedItems: true }
+                    ];
+
+                    ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+                } else {
+                    self.$playlistsTable.parents('.draggable').makeDraggable({
+                        contextMenu: [
+                            { 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
+                            { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
+                            { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true },
+                            { 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true },
+                            { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false },
+                            { 'id': 'sharetracks', 'name': 'Share tracks', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
+
+                        ],
+                        onMoveTrackToNewPosition: self._moveTrackToNewPosition,
+                        manager: self
+                    });
+                }
+
                 self.$searchPlaylistInput.val('');
             }
         });

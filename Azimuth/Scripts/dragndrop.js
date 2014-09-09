@@ -70,6 +70,16 @@
 
                 _setRelativePosition(event);
                 if ($elem) {
+
+                    if ($elem.parent().attr('id') == 'playlistTracks') {
+                        var playlistId = $elem.parent().find('.playlistId').text();
+                        var $currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent();
+                        if ($currentPlaylist.find('.readonly').text() == "true") {
+                            return;
+                        }
+
+                    }
+
                     if ($elem.hasClass('draggable-list')) {
                         $elem.append($draggableStub);
                     } else if (!$elem.hasClass('delete-area')) {
