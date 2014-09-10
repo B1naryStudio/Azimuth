@@ -73,8 +73,9 @@
         $('#playlistsArea').hide();
         $('#playlist-spinner').show();
         var $currentPlaylist = $(this);
+        var playlistId = $currentPlaylist.find('.playlistId').val();
         $.ajax({
-            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + $currentPlaylist.find('.playlistId').val() +
+            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
                 "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
                 "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
                 "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
@@ -82,6 +83,10 @@
             success: function(data) {
                 $(data).appendTo($('#tracksArea'));
                 //$('#playlist-spinner').fadeIn('normal');
+                $.ajax({
+                    url: 'api/playlists/raiselistened?id=' + playlistId,
+                    type: 'POST'
+                });
             }
         });
     });

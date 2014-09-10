@@ -22,5 +22,6 @@ namespace Azimuth.Services.Interfaces
         List<TracksDto> GetSharedTracks(string guid);
         Task<string> GetSharedPlaylist(List<long> tracksId);
         Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName);
+        Task<int> RaiseListenedCount(int id);
     }
 }

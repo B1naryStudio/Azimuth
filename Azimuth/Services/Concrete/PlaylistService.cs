@@ -518,5 +518,24 @@ namespace Azimuth.Services.Concrete
                 return playlistName;
             });
         }
+
+        public Task<int> RaiseListenedCount(int id)
+        {
+            return Task.Run(() =>
+            {
+                int listened = -1;
+                using (_unitOfWork)
+                {
+                    var playlist = _playlistRepository.Get(item => item.Id == id).FirstOrDefault();
+                    if (playlist != null)
+                    {
+                        listened = playlist.Listened++;
+                    }
+                    _unitOfWork.Commit();
+                    return listened;
+                }
+
+            });
+        }
     }
 }

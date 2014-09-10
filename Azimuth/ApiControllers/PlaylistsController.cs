@@ -234,6 +234,20 @@ namespace Azimuth.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("raiselistened")]
+        public async  Task<HttpResponseMessage> RaiseListenedCount(int id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.RaiseListenedCount(id));
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
         
         [HttpPut]
         public HttpResponseMessage SetPlaylistAccessibilty(int id, Accessibilty accessibilty)
