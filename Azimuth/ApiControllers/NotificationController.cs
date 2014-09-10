@@ -32,12 +32,12 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
-        [Route("followers/{id:int}")]
-        public async Task<HttpResponseMessage> GetFollowersActivity(int id)
+        [Route("followings/{id:int}")]
+        public async Task<HttpResponseMessage> GetFollowingsActivity(int id)
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetFollowersActivity(id));
+                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetFollowingsActivity(id));
             }
             catch (Exception ex)
             {
