@@ -392,7 +392,8 @@
     <Content Include="Views\PublicPlaylists\_PublicPlaylists.cshtml" />
     <Content Include="Views\PublicPlaylists\_PlaylistTracks.cshtml" />
     <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
-    <Content Include="Views\PublicPlaylists\_UnauthorizedPublicPlaylists.cshtml" />
+    <Content Include="Views\PublicPlaylists\DisplayTemplates\PlaylistData.cshtml" />
+    <Content Include="Views\PublicPlaylists\DisplayTemplates\TracksDto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

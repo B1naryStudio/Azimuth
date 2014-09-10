@@ -93,11 +93,5 @@ namespace Azimuth.Controllers
             }
             return null;
         }
-
-        public PartialViewResult _UnauthorizedPublicPlaylists()
-        {
-            var publicPlaylists = _playlistService.GetPublicPlaylistsSync();
-            return PartialView(publicPlaylists);
-        }
 	}
 }

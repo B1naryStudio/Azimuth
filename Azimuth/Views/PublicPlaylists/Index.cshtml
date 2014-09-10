@@ -3,7 +3,6 @@
 @Styles.Render("~/Content/PublicPlaylists.css")
 
 <div id="playlist-spinner" class="spinner loader"></div>
-
 <div id="barplaylistArea">
     <div id="playlistsArea">
         <h2>Public Playlists</h2>
@@ -16,13 +15,30 @@
             }
             else
             {
-                Html.RenderAction("_UnauthorizedPublicPlaylists", "PublicPlaylists");
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists");
             }
         </div>
     </div>
     <div id="progressSlider" style="display: none"></div>
-    <div id="tracksArea" style="display: none; margin-top:10px">
+    <div id="tracksArea" style="display: none; margin-top:10px"></div>
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Track info</h4>
+                </div>
+                <div id="info-header-spinner" class="spinner loader"></div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="listenTopBtn" data-dismiss="modal" disabled>Listen top tracks</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 @section styles
 {
