@@ -1,11 +1,4 @@
 ﻿@model Azimuth.DataAccess.Entities.User
-@*@model List<Azimuth.Shared.Dto.PlaylistData>*@
-@using System.Web.UI.WebControls
-@using Azimuth.Infrastructure.Concrete
-@using Azimuth.Services.Concrete
-@{
-    var loggedUser = AzimuthIdentity.Current.UserCredential;
-}
 
 @Styles.Render("~/Content/PublicPlaylists.css")
 
@@ -15,25 +8,20 @@
     <div id="playlistsArea">
         <h2>Public Playlists</h2>
         <div id="playlists-plated">
-            @{
-                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { Model.PlaylistFollowing});
+            @if (Request.IsAuthenticated)
+            {
+                
+                    Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
+                
+            }
+            else
+            {
+                Html.RenderAction("_UnauthorizedPublicPlaylists", "PublicPlaylists");
             }
         </div>
     </div>
     <div id="progressSlider" style="display: none"></div>
     <div id="tracksArea" style="display: none; margin-top:10px">
-
-        @*<div style ="display: inline; font-size:25px; position: relative;">
-            <div id="playlistName" style="display: block; float:left; margin-right:20px;"></div>
-            <div class="likesCounter" style="font-size:16px; float:left; bottom: 0"></div>
-        </div>
-        <h3 id="listeners"></h3>
-        <a class="btn btn-primary" id="backToPlaylistsBtn" style="display:none; margin-top: 10px">&laquo;Back</a>
-        <div id="playlist-info">
-            
-            <div id="tracks"></div>
-            <div class="listeners"></div>
-        </div>*@
     </div>
 </div>
 @section styles
@@ -45,9 +33,20 @@
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
-    @*<script type="text/javascript" src="../../Scripts/workWithPublicPlaylists.js"></script>
-    <script type="text/javascript" src="../../Scripts/publicPlaylistManager.js"></script>*@
     <script type="" src="../../Scripts/dragndrop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            $('.playlist-plated').hover(function () {
+                var $currentPlaylist = $(this);
+                $currentPlaylist.find('.playlist-plated-info').show("medium");
+            });
+            $('.playlist-plated').mouseleave(function () {
+                var $currentPlaylist = $(this);
+                $currentPlaylist.find('.playlist-plated-info').hide("medium");
+            });
+        });
+    </script>
 }

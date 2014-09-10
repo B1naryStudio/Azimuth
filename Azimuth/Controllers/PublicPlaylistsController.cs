@@ -27,6 +27,8 @@ namespace Azimuth.Controllers
         // GET: /PublicPlaylists/
         public async Task<ActionResult> Index()
         {
+            if (AzimuthIdentity.Current == null)
+                return View();
             var user = _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id);
             return View(user);
         }
@@ -83,11 +85,19 @@ namespace Azimuth.Controllers
                 var tracks = _userTracksService.GetTracksByPlaylistIdSync(Convert.ToInt32(playlistId));
                 ViewBag.playlistId = playlistId;
                 ViewBag.playlistName = playlistName;
-                ViewBag.isLiked = Convert.ToBoolean(isLiked);
-                ViewBag.isFavourited = Convert.ToBoolean(isFavourited);
+                if (isLiked != "undefined")
+                    ViewBag.isLiked = Convert.ToBoolean(isLiked);
+                if (isFavourited != "undefined")
+                    ViewBag.isFavourited = Convert.ToBoolean(isFavourited);
                 return PartialView(tracks);
             }
             return null;
+        }
+
+        public PartialViewResult _UnauthorizedPublicPlaylists()
+        {
+            var publicPlaylists = _playlistService.GetPublicPlaylistsSync();
+            return PartialView(publicPlaylists);
         }
 	}
 }

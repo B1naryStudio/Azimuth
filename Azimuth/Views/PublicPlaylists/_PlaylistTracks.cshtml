@@ -9,13 +9,26 @@
 @foreach (var track in Model)
 {
     <div class="tableRow draggable-item track">
-    <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-    <div class="track-description">
-        <div class="track-info">
-            <span class="nowrap">@track.Artist</span>
+        @if (Request.IsAuthenticated)
+        {
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+        }
+        else
+        {
+            using (Html.BeginForm("NeedLogIn", "PublicPlaylists", FormMethod.Post))
+            {
+                <div>
+                    <button class="glyphicon glyphicon-play btn btn-default track-play-btn"></button>
+                </div>
+            }
+        }
+        @*<div style="float: left"><button class="glyphicon glyphicon-play btn-default btn-default tracks-play-btn"></button></div>*@
+        <div class="track-description">
+            <div class="track-info">
+                <span class="nowrap">@track.Artist</span>
+            </div>
+            <div class="track-title nowrap">@track.Name</div>
         </div>
-        <div class="track-title nowrap">@track.Name</div>
-    </div>
         <div class="track-duration nowrap">
             @{
                 var duration = Convert.ToDecimal(track.Duration);
@@ -25,12 +38,12 @@
             } 
             @forrmattedDuration
         </div>
-    <div class="track-remaining" style="display: none"></div>
-    <div style="display: none" class="track-url">@track.Url</div>
-    <div style="display: none" class="trackId">@track.Id</div>
-    <div style="display: none" class="ownerId">@track.OwnerId</div>
-    <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
-</div>
+        <div class="track-remaining" style="display: none"></div>
+        <div style="display: none" class="track-url">@track.Url</div>
+        <div style="display: none" class="trackId">@track.Id</div>
+        <div style="display: none" class="ownerId">@track.OwnerId</div>
+        <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
+    </div>
 }
 
 <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>

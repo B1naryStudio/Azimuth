@@ -70,6 +70,9 @@ namespace Azimuth.Services.Concrete
                             Email = creator.Email
                         },
                         ItemsCount = playlist.Tracks.Count,
+                        PlaylistListened = playlist.Listened,
+                        PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
+                        PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite)
                     };
                 }).ToList();
 
@@ -102,13 +105,13 @@ namespace Azimuth.Services.Concrete
                         Email = creator.Email
                     },
                     
-                    PlaylistListeners = playlist.PlaylistListeners.Count,
-                    PlaylistLikes = playlist.PlaylistLikes.Select(s => s.IsLiked).Count(),
-                    PlaylistFavourited = playlist.PlaylistLikes.Select(s => s.IsFavorite).Count(),
+                    PlaylistListened = playlist.Listened,
+                        PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
+                        PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite),
 
                     ItemsCount = playlist.Tracks.Count,
                 };
-            }).ToList();
+            }).OrderByDescending(order => order.PlaylistListened).ToList();
 
             return playlists;
         }

@@ -14,7 +14,7 @@ namespace Azimuth.Shared.Dto
         public UserBrief Creator { get; set; }
         public int Duration;
         public int ItemsCount;
-        public int PlaylistListeners { get; set; }
+        public int PlaylistListened { get; set; }
         public int PlaylistLikes { get; set; }
         public int PlaylistFavourited { get; set; }
 

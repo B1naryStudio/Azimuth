@@ -11,6 +11,7 @@
 }
 
 .playlist-plated-info {
+    display: none;
     position: absolute;
     background-color: rgba(0,0,0,0.3);
     bottom: 0;
@@ -19,7 +20,6 @@
     height: 45%;
 }
 .playlist-plated-info div{
-
     margin: 0em;
     color: white;
     font-weight: bold;
@@ -38,3 +38,7 @@ div.playlistName {
 a {
     color: white;
 }
+
+/*.playlist-plated:hover + .playlist-info {
+    display: block;
+}*/
