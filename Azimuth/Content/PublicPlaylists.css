@@ -35,9 +35,9 @@ div.playlistName {
     text-decoration: underline;
 }
 
-a {
+/*a {
     color: white;
-}
+}*/
 
 /*.playlist-plated:hover + .playlist-info {
     display: block;

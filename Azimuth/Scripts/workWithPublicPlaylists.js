@@ -1,10 +1,10 @@
 ﻿$(document).ready(function () {
-    var volumeSlider = new SliderController({
-        sliderSelector: '#volumeSlider',
-        sliderBarClass: 'volumeBar',
-        sliderClass: 'volume',
-        dirrection: 'vertical'
-    });
+    //var volumeSlider = new SliderController({
+    //    sliderSelector: '#volumeSlider',
+    //    sliderBarClass: 'volumeBar',
+    //    sliderClass: 'volume',
+    //    dirrection: 'vertical'
+    //});
     var progressSlider = new SliderController({
         sliderSelector: '#progressSlider',
         sliderBarClass: 'progressBar',
@@ -13,10 +13,11 @@
         dirrection: 'horizontall'
     });
 
-    var audioManager = new AudioManager(volumeSlider, progressSlider);
+    //var audioManager = new AudioManager(volumeSlider, progressSlider);
+    var audioManager = new AudioManager(null, progressSlider);
     var manager = new PublicPlaylistManager(audioManager);
 
     manager.showPlaylists();
-    manager.bindListeners();
+    //manager.bindListeners();
     audioManager.bindListeners();
 });

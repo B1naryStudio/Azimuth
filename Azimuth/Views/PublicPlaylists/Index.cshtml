@@ -28,7 +28,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Track info</h4>
                 </div>
-                <div id="info-header-spinner" class="spinner loader"></div>
+                <div id="trackInfo-spinner" class="spinner loader"></div>
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
@@ -62,6 +62,11 @@
             $('.playlist-plated').mouseleave(function () {
                 var $currentPlaylist = $(this);
                 $currentPlaylist.find('.playlist-plated-info').hide("medium");
+            });
+
+            $('#closeModalBtn').click(function() {
+                $('#infoModal .modal-body').text('');
+                $('#listenTopBtn').attr('disabled', true);
             });
         });
     </script>
