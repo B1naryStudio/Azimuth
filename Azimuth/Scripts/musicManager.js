@@ -624,17 +624,23 @@ MusicManager.prototype.bindListeners = function() {
 
     this.$searchTrackInput.keyup(function(e) {
         var searchParam = $(this).val().toLocaleLowerCase();
-            $.ajax({
-                url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('#searchcriteria option:selected').val(),
-                type: 'GET',
-                dataType: 'json',
-                success: function (tracks) {
-                    $('.vkMusicList').find('.track').remove();
-                    var template = $('#searchTrackTemplate');
-                    self.showTracks(tracks, template);
-                    self.audioManager.refreshTracks();
-                }
-            });
+
+        self.showTracks(self.tracksGlobal.filter(function (index) {
+            self.$searchTrackInput.next().next().children().remove();
+            return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
+        }));
+        self.audioManager.refreshTracks();
+            //$.ajax({
+            //    url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('#searchcriteria option:selected').val(),
+            //    type: 'GET',
+            //    dataType: 'json',
+            //    success: function (tracks) {
+            //        $('.vkMusicList').find('.track').remove();
+            //        var template = $('#searchTrackTemplate');
+            //        self.showTracks(tracks, template);
+            //        self.audioManager.refreshTracks();
+            //    }
+            //});
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
