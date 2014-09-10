@@ -227,6 +227,13 @@
 SearchManager.prototype.bindListeners = function () {
     var self = this;
 
+    $(document).click(function(e) {
+        var contextMenu = $('.contextMenu');
+        if (contextMenu.length > 0) {
+            contextMenu.detach();
+        }
+    });
+
     $('#search').keyup(function () {
         self._delay(function() {
             self._search();

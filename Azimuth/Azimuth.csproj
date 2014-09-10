@@ -349,6 +349,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\musicManager.js" />
+    <Content Include="Scripts\searchManager.js" />
     <Content Include="Scripts\shareManager.js" />
     <Content Include="Scripts\sliderController.js" />
     <Content Include="Scripts\userProfileManager.js" />

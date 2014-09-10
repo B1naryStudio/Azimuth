@@ -8,166 +8,181 @@
 
 @Html.DisplayFor(x => x);
 
-
-<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
-<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="../../Scripts/audioManager.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
 
     <script type="text/javascript">
-    $(document).ready(function () {
-        $('#playlist-spinner').hide();
-        $('#tracksArea').show();
-        $('button#backToPlaylistsBtn').off('click').click(function () {
-            $('#tracksArea').empty();
-            $('#playlistsArea').show();
-        });
-
-        var progressSlider = new SliderController({
-            sliderSelector: '#progressSlider',
-            sliderBarClass: 'progressBar',
-            sliderClass: 'progress',
-            backgroundSliderClass: 'cache',
-            dirrection: 'horizontall'
-        });
-        var audioManager = new AudioManager(null, progressSlider);
-
-        audioManager.refreshTracks();
-        audioManager.bindPlayBtnListeners();
-
-        $('.track-info-btn').click(function () {
-            var $self = $(this);
-            var $trackInfoSpinner = $('#trackInfo-spinner');
-            var author = $self.parent().children('.track-description').children('.track-info').find('span');
-            var trackName = $self.parent().children('.track-description').children('.track-title');
-            $trackInfoSpinner.show();
-            $.ajax({
-                url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
-                async: true,
-                success: function (trackInfo) {
-                    $trackInfoSpinner.hide();
-                    var $trackInfoTemplate = $('#trackInfoTemplate');
-                    var object = $trackInfoTemplate.tmpl(trackInfo);
-                    var $trackInfoContainer = $('.modal-body');
-                    $trackInfoContainer.text('');
-                    object.appendTo($trackInfoContainer);
-                    if (trackInfo.Lyric != null) {
-                        for (var i = 0; i < trackInfo.Lyric.length; i++) {
-                            var $p = $('<p>');
-                            $p.text(trackInfo.Lyric[i]);
-                            $trackInfoContainer.find('.trackLyric').append($p);
-                        }
-                    }
-                    if (trackInfo.Summary != null) {
-                        $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
-                    }
-                    self.topTracks = trackInfo.ArtistTopTrackList;
-                    $('#listenTopBtn').attr('disabled', false);
-                }
+        $(document).ready(function() {
+            $('#playlist-spinner').hide();
+            $('#tracksArea').show();
+            $('button#backToPlaylistsBtn').off('click').click(function() {
+                $('#tracksArea').empty();
+                $('#playlistsArea').show();
             });
+
+            var progressSlider = new SliderController({
+                sliderSelector: '#progressSlider',
+                sliderBarClass: 'progressBar',
+                sliderClass: 'progress',
+                backgroundSliderClass: 'cache',
+                dirrection: 'horizontall'
+            });
+            var audioManager = new AudioManager(null, progressSlider);
+
+            audioManager.refreshTracks();
+            audioManager.bindPlayBtnListeners();
+
+            $('.track-info-btn').click(function() {
+                var $self = $(this);
+                var $trackInfoSpinner = $('#trackInfo-spinner');
+                var author = $self.parent().children('.track-description').children('.track-info').find('span');
+                var trackName = $self.parent().children('.track-description').children('.track-title');
+                $trackInfoSpinner.show();
+                $.ajax({
+                    url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
+                    async: true,
+                    success: function(trackInfo) {
+                        $trackInfoSpinner.hide();
+                        var $trackInfoTemplate = $('#trackInfoTemplate');
+                        var object = $trackInfoTemplate.tmpl(trackInfo);
+                        var $trackInfoContainer = $('.modal-body');
+                        $trackInfoContainer.text('');
+                        object.appendTo($trackInfoContainer);
+                        if (trackInfo.Lyric != null) {
+                            for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                                var $p = $('<p>');
+                                $p.text(trackInfo.Lyric[i]);
+                                $trackInfoContainer.find('.trackLyric').append($p);
+                            }
+                        }
+                        if (trackInfo.Summary != null) {
+                            $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
+                        }
+                        self.topTracks = trackInfo.ArtistTopTrackList;
+                        $('#listenTopBtn').attr('disabled', false);
+                    }
+                });
+            });
+
+            var isAuth = "@Request.IsAuthenticated";
+            if (isAuth === "True") {
+
+                var ctxMenu = new ContextMenu();
+                var contextMenuActions = [
+                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
+                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                ];
+
+                ctxMenu.initializeContextMenu(0, contextMenuActions, $('#tracksArea'), null);
+
+                $('.track').off('mousedown').mousedown(function(event) {
+                    if (event.which == 3) {
+                        $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        var $target = $(event.target).parents('.track');
+                        $target.toggleClass('draggable-item-selected', true);
+                        ctxMenu.drawContextMenu(event);
+                    }
+                });
+
+                ctxMenu.$contextMenuContainer.mousedown(function(event) {
+                    ctxMenu.$contextMenuContainer.hide();
+                    ctxMenu.selectAction($('.track.selected'));
+                });
+            }
+
+
         });
+    </script>
 
-        var isAuth = "@Request.IsAuthenticated";
-        if (isAuth === "True") {
-            var contextMenu = new ContextMenu();
-        var contextMenuOptions = [
-            { id: 'movetoplaylist', name: 'Move to', isNewSection: false, hasSubMenu: false, needSelectedItems: true },
-            { id: 'createplaylist', name: 'Create new Playlist', isNewSection: false, hasSubMenu: true, needSelectedItems: true }
-        ];
-        contextMenu.initializeContextMenu(0, contextMenuOptions, $('#tracksArea'), null);
-        }
-
-
-    });
-</script>
-
-<script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
-    <div id="trackInfo">
-        <div class="tableRow" id="artistData">
-            <div class="descriptionPhoto">
-                {{if ArtistImage != null}}
-                <img src=${ArtistImage}>
-                {{/if}}
-            </div>
-            <div class="infoDescription">
-                <div class="trackTitle">
-                    {{if Title != null}}
-                    Title: <a href=${TrackLastfmUrl}>${Title}</a>
+    <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
+        <div id="trackInfo">
+            <div class="tableRow" id="artistData">
+                <div class="descriptionPhoto">
+                    {{if ArtistImage != null}}
+                    <img src=${ArtistImage}>
                     {{/if}}
                 </div>
-                <div class="Artist">
-                    Artist:
-                    {{if Artist != null}}
-                    <a href=${ArtistLastfmUrl}>${Artist}</a>
+                <div class="infoDescription">
+                    <div class="trackTitle">
+                        {{if Title != null}}
+                        Title: <a href=${TrackLastfmUrl}>${Title}</a>
+                        {{/if}}
+                    </div>
+                    <div class="Artist">
+                        Artist:
+                        {{if Artist != null}}
+                        <a href=${ArtistLastfmUrl}>${Artist}</a>
+                        {{/if}}
+                    </div>
+                    {{if ArtistFans != 0}}
+                    <div>Fans count: ${ArtistFans}</div>
+                    {{/if}}
+
+                </div>
+            </div>
+            <div class="tableRow" id="albumData">
+                {{if AlbumCover != null}}
+                <div class="descriptionPhoto"><img src=${AlbumCover}></div>
+                {{/if}}
+                <div class="infoDescription">
+                    {{if AlbumTitle != null}}
+                    <div>Album: <a href="${AlbumLastfmUrl}">${AlbumTitle}</a></div>
+                    {{/if}}
+                    {{if AlbumFans != 0}}
+                    <div>Fans count: ${AlbumFans}</div>
+                    {{/if}}
+                    {{if AlbumRelease != null}}
+                    <div>Year: ${AlbumRelease}</div>
                     {{/if}}
                 </div>
-                {{if ArtistFans != 0}}
-                <div>Fans count: ${ArtistFans}</div>
-                {{/if}}
-
             </div>
-        </div>
-        <div class="tableRow" id="albumData">
-            {{if AlbumCover != null}}
-            <div class="descriptionPhoto"><img src=${AlbumCover}></div>
+            {{if Lyric!= null}}
+            <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseLyrics">
+                            Lyrics
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseLyrics" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackLyric"></div>
+                    </div>
+                </div>
+            </div>
             {{/if}}
-            <div class="infoDescription">
-                {{if AlbumTitle != null}}
-                <div>Album: <a href="${AlbumLastfmUrl}">${AlbumTitle}</a></div>
-                {{/if}}
-                {{if AlbumFans != 0}}
-                <div>Fans count: ${AlbumFans}</div>
-                {{/if}}
-                {{if AlbumRelease != null}}
-                <div>Year: ${AlbumRelease}</div>
-                {{/if}}
-            </div>
-        </div>
-        {{if Lyric!= null}}
-        <div class="tableRow panel panel-primary" id="lyricsData" style="display: block">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapseLyrics">
-                        Lyrics
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseLyrics" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="trackLyric"></div>
+
+            {{if Summary != null}}
+            <div class="tableRow panel panel-primary" id="summaryData" style="display: block">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseSummary">
+                            Summary
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseSummary" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="trackSummary"></div>
+                    </div>
                 </div>
             </div>
+            {{/if}}
         </div>
-        {{/if}}
+    </script>
 
-        {{if Summary != null}}
-        <div class="tableRow panel panel-primary" id="summaryData" style="display: block">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapseSummary">
-                        Summary
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseSummary" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="trackSummary"></div>
-                </div>
-            </div>
+    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div id="${id}" class="contextMenuActionName">${name}</div>
+            <div class="contextMenuExpander"></div>
         </div>
-        {{/if}}
-    </div>
-</script>
+    </script>
 
-<script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
-    <div class="tableRow">
-        <div id="${id}" class="contextMenuActionName">${name}</div>
-        <div class="contextMenuExpander"></div>
-    </div>
-</script>
-
-<script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
-    <div class="tableRow">
-        <div class="contextMenuActionName">${name}</div>
-        <span class="playlistId" style="display: none">${id}</span>
-    </div>
-</script>
+    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div class="contextMenuActionName">${name}</div>
+            <span class="playlistId" style="display: none">${id}</span>
+        </div>
+    </script>
