@@ -21,14 +21,12 @@ namespace Azimuth.Infrastructure.Concrete
             Bind<IUserService>().To<UserService>();
             Bind<IListenersService>().To<ListenersService>();
             Bind<IPlaylistLikesService>().To<PlaylistLikesService>();
-            Bind<IPlaylistListenedService>().To<PlaylistListenedService>();
             Bind<INotificationService>().To<NotificationService>();
             Bind<IWebClient>().To<WebClient>();
             Bind<IAccountProvider>().To<FacebookAccountProvider>().Named("Facebook");
             Bind<IAccountProvider>().To<VkAccountProvider>().Named("Vkontakte");
             Bind<IAccountProvider>().To<TwitterAccountProvider>().Named("Twitter");
             Bind<IAccountProvider>().To<GoogleAccountProvider>().Named("Google");
-            //Bind<IChartLyricsApi>().To<ChartLyricsApi>();
         }
     }
 }

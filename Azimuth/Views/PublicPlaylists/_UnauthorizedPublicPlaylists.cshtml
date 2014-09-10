@@ -1,9 +1,4 @@
-﻿@using Azimuth.DataAccess.Entities
-@model List<Azimuth.Shared.Dto.PlaylistData>
-@{
-    var playlistFollowData = ViewData["playlistFollowing"] as IEnumerable<PlaylistLike>;
-    var temp = playlistFollowData.ToList();
-}
+﻿@model List<Azimuth.Shared.Dto.PlaylistData>
 
 @foreach (var playlist in Model)
 {
@@ -23,7 +18,7 @@
     string forrmattedDuration = ((hours > 0) ? ((hours > 10) ? hours.ToString() : "0" + hours.ToString()) + ":" : "") +
                                 ((minutes > 10) ? minutes.ToString() : "0" + minutes) + ":"
                                 + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
-    
+
     <div class="playlist-plated">
         <div id="playlist-header-spinner" class="spinner loader"></div>
         <div class="playlist-plated-info">
@@ -32,29 +27,15 @@
                 Created by: @{ @Html.ActionLink(playlist.Creator.Name, "Index", "UserProfile", new { id = playlist.Creator.UserId }, null);}
             </div>
             <div class="duration">Duration: @forrmattedDuration</div>
-            <div class="genres">Genres: 
+            <div class="genres">
+                Genres:
                 @{
-                    string genres = playlist.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
+    string genres = playlist.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
                 }
                 @genres
             </div>
             <div class="plylistFolloiwngs">Likes: @playlist.PlaylistLikes Favourited: @playlist.PlaylistFavourited Listeners: @playlist.PlaylistListened</div>
-                 
-            @{
-                var curPlaylistFollowData = temp.FirstOrDefault(s => s.Playlist.Id == playlist.Id);
-            }
-
-            <input type="hidden" class="playlistId" value="@playlist.Id.ToString()"/>
-            @if (curPlaylistFollowData != null)
-            {
-                <input type="hidden" class="isLiked" value="@curPlaylistFollowData.IsLiked.ToString()"/>
-                <input type="hidden" class="isFavourited" value="@curPlaylistFollowData.IsFavorite.ToString()" />
-            }
-            else
-            {
-                <input type="hidden" class="isLiked" value="False"/>
-                <input type="hidden" class="isFavourited" value="False" />
-            }
+            <input type="hidden" class="playlistId" value="@playlist.Id.ToString()" />  
         </div>
     </div>
 }
@@ -63,13 +44,11 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#tracksArea').hide();
-        //$('#playlistsArea').show();
     });
 
     $('.playlist-plated').click(function () {
-        //$('#playlists-plated').hide();
         $('#playlistsArea').hide();
         $('#playlist-spinner').show();
         var $currentPlaylist = $(this);
@@ -80,9 +59,8 @@
                 "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
                 "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
             type: 'GET',
-            success: function(data) {
+            success: function (data) {
                 $(data).appendTo($('#tracksArea'));
-                //$('#playlist-spinner').fadeIn('normal');
                 $.ajax({
                     url: 'api/playlists/raiselistened?id=' + playlistId,
                     type: 'POST'
@@ -116,17 +94,7 @@
         });
     };
 
-    $('.playlist-plated').each(function() {
+    $('.playlist-plated').each(function () {
         self._setNewImage($(this), $(this).find('.playlistId').val());
     });
-
-    //$('.playlist-plated').hover(function() {
-    //    alert('in');
-    //});
-    //$('.playlist-plated').mouseleave(function() {
-    //    alert('out');
-    //});
-
-
-
 </script>

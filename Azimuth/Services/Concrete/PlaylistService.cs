@@ -70,6 +70,9 @@ namespace Azimuth.Services.Concrete
                             Email = creator.Email
                         },
                         ItemsCount = playlist.Tracks.Count,
+                        PlaylistListened = playlist.Listened,
+                        PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
+                        PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite)
                     };
                 }).ToList();
 
@@ -102,13 +105,13 @@ namespace Azimuth.Services.Concrete
                         Email = creator.Email
                     },
                     
-                    PlaylistListeners = playlist.PlaylistListeners.Count,
-                    PlaylistLikes = playlist.PlaylistLikes.Select(s => s.IsLiked).Count(),
-                    PlaylistFavourited = playlist.PlaylistLikes.Select(s => s.IsFavorite).Count(),
+                    PlaylistListened = playlist.Listened,
+                        PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
+                        PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite),
 
                     ItemsCount = playlist.Tracks.Count,
                 };
-            }).ToList();
+            }).OrderByDescending(order => order.PlaylistListened).ToList();
 
             return playlists;
         }
@@ -249,7 +252,6 @@ namespace Azimuth.Services.Concrete
                     return playlists;
                 }
             });
-                
         }
 
         public void RemovePlaylistById(int id)
@@ -271,7 +273,6 @@ namespace Azimuth.Services.Concrete
                 if (AzimuthIdentity.Current != null)
                 {
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //userRepo.GetOne(user => user.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     if (userId == playlist.Creator.Id)
                     {
                         var user = playlist.Creator;
@@ -518,6 +519,25 @@ namespace Azimuth.Services.Concrete
                 }
 
                 return playlistName;
+            });
+        }
+
+        public Task<int> RaiseListenedCount(int id)
+        {
+            return Task.Run(() =>
+            {
+                int listened = -1;
+                using (_unitOfWork)
+                {
+                    var playlist = _playlistRepository.Get(item => item.Id == id).FirstOrDefault();
+                    if (playlist != null)
+                    {
+                        listened = playlist.Listened++;
+                    }
+                    _unitOfWork.Commit();
+                    return listened;
+                }
+
             });
         }
     }

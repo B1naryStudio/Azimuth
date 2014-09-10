@@ -208,7 +208,6 @@
     <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="ApiControllers\LikesController.cs" />
-    <Compile Include="ApiControllers\PlaylistListenedController.cs" />
     <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />
     <Compile Include="DataProviders\Concrete\MusicServiceWorkUnit.cs" />
@@ -220,8 +219,6 @@
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
     <Compile Include="Services\Concrete\NotificationService.cs" />
     <Compile Include="Services\Interfaces\INotificationService.cs" />
-    <Compile Include="Services\Interfaces\IPlaylistListenedService.cs" />
-    <Compile Include="Services\Concrete\PlaylistListenedService.cs" />
     <Compile Include="Services\Interfaces\IPlaylistLikesService.cs" />
     <Compile Include="Services\Concrete\PlaylistLikesService.cs" />
     <Compile Include="Services\Interfaces\IListenersService.cs" />
@@ -395,6 +392,7 @@
     <Content Include="Views\PublicPlaylists\_PublicPlaylists.cshtml" />
     <Content Include="Views\PublicPlaylists\_PlaylistTracks.cshtml" />
     <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
+    <Content Include="Views\PublicPlaylists\_UnauthorizedPublicPlaylists.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

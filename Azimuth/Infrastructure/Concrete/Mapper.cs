@@ -272,6 +272,9 @@ namespace Azimuth.Infrastructure.Concrete
                 Email = creator.Email
             };
             playlistData.ItemsCount = playlist.Tracks.Count;
+            playlistData.PlaylistListened = playlist.Listened;
+            playlistData.PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked);
+            playlistData.PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite);
         }
 
     }
