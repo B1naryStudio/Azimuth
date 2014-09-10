@@ -1,4 +1,103 @@
-﻿
+﻿var PublicPlaylistManager = function(manager) {
+    var self = this;
+    this.audioManager = manager;
+    this.$playlistSpinner = $('#playlist-spinner');
+    this.$trackInfoSpinner = $('#trackInfo-spinner');
+    this.$playlistArea = $('#playlistsArea');
+    this.$trackArea = $('#tracksArea');
+    this.$backToPlaylistsBtn = $('button#backToPlaylistsBtn');
+
+    this._setNewImage = function ($playlist, id) {
+        $.ajax({
+            url: '/api/playlists/image/' + id,
+            success: function (image) {
+                var $logo = $playlist;
+                $logo.fadeOut(200, function () {
+                    if (image != "") {
+                        $logo.css({
+                            "background-image": 'url(' + image + ')'
+                        });
+                    } else {
+                        $logo.css({
+                            "background-image": 'url(http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg)'
+                        });
+                    }
+                });
+                $logo.fadeIn(200);
+            }
+        });
+    };
+    $('.playlist-plated').each(function () {
+        self._setNewImage($(this), $(this).find('.playlistId').val());
+    });
+};
+
+PublicPlaylistManager.prototype.showPlaylists = function() {
+    var self = this;
+    self.$trackArea.hide();
+
+    //$('.playlist-plated').click(function () {
+    //    $('#playlistsArea').hide();
+    //    $('#playlist-spinner').show();
+    //    var $currentPlaylist = $(this);
+    //    var playlistId = $currentPlaylist.find('.playlistId').val();
+    //    $.ajax({
+    //        url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
+    //            "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
+    //            "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
+    //            "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
+    //        type: 'GET',
+    //        success: function (data) {
+    //            $(data).appendTo($('#tracksArea'));
+    //            $.ajax({
+    //                url: 'api/playlists/raiselistened?id=' + playlistId,
+    //                type: 'POST'
+    //            });
+    //        }
+    //    });
+    //});
+
+};
+
+PublicPlaylistManager.prototype.showTracks = function() {
+    var self = this;
+    self.$trackArea.show();
+    self.$backToPlaylistsBtn.off('click').click(function () {
+        $('#tracksArea').empty();
+        $('#playlistsArea').show();
+    });
+
+    $('.track-info-btn').click(function () {
+        var $self = $(this);
+        var author = $self.parent().children('.track-description').children('.track-info');
+        var trackName = $self.parent().children('.track-description').children('.track-title');
+        //self.$infoLoadingSpinner.show();
+        $.ajax({
+            url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
+            async: true,
+            success: function (trackInfo) {
+                //self.$infoLoadingSpinner.hide();
+                var $trackInfoTemplate = $('#trackInfoTemplate');
+                var object = $trackInfoTemplate.tmpl(trackInfo);
+                var $trackInfoContainer = $('.modal-body');
+                $trackInfoContainer.text('');
+                object.appendTo($trackInfoContainer);
+                if (trackInfo.Lyric != null) {
+                    for (var i = 0; i < trackInfo.Lyric.length; i++) {
+                        var $p = $('<p>');
+                        $p.text(trackInfo.Lyric[i]);
+                        $trackInfoContainer.find('.trackLyric').append($p);
+                    }
+                }
+                if (trackInfo.Summary != null) {
+                    $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
+                }
+                self.topTracks = trackInfo.ArtistTopTrackList;
+                $('#listenTopBtn').attr('disabled', false);
+            }
+        });
+    });
+};
 
 
 

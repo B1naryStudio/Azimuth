@@ -3,7 +3,6 @@
 @Styles.Render("~/Content/PublicPlaylists.css")
 
 <div id="playlist-spinner" class="spinner loader"></div>
-
 <div id="barplaylistArea">
     <div id="playlistsArea">
         <h2>Public Playlists</h2>
@@ -11,19 +10,37 @@
             @if (Request.IsAuthenticated)
             {
                 
-                    Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
                 
             }
             else
             {
-                Html.RenderAction("_UnauthorizedPublicPlaylists", "PublicPlaylists");
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists");
             }
         </div>
     </div>
     <div id="progressSlider" style="display: none"></div>
-    <div id="tracksArea" style="display: none; margin-top:10px">
+    <div id="tracksArea" style="display: none; margin-top:10px"></div>
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Track info</h4>
+                </div>
+                <div id="trackInfo-spinner" class="spinner loader"></div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="listenTopBtn" data-dismiss="modal" disabled>Listen top tracks</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
+<div id="userPlaylists" style="display: none"></div>
 @section styles
 {
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -36,6 +53,7 @@
     <script type="" src="../../Scripts/dragndrop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
+    <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
     
     <script>
         $(document).ready(function() {
@@ -47,6 +65,48 @@
                 var $currentPlaylist = $(this);
                 $currentPlaylist.find('.playlist-plated-info').hide("medium");
             });
+
+            $('#closeModalBtn').click(function() {
+                $('#infoModal .modal-body').text('');
+                $('#listenTopBtn').attr('disabled', true);
+            });
+
+            var auth = "@Request.IsAuthenticated";
+            if (auth === "True") {
+                $.ajax({
+                    url: '/api/playlists',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (playlists) {
+                        var $userPlaylists = $('#userPlaylists');
+                        for (var i = 0; i < playlists.length; i++) {
+                            var $playlistId = $('<span>');
+                            var $playlistName = $('<span>');
+                            var $div = $('<div>');
+                            $div.toggleClass('tableRow', true);
+                            $playlistId.text(playlists[i].Id);
+                            $playlistName.text(playlists[i].Name);
+                            $div.append($playlistId);
+                            $div.append($playlistName);
+                            $userPlaylists.append($div);
+                        }
+                    }
+                });
+            }
         });
     </script>
+    
+    @*<script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div id="${id}" class="contextMenuActionName">${name}</div>
+            <div class="contextMenuExpander"></div>
+        </div>
+    </script>
+
+    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div class="contextMenuActionName">${name}</div>
+            <span class="playlistId" style="display: none">${id}</span>
+        </div>
+    </script>*@
 }
