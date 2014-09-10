@@ -19,6 +19,7 @@
     </div>
     <div id="progressSlider" style="display: none"></div>
     <div id="tracksArea" style="display: none; margin-top:10px"></div>
+
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -36,24 +37,46 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Enter Playlist Name For Selected Tracks</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="playlistNameToCreate" placeholder="Enter Playlist Name" />
+                    <select class="form-control" id="newPlaylistAccessibility">
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="okPlaylistCreateModalBtn" data-dimiss="modal">OK</button>
+                    <button type="button" class="btn btn-default" id="cancelModalBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div id="userPlaylists" style="display: none"></div>
 <div id="playlistsTable" style="display: none;"></div>
 <div class="itemsContainer tableRow" id="itemsContainer"></div>
-@section styles
+@*@section styles
 {
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-}
+}*@
 @section scripts
 {
-    <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
+    @*<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>*@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
-    <script type="" src="../../Scripts/dragndrop.js"></script>
-    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="../../Scripts/sliderController.js"></script>
+    <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/sliderController.js"></script>
     <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
     
     <script>
         $(document).ready(function () {
@@ -142,7 +165,6 @@
             ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
             $(document).off('mousedown','.track').on('mousedown', '.track',function(event) {
-                console.log('document ready');
                 if (event.which == 3) {
                     $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
                     var $target = $(event.target).parents('.track');
@@ -154,6 +176,28 @@
             ctxMenu.$contextMenuContainer.mousedown(function (event) {
                 ctxMenu.$contextMenuContainer.hide();
                 ctxMenu.selectAction($('.track.selected'));
+            });
+
+            $('#okPlaylistCreateModalBtn').click(function () {
+
+                $('#createPlaylistModal').modal('hide');
+                $('#createPlaylistModal').on('hidden.bs.modal', function () {
+                    $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+                    $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
+                });
+
+                var playlistName = $('#playlistNameToCreate').val();
+                var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+                $.ajax({
+                    url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    success: function (playlistId) {
+                        self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+                    }
+                });
+                self._updatePlaylists();
             });
         });
     </script>
