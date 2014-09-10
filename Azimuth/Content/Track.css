@@ -34,7 +34,7 @@
     font-size: 12px;
 }
 
-.track-description:hover::after {
+/*.track-description:hover::after {
     content: attr(data-title); 
     position: absolute; 
     left: 40%;
@@ -46,7 +46,7 @@
     border: 1px solid #333;
     -ms-border-radius: 20px;
     border-radius: 20px;
-}
+}*/
 
 .track-info {
     display: block;
