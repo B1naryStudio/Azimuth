@@ -1,4 +1,5 @@
 ﻿@using Azimuth.DataAccess.Entities
+@using Ninject
 @model Azimuth.Shared.Dto.PlaylistData
 @{
     List<PlaylistLike> temp = new List<PlaylistLike>();
@@ -33,14 +34,12 @@
             Created by: @{ @Html.ActionLink(Model.Creator.Name, "Index", "UserProfile", new { id = Model.Creator.UserId }, null);}
         </div>
         <div class="duration">Duration: @forrmattedDuration</div>
-        <div class="genres">
-            Genres:
-            @{
-                string genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
-            }
-            @genres
-        </div>
-        <div class="plylistFolloiwngs">Likes: @Model.PlaylistLikes Favourited: @Model.PlaylistFavourited Listeners: @Model.PlaylistListened</div>
+        @if (Model.Genres.Any())
+        {
+            string genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
+            <div class="genres">Genres: @genres</div>   
+        }
+        <div class="plylistFolloiwngs">Likes: @Model.PlaylistLikes Favourited: @Model.PlaylistFavourited Listened: @Model.PlaylistListened</div>
 
         <input type="hidden" class="playlistId" value="@Model.Id.ToString()" />
         

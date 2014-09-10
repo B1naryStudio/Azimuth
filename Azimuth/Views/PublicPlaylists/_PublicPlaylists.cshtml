@@ -24,7 +24,7 @@
             success: function(data) {
                 $(data).appendTo($('#tracksArea'));
                 $.ajax({
-                    url: 'api/playlists/raiselistened?id=' + playlistId,
+                    url: '/api/playlists/raiselistened?id=' + playlistId,
                     type: 'POST'
                 });
             }

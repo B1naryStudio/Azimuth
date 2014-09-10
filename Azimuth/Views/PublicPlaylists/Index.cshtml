@@ -10,7 +10,7 @@
             @if (Request.IsAuthenticated)
             {
                 
-                    Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
                 
             }
             else
@@ -40,6 +40,7 @@
     </div>
 
 </div>
+<div id="userPlaylists" style="display: none"></div>
 @section styles
 {
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -52,6 +53,7 @@
     <script type="" src="../../Scripts/dragndrop.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../../Scripts/sliderController.js"></script>
+    <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
     
     <script>
         $(document).ready(function() {
@@ -68,6 +70,43 @@
                 $('#infoModal .modal-body').text('');
                 $('#listenTopBtn').attr('disabled', true);
             });
+
+            var auth = "@Request.IsAuthenticated";
+            if (auth === "True") {
+                $.ajax({
+                    url: '/api/playlists',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (playlists) {
+                        var $userPlaylists = $('#userPlaylists');
+                        for (var i = 0; i < playlists.length; i++) {
+                            var $playlistId = $('<span>');
+                            var $playlistName = $('<span>');
+                            var $div = $('<div>');
+                            $div.toggleClass('tableRow', true);
+                            $playlistId.text(playlists[i].Id);
+                            $playlistName.text(playlists[i].Name);
+                            $div.append($playlistId);
+                            $div.append($playlistName);
+                            $userPlaylists.append($div);
+                        }
+                    }
+                });
+            }
         });
     </script>
+    
+    @*<script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div id="${id}" class="contextMenuActionName">${name}</div>
+            <div class="contextMenuExpander"></div>
+        </div>
+    </script>
+
+    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
+        <div class="tableRow">
+            <div class="contextMenuActionName">${name}</div>
+            <span class="playlistId" style="display: none">${id}</span>
+        </div>
+    </script>*@
 }

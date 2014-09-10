@@ -12,7 +12,8 @@
 <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
 <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
-<script type="text/javascript">
+
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#playlist-spinner').hide();
         $('#tracksArea').show();
@@ -64,46 +65,19 @@
                 }
             });
         });
+
+        var isAuth = "@Request.IsAuthenticated";
+        if (isAuth === "True") {
+            var contextMenu = new ContextMenu();
+        var contextMenuOptions = [
+            { id: 'movetoplaylist', name: 'Move to', isNewSection: false, hasSubMenu: false, needSelectedItems: true },
+            { id: 'createplaylist', name: 'Create new Playlist', isNewSection: false, hasSubMenu: true, needSelectedItems: true }
+        ];
+        contextMenu.initializeContextMenu(0, contextMenuOptions, $('#tracksArea'), null);
+        }
+
+
     });
-
-
-
-
-
-
-        //this._getTrackInfo = function () {
-        //var $self = $(this);
-        //var author = $self.parent().children('.track-description').children('.track-info');
-        //var trackName = $self.parent().children('.track-description').children('.track-title');
-        //self.$infoLoadingSpinner.show();
-        //$.ajax({
-        //    url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
-        //    async: true,
-        //    success: function (trackInfo) {
-        //        self.$infoLoadingSpinner.hide();
-        //        var $trackInfoTemplate = $('#trackInfoTemplate');
-        //        var object = $trackInfoTemplate.tmpl(trackInfo);
-        //        var $trackInfoContainer = $('.modal-body');
-        //        $trackInfoContainer.text('');
-        //        object.appendTo($trackInfoContainer);
-        //        if (trackInfo.Lyric != null) {
-        //            for (var i = 0; i < trackInfo.Lyric.length; i++) {
-        //                var $p = $('<p>');
-        //                $p.text(trackInfo.Lyric[i]);
-        //                $trackInfoContainer.find('.trackLyric').append($p);
-        //            }
-        //        }
-        //        if (trackInfo.Summary != null) {
-        //            $trackInfoContainer.find('.trackSummary').append(trackInfo.Summary);
-        //        }
-        //        self.topTracks = trackInfo.ArtistTopTrackList;
-        //        $('#listenTopBtn').attr('disabled', false);
-        //    }
-    //});
-    //};
-
-
-    //});
 </script>
 
 <script id="trackInfoTemplate" type="text/x-JQuery-tmpl">
@@ -181,5 +155,19 @@
             </div>
         </div>
         {{/if}}
+    </div>
+</script>
+
+<script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
+    <div class="tableRow">
+        <div id="${id}" class="contextMenuActionName">${name}</div>
+        <div class="contextMenuExpander"></div>
+    </div>
+</script>
+
+<script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
+    <div class="tableRow">
+        <div class="contextMenuActionName">${name}</div>
+        <span class="playlistId" style="display: none">${id}</span>
     </div>
 </script>
