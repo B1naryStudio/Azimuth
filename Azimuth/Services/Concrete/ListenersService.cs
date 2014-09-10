@@ -17,7 +17,6 @@ namespace Azimuth.Services.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<PlaylistListener> _listenerRepository;
         private readonly UserRepository _userRepository;
-        private readonly IRepository<PlaylistListened> _unauthorizedListenersRepository;
         private readonly IRepository<Playlist> _playlistRepository;
         private readonly INotificationService _notificationService;
 
@@ -25,7 +24,6 @@ namespace Azimuth.Services.Concrete
         {
             _unitOfWork = unitOfWork;
             _listenerRepository = _unitOfWork.GetRepository<PlaylistListener>();
-            _unauthorizedListenersRepository = _unitOfWork.GetRepository<PlaylistListened>();
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
 
@@ -101,21 +99,21 @@ namespace Azimuth.Services.Concrete
                 }
                 else
                 {
-                    var unListener =
-                        _unauthorizedListenersRepository.GetOne(listener => listener.Playlist.Id == playlist.Id);
-                    if (unListener != null)
-                    {
-                        ++unListener.Amount;
-                        _unauthorizedListenersRepository.UpdateItem(unListener);
-                    }
-                    else
-                    {
-                        _unauthorizedListenersRepository.AddItem(new PlaylistListened
-                        {
-                            Amount = 1,
-                            Playlist = playlist
-                        });
-                    }
+                    //var unListener =
+                    //    _unauthorizedListenersRepository.GetOne(listener => listener.Playlist.Id == playlist.Id);
+                    //if (unListener != null)
+                    //{
+                    //    ++unListener.Amount;
+                    //    _unauthorizedListenersRepository.UpdateItem(unListener);
+                    //}
+                    //else
+                    //{
+                    //    _unauthorizedListenersRepository.AddItem(new PlaylistListened
+                    //    {
+                    //        Amount = 1,
+                    //        Playlist = playlist
+                    //    });
+                    //}
                 }
                 _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
 
@@ -141,14 +139,14 @@ namespace Azimuth.Services.Concrete
                 }
                 else
                 {
-                    var unListeners =
-                        _unauthorizedListenersRepository.GetOne(listener => listener.Playlist.Id == playlist.Id);
-                    if(unListeners == null)
-                        throw new BadRequestException("No unauthorized users listening this playlist");
-                    if(unListeners.Amount==0)
-                        throw new BadRequestException("No unauthorized users listening this playlist");
-                    unListeners.Amount--;
-                    _unauthorizedListenersRepository.UpdateItem(unListeners);
+                    //var unListeners =
+                    //    _unauthorizedListenersRepository.GetOne(listener => listener.Playlist.Id == playlist.Id);
+                    //if(unListeners == null)
+                    //    throw new BadRequestException("No unauthorized users listening this playlist");
+                    //if(unListeners.Amount==0)
+                    //    throw new BadRequestException("No unauthorized users listening this playlist");
+                    //unListeners.Amount--;
+                    //_unauthorizedListenersRepository.UpdateItem(unListeners);
                 }
                 _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
 

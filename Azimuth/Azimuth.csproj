@@ -208,7 +208,6 @@
     <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
     <Compile Include="ApiControllers\LikesController.cs" />
-    <Compile Include="ApiControllers\PlaylistListenedController.cs" />
     <Compile Include="DataProviders\Concrete\DeezerApi.cs" />
     <Compile Include="DataProviders\Concrete\LastfmApi.cs" />
     <Compile Include="DataProviders\Concrete\MusicServiceWorkUnit.cs" />

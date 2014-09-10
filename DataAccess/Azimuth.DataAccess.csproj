@@ -80,7 +80,6 @@
     <Compile Include="Entities\SharedPlaylist.cs" />
     <Compile Include="Entities\SocialNetwork.cs" />
     <Compile Include="Entities\Track.cs" />
-    <Compile Include="Entities\PlaylistListened.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserSocialNetwork.cs" />
     <Compile Include="Infrastructure\BaseEntity.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="Repositories\SharedPlaylistRepository.cs" />
     <Compile Include="Repositories\SocialNetworkRepository.cs" />
     <Compile Include="Repositories\TrackRepository.cs" />
-    <Compile Include="Repositories\PlaylistListenedRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserSocialNetworkRepository.cs" />
   </ItemGroup>
@@ -152,7 +150,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Mappings\sharedplaylist.hbm.xml" />
     <EmbeddedResource Include="Mappings\likes.hbm.xml" />
-    <EmbeddedResource Include="Mappings\listened.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\notification.hbm.xml" />

@@ -36,7 +36,6 @@ namespace Azimuth.DataAccess.Infrastructure
             Bind<IRepository<UserSocialNetwork>, BaseRepository<UserSocialNetwork>>().To<UserSocialNetworkRepository>();
             Bind<IRepository<PlaylistTrack>, BaseRepository<PlaylistTrack>>().To<PlaylistTrackRepository>();
             Bind<IRepository<PlaylistListener>, BaseRepository<PlaylistListener>>().To<PlaylistListenersRepository>();
-            Bind<IRepository<PlaylistListened>, BaseRepository<PlaylistListened>>().To<PlaylistListenedRepository>();
             Bind<IRepository<SharedPlaylist>, BaseRepository<SharedPlaylist>>().To<SharedPlaylistRepository>();
             Bind<IRepository<PlaylistLike>, BaseRepository<PlaylistLike>>().To<PlaylistLikerRepository>();
             Bind<IRepository<Notification>, BaseRepository<Notification>>().To<NotificationRepository>();

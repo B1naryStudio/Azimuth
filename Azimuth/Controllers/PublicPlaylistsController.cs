@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.UI;
-using System.Web.UI.WebControls.WebParts;
-using Antlr.Runtime.Misc;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Concrete;
 using Azimuth.Services.Interfaces;
-using Azimuth.Shared.Dto;
 
 namespace Azimuth.Controllers
 {

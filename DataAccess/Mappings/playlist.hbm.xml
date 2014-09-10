@@ -19,5 +19,6 @@
       <key column="PlaylistId"/>
       <one-to-many class="PlaylistLike"/>
     </set>
+    <property name="Listened" />
   </class>
 </hibernate-mapping>

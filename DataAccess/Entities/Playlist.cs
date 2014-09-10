@@ -17,6 +17,7 @@ namespace Azimuth.DataAccess.Entities
         public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; }
         public virtual ICollection<PlaylistListener> PlaylistListeners { get; set; }
         public virtual ICollection<PlaylistLike> PlaylistLikes { get; set; }
+        public virtual int Listened { get; set; }
 
         public Playlist()
         {

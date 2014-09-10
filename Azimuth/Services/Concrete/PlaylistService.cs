@@ -249,7 +249,6 @@ namespace Azimuth.Services.Concrete
                     return playlists;
                 }
             });
-                
         }
 
         public void RemovePlaylistById(int id)
@@ -271,7 +270,6 @@ namespace Azimuth.Services.Concrete
                 if (AzimuthIdentity.Current != null)
                 {
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //userRepo.GetOne(user => user.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     if (userId == playlist.Creator.Id)
                     {
                         var user = playlist.Creator;
