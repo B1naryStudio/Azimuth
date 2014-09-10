@@ -83,14 +83,14 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public async Task<List<NotificationDto>> GetFollowersActivity(long userId)
+        public async Task<List<NotificationDto>> GetFollowingsActivity(long userId)
         {
             var notifications = new List<NotificationDto>();
             var user = _userRepository.GetOne(u => u.Id == userId);
 
-            foreach (var follower in user.Followers)
+            foreach (var following in user.Following)
             {
-                notifications.AddRange(await GetRecentActivity(follower.Id));
+                notifications.AddRange(await GetRecentActivity(following.Id));
             }
 
             return notifications;
