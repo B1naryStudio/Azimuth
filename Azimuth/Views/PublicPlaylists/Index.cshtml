@@ -1,10 +1,15 @@
 ﻿@model Azimuth.DataAccess.Entities.User
 @*@model List<Azimuth.Shared.Dto.PlaylistData>*@
+@using System.Web.UI.WebControls
 @using Azimuth.Infrastructure.Concrete
 @using Azimuth.Services.Concrete
 @{
     var loggedUser = AzimuthIdentity.Current.UserCredential;
 }
+
+@Styles.Render("~/Content/PublicPlaylists.css")
+
+<div id="playlist-spinner" class="spinner loader"></div>
 
 <div id="barplaylistArea">
     <div id="playlistsArea">
@@ -18,7 +23,7 @@
     <div id="progressSlider" style="display: none"></div>
     <div id="tracksArea" style="display: none; margin-top:10px">
 
-        <div style ="display: inline; font-size:25px; position: relative;">
+        @*<div style ="display: inline; font-size:25px; position: relative;">
             <div id="playlistName" style="display: block; float:left; margin-right:20px;"></div>
             <div class="likesCounter" style="font-size:16px; float:left; bottom: 0"></div>
         </div>
@@ -28,7 +33,7 @@
             
             <div id="tracks"></div>
             <div class="listeners"></div>
-        </div>
+        </div>*@
     </div>
 </div>
 @section styles

@@ -11,5 +11,13 @@
       <key column="PlaylistId" />
       <many-to-many column="TrackId" class="Track" />
     </set>
+    <set name="PlaylistListeners" table="PlaylistListeners" cascade="save-update">
+      <key column="PlaylistId" />
+      <one-to-many class="PlaylistListener"/>
+    </set>
+    <set name="PlaylistLikes" table="Likes" cascade="save-update">
+      <key column="PlaylistId"/>
+      <one-to-many class="PlaylistLike"/>
+    </set>
   </class>
 </hibernate-mapping>

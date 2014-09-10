@@ -4,6 +4,8 @@
 
 <button class="btn btn-default" type="button" id="backToPlaylistsBtn">Back</button>
 
+<h2>@ViewBag.playlistName</h2>
+
 @foreach (var track in Model)
 {
     <div class="tableRow draggable-item track">
@@ -35,12 +37,12 @@
 <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
-        $('#playlists-plated').hide();
+        $('#playlist-spinner').hide();
+        //$('#playlists-plated').hide();
         $('#tracksArea').show();
         $('button#backToPlaylistsBtn').off('click').click(function () {
             $('#tracksArea').empty();
-            $('#playlists-plated').show();
+            $('#playlistsArea').show();
         });
 
         var progressSlider = new SliderController({

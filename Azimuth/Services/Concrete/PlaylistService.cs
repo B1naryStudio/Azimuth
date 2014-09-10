@@ -65,6 +65,7 @@ namespace Azimuth.Services.Concrete
                                                 .ToList(),
                         Creator = new UserBrief
                         {
+                            UserId = creator.Id,
                             Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
                             Email = creator.Email
                         },
@@ -96,9 +97,15 @@ namespace Azimuth.Services.Concrete
                         .ToList(),
                     Creator = new UserBrief
                     {
+                        UserId = creator.Id,
                         Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
                         Email = creator.Email
                     },
+                    
+                    PlaylistListeners = playlist.PlaylistListeners.Count,
+                    PlaylistLikes = playlist.PlaylistLikes.Select(s => s.IsLiked).Count(),
+                    PlaylistFavourited = playlist.PlaylistLikes.Select(s => s.IsFavorite).Count(),
+
                     ItemsCount = playlist.Tracks.Count,
                 };
             }).ToList();

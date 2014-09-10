@@ -4,38 +4,59 @@
     var playlistFollowData = ViewData["playlistFollowing"] as IEnumerable<PlaylistLike>;
     var temp = playlistFollowData.ToList();
 }
+
 @foreach (var playlist in Model)
 {
-         <div class="playlist-plated">
-             <div class="playlist-plated-info">
-                 <div class="playlistName"> @playlist.Name</div>
-                 <div class="duration">@playlist.Duration</div>
-                 <div class="creator">Created by: @playlist.Creator.Name</div>
-                 <div class="genres">Genres: 
-                     @foreach (var genre in @playlist.Genres)
-                     {
-                         @genre
-                     }
-               
-                 </div>
+    string playlistName = "";
+    if (playlist.Name.Length > 15)
+    {
+        playlistName = playlist.Name.Substring(0, 25) + "...";
+    }
+    else
+    {
+        playlistName = playlist.Name;
+    }
+    var duration = Convert.ToDecimal(playlist.Duration);
+    var hours = Math.Floor(duration / (60 * 60));
+    var minutes = Math.Floor(duration / 60) - (60 * hours);
+    var seconds = (duration % 60);
+    string forrmattedDuration = ((hours > 0) ? ((hours > 10) ? hours.ToString() : "0" + hours.ToString()) + ":" : "") +
+                                ((minutes > 10) ? minutes.ToString() : "0" + minutes) + ":"
+                                + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
+    
+    <div class="playlist-plated">
+        <div id="playlist-header-spinner" class="spinner loader"></div>
+        <div class="playlist-plated-info">
+            <div class="playlistName">@playlistName</div>
+            <div class="creator">
+                Created by: @{ @Html.ActionLink(playlist.Creator.Name, "Index", "UserProfile", new { id = playlist.Creator.UserId }, null);}
+            </div>
+            <div class="duration">Duration: @forrmattedDuration</div>
+            <div class="genres">Genres: 
+                @{
+                    string genres = playlist.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
+                }
+                @genres
+            </div>
+            <div class="plylistFolloiwngs">Likes: @playlist.PlaylistLikes Favourited: @playlist.PlaylistFavourited Listeners: @playlist.PlaylistListeners</div>
                  
-                 @{
-                     var curPlaylistFollowData = temp.FirstOrDefault(s => s.Playlist.Id == playlist.Id);
-                 }
+            @{
+                var curPlaylistFollowData = temp.FirstOrDefault(s => s.Playlist.Id == playlist.Id);
+            }
 
-                 <input type="hidden" class="playlistId" value="@playlist.Id.ToString()"/>
-                 @if (curPlaylistFollowData != null)
-                 {
-                     <input type="hidden" class="isLiked" value="@curPlaylistFollowData.IsLiked.ToString()"/>
-                     <input type="hidden" class="isFavourited" value="@curPlaylistFollowData.IsFavorite.ToString()" />
-                 }
-                 else
-                 {
-                    <input type="hidden" class="isLiked" value="False"/>
-                    <input type="hidden" class="isFavourited" value="False" />
-                 }
-             </div>
-         </div>
+            <input type="hidden" class="playlistId" value="@playlist.Id.ToString()"/>
+            @if (curPlaylistFollowData != null)
+            {
+                <input type="hidden" class="isLiked" value="@curPlaylistFollowData.IsLiked.ToString()"/>
+                <input type="hidden" class="isFavourited" value="@curPlaylistFollowData.IsFavorite.ToString()" />
+            }
+            else
+            {
+                <input type="hidden" class="isLiked" value="False"/>
+                <input type="hidden" class="isFavourited" value="False" />
+            }
+        </div>
+    </div>
 }
 
 <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
@@ -44,16 +65,23 @@
 
     $(document).ready(function() {
         $('#tracksArea').hide();
-        $('#playlist-plated').show();
+        //$('#playlistsArea').show();
     });
 
-    $('.playlist-plated').click(function() {
+    $('.playlist-plated').click(function () {
+        //$('#playlists-plated').hide();
+        $('#playlistsArea').hide();
+        $('#playlist-spinner').show();
+        var $currentPlaylist = $(this);
         $.ajax({
-            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + $(this).find('.playlistId').val() + "&isLiked=" +
-                $(this).find('.isLiked').val() + "&isFavourited=" + $(this).find('.isFavourited').val(),
+            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + $currentPlaylist.find('.playlistId').val() +
+                "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
+                "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
+                "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
             type: 'GET',
             success: function(data) {
                 $(data).appendTo($('#tracksArea'));
+                //$('#playlist-spinner').fadeIn('normal');
             }
         });
     });
