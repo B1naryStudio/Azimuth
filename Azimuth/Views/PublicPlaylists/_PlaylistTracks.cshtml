@@ -68,27 +68,7 @@
             var isAuth = "@Request.IsAuthenticated";
             if (isAuth === "True") {
 
-                var ctxMenu = new ContextMenu();
-                var contextMenuActions = [
-                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
-                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
-                ];
-
-                ctxMenu.initializeContextMenu(0, contextMenuActions, $('#tracksArea'), null);
-
-                $('.track').off('mousedown').mousedown(function(event) {
-                    if (event.which == 3) {
-                        $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                        var $target = $(event.target).parents('.track');
-                        $target.toggleClass('draggable-item-selected', true);
-                        ctxMenu.drawContextMenu(event);
-                    }
-                });
-
-                ctxMenu.$contextMenuContainer.mousedown(function(event) {
-                    ctxMenu.$contextMenuContainer.hide();
-                    ctxMenu.selectAction($('.track.selected'));
-                });
+                
             }
 
 
@@ -173,16 +153,4 @@
         </div>
     </script>
 
-    <script id="contextmenuTemplate" type="text/x-JQuery-tmpl">
-        <div class="tableRow">
-            <div id="${id}" class="contextMenuActionName">${name}</div>
-            <div class="contextMenuExpander"></div>
-        </div>
-    </script>
-
-    <script id="subContextmenuTemplate" type="text/x-JQuery-tmpl">
-        <div class="tableRow">
-            <div class="contextMenuActionName">${name}</div>
-            <span class="playlistId" style="display: none">${id}</span>
-        </div>
-    </script>
+    
