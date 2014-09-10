@@ -15,11 +15,14 @@ namespace Azimuth.DataAccess.Entities
 
         public virtual ICollection<Track> Tracks { get; set; }
         public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; }
+        public virtual ICollection<PlaylistListener> PlaylistListeners { get; set; }
+        public virtual ICollection<PlaylistLike> PlaylistLikes { get; set; }
 
         public Playlist()
         {
             Tracks = new List<Track>();
             PlaylistTracks= new List<PlaylistTrack>();
+            PlaylistListeners = new List<PlaylistListener>();
         }
     }
 

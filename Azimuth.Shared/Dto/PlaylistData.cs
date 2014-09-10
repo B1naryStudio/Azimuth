@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Enums;
 
 namespace Azimuth.Shared.Dto
@@ -13,5 +14,19 @@ namespace Azimuth.Shared.Dto
         public UserBrief Creator { get; set; }
         public int Duration;
         public int ItemsCount;
+        public int PlaylistListeners { get; set; }
+        public int PlaylistLikes { get; set; }
+        public int PlaylistFavourited { get; set; }
+
+
+
+        //public ICollection<PlaylistListener> PlaylistListeners { get; set; }
+        //public ICollection<PlaylistLike> PlaylistLikes { get; set; }
+
+        //public PlaylistData()
+        //{
+        //    PlaylistListeners = new List<PlaylistListener>();
+        //    PlaylistLikes = new List<PlaylistLike>();
+        //}
     }
 }

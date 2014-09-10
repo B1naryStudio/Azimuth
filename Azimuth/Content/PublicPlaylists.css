@@ -1,0 +1,40 @@
+﻿.playlist-plated {
+    width: 300px;
+    height: 300px;
+    display: block;
+    float: left;
+    background-image: url(http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg);
+    background-size:  contain;
+    background-repeat: no-repeat;
+    /*margin: 10px 10px 10px 10px;*/
+    position: relative;
+}
+
+.playlist-plated-info {
+    position: absolute;
+    background-color: rgba(0,0,0,0.3);
+    bottom: 0;
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    height: 45%;
+}
+.playlist-plated-info div{
+
+    margin: 0em;
+    color: white;
+    font-weight: bold;
+    /*font-size: 12px;*/
+}
+
+div.playlistName {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.playlist-plated:hover .playlistName {
+    text-decoration: underline;
+}
+
+a {
+    color: white;
+}

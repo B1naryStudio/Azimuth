@@ -6920,7 +6920,7 @@ td.visible-print {
   }
 }
 
-.playlist-plated {
+/*.playlist-plated {
     width: 200px;
     height: 200px;
     display: block;
@@ -6946,7 +6946,7 @@ td.visible-print {
     color: white;
     font-weight: bold;
     font-size: 12px;
-}
+}*/
 
 #barplaylistArea,#editBarplaylistArea {
     display: block;

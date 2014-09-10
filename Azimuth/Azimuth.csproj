@@ -300,6 +300,7 @@
     <Content Include="Content\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Loading.css" />
     <Content Include="Content\Playlist.css" />
+    <Content Include="Content\PublicPlaylists.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\Share.css" />
     <Content Include="Content\Track.css" />

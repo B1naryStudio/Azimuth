@@ -54,9 +54,9 @@ namespace Azimuth.Controllers
             else
             {
                 if (favourite)
-                    _playlistLikesService.RemoveCurrentUserAsLiker(playlist);
+                    _playlistLikesService.RemoveCurrentUserAsFavorite(playlist);
                 else
-                    _playlistLikesService.AddCurrentUserAsLiker(playlist);
+                    _playlistLikesService.AddCurrentUserAsFavorite(playlist);
 
                 ViewBag.isLiked = like;
                 ViewBag.isFavourited = !favourite;
@@ -74,17 +74,19 @@ namespace Azimuth.Controllers
         public PartialViewResult _PublicPlaylists(ICollection<PlaylistLike> playlistFollowing)
         {
             var publicPlaylists = _playlistService.GetPublicPlaylistsSync();
+
             ViewData["playlistFollowing"] = playlistFollowing;
 
             return PartialView(publicPlaylists);
         }
 
-        public PartialViewResult _PlaylistTracks(string playlistId, string isLiked, string isFavourited)
+        public PartialViewResult _PlaylistTracks(string playlistId, string playlistName, string isLiked, string isFavourited)
         {
             if (!String.IsNullOrEmpty(playlistId) || !String.IsNullOrWhiteSpace(playlistId))
             {
                 var tracks = _userTracksService.GetTracksByPlaylistIdSync(Convert.ToInt32(playlistId));
                 ViewBag.playlistId = playlistId;
+                ViewBag.playlistName = playlistName;
                 ViewBag.isLiked = Convert.ToBoolean(isLiked);
                 ViewBag.isFavourited = Convert.ToBoolean(isFavourited);
                 return PartialView(tracks);
