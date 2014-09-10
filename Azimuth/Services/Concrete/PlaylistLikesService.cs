@@ -115,6 +115,7 @@ namespace Azimuth.Services.Concrete
                     {
                         atemp.IsFavorite = true;
                         _likerRepository.UpdateItem(atemp);
+                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user, recentlyPlaylist: playlist);
                     }
                 }
                 _unitOfWork.Commit();
