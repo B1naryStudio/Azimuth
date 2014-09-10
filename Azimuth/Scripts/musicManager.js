@@ -369,6 +369,20 @@ var MusicManager = function (manager) {
             }
         });
     };
+
+    this._sendMessage = function(e) {
+        var $this = $(this);
+        var friendId = $this.siblings('.friend-id').html();
+
+        VK.api('wall.post', {
+                owner_id: friendId,
+                message: "new message",
+                attachments: "photo261844377_336279002,http://localhost:44300/"
+        }, function (data) {
+        });
+
+        e.stopPropagation();
+    };
 };
 
 MusicManager.prototype.showTracks = function (tracks, template) {
@@ -450,6 +464,7 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
     });
 
     $('.friend').click(self._getFriendTracks);
+    $('.send-message-btn').click(self._sendMessage);
 };
 
 MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {

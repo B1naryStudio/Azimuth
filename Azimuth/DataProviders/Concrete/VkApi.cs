@@ -269,6 +269,6 @@ namespace Azimuth.DataProviders.Concrete
             var trackJson = await _webClient.GetWebData(url);
                 var track = JsonConvert.DeserializeObject<VkTrackResponse>(trackJson).Response.Select(list => list.Url).ToList();
                 return track;
-        } 
+        }
     }
 }

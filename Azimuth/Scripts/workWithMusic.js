@@ -1,4 +1,12 @@
 ﻿$(document).ready(function () {
+    VK.init({
+        apiId: "4469725"
+    });
+    VK.Auth.login(
+        null,
+        VK.access.FRIENDS | VK.access.WALL
+    );
+
     var volumeSlider = new SliderController({
         sliderSelector: '#volumeSlider', 
         sliderBarClass: 'volumeBar', 
