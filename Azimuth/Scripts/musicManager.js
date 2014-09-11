@@ -528,40 +528,42 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     self.$vkMusicTable.hide();
                 }
                 $('.accordion .tableRow').on("click", self._getTracks);
-                
-            }
-        });
-        $.ajax({
-            url: '/api/playlists/favorite/notOwned',
-            success: function (playlistsData) {
-                console.log('Hi');
-                if (typeof playlistsData.Message === 'undefined') {
-                    self.$reloginForm.hide();
-                    self.$vkMusicTable.show();
-                    self.playlists = playlistsData;
-                    for (var i = 0; i < self.playlists.length; i++) {
-                        var playlist = self.playlists[i];
-                        if (playlist.Accessibilty === 1) {
-                            playlist.Accessibilty = "public";
-                        } else {
-                            playlist.Accessibilty = "private";
-                        }
-                        playlist.Duration = self._toFormattedTime(playlist.Duration, true);
-                        playlist.readonly = true;
-                        self.playlistsGlobal.push(playlist);
-                        var tmpl = self.playlistTemplate.tmpl(playlist);
-                        self._setNewImage(tmpl);
-                        self.$playlistsTable.append(tmpl);
-                        self._setChangingPlaylistImage(tmpl);
 
+                $.ajax({
+                    url: '/api/playlists/favorite/notOwned',
+                    success: function (playlistsData) {
+                        console.log('Hi');
+                        if (typeof playlistsData.Message === 'undefined') {
+                            self.$reloginForm.hide();
+                            self.$vkMusicTable.show();
+                            self.playlists = playlistsData;
+                            for (var i = 0; i < self.playlists.length; i++) {
+                                var playlist = self.playlists[i];
+                                if (playlist.Accessibilty === 1) {
+                                    playlist.Accessibilty = "public";
+                                } else {
+                                    playlist.Accessibilty = "private";
+                                }
+                                playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                                playlist.readonly = true;
+                                self.playlistsGlobal.push(playlist);
+                                var tmpl = self.playlistTemplate.tmpl(playlist);
+                                self._setNewImage(tmpl);
+                                self.$playlistsTable.append(tmpl);
+                                self._setChangingPlaylistImage(tmpl);
+                            }
+                        } else {
+                            self.$reloginForm.show();
+                            self.$vkMusicTable.hide();
+                        }
+                        self.$playlistsLoadingSpinner.hide();
+                        $('.accordion .tableRow').on("click", self._getTracks);
                         self._createContextMenuForPlaylists();
                     }
-                } else {
-                    self.$reloginForm.show();
-                    self.$vkMusicTable.hide();
-                }
-                self.$playlistsLoadingSpinner.hide();
-                $('.accordion .tableRow').on("click", self._getTracks);
+                });
+
+
+
             }
         });
     } else { //using to print playlists after using filter
@@ -574,7 +576,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 self._setChangingPlaylistImage(tmpl);
             }
         }
-        self._createContextMenuForPlaylists();
+        //self._createContextMenuForPlaylists();
         self.$playlistsLoadingSpinner.hide();
     }
 
@@ -589,10 +591,15 @@ MusicManager.prototype.showPlaylists = function (playlists) {
 
         ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
-        $('.playlist').off('mousedown').mousedown(function (event) {
+        //$('.playlist').off('mousedown').mousedown(function (event) {
+        $('.playlist').mousedown(function (event) {
             if (event.which == 3) {
                 $('.playlist.selected').toggleClass('selected', false);
                 var $target = $(event.target).parents('.playlist');
+
+                //if ($target.find('.readonly').text() == "true")
+                //    return;
+
                 $target.toggleClass('selected', true);
                 ctxMenu.drawContextMenu(event);
             }

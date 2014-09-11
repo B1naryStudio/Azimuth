@@ -378,6 +378,17 @@ ContextMenu.prototype.drawContextMenu = function (event) {
     if ($target.hasClass('vkMusicTable')) {
         $target = $target.parent();
     }
+    if ($(event.target).parents().hasClass('playlist')) {
+
+        var $playlist = $(event.target).parents('.playlist');
+
+        if ($playlist.find('.readonly').text() == 'true') {
+            self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', true);
+            self.$contextMenuContainer.children('.tableRow').has('#removeplaylist').toggleClass('unactiveContextMenuAction', false);
+        } else {
+            self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', false);
+        }
+    }
     var y = $(event.clientY)[0];
     var x = $(event.clientX)[0];
 
@@ -390,7 +401,7 @@ ContextMenu.prototype.drawContextMenu = function (event) {
     self.$contextMenuContainer.css({
         'top': y + 'px',
         'left': x + 'px'
-    });
+});
     $('body').append(self.$contextMenuContainer);
 
     if ($('.draggable-item-selected').length == 0) {
