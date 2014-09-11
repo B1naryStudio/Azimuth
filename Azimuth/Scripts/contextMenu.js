@@ -16,7 +16,7 @@
     this.musicList = null;
     this.timerId = null;
     this.provider = 'Vkontakte';
-    this.host = "https://localhost:44300/"; //TODO: Changed to host address
+    this.host = window.location.protocol + "//" + window.location.host + "/";
 
     this._shuffleTracksAction = function ($currentItem) {
         var index = 0;
