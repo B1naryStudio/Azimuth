@@ -3,6 +3,7 @@
     public enum Accessibilty
     {
         Private,
-        Public
+        Public,
+        Shared
     }
 }
