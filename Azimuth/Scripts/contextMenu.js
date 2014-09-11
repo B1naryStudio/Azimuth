@@ -248,7 +248,7 @@ ContextMenu.prototype.initializeContextMenu = function (contextId, contextmenuop
         }
         if (contextmenuoptions[i].hasSubMenu == true) {
             // WRONG!!!!
-            object.append(">");
+            object.children('.contextMenuActionName').text(object.children('.contextMenuActionName').text() + ' >');
             object.toggleClass('hasSubMenu', true);
         }
         if (contextmenuoptions[i].isNewSection == true) {
@@ -258,6 +258,9 @@ ContextMenu.prototype.initializeContextMenu = function (contextId, contextmenuop
 
         object.appendTo(self.$contextMenuContainer);
     }
+    self.$contextMenuContainer.children().css('white-space', 'nowrap').css('float', 'left');
+    self.$contextMenuContainer.css('width', 'auto');
+    self.$subContextMenuContainer.css('width', 'auto');
 };
 
 ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
