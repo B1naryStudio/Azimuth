@@ -95,4 +95,30 @@
             </div>
         </div>
     </script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            // Declare a proxy to reference the hub.
+            var notificationsHub = $.connection.notificationsHub;
+            var id = @loggedUser.Id;
+            // Start Hub
+            $.connection.hub.start().done(function () {
+                notificationsHub.client.connect(id);
+            });
+
+            $('#myButton').click(function() {
+                notificationsHub.client.send("message");
+            });
+
+            notificationsHub.client.messageReceived = function(message) {
+                $('messagesBody').append(message);
+            };
+
+            notificationsHub.client.newNotification = function(notification) {
+                
+            };
+        });
+
+    </script>
 }

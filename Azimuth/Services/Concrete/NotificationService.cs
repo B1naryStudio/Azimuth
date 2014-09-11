@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.Hubs;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
@@ -15,6 +16,7 @@ namespace Azimuth.Services.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationRepository _notificationRepository;
         private readonly UserRepository _userRepository;
+        public NotificationsHub NotificationsHub { get; set; }
 
         public NotificationService(IUnitOfWork unitOfWork)
         {
@@ -39,6 +41,7 @@ namespace Azimuth.Services.Concrete
                     _notificationRepository.AddItem(notification);
 
                     _unitOfWork.Commit();
+                    NotificationsHub.SendMessage(user.Id, notification);
                 }
             });
         }
