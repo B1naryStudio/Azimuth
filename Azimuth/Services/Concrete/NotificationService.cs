@@ -68,7 +68,7 @@ namespace Azimuth.Services.Concrete
                         }
                         if (notification.RecentlyPlaylist != null)
                         {
-                            if (notification.RecentlyPlaylist.Accessibilty == Accessibilty.Public)
+                            if (notification.RecentlyPlaylist.Accessibilty != Accessibilty.Private)
                             {
                                 notifDto.RecentlyPlaylistId = notification.RecentlyPlaylist.Id;
                             }

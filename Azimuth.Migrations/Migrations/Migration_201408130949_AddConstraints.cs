@@ -9,7 +9,7 @@ namespace Azimuth.Migrations
     {
         public override void Up()
         {
-            Execute.Sql("Alter Table PLaylists Add Constraint ConstraintAccess CHECK(Accessibilty IN ('public', 'private'))");
+            Execute.Sql("Alter Table Playlists Add Constraint ConstraintAccess CHECK(Accessibilty IN ('public', 'private'))");
         }
 
         public override void Down()

@@ -390,7 +390,7 @@ namespace Azimuth.Services.Concrete
                     {
                         Name = "Share_" + guid,
                         Creator = sysUser,
-                        Accessibilty = Accessibilty.Public
+                        Accessibilty = Accessibilty.Shared
                     };
 
                     foreach (var track in currentPlaylist.Tracks)
@@ -476,7 +476,7 @@ namespace Azimuth.Services.Concrete
                     {
                         Name = "Share_" + guid,
                         Creator = sysUser,
-                        Accessibilty = Accessibilty.Public
+                        Accessibilty = Accessibilty.Shared
                     };
 
                     foreach (var track in tracks)
