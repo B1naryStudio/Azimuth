@@ -111,7 +111,7 @@
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
-                var $trackInfoContainer = $('.modal-body');
+                var $trackInfoContainer = $('#infoModal .modal-body');
                 $trackInfoContainer.text('');
                 object.appendTo($trackInfoContainer);
                 if (trackInfo.Lyric != null) {

@@ -235,7 +235,7 @@ var MusicManager = function (manager) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
-                var $trackInfoContainer = $('.modal-body');
+                var $trackInfoContainer = $('#infoModal .modal-body');
                 $trackInfoContainer.text('');
                 object.appendTo($trackInfoContainer);
                 if (trackInfo.Lyric != null) {
@@ -424,7 +424,6 @@ MusicManager.prototype.showTracks = function (tracks, template) {
 
     self.audioManager.bindPlayBtnListeners();
     $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
-
 };
 
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
