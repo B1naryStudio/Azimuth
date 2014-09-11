@@ -68,6 +68,7 @@
     <Compile Include="Migrations\Migration_201409091257_AddRecentlyUserAndPlaylist.cs" />
     <Compile Include="Migrations\Migration_201409101200_RemoveListenedTableAndAddCounterToPlaylistTable.cs" />
     <Compile Include="Migrations\Migration_201409111617_UpdateConstraints.cs" />
+    <Compile Include="Migrations\Migration_201409120021_Remove_FK_From_Notification.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
