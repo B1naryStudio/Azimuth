@@ -138,6 +138,21 @@ AudioManager.prototype.refreshPlaylistTracks = function () {
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
 }
 
+AudioManager.prototype.updateProgressbar = function (musicSelector) {
+    var self = this;
+    $(musicSelector).children('.track').each(function() {
+        if ($(this).children('.thirdPartId').text() == self.$currentTrack.children('.thirdPartId').text() &&
+            $(this).children('.ownerId').text() == self.$currentTrack.children('.ownerId').text()) {
+
+            $(this).append(self.progressSlider.getSlider());
+            self.$currentTrack = $(this);
+            if (self.audio.paused == false) {
+                $(this).children('.track-play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
+            }
+        }
+    });
+}
+
 AudioManager.prototype.play = function() {
     var self = this;
 
@@ -303,9 +318,6 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
 AudioManager.prototype.refreshProgressBar = function () {
     var self = this;
 
-    //$('#progressSlider').on('OnChange', function (e, value) {
-    //    self.audio.currentTime = value * self.audio.duration;
-    //});
     $('#progressSlider').on('mousedown', function () {
         self.audio.pause();
         self.onProgressBarClick = true;
