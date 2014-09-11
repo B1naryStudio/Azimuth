@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
-using Azimuth.Hubs;
+using Azimuth.Hubs.Concrete;
+using Azimuth.Hubs.Interfaces;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
@@ -16,13 +18,15 @@ namespace Azimuth.Services.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationRepository _notificationRepository;
         private readonly UserRepository _userRepository;
-        public NotificationsHub NotificationsHub { get; set; }
+        private readonly INotificationsHub _notificationHub;
 
         public NotificationService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+
+            _notificationHub = NotificationsHub.Instance;
         }
         public Task CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
         {
@@ -40,8 +44,12 @@ namespace Azimuth.Services.Concrete
 
                     _notificationRepository.AddItem(notification);
 
+                    var notificationDto = new NotificationDto();
+                    Mapper.Map(notification, notificationDto);
+                    notificationDto.Message = GetMessage(notification);
+
+                    _notificationHub.SendNotification(user.Id, notificationDto);
                     _unitOfWork.Commit();
-                    NotificationsHub.SendMessage(user.Id, notification);
                 }
             });
         }
@@ -57,26 +65,9 @@ namespace Azimuth.Services.Concrete
 
                     foreach (var notification in notifications)
                     {
-                        var notifDto = new NotificationDto
-                        {
-                            UserFirstName = notification.User.Name.FirstName,
-                            UserLastName = notification.User.Name.LastName,
-                            Message = GetMessage(notification)
-                        };
-                        if (notification.RecentlyUser != null)
-                        {
-                            notifDto.RecentlyUserId = notification.RecentlyUser.Id;
-                            notifDto.RecentlyUserFirstName = notification.RecentlyUser.Name.FirstName;
-                            notifDto.RecentlyUserLastName = notification.RecentlyUser.Name.LastName;
-                        }
-                        if (notification.RecentlyPlaylist != null)
-                        {
-                            if (notification.RecentlyPlaylist.Accessibilty != Accessibilty.Private)
-                            {
-                                notifDto.RecentlyPlaylistId = notification.RecentlyPlaylist.Id;
-                            }
-                            notifDto.RecentlyPlaylistName = notification.RecentlyPlaylist.Name;
-                        }
+                        var notifDto = new NotificationDto();
+                        Mapper.Map(notification, notifDto);
+                        notifDto.Message = GetMessage(notification);
 
                         notificationsDto.Add(notifDto);
                     }

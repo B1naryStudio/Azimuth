@@ -1,6 +1,8 @@
 ﻿using Azimuth.ApiControllers;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
+using Azimuth.Hubs.Concrete;
+using Azimuth.Hubs.Interfaces;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Services.Concrete;
 using Azimuth.Services.Interfaces;
