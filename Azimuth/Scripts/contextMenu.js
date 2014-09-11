@@ -368,7 +368,8 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     self._shareTracks();
                     break;
                 case 'removeplaylist':
-                    var plId = $('.playlist.selected').find('.playlistId').text();
+                    var $playlist = $('.playlist.selected');
+                    var plId = $playlist.find('.playlistId').text();
                     self._removePlaylist(plId);
                     break;
             }
