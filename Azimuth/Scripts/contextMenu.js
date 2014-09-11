@@ -18,9 +18,20 @@
     this.provider = 'Vkontakte';
     this.host = "https://localhost:44300/"; //TODO: Changed to host address
 
-    this._shuffleTracksAction = function($currentItem) {
+    this._shuffleTracksAction = function ($currentItem) {
+        var index = 0;
         var elems = $currentItem.children('.tableRow');
-        elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
+        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+        elems.each(function() {
+            if ($(this).children('.track-play-btn').hasClass('glyphicon-pause')) {
+                index = $(this).index();
+            }
+        });
+        if (index != 0) {
+            var temp = elems[index];
+            elems[index] = elems[0];
+            elems[0] = temp;
+        }
         $currentItem.children().detach('.tableRow');
         $currentItem.prepend(elems);
 
