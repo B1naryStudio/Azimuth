@@ -582,7 +582,8 @@ MusicManager.prototype.showPlaylists = function (playlists) {
         var ctxMenu = new ContextMenu();
         var contextMenuActions = [
             { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
-            { id: 'shareplaylist', name: 'Share it', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+            { id: 'makeprivate', name: 'Make private', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+            { id: 'shareplaylist', name: 'Share it', isNewSection: true, hasSubMenu: false, needSelectedItems: false },
             { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
         ];
 
