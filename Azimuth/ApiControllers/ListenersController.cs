@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel;
-using System.Linq;
+﻿using System.IdentityModel;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Azimuth.DataAccess.Entities;
-using Azimuth.Services.Concrete;
-using Azimuth.Services.Interfaces;
 
 namespace Azimuth.ApiControllers
 {

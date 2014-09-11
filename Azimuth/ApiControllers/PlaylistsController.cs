@@ -6,11 +6,9 @@ using System.Management.Instrumentation;
 using System.Net.Http;
 ﻿using System.Threading.Tasks;
 ﻿using System.Web.Http;
-﻿using Azimuth.DataAccess.Entities;
 ﻿using Azimuth.Services.Interfaces;
 ﻿using Azimuth.Shared.Enums;
-﻿using NHibernate.Mapping;
-
+﻿
 namespace Azimuth.ApiControllers
 {
     [RoutePrefix("api/playlists")]

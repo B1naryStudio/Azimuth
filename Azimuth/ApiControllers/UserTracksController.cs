@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel;
-using System.Linq;
 using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Http;

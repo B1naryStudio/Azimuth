@@ -63,13 +63,7 @@
 <div id="userPlaylists" style="display: none"></div>
 <div id="playlistsTable" style="display: none;"></div>
 <div class="itemsContainer tableRow" id="itemsContainer"></div>
-@*@section styles
-{
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-}*@
-@section scripts
-{
-    @*<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>*@
+
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
@@ -79,17 +73,17 @@
     <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
     
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var self = this;
 
-            this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
+            this._saveTrackFromVkToPlaylist = function($currentItem, index, playlistId) {
                 var tracks = [];
 
                 var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
                 if (currentPlaylist.find('.readonly').text() == 'true')
                     return;
                 $currentItem.children().toggleClass('vk-item', false);
-                $currentItem.children('.tableRow').each(function () {
+                $currentItem.children('.tableRow').each(function() {
                     tracks.push({
                         ThirdPartId: $(this).closest('.tableRow').find('.thirdPartId').text(),
                         OwnerId: $(this).closest('.tableRow').find('.ownerId').text()
@@ -107,11 +101,12 @@
                 });
             };
 
-            $('.playlist-plated').hover(function () {
+            $('.playlist-plated').hover(function() {
                 var $currentPlaylist = $(this);
                 $currentPlaylist.find('.playlist-plated-info').show("medium");
             });
-            $('.playlist-plated').mouseleave(function () {
+
+            $('.playlist-plated').mouseleave(function() {
                 var $currentPlaylist = $(this);
                 $currentPlaylist.find('.playlist-plated-info').hide("medium");
             });
@@ -124,81 +119,108 @@
             var auth = "@Request.IsAuthenticated";
             if (auth === "True") {
                 $.ajax({
-                    url: '/api/playlists',
+                    url: 'api/playlists/',
                     type: 'GET',
                     dataType: 'json',
-                    success: function (playlists) {
-                        var $userPlaylists = $('#userPlaylists');
-                        for (var i = 0; i < playlists.length; i++) {
-                            var $playlistId = $('<span>');
-                            var $playlistName = $('<span>');
-                            var $div = $('<div>');
-                            $div.toggleClass('tableRow', true);
-                            $playlistId.text(playlists[i].Id);
-                            $playlistName.text(playlists[i].Name);
-                            $div.append($playlistId);
-                            $div.append($playlistName);
-                            $userPlaylists.append($div);
+                    success: function(playlists) {
+                        $('#playlistsTable').empty();
+                        $(playlists).each(function() {
+                            $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
+                        });
+                    }
+                });
+
+                var ctxMenu = new ContextMenu();
+                var contextMenuActions = [
+                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
+                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                ];
+
+                ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+                $(document).off('mousedown', '.track').on('mousedown', '.track', function(event) {
+                    var $contextMenu = $('.contextMenu');
+                    var $target = $(event.target).parents('.track');
+                    if (event.which == 3) {
+                        $target.toggleClass('draggable-item-selected', true);
+                        ctxMenu.drawContextMenu(event);
+                    } else if (event.which == 1) {
+                        if ($contextMenu.is(':visible')) {
+                            $contextMenu.hide();
+                        }
+
+                        var $currentItem = $target;
+                        if (event.ctrlKey) {
+                            if ($currentItem.hasClass('draggable-item-selected')) {
+                                $currentItem.toggleClass('draggable-item-selected', false);
+                            } else {
+                                $currentItem.toggleClass('draggable-item-selected', true);
+                            }
+                        } else if (event.shiftKey) {
+                            var indexFirst = -1;
+                            var indexLast = -1;
+                            if ($('.draggable-item-selected').last().index() < $currentItem.index()) {
+                                indexFirst = $('.draggable-item-selected').last().index();
+                                indexLast = $currentItem.index();
+                            } else {
+                                indexFirst = $currentItem.index();
+                                indexLast = $('.draggable-item-selected').last().index();
+                            }
+
+                            var currentChildren = $currentItem.parent().children();
+
+                            for (i = indexFirst; i <= indexLast; i++) {
+                                var $currentChild = $(currentChildren[i]);
+                                if (!$currentChild.hasClass('draggable-item-selected')) {
+                                    $currentChild.toggleClass('draggable-item-selected', true);
+                                }
+                            }
+                        } else {
+                            $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                            $currentItem.toggleClass('draggable-item-selected', true);
                         }
                     }
                 });
-            }
 
-            $.ajax({
-                url: 'api/playlists/',
-                type: 'GET',
-                dataType: 'json',
-                success: function (playlists) {
-                    $('#playlistsTable').empty();
-                    $(playlists).each(function () {
-                        $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
-                    });
-                }
-            });
-
-            var ctxMenu = new ContextMenu();
-            var contextMenuActions = [
-                { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
-                { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
-            ];
-
-            ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
-
-            $(document).off('mousedown','.track').on('mousedown', '.track',function(event) {
-                if (event.which == 3) {
-                    $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                    var $target = $(event.target).parents('.track');
-                    $target.toggleClass('draggable-item-selected', true);
-                    ctxMenu.drawContextMenu(event);
-                }
-            });
-
-            ctxMenu.$contextMenuContainer.mousedown(function (event) {
-                ctxMenu.$contextMenuContainer.hide();
-                ctxMenu.selectAction($('.track.selected'));
-            });
-
-            $('#okPlaylistCreateModalBtn').click(function () {
-
-                $('#createPlaylistModal').modal('hide');
-                $('#createPlaylistModal').on('hidden.bs.modal', function () {
-                    $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
-                    $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
-                });
-
-                var playlistName = $('#playlistNameToCreate').val();
-                var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
-                $.ajax({
-                    url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    async: false,
-                    success: function (playlistId) {
-                        self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+                $(document).on('mousedown', function(event) {
+                    var $target = $(event.target);
+                    var $contextMenu = $('.contextMenu');
+                    if ($target.parents('.track').length == 0 && !$target.hasClass('track')) {
+                        if ($contextMenu.is(':visible')) {
+                            $contextMenu.hide();
+                        }
+                        document.oncontextmenu = function() {
+                            return true;
+                        }
                     }
                 });
-                self._updatePlaylists();
-            });
+
+                ctxMenu.$contextMenuContainer.mousedown(function(event) {
+                    ctxMenu.$contextMenuContainer.hide();
+                    ctxMenu.selectAction($('.track.selected'));
+                });
+
+                $('#okPlaylistCreateModalBtn').click(function() {
+
+                    $('#createPlaylistModal').modal('hide');
+                    $('#createPlaylistModal').on('hidden.bs.modal', function() {
+                        $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+                        $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
+                    });
+
+                    var playlistName = $('#playlistNameToCreate').val();
+                    var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+                    $.ajax({
+                        url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: false,
+                        success: function(playlistId) {
+                            self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+                        }
+                    });
+                });
+            }
         });
     </script>
     

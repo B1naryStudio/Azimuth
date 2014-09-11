@@ -135,7 +135,6 @@
 
                         $currentItem.children().insertAfter($draggableStub);
                         $draggableStub.detach();
-                        //contextMenu._moveTrackToNewPosition('.draggable-list');
                         moveTrackToNewPosition($rootElement.find('.draggable-list'));
                         _clearContainer();
                         moveEnable = false;
@@ -155,7 +154,6 @@
                             index = $draggableStub.index();
                         }
                         contextMenu._saveTrackFromVkToPlaylist($currentItem, index, playlistId);
-                        //saveVkTrackToPlaylist($currentItem, index, playlistId); //////////////////////////////////////////////????????????????????????????????????????????
                     }
 
                     if ($element.hasClass('delete-area')) {
@@ -189,7 +187,6 @@
             if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
                 mousedownOnProgressBar = true;
             }
-            //if (!$target.parents().hasClass('draggable-list')) {
             if (!$target.parents().hasClass('draggable-list') && !$target.parents().hasClass('list')) {
                 document.oncontextmenu = function () {
                     return true;
@@ -369,27 +366,6 @@
                 }
             }
         });
-
-        //$('.container').on('delete', function (e) {
-        //    $currentItem.empty();
-        //    _clearContainer();
-        //    deleteFlag = false;
-        //    _setDeleteAreaCss();
-        //});
-
-        //$('.draggable-list').on('shuffle', function() {
-        //    var $this = $(this);
-        //    var elems = $this.children('li');
-        //    elems.sort(function() { return (Math.round(Math.random()) - 0.5); });
-        //    $this.remove(elems[0].tagName);
-        //    $this.prepend(elems);
-        //});
-
-        //$('.draggable-list').on('add', function (e, data) {
-        //    var $newItem = $('<li>').toggleClass('draggable-item', true).text(data);
-        //    $newItem.mousedown(_makeDraggable);
-        //    $(this).prepend($newItem);
-        //});
 
         //$('.draggable-list').on('sort', function (e, dir) {
         //    $list = $(this);

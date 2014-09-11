@@ -337,7 +337,6 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     break;
                 case 'trackshuffle':
                     self._shuffleTracksAction(self.musicList.find('.draggable-list'));
-                    //self.manager.audioManager.refreshPlaylistTracks();
                     break;
                 case 'makepublic':
                     var playlistId = $('.playlist.selected').find('.playlistId').text();

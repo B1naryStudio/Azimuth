@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Helpers;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Interfaces;
 using Azimuth.Shared.Dto;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Azimuth.DataProviders.Concrete
 {
