@@ -275,8 +275,9 @@ SearchManager.prototype.bindListeners = function () {
     });
 
     $('#search').keyup(function () {
-        self._delay(function() {
+        self._delay(function () {
             self._search();
+            self.audioManager.stop();
         }, 1000);
     });
 
@@ -284,6 +285,7 @@ SearchManager.prototype.bindListeners = function () {
         $('.searchBtn:not(.btn-default)').removeClass('btn-primary').addClass('btn-default');
         $(this).removeClass('btn-default').addClass('btn-primary');
         self._search();
+        self.audioManager.stop();
     });
 
     $('#infoModal').on('hidden.bs.modal', function () {
