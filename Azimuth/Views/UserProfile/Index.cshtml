@@ -8,8 +8,8 @@
 
 <div class="container">
     <div id="user-logo">
-        <div class="user-photo">
-            <img src="@Model.Photo" width="220" height="300"/>
+        <div class="user-photo" style="width: 220px; height: 300px; vertical-align: middle; display: table-cell; text-align: center;">
+            <img src="@Model.Photo" style="max-width: 100%; max-height: 100%;" />
         </div>
         <div id="user-id" style="display: none">@Model.Id</div>
         <div class="user-screen-name">@Model.ScreenName</div>
