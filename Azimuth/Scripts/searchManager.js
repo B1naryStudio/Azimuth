@@ -180,12 +180,52 @@
 
         ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
-        $('.track').off('mousedown').mousedown(function (event) {
+        //$('.track').off('mousedown').mousedown(function (event) {
+        //    if (event.which == 3) {
+        //        $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
+        //        var $target = $(event.target).parents('.track');
+        //        $target.toggleClass('draggable-item-selected', true);
+        //        ctxMenu.drawContextMenu(event);
+        //    }
+        //});
+
+        $(document).off('mousedown', '.track').on('mousedown', '.track', function (event) {
+            var $target = $(event.target).parents('.track');
             if (event.which == 3) {
-                $('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
-                var $target = $(event.target).parents('.track');
+                //$('.track.draggable-item-selected').toggleClass('draggable-item-selected', false);
                 $target.toggleClass('draggable-item-selected', true);
                 ctxMenu.drawContextMenu(event);
+            } else if (event.which == 1) {
+                var $currentItem = $target;
+                if (event.ctrlKey) {
+                    if ($currentItem.hasClass('draggable-item-selected')) {
+                        $currentItem.toggleClass('draggable-item-selected', false);
+                    } else {
+                        $currentItem.toggleClass('draggable-item-selected', true);
+                    }
+                } else if (event.shiftKey) {
+                    var indexFirst = -1;
+                    var indexLast = -1;
+                    if ($('.draggable-item-selected').last().index() < $currentItem.index()) {
+                        indexFirst = $('.draggable-item-selected').last().index();
+                        indexLast = $currentItem.index();
+                    } else {
+                        indexFirst = $currentItem.index();
+                        indexLast = $('.draggable-item-selected').last().index();
+                    }
+
+                    var currentChildren = $currentItem.parent().children();
+
+                    for (var i = indexFirst; i <= indexLast; i++) {
+                        var $currentChild = $(currentChildren[i]);
+                        if (!$currentChild.hasClass('draggable-item-selected')) {
+                            $currentChild.toggleClass('draggable-item-selected', true);
+                        }
+                    }
+                } else {
+                    $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                    $currentItem.toggleClass('draggable-item-selected', true);
+                }
             }
         });
 
