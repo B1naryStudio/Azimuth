@@ -4,12 +4,12 @@
 
 <div id="playlist-spinner" class="spinner loader"></div>
 <div id="barplaylistArea">
-    <div id="playlistsArea">
+    <div id="playlistsArea" style="height: 90%; position: absolute;">
         <h2>Public Playlists</h2>
         <div id="playlists-plated">
             @if (Request.IsAuthenticated)
             {
-                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new {Model.PlaylistFollowing});
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { Model.PlaylistFollowing });
             }
             else
             {
@@ -67,6 +67,7 @@
 @section scripts{
 
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
     <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -77,6 +78,15 @@
     <script>
         $(document).ready(function() {
             var self = this;
+
+            $('#playlistsArea').mCustomScrollbar({
+                theme: 'dark-3',
+                scrollButtons: { enable: true },
+                updateOnContentResize: true,
+                scrollInertia: 0,
+                autoHideScrollbar: true,
+                advanced: { updateOnSelectorChange: "true" }
+            });
 
             this._saveTrackFromVkToPlaylist = function($currentItem, index, playlistId) {
                 var tracks = [];
