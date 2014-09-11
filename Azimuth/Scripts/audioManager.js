@@ -155,6 +155,12 @@ AudioManager.prototype.pause = function() {
     self.audio.pause();
 };
 
+AudioManager.prototype.stop = function() {
+    var self = this;
+    self.audio.pause();
+    self.audio.currentTime = 0;
+};
+
 AudioManager.prototype.setVolume = function(value) {
     var self = this;
     self.audio.volume = value;
