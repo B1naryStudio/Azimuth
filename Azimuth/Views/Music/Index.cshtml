@@ -50,7 +50,7 @@
             <div>
                 <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
                     <p id="error"> Your time has expired, please login again. </p>
-                    @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-danger btn-large" })
+                    @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Music") }, new { @class = "btn btn-danger btn-large" })
                 </div>
                 <button id="get-friends-info-btn" class="btn btn-default">Get friends info</button>
                 <button id="get-user-tracks" class="btn btn-default">Get user tracks</button>

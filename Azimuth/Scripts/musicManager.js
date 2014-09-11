@@ -206,7 +206,6 @@ var MusicManager = function (manager) {
                     self.showTracks(tracks);
                 } else {
                     self.$reloginForm.show();
-                    self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
@@ -282,7 +281,6 @@ var MusicManager = function (manager) {
                     self.showTracks(tracks);
                 } else {
                     self.$reloginForm.show();
-                    self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 self.audioManager.bindPlayBtnListeners();
@@ -527,7 +525,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     }
                 } else {
                     self.$reloginForm.show();
-                    self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 $('.accordion .tableRow').on("click", self._getTracks);
@@ -561,7 +558,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     }
                 } else {
                     self.$reloginForm.show();
-                    self.$reloginForm.find('a').attr('href', reloginUrl);
                     self.$vkMusicTable.hide();
                 }
                 self.$playlistsLoadingSpinner.hide();
