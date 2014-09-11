@@ -64,6 +64,8 @@
 <div id="playlistsTable" style="display: none;"></div>
 <div class="itemsContainer tableRow" id="itemsContainer"></div>
 
+@section scripts{
+
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
@@ -119,7 +121,7 @@
             var auth = "@Request.IsAuthenticated";
             if (auth === "True") {
                 $.ajax({
-                    url: 'api/playlists/',
+                    url: '/api/playlists/',
                     type: 'GET',
                     dataType: 'json',
                     success: function(playlists) {
@@ -132,8 +134,8 @@
 
                 var ctxMenu = new ContextMenu();
                 var contextMenuActions = [
-                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: false },
-                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
+                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
+                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: true }
                 ];
 
                 ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
@@ -142,7 +144,7 @@
                     var $contextMenu = $('.contextMenu');
                     var $target = $(event.target).parents('.track');
                     if (event.which == 3) {
-                        $target.toggleClass('draggable-item-selected', true);
+                        //$target.toggleClass('draggable-item-selected', true);
                         ctxMenu.drawContextMenu(event);
                     } else if (event.which == 1) {
                         if ($contextMenu.is(':visible')) {
