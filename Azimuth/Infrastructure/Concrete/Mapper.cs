@@ -275,6 +275,7 @@ namespace Azimuth.Infrastructure.Concrete
             playlistData.PlaylistListened = playlist.Listened;
             playlistData.PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked);
             playlistData.PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite);
+            playlistData.Accessibilty = playlist.Accessibilty;
         }
 
     }

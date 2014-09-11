@@ -342,6 +342,10 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     var playlistId = $('.playlist.selected').find('.playlistId').text();
                     self._changePlaylistAccessibility(playlistId, 'Public');
                     break;
+                case 'makeprivate':
+                    var playlistId = $('.playlist.selected').find('.playlistId').text();
+                    self._changePlaylistAccessibility(playlistId, 'Private');
+                    break;
                 case 'shareplaylist':
                     var playlistId = $('.playlist.selected').find('.playlistId').text();
                     self._sharePlaylist(playlistId);
