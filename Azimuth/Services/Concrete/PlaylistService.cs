@@ -211,6 +211,7 @@ namespace Azimuth.Services.Concrete
 
 
                 _notificationService.CreateNotification(Notifications.PlaylistCreated, user, recentlyPlaylist: playlist);
+                
                 _unitOfWork.Commit();
             }
             return playlistId;
