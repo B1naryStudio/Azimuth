@@ -634,17 +634,18 @@ MusicManager.prototype.bindListeners = function() {
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
         self.audioManager.refreshTracks();
-            //$.ajax({
-            //    url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('#searchcriteria option:selected').val(),
-            //    type: 'GET',
-            //    dataType: 'json',
-            //    success: function (tracks) {
-            //        $('.vkMusicList').find('.track').remove();
-            //        var template = $('#searchTrackTemplate');
-            //        self.showTracks(tracks, template);
-            //        self.audioManager.refreshTracks();
-            //    }
-            //});
+        self.audioManager.updateProgressbar('.vkMusicList');
+        //$.ajax({
+        //    url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('#searchcriteria option:selected').val(),
+        //    type: 'GET',
+        //    dataType: 'json',
+        //    success: function (tracks) {
+        //        $('.vkMusicList').find('.track').remove();
+        //        var template = $('#searchTrackTemplate');
+        //        self.showTracks(tracks, template);
+        //        self.audioManager.refreshTracks();
+        //    }
+        //});
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
@@ -676,12 +677,13 @@ MusicManager.prototype.bindListeners = function() {
             self.showPlaylists(foundedPlaylist);
             $('.accordion .tableRow').on("click", self._getTracks);
         } else {
-            console.log('nothing to do here');
+            //console.log('nothing to do here');
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function(index) {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
             }));
             self.audioManager.refreshPlaylistTracks();
+            self.audioManager.updateProgressbar('#playlistTracks');
         }
     });
 
