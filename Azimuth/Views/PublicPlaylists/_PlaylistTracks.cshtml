@@ -4,12 +4,17 @@
 
 <button class="btn btn-default" type="button" id="backToPlaylistsBtn">Back</button>
 
-<h2>@ViewBag.playlistName</h2>
+<div style="height: 100%;">
+    <div id="playlistTracks" style="position: absolute; height: 70%; width: 90%;">
+        <h2>@ViewBag.playlistName</h2>
 
-@Html.DisplayFor(x => x)
+        @Html.DisplayFor(x => x)
+    </div>
+</div>
 
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     @*<script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>*@
 
 <script type="text/javascript">
@@ -58,6 +63,15 @@
                 }
             });
         });
+
+        //$('#playlistTracks').mCustomScrollbar({
+        //    theme: 'dark-3',
+        //    scrollButtons: { enable: true },
+        //    updateOnContentResize: true,
+        //    scrollInertia: 0,
+        //    autoHideScrollbar: true,
+        //    advanced: { updateOnSelectorChange: "true" }
+        //});
     });
 </script>
 
