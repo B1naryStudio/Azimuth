@@ -163,6 +163,7 @@
                     var $contextMenu = $('.contextMenu');
                     var $target = $(event.target).parents('.track');
                     if (event.which == 3) {
+                        $target.toggleClass('draggable-item-selected', true);
                         ctxMenu.drawContextMenu(event);
                     } else if (event.which == 1) {
                         if ($contextMenu.is(':visible')) {
