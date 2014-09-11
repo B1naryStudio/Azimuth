@@ -24,7 +24,7 @@
                 @if (Request.IsAuthenticated)
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("UserProfile", "Index", "UserProfile")</li>
+                        <li>@Html.ActionLink("UserProfile", "Index", "UserProfile", new { AzimuthIdentity.Current.UserCredential.Id }, null)</li>
                         <li>@Html.ActionLink("My music", "Index", "Music")</li>
                     
                         <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
