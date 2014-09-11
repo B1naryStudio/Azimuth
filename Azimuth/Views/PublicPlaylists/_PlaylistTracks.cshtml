@@ -22,17 +22,9 @@
             $('#playlistsArea').show();
         });
 
-        var progressSlider = new SliderController({
-            sliderSelector: '#progressSlider',
-            sliderBarClass: 'progressBar',
-            sliderClass: 'progress',
-            backgroundSliderClass: 'cache',
-            dirrection: 'horizontall'
-        });
-        var audioManager = new AudioManager(null, progressSlider);
-
-        //audioManager.refreshTracks();
-        audioManager.bindPlayBtnListeners();
+        document.audioManager.refreshTracks();
+        document.audioManager.refreshPlaylistTracks();
+        document.audioManager.bindPlayBtnListeners();
 
         $('.track-info-btn').click(function() {
             var $self = $(this);
