@@ -132,6 +132,15 @@
                     }
                 });
 
+                var progressSlider = new SliderController({
+                    sliderSelector: '#progressSlider',
+                    sliderBarClass: 'progressBar',
+                    sliderClass: 'progress',
+                    backgroundSliderClass: 'cache',
+                    dirrection: 'horizontall'
+                });
+                this.audioManager = new AudioManager(null, progressSlider);
+
                 var ctxMenu = new ContextMenu();
                 var contextMenuActions = [
                     { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
@@ -144,7 +153,6 @@
                     var $contextMenu = $('.contextMenu');
                     var $target = $(event.target).parents('.track');
                     if (event.which == 3) {
-                        //$target.toggleClass('draggable-item-selected', true);
                         ctxMenu.drawContextMenu(event);
                     } else if (event.which == 1) {
                         if ($contextMenu.is(':visible')) {
