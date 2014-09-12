@@ -86,7 +86,7 @@ namespace Azimuth.Services.Concrete
 
         public void AddCurrentUserAsFavorite(int playlistId)
         {
-            User user;
+            User user = null;
             Playlist playlist;
             using (_unitOfWork)
             {
@@ -127,7 +127,7 @@ namespace Azimuth.Services.Concrete
 
         public void RemoveCurrentUserAsLiker(int playlistId)
         {
-            User user;
+            User user = null;
             Playlist playlist;
             using (_unitOfWork)
             {
