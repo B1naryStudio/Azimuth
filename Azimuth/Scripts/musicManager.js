@@ -58,7 +58,6 @@ var MusicManager = function (manager) {
                         { id: 'copytoplaylist', name: 'Copy to another playlist', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
                         { id: 'movetoplaylist', name: 'Move to another plylist', isNewSection: false, hasSubMenu: true, needSelectedItems: true },
                         { id: 'removeselected', name: 'Remove selected', isNewSection: true, hasSubMenu: false, needSelectedItems: true },
-                        { id: 'trackshuffle', name: 'Shuffle', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
                         { id: 'sharetracks', name: 'Share tracks', isNewSection: false, hasSubMenu: false, needSelectedItems: true }
                     ];
 
@@ -70,7 +69,6 @@ var MusicManager = function (manager) {
                             { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
                             { 'id': 'movetoplaylist', 'name': 'Move to another plylist', "isNewSection": false, "hasSubMenu": true, "needSelectedItems": true },
                             { 'id': 'removeselected', 'name': 'Remove selected', "isNewSection": true, "hasSubMenu": false, "needSelectedItems": true },
-                            { 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false },
                             { 'id': 'sharetracks', 'name': 'Share tracks', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
 
                         ],
@@ -89,6 +87,8 @@ var MusicManager = function (manager) {
         self.$playlistsTitle.text(temp);
         $('#playlistsTable').hide();
         $('#backToPlaylistsBtn').show();
+        $('#shuffleBtn').show();
+        $('#repeatBtn').show();
         $('#playlistTracks').show();
         self.audioManager.bindPlayBtnListeners();
         $(this).toggleClass("active");
@@ -690,6 +690,8 @@ MusicManager.prototype.bindListeners = function() {
 
     $('#backToPlaylistsBtn').click(function() {
         $('#backToPlaylistsBtn').hide();
+        $('#shuffleBtn').hide();
+        $('#repeatBtn').hide();
         $('#playlistTracks').empty();
 
         $('#playlistTracks').hide();
@@ -698,6 +700,32 @@ MusicManager.prototype.bindListeners = function() {
         self.$playlistsTable.show();
         self.$searchPlaylistInput.val('');
         $('.accordion .tableRow').on("click", self._getTracks);
+    });
+
+    $('#shuffleBtn').click(function() {
+        var index = 0;
+        var $currentItem = $('#playlistTracks');
+        var elems = $currentItem.children('.tableRow');
+        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+        //elems.each(function () {
+        for (var i=0; i<elems.length; i++) {
+            if ($(elems[i]).find('.track-play-btn').hasClass('glyphicon-pause')) {
+                index = i;
+            }
+        }
+        if (index != 0) {
+            var temp = elems[index];
+            elems[index] = elems[0];
+            elems[0] = temp;
+        }
+        $currentItem.children().detach('.tableRow');
+        $currentItem.prepend(elems);
+
+        self._moveTrackToNewPosition($currentItem);
+    });
+
+    $('#repeatBtn').click(function () {
+
     });
 
     $('#playlists, .vkMusicTable').mCustomScrollbar({
