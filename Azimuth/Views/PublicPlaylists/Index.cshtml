@@ -128,120 +128,117 @@
                 $('#listenTopBtn').attr('disabled', true);
             });
 
-            var auth = "@Request.IsAuthenticated";
-            if (auth === "True") {
-                $.ajax({
-                    url: '/api/playlists/',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(playlists) {
-                        $('#playlistsTable').empty();
-                        $(playlists).each(function() {
-                            $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
-                        });
+            $.ajax({
+                url: '/api/playlists/',
+                type: 'GET',
+                dataType: 'json',
+                success: function(playlists) {
+                    $('#playlistsTable').empty();
+                    $(playlists).each(function() {
+                        $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
+                    });
+                }
+            });
+
+            var progressSlider = new SliderController({
+                sliderSelector: '#progressSlider',
+                sliderBarClass: 'progressBar',
+                sliderClass: 'progress',
+                backgroundSliderClass: 'cache',
+                dirrection: 'horizontall'
+            });
+            this.audioManager = new AudioManager(null, progressSlider);
+
+            var ctxMenu = new ContextMenu();
+            var contextMenuActions = [
+                { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
+                { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: true }
+            ];
+
+            ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
+
+            $(document).off('mousedown', '.track').on('mousedown', '.track', function(event) {
+                var $contextMenu = $('.contextMenu');
+                var $target = $(event.target).parents('.track');
+                if (event.which == 3) {
+                    $target.toggleClass('draggable-item-selected', true);
+                    ctxMenu.drawContextMenu(event);
+                } else if (event.which == 1) {
+                    if ($contextMenu.is(':visible')) {
+                        $contextMenu.hide();
                     }
-                });
 
-                var progressSlider = new SliderController({
-                    sliderSelector: '#progressSlider',
-                    sliderBarClass: 'progressBar',
-                    sliderClass: 'progress',
-                    backgroundSliderClass: 'cache',
-                    dirrection: 'horizontall'
-                });
-                this.audioManager = new AudioManager(null, progressSlider);
-
-                var ctxMenu = new ContextMenu();
-                var contextMenuActions = [
-                    { id: 'savevktrack', name: 'Move to', isNewSection: true, hasSubMenu: true, needSelectedItems: true },
-                    { id: 'createplaylist', name: 'Create new playlist', isNewSection: false, hasSubMenu: false, needSelectedItems: true }
-                ];
-
-                ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
-
-                $(document).off('mousedown', '.track').on('mousedown', '.track', function(event) {
-                    var $contextMenu = $('.contextMenu');
-                    var $target = $(event.target).parents('.track');
-                    if (event.which == 3) {
-                        $target.toggleClass('draggable-item-selected', true);
-                        ctxMenu.drawContextMenu(event);
-                    } else if (event.which == 1) {
-                        if ($contextMenu.is(':visible')) {
-                            $contextMenu.hide();
-                        }
-
-                        var $currentItem = $target;
-                        if (event.ctrlKey) {
-                            if ($currentItem.hasClass('draggable-item-selected')) {
-                                $currentItem.toggleClass('draggable-item-selected', false);
-                            } else {
-                                $currentItem.toggleClass('draggable-item-selected', true);
-                            }
-                        } else if (event.shiftKey) {
-                            var indexFirst = -1;
-                            var indexLast = -1;
-                            if ($('.draggable-item-selected').last().index() < $currentItem.index()) {
-                                indexFirst = $('.draggable-item-selected').last().index();
-                                indexLast = $currentItem.index();
-                            } else {
-                                indexFirst = $currentItem.index();
-                                indexLast = $('.draggable-item-selected').last().index();
-                            }
-
-                            var currentChildren = $currentItem.parent().children();
-
-                            for (i = indexFirst; i <= indexLast; i++) {
-                                var $currentChild = $(currentChildren[i]);
-                                if (!$currentChild.hasClass('draggable-item-selected')) {
-                                    $currentChild.toggleClass('draggable-item-selected', true);
-                                }
-                            }
+                    var $currentItem = $target;
+                    if (event.ctrlKey) {
+                        if ($currentItem.hasClass('draggable-item-selected')) {
+                            $currentItem.toggleClass('draggable-item-selected', false);
                         } else {
-                            $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
                             $currentItem.toggleClass('draggable-item-selected', true);
                         }
+                    } else if (event.shiftKey) {
+                        var indexFirst = -1;
+                        var indexLast = -1;
+                        if ($('.draggable-item-selected').last().index() < $currentItem.index()) {
+                            indexFirst = $('.draggable-item-selected').last().index();
+                            indexLast = $currentItem.index();
+                        } else {
+                            indexFirst = $currentItem.index();
+                            indexLast = $('.draggable-item-selected').last().index();
+                        }
+
+                        var currentChildren = $currentItem.parent().children();
+
+                        for (i = indexFirst; i <= indexLast; i++) {
+                            var $currentChild = $(currentChildren[i]);
+                            if (!$currentChild.hasClass('draggable-item-selected')) {
+                                $currentChild.toggleClass('draggable-item-selected', true);
+                            }
+                        }
+                    } else {
+                        $('.draggable-item-selected').toggleClass('draggable-item-selected', false);
+                        $currentItem.toggleClass('draggable-item-selected', true);
+                    }
+                }
+            });
+
+            $(document).on('mousedown', function(event) {
+                var $target = $(event.target);
+                var $contextMenu = $('.contextMenu');
+                if ($target.parents('.track').length == 0 && !$target.hasClass('track')) {
+                    if ($contextMenu.is(':visible')) {
+                        $contextMenu.hide();
+                    }
+                    document.oncontextmenu = function() {
+                        return true;
+                    }
+                }
+            });
+
+            ctxMenu.$contextMenuContainer.mousedown(function(event) {
+                ctxMenu.$contextMenuContainer.hide();
+                ctxMenu.selectAction($('.track.selected'));
+            });
+
+            $('#okPlaylistCreateModalBtn').click(function() {
+
+                $('#createPlaylistModal').modal('hide');
+                $('#createPlaylistModal').on('hidden.bs.modal', function() {
+                    $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+                    $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
+                });
+
+                var playlistName = $('#playlistNameToCreate').val();
+                var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+                $.ajax({
+                    url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    success: function(playlistId) {
+                        self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
                     }
                 });
-
-                $(document).on('mousedown', function(event) {
-                    var $target = $(event.target);
-                    var $contextMenu = $('.contextMenu');
-                    if ($target.parents('.track').length == 0 && !$target.hasClass('track')) {
-                        if ($contextMenu.is(':visible')) {
-                            $contextMenu.hide();
-                        }
-                        document.oncontextmenu = function() {
-                            return true;
-                        }
-                    }
-                });
-
-                ctxMenu.$contextMenuContainer.mousedown(function(event) {
-                    ctxMenu.$contextMenuContainer.hide();
-                    ctxMenu.selectAction($('.track.selected'));
-                });
-
-                $('#okPlaylistCreateModalBtn').click(function() {
-
-                    $('#createPlaylistModal').modal('hide');
-                    $('#createPlaylistModal').on('hidden.bs.modal', function() {
-                        $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
-                        $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
-                    });
-
-                    var playlistName = $('#playlistNameToCreate').val();
-                    var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
-                    $.ajax({
-                        url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
-                        type: 'POST',
-                        contentType: 'application/json',
-                        async: false,
-                        success: function(playlistId) {
-                            self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
-                        }
-                    });
-                });
-            }
+            });
         });
     </script>
     

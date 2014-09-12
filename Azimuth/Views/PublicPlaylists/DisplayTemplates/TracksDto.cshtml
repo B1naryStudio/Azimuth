@@ -7,20 +7,9 @@
 }
 
 <div class="tableRow draggable-item track">
-    @if (Request.IsAuthenticated)
-    {
-        <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-    }
-    else
-    {
-        using (Html.BeginForm("NeedLogIn", "PublicPlaylists", FormMethod.Post))
-        {
-            <div>
-                <button class="glyphicon glyphicon-play btn btn-default track-play-btn"></button>
-            </div>
-        }
-    }
-     <div class="track-description">
+    
+    <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+    <div class="track-description">
         <div class="track-info">
             <span class="nowrap">@Model.Artist</span>
         </div>

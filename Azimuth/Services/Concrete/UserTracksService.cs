@@ -199,12 +199,26 @@ namespace Azimuth.Services.Concrete
         public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider)
         {
             string accessToken;
-            _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
-            using (_unitOfWork)
+            if (AzimuthIdentity.Current == null)
             {
-                accessToken = GetSocialNetworkData(provider).AccessToken;
-                _unitOfWork.Commit();
+                var admin =
+                    _userRepository.GetFullUserData(
+                        _userRepository.Get(user => user.ScreenName == "id268940215"&& user.Name.FirstName == "Azimuth" && user.Name.LastName == "Azimuth")
+                            .FirstOrDefault()
+                            .Id);
+                accessToken =
+                    admin.SocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Vkontakte").AccessToken;
             }
+            else
+            {
+                using (_unitOfWork)
+                {
+                    accessToken = GetSocialNetworkData(provider).AccessToken;
+                    _unitOfWork.Commit();
+                }
+            }
+
+            _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
 
             return await _socialNetworkApi.GetTrackUrl(tracks, accessToken);
 

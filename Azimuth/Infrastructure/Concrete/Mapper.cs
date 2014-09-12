@@ -128,8 +128,8 @@ namespace Azimuth.Infrastructure.Concrete
             user.Location =
                 new Location
                 {
-                    City = snData.Response.First().City.Title ?? String.Empty,
-                    Country = snData.Response.First().Country.Title ?? String.Empty
+                    City = (snData.Response.First().City !=null) ? snData.Response.First().City.Title : String.Empty,
+                    Country = (snData.Response.First().Country != null) ? snData.Response.First().Country.Title : String.Empty
                 };
             user.Timezone = snData.Response.First().Timezone;
             user.Photo = snData.Response.First().Photo;
