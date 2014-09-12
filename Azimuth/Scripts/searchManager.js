@@ -43,19 +43,44 @@
     this._search = function() {
         var searchParam = $('#search').val().toLocaleLowerCase();
         $('.vkMusicList').find('.track').remove();
+        $('#users').find('.user').remove();
         if (searchParam != '') {
-            self.$vkMusicLoadingSpinner.fadeIn('normal');
-            $.ajax({
-                url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
-                type: 'GET',
-                dataType: 'json',
-                success: function (tracks) {
-                    self.searchTracks = tracks;
-                    self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
-                }
-            });
+            self.$vkMusicLoadingSpinner.show();
+            if ($('.searchBtn.btn-primary').text() == 'User') {
+                $.ajax({
+                    url: 'api/search/users?searchText=' + searchParam,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (users) {
+                        self._showUsers(users, $('#searchUserTemplate'));
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(tracks) {
+                        self.searchTracks = tracks;
+                        self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
+                    }
+                });
+            }
         }
     };
+
+    this._showUsers = function(users, template) {
+        var correctedUsers = $.extend(true, [], users);
+
+        for (var i = 0; i < correctedUsers.length; i++) {
+            if (typeof(correctedUsers[i].Name) != 'undefined') {
+                var tmpl = template.tmpl(correctedUsers[i]);
+                tmpl.appendTo('#users');
+            }
+        }
+
+        self.$vkMusicLoadingSpinner.hide();
+    }
 
     this._showTracks = function (tracks, template) {
         var correctedTracks = $.extend(true, [], tracks);

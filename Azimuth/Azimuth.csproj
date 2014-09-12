@@ -308,6 +308,7 @@
     <Content Include="Content\Settings.css" />
     <Content Include="Content\Share.css" />
     <Content Include="Content\Track.css" />
+    <Content Include="Content\User.css" />
     <Content Include="Content\UserProfile.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

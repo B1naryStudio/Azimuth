@@ -13,5 +13,6 @@ namespace Azimuth.Services.Interfaces
         User GetUserInfo(string email);
         User FollowPerson(long followerId);
         User UnfollowPerson(long followerId);
+        Task<List<User>> SearchUsers(string searchText);
     }
 }
