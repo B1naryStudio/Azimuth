@@ -10,8 +10,10 @@
 
     this.onProgressBarClick = false;
 
-    self.audio.onended = function() {
-        self._nextTrack();
+    self.audio.onended = function () {
+        if (self.audio.loop == false) {
+            self._nextTrack();
+        }
     };
 
     self.audio.onvolumechange = function() {
@@ -128,15 +130,15 @@
     };
 };
 
-AudioManager.prototype.refreshTracks = function () {
+AudioManager.prototype.refreshTracks = function() {
     var self = this;
     self.tracksGlobal = $('.vkMusicList').children('.track').children('.track-url');
-}
+};
 
-AudioManager.prototype.refreshPlaylistTracks = function () {
+AudioManager.prototype.refreshPlaylistTracks = function() {
     var self = this;
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
-}
+};
 
 AudioManager.prototype.updateProgressbar = function (musicSelector) {
     var self = this;
@@ -152,6 +154,11 @@ AudioManager.prototype.updateProgressbar = function (musicSelector) {
         }
     });
 }
+
+AudioManager.prototype.loop = function (value) {
+    var self = this;
+    self.audio.loop = value;
+};
 
 AudioManager.prototype.play = function() {
     var self = this;
