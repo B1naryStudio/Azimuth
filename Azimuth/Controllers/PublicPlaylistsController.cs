@@ -26,11 +26,11 @@ namespace Azimuth.Controllers
 
         //
         // GET: /PublicPlaylists/
-        public async Task<ActionResult> Index(long id)
+        public async Task<ActionResult> Index(long? id)
         {
             if (AzimuthIdentity.Current == null)
                 return View();
-            var user = id == 0 ? _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id) : _userService.GetUserInfo(id);
+            var user = id == null ? _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id) : _userService.GetUserInfo((long)id);
             ViewBag.Id = id;
             return View(user);
         }
@@ -71,9 +71,9 @@ namespace Azimuth.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public PartialViewResult _PublicPlaylists(ICollection<PlaylistLike> playlistFollowing, long id)
+        public PartialViewResult _PublicPlaylists(ICollection<PlaylistLike> playlistFollowing, long? id)
         {
-            var publicPlaylists = id == 0
+            var publicPlaylists = id == null
                 ? _playlistService.GetPublicPlaylistsSync()
                 : _playlistService.GetPublicPlaylistsSync(id);
 
