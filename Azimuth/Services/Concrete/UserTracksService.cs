@@ -72,8 +72,11 @@ namespace Azimuth.Services.Concrete
 
             const string regExp = @"[^\w\d\s\/\\\.\,\[\]!@#$%^&*\(\);:?№']";
 
-            artist = Regex.Replace(artist, regExp, "").Substring(0, 50);
-            trackName = Regex.Replace(trackName, regExp, "").Substring(0, 50);
+            int artistLength = (artist.Length > 50) ? 50 : artist.Length;
+            int trackNameLength = (trackName.Length > 50) ? 50 : trackName.Length;
+
+            artist = Regex.Replace(artist, regExp, "").Substring(0, artistLength);
+            trackName = Regex.Replace(trackName, regExp, "").Substring(0, trackNameLength);
 
             var trackData = new TrackInfoDto();
 

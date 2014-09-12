@@ -198,6 +198,12 @@
         //});
 
         function _makeDraggable(event) {
+
+            var $target = $(event.target);
+            if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
+                mousedownOnProgressBar = true;
+            }
+
             mouseClickPosition = { x: event.clientX, y: event.clientY };
             if (event.which == 3) {
 
