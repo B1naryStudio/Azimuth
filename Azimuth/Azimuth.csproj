@@ -395,7 +395,6 @@
     <Content Include="Views\Test\RunMigrator.cshtml" />
     <Content Include="Views\Test\Drop.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
-    <Content Include="Views\UserProfile\_FollowUserPartial.cshtml" />
     <Content Include="Views\UserProfile\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Share\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />

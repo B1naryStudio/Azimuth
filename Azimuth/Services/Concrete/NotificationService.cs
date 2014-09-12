@@ -36,6 +36,11 @@ namespace Azimuth.Services.Concrete
                         RecentlyPlaylist = recentlyPlaylist
                     };
 
+                    if (recentlyPlaylist != null)
+                    {
+                        recentlyPlaylist.Notifications.Add(notification);
+                    }
+
                     _notificationRepository.AddItem(notification);
 
                     _unitOfWork.Commit();

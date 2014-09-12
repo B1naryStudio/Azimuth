@@ -19,6 +19,10 @@
       <key column="PlaylistId"/>
       <one-to-many class="PlaylistLike"/>
     </set>
+    <set name="Notifications" table="Notifications" cascade="all-delete-orphan">
+      <key column="RecentlyPlaylistId"/>
+      <one-to-many class="Notification"/>
+    </set>
     <property name="Listened" />
   </class>
 </hibernate-mapping>
