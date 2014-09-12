@@ -203,7 +203,7 @@
         $('#copy-to-clipboard').clipboard({
             path: '/Scripts/jquery.clipboard.swf',
             copy: function () {
-                alert($sharingLink.val());
+                //alert($sharingLink.val());
                 return $sharingLink.val();
             }
         });
