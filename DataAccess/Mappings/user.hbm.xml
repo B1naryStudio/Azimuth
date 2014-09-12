@@ -29,7 +29,7 @@
       <key column="FollowerId" />
       <many-to-many column="FollowingId" class="User" />
     </set>
-    <set name="PlaylistFollowing" table="Likes" cascade="save-update" lazy="false">
+    <set name="PlaylistFollowing" table="Likes" cascade="all-delete-orphan">
       <key column="UserId" />
       <one-to-many class="PlaylistLike"/>
     </set>

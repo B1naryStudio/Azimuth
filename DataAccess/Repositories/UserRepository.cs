@@ -17,6 +17,8 @@ namespace Azimuth.DataAccess.Repositories
             return _session.Query<User>()
                 .Fetch(x => x.Followers)
                 .Fetch(x => x.Following)
+                .Fetch(x => x.PlaylistFollowing)
+                .Fetch(x => x.SocialNetworks)
                 .FirstOrDefault(x => x.Id == id);
         }
 

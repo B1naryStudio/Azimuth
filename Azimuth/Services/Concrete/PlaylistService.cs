@@ -122,15 +122,15 @@ namespace Azimuth.Services.Concrete
             {
                 if (AzimuthIdentity.Current != null)
                 {
-                    
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
                     var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item=>item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
                 }
-                return new List<PlaylistData> {};
+                return new List<PlaylistData>();
               
             });
         }
@@ -151,7 +151,7 @@ namespace Azimuth.Services.Concrete
                         likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
                 }
-                return new List<PlaylistData> { };
+                return new List<PlaylistData>();
 
             });
         }
@@ -234,7 +234,7 @@ namespace Azimuth.Services.Concrete
                     }
 
                     _unitOfWork.Commit();
-                    return Mapper.Map(playlist, new PlaylistData()); ;
+                    return Mapper.Map(playlist, new PlaylistData());
                 }
             });
         }
@@ -261,7 +261,7 @@ namespace Azimuth.Services.Concrete
 
         public void RemovePlaylistById(int id)
         {
-            User user;
+            User user = null;
             using (_unitOfWork)
             {
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
@@ -281,18 +281,38 @@ namespace Azimuth.Services.Concrete
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
                     if (userId == playlist.Creator.Id)
                     {
-                        user = playlist.Creator;
-                        _playlistRepository.DeleteItem(playlist);
+                        var playlistFollowing = _likesRepository.Get(pl => pl.Playlist.Id == playlist.Id && (pl.IsFavorite || pl.IsLiked)).Count();
+                        if (playlistFollowing == 0)
+                        {
+                            _playlistRepository.DeleteItem(playlist);
+                        }
+                        else
+                        {
+                            user = playlist.Creator;
+                            var admin =
+                                _userRepository.Get(
+                                    sysAdmin => sysAdmin.Name.FirstName.ToLower() == "admin" && sysAdmin.Name.LastName.ToLower() == "admin").FirstOrDefault();
+                            playlist.Creator = admin;
+                            _notificationService.CreateNotification(Notifications.PlaylistRemoved, user);
+                        }
                     }
                     else
                     {
-                        throw new PrivilegeNotHeldException("Only creator can delete public playlist");
+                        var favouritedPlaylist =
+                            _likesRepository.Get(record => record.Liker.Id == userId && record.IsFavorite).FirstOrDefault();
+                        if (favouritedPlaylist != null)
+                        {
+                            _likesRepository.DeleteItem(favouritedPlaylist);
+                            //favouritedPlaylist.Liker.PlaylistFollowing.Remove(favouritedPlaylist);
+                        }
                     }
                 }
                 else
                 {
                     throw new PrivilegeNotHeldException("Only creator can delete public playlist");
                 }
+
+                _unitOfWork.Commit();
             }
 
             _notificationService.CreateNotification(Notifications.PlaylistRemoved, user);

@@ -27,4 +27,21 @@
     manager.showPlaylists();
     manager.bindListeners();
     audioManager.bindListeners();
+
+
+    $(this).mousedown(function (event) {
+        var $target = $(event.target);
+        if ($target.hasClass('progressBar') || $target.hasClass('progress') || $target.hasClass('cache')) {
+            mousedownOnProgressBar = true;
+        }
+        if (!$target.parents().hasClass('draggable-list') && !$target.parents().hasClass('list')) {
+            document.oncontextmenu = function () {
+                return true;
+            }
+        }
+        if (!$target.hasClass('contextMenuActionName') && event.which != 3) {
+            $('.contextMenu').detach();
+        }
+    });
+
 });

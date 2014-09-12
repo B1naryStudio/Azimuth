@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
-    @*<script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>*@
+    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -23,7 +23,8 @@
         $('#tracksArea').show();
         $('button#backToPlaylistsBtn').off('click').click(function() {
             $('#tracksArea').empty();
-            document.audioManager.stop();
+            if (document.audioManager.$currentTrack) 
+                document.audioManager.stop();   
             $('#playlistsArea').show();
         });
 

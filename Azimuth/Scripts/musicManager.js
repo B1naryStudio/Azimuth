@@ -495,6 +495,7 @@ MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
 MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     $('.playlist').remove();
+    self.playlists = playlists;
     self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.show();
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
@@ -526,7 +527,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
                 }
-                $('.accordion .tableRow').on("click", self._getTracks);
+                //$('.accordion .tableRow').on("click", self._getTracks);
 
                 $.ajax({
                     url: '/api/playlists/favorite/notOwned',
@@ -573,6 +574,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 self.$playlistsTable.append(tmpl);
                 self._setNewImage(tmpl);
                 self._setChangingPlaylistImage(tmpl);
+                self._createContextMenuForPlaylists();
             }
         }
         //self._createContextMenuForPlaylists();
@@ -741,6 +743,10 @@ MusicManager.prototype.bindListeners = function() {
     $('#infoModal').on('hidden.bs.modal', function() {
         $('#infoModal .modal-body').text('');
         $('#listenTopBtn').attr('disabled', true);
+    });
+
+    $('#createPlaylistModal').on('hidden.bs.modal', function () {
+        $('#createPlaylistModal .modal-body #playlistNameToCreate').val('');
     });
 
     $('#listenTopBtn').click(function() {
