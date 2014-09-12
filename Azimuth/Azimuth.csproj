@@ -318,6 +318,7 @@
     <Content Include="Images\google_logo.png" />
     <Content Include="Images\grey-caret-right.png" />
     <Content Include="Images\login_bg.jpeg" />
+    <Content Include="Images\logo.jpg" />
     <Content Include="Images\mCSB_buttons.png" />
     <Content Include="Images\media_add.png" />
     <Content Include="Images\media_next.png" />
