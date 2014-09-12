@@ -462,7 +462,7 @@ ContextMenu.prototype.drawContextMenu = function (event) {
 
                 if (self.$subContextMenuContainer.children().length > 0) {
                     var x = self.$contextMenuContainer.width();
-                    var y = $('.tableRow:hover').position().top;
+                    var y = $('.tableRow.hasSubMenu:hover').position().height;
                     if ((self.$subContextMenuContainer.width() + x + self.$contextMenuContainer.position().left) > $(window).width()) {
                         x = x - 2 * self.$subContextMenuContainer.width();
                     }
@@ -473,7 +473,7 @@ ContextMenu.prototype.drawContextMenu = function (event) {
                     });
 
                     self.$subContextMenuContainer.attr('action', $('.tableRow:hover').children().attr('id'));
-                    $('.tableRow:hover').append(self.$subContextMenuContainer);
+                    $('.tableRow.hasSubMenu:hover').append(self.$subContextMenuContainer);
                     self.$subContextMenuContainer.show();
                 }
             }
