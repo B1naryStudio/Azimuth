@@ -23,7 +23,8 @@
         $('#tracksArea').show();
         $('button#backToPlaylistsBtn').off('click').click(function() {
             $('#tracksArea').empty();
-            document.audioManager.stop();
+            if (document.audioManager.$currentTrack) 
+                document.audioManager.stop();   
             $('#playlistsArea').show();
         });
 
@@ -64,14 +65,14 @@
             });
         });
 
-        $('#playlistTracks').mCustomScrollbar({
-            theme: 'dark-3',
-            scrollButtons: { enable: true },
-            updateOnContentResize: true,
-            scrollInertia: 0,
-            autoHideScrollbar: true,
-            advanced: { updateOnSelectorChange: "true" }
-        });
+        //$('#playlistTracks').mCustomScrollbar({
+        //    theme: 'dark-3',
+        //    scrollButtons: { enable: true },
+        //    updateOnContentResize: true,
+        //    scrollInertia: 0,
+        //    autoHideScrollbar: true,
+        //    advanced: { updateOnSelectorChange: "true" }
+        //});
     });
 </script>
 
