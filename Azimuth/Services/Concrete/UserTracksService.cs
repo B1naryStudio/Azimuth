@@ -87,7 +87,10 @@ namespace Azimuth.Services.Concrete
                 }
                 if (socialNetworkData != null)
                 {
-                    lyricData = await _socialNetworkApi.GetTrackLyricByArtistAndName(artist, trackName, socialNetworkData.AccessToken, socialNetworkData.ThirdPartId);
+                    lyricData =
+                        await
+                            _socialNetworkApi.GetTrackLyricByArtistAndName(artist, trackName,
+                                socialNetworkData.AccessToken, socialNetworkData.ThirdPartId);
                 }
             }
 
@@ -137,27 +140,27 @@ namespace Azimuth.Services.Concrete
 
         public ICollection<TracksDto> GetTracksByPlaylistIdSync(int id)
         {
-                using (_unitOfWork)
+            using (_unitOfWork)
+            {
+                var pt =
+                    _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                        .OrderBy(o => o.TrackPosition)
+                        .ToList();
+
+                ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
                 {
-                    var pt =
-                        _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
-                            .OrderBy(o => o.TrackPosition)
-                            .ToList();
+                    Id = s.Identifier.Track.Id,
+                    Name = s.Identifier.Track.Name,
+                    Duration = s.Identifier.Track.Duration,
+                    Album = s.Identifier.Track.Album.Name,
+                    Artist = s.Identifier.Track.Album.Artist.Name,
+                    ThirdPartId = s.Identifier.Track.ThirdPartId,
+                    OwnerId = s.Identifier.Track.OwnerId
+                }).ToList();
 
-                    ICollection<TracksDto> tracks = pt.Select(s => new TracksDto
-                    {
-                        Id = s.Identifier.Track.Id,
-                        Name = s.Identifier.Track.Name,
-                        Duration = s.Identifier.Track.Duration,
-                        Album = s.Identifier.Track.Album.Name,
-                        Artist = s.Identifier.Track.Album.Artist.Name,
-                        ThirdPartId = s.Identifier.Track.ThirdPartId,
-                        OwnerId = s.Identifier.Track.OwnerId
-                    }).ToList();
-
-                    _unitOfWork.Commit();
-                    return tracks;
-                }
+                _unitOfWork.Commit();
+                return tracks;
+            }
         }
 
         public async Task<ICollection<TracksDto>> GetUserTracks()
@@ -237,13 +240,16 @@ namespace Azimuth.Services.Concrete
                         tracks = _trackRepository.Get(track => track.Genre.ToLower().Contains(searchText)).ToList();
                         break;
                     case "artist":
-                        tracks = _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText)).ToList();
+                        tracks =
+                            _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText))
+                                .ToList();
                         break;
                     case "track":
                         tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
                         break;
                     case "vkontakte":
-                        findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, 0, 20);
+                        findInVk =
+                            await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, 0, 20);
                         if (findInVk.Count > 0)
                         {
                             findInVk.ForEach(item =>
@@ -264,7 +270,8 @@ namespace Azimuth.Services.Concrete
                         findInVk =
                             findInVk.Where(
                                 s =>
-                                    s.Title.ToLower().Contains(searchText) || s.GenreId.ToString().ToLower().Contains(searchText) ||
+                                    s.Title.ToLower().Contains(searchText) ||
+                                    s.GenreId.ToString().ToLower().Contains(searchText) ||
                                     s.Artist.ToLower().Contains(searchText)).ToList();
 
                         if (findInVk.Count > 0)
@@ -360,7 +367,7 @@ namespace Azimuth.Services.Concrete
                     pt.Where(track => track.Identifier.Track.Id == item.TrackId)
                         .Select(pos => pos.TrackPosition = item.TrackPosition).ToList();
                 });
-                
+
                 _unitOfWork.Commit();
             }
         }
@@ -401,7 +408,7 @@ namespace Azimuth.Services.Concrete
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
                 if (playlist == null)
                 {
-                    throw new InstanceNotFoundException("Playlist with specified id does not exist");                    
+                    throw new InstanceNotFoundException("Playlist with specified id does not exist");
                 }
 
                 playlist.Tracks.Add(track);
@@ -409,7 +416,8 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        public async Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription, string provider)
+        public async Task<List<TrackData.Audio>> SearchTracksInSn(List<TrackSearchInfo.SearchData> tracksDescription,
+            string provider)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
@@ -417,7 +425,8 @@ namespace Azimuth.Services.Concrete
             using (_unitOfWork)
             {
                 var socialNetworkData = GetSocialNetworkData(provider);
-                searchedTracks = await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);
+                searchedTracks =
+                    await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);
                 _unitOfWork.Commit();
             }
 
@@ -440,7 +449,8 @@ namespace Azimuth.Services.Concrete
                 if (trackDatas.Any())
                 {
                     var playlist = _playlistRepository.GetOne(pl => pl.Id == tracksInfo.PlaylistId);
-                    playlist.PlaylistTracks = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == tracksInfo.PlaylistId).ToList();
+                    playlist.PlaylistTracks =
+                        _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == tracksInfo.PlaylistId).ToList();
 
                     int i = 0;
                     //create Track objects
@@ -531,7 +541,7 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        public async Task CopyTrackToAnotherPlaylist (long playlistId, List<long> trackIds )
+        public async Task CopyTrackToAnotherPlaylist(long playlistId, List<long> trackIds)
         {
             using (_unitOfWork)
             {
@@ -568,7 +578,9 @@ namespace Azimuth.Services.Concrete
                 tracks.ForEach(track =>
                 {
                     track.Playlists.Remove(playlist);
-                    var playlistTrackToDelete = _playlistTrackRepository.Get(pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
+                    var playlistTrackToDelete =
+                        _playlistTrackRepository.Get(
+                            pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
                     var curPlaylistPt = _playlistTrackRepository.Get(pt => pt.Identifier.Playlist.Id == playlistId);
                     playlistTrackToDelete.ForEach(pt =>
                     {
@@ -594,16 +606,18 @@ namespace Azimuth.Services.Concrete
             var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
             if (AzimuthIdentity.Current != null)
             {
-                return userSocialNetworkRepo.GetOne(
-                s =>
-                    (s.SocialNetwork.Name == provider) &&
-                    (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));    
+                using (_unitOfWork)
+                {
+                    var networkData = userSocialNetworkRepo.GetOne(
+                        s =>
+                            (s.SocialNetwork.Name == provider) &&
+                            (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
+                    _unitOfWork.Commit();
+                    return networkData;
+                }
             }
-            else
-            {
-                return null;
-            }
-            
+            return null;
         }
+
     }
 }

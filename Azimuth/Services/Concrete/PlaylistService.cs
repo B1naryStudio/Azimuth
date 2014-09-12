@@ -296,13 +296,18 @@ namespace Azimuth.Services.Concrete
                         var favouritedPlaylist =
                             _likesRepository.Get(record => record.Liker.Id == userId && record.IsFavorite).FirstOrDefault();
                         if (favouritedPlaylist != null)
+                        {
                             _likesRepository.DeleteItem(favouritedPlaylist);
+                            //favouritedPlaylist.Liker.PlaylistFollowing.Remove(favouritedPlaylist);
+                        }
                     }
                 }
                 else
                 {
                     throw new PrivilegeNotHeldException("Only creator can delete public playlist");
                 }
+
+                _unitOfWork.Commit();
             }
         }
 

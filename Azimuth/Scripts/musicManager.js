@@ -743,6 +743,10 @@ MusicManager.prototype.bindListeners = function() {
         $('#listenTopBtn').attr('disabled', true);
     });
 
+    $('#createPlaylistModal').on('hidden.bs.modal', function () {
+        $('#createPlaylistModal .modal-body #playlistNameToCreate').val('');
+    });
+
     $('#listenTopBtn').click(function() {
         $('.modal-body').text('');
         if (self.topTracks != null) {
