@@ -19,12 +19,14 @@ namespace Azimuth.Services.Concrete
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserRepository _userRepository;
         private readonly INotificationService _notificationService;
+        private readonly NotificationRepository _notificationRepository;
 
         public UserService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
             _notificationService = notificationService;
+            _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
         }
         public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count)
         {
@@ -108,16 +110,15 @@ namespace Azimuth.Services.Concrete
         private User FollowOperation(long followerId, bool isFollow)
         {
             User user;
-            User loggedUser;
-            Notifications notification;
             using (_unitOfWork)
             {
                 user = _userRepository.GetFullUserData(followerId);
-                loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                var loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
                 if (user == null || loggedUser == null)
                 {
                     throw new EndUserException("Something wrong during unfollowing operation.");
                 }
+                Notifications notification;
                 if (isFollow)
                 {
                     user.Followers.Add(loggedUser);
@@ -128,11 +129,14 @@ namespace Azimuth.Services.Concrete
                     user.Followers.Remove(loggedUser);
                     notification = Notifications.Unfollowed;
                 }
-                
+
+                var notif = _notificationService.CreateNotification(notification, loggedUser, user);
+
+                _notificationRepository.AddItem(notif);
+
                 _unitOfWork.Commit();
             }
 
-            _notificationService.CreateNotification(notification, loggedUser, user);
             return user;
         }
     }

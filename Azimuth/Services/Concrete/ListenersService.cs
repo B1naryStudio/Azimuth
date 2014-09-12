@@ -19,6 +19,7 @@ namespace Azimuth.Services.Concrete
         private readonly UserRepository _userRepository;
         private readonly IRepository<Playlist> _playlistRepository;
         private readonly INotificationService _notificationService;
+        private readonly NotificationRepository _notificationRepository;
 
         public ListenersService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
@@ -28,6 +29,7 @@ namespace Azimuth.Services.Concrete
             _playlistRepository = _unitOfWork.GetRepository<Playlist>();
 
             _notificationService = notificationService;
+            _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
         }
 
         public Task<List<User>> GetListenersByPlaylistId(int id)
@@ -47,7 +49,6 @@ namespace Azimuth.Services.Concrete
         {
             Task.Run(() =>
             {
-                Playlist playlist;
                 using (_unitOfWork)
                 {                    
                     var user = _userRepository.Get(userId);
@@ -56,7 +57,7 @@ namespace Azimuth.Services.Concrete
                         throw new BadRequestException("User with Id does not exist");
                     }
                     
-                    playlist = _playlistRepository.Get(playlistId);
+                    var playlist = _playlistRepository.Get(playlistId);
                     if (playlist == null)
                     {
                         throw new BadRequestException("Playlist with Id does not exist");
@@ -67,19 +68,21 @@ namespace Azimuth.Services.Concrete
                         Playlist = playlist
                     });
 
+                    var notification = _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
+
+                    playlist.Notifications.Add(notification);
+                    _notificationRepository.AddItem(notification);
+
                     _unitOfWork.Commit();
                 }
-                _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
-
             });
         }
 
         public void AddCurrentUserAsListener(int playlistId)
         {
-            Playlist playlist;
             using (_unitOfWork)
             {
-                playlist = _playlistRepository.Get(playlistId);
+                var playlist = _playlistRepository.Get(playlistId);
                     if (playlist == null)
                     {
                         throw new BadRequestException("Playlist with Id does not exist");
@@ -98,17 +101,19 @@ namespace Azimuth.Services.Concrete
                     });
                 }
 
+                var notification = _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
+                playlist.Notifications.Add(notification);
+                _notificationRepository.AddItem(notification);
+
                 _unitOfWork.Commit();
             }
-            _notificationService.CreateNotification(Notifications.AddedNewListener, playlist.Creator, recentlyPlaylist: playlist);
         }
 
         public void RemoveCurrentUserAsListener(int playlistId)
         {
-            Playlist playlist;
             using (_unitOfWork)
             {
-                playlist = _playlistRepository.Get(playlistId);
+                var playlist = _playlistRepository.Get(playlistId);
                 if (playlist == null)
                 {
                     throw new BadRequestException("Playlist with Id does not exist");
@@ -121,10 +126,12 @@ namespace Azimuth.Services.Concrete
                     _listenerRepository.DeleteItem(listener);
                 }
 
+                var notification = _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
+
+                _notificationRepository.AddItem(notification);
+
                 _unitOfWork.Commit();
             }
-            _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
-
         }
 
         
@@ -132,8 +139,6 @@ namespace Azimuth.Services.Concrete
         {
             Task.Run(() =>
             {
-                Playlist playlist;
-
                 using (_unitOfWork)
                 {
                     var listener = _listenerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
@@ -143,11 +148,13 @@ namespace Azimuth.Services.Concrete
                     }
                     _listenerRepository.DeleteItem(listener);
 
-                    playlist = _playlistRepository.GetOne(p => p.Id == playlistId);
+                    var playlist = _playlistRepository.GetOne(p => p.Id == playlistId);
+
+                    var notification = _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
+                    _notificationRepository.AddItem(notification);
 
                     _unitOfWork.Commit();
                 }
-                _notificationService.CreateNotification(Notifications.RemovedListener, playlist.Creator);
             });
         }
     }

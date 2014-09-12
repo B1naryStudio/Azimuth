@@ -22,30 +22,24 @@ namespace Azimuth.Services.Concrete
             _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
             _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
         }
-        public Task CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
+        public Notification CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
         {
-            return Task.Run(() =>
+            var notification = new Notification
             {
-                using (_unitOfWork)
-                {
-                    var notification = new Notification
-                    {
-                        NotificationType = type,
-                        User = user,
-                        RecentlyUser = recentlyUser,
-                        RecentlyPlaylist = recentlyPlaylist
-                    };
+                NotificationType = type,
+                User = user,
+                RecentlyUser = recentlyUser,
+                RecentlyPlaylist = recentlyPlaylist
+            };
 
-                    if (recentlyPlaylist != null)
-                    {
-                        recentlyPlaylist.Notifications.Add(notification);
-                    }
+            return notification;
 
-                    _notificationRepository.AddItem(notification);
+            if (recentlyPlaylist != null)
+            {
+                recentlyPlaylist.Notifications.Add(notification);
+            }
 
-                    _unitOfWork.Commit();
-                }
-            });
+            _notificationRepository.AddItem(notification);
         }
 
         public Task<List<NotificationDto>> GetRecentActivity(long userId)
