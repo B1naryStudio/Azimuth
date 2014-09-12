@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409052047)]
     public class Migration_201409052047_AddSharing : Migration

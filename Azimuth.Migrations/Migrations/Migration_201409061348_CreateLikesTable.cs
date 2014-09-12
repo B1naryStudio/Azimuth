@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409061348)]
     public class Migration_201409061348_CreateLikesTable:Migration

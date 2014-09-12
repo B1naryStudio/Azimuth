@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409081528)]
     public class Migration_201409081528_AlterLikesTable : Migration

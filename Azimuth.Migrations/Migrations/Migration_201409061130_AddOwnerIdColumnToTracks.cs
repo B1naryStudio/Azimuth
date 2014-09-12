@@ -1,7 +1,7 @@
 ﻿
 using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409061130)]
     public class Migration_201409061130_AddOwnerIdColumnToTracks: Migration
