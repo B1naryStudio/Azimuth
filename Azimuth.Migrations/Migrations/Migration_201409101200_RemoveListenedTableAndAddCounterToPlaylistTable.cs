@@ -8,7 +8,10 @@ namespace Azimuth.Migrations
     {
         public override void Up()
         {
-            Delete.Table("Listened");
+            if (Schema.Table("Listened").Exists())
+            {
+                Delete.Table("Listened");   
+            }
             Alter.Table("Playlists").AddColumn("Listened").AsInt64().WithDefaultValue(0);
         }
 
