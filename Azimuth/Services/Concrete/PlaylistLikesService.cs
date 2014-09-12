@@ -98,7 +98,6 @@ namespace Azimuth.Services.Concrete
                 if (AzimuthIdentity.Current != null)
                 {
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
-                       // _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     user = _userRepository.Get(userId);
 
 
