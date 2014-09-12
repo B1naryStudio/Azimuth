@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409071636)]
     public class Migration_201409071636_ChangeNameOfUnauthorizedListenersToListened:Migration

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201409091133)]
     public class Migration_201409091133_AddNotifications : Migration
