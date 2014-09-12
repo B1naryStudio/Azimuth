@@ -30,7 +30,8 @@ namespace Azimuth.Controllers
         {
             if (AzimuthIdentity.Current == null)
                 return View();
-            var user = id == null ? _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id) : _userService.GetUserInfo((long)id);
+            //var user = id == null ? _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id) : _userService.GetUserInfo((long)id);
+            var user = _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id);
             ViewBag.Id = id;
             return View(user);
         }
