@@ -20,6 +20,7 @@
                 success: function (tracks) {
                     self.searchTracks = $.merge(self.searchTracks, tracks);
                     self._showTracks(self.searchTracks, $('#searchTrackTemplate'));
+                    self.audioManager.updateProgressbar('.vkMusicList');
                     self.searching = false;
                 }
             });
@@ -94,7 +95,7 @@
             if (self.audioManager.$currentTrack !== null
                 && self.audioManager.$currentTrack.children('.trackId').html() == correctedTracks[i].id) {
                 tmpl.toggleClass('.draggable-item-selected');
-                self.audioManager.$currentTrack = tmpl;
+                //self.audioManager.$currentTrack = tmpl; !!!!!
                 //tmpl.append(self.audioManager.progressSlider.getSlider());
                 if (self.audioManager.audio.paused) {
                     self.audioManager._setPlayImgButton(tmpl);
