@@ -606,17 +606,16 @@ namespace Azimuth.Services.Concrete
             var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
             if (AzimuthIdentity.Current != null)
             {
-                using (_unitOfWork)
-                {
-                    var networkData = userSocialNetworkRepo.GetOne(
-                        s =>
-                            (s.SocialNetwork.Name == provider) &&
-                            (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
-                    _unitOfWork.Commit();
-                    return networkData;
-                }
+                return userSocialNetworkRepo.GetOne(
+                    s =>
+                        (s.SocialNetwork.Name == provider) &&
+                        (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
+                _unitOfWork.Commit();
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
 
     }
