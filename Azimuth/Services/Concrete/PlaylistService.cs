@@ -89,39 +89,29 @@ namespace Azimuth.Services.Concrete
             {
                 currentId = AzimuthIdentity.Current.UserCredential.Id;
             }
-            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public
-                                                            && list.Creator.Id != currentId).Select(playlist =>
-            {
-                var creator = playlist.Creator;
-                return new PlaylistData
-                {
-                    Id = playlist.Id,
-                    Name = playlist.Name,
-                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
-                    Genres = playlist.Tracks.Select(x => x.Genre)
-                        .GroupBy(x => x, (key, values) => new {Name = key, Count = values.Count()})
-                        .OrderByDescending(x => x.Count)
-                        .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
-                        .Select(x => x.Name)
-                        .Take(5)
-                        .ToList(),
-                    Creator = new UserBrief
-                    {
-                        UserId = creator.Id,
-                        Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
-                        Email = creator.Email
-                    },
-                    
-                    PlaylistListened = playlist.Listened,
-                        PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
-                        PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite),
-
-                    ItemsCount = playlist.Tracks.Count,
-                };
-            }).OrderByDescending(order => order.PlaylistListened).ToList();
+            var playlists = _playlistRepository
+                .Get(list => list.Accessibilty == Accessibilty.Public
+                             && list.Creator.Id != currentId)
+                             .Select(GetPlaylistData())
+                             .OrderByDescending(order => order.PlaylistListened)
+                             .ToList();
 
             return playlists;
         }
+
+        public List<PlaylistData> GetPublicPlaylistsSync(long? id)
+        {
+            var playlists = _playlistRepository
+                .Get(list => list.Accessibilty == Accessibilty.Public
+                             && list.Creator.Id == id)
+                             .Select(GetPlaylistData())
+                             .OrderByDescending(order => order.PlaylistListened)
+                             .ToList();
+
+            return playlists;
+        }
+
+        
 
         public async Task<List<PlaylistData>> GetFavoritePlaylists()
         {
@@ -590,6 +580,39 @@ namespace Azimuth.Services.Concrete
                 }
 
             });
+        }
+
+        private Func<Playlist, PlaylistData> GetPlaylistData()
+        {
+            return playlist =>
+            {
+                var creator = playlist.Creator;
+                return new PlaylistData
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Duration = playlist.Tracks.Sum(x => int.Parse(x.Duration)),
+                    Genres = playlist.Tracks.Select(x => x.Genre)
+                        .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                        .OrderByDescending(x => x.Count)
+                        .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                        .Select(x => x.Name)
+                        .Take(5)
+                        .ToList(),
+                    Creator = new UserBrief
+                    {
+                        UserId = creator.Id,
+                        Name = creator.Name.FirstName + ' ' + creator.Name.LastName,
+                        Email = creator.Email
+                    },
+
+                    PlaylistListened = playlist.Listened,
+                    PlaylistLikes = playlist.PlaylistLikes.Count(s => s.IsLiked),
+                    PlaylistFavourited = playlist.PlaylistLikes.Count(s => s.IsFavorite),
+
+                    ItemsCount = playlist.Tracks.Count,
+                };
+            };
         }
     }
 }

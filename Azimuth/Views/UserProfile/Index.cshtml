@@ -23,6 +23,7 @@
                 <div class="user-listen-label">Listening</div>
             </li>
         </ul>
+        @Html.ActionLink("Show playlists", "Index", "PublicPlaylists", new {@Model.Id}, new { @class = "btn btn-success btn-large"})
 
         @using (@Ajax.BeginForm("_FollowInfo", "UserProfile", new AjaxOptions
         {
