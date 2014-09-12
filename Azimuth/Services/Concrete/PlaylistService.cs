@@ -336,35 +336,34 @@ namespace Azimuth.Services.Concrete
             {
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
 
-                var tracks = playlist.Tracks.ToList();
-
-                if (!tracks.Any())
+                if (playlist != null)
                 {
-                    return image;
-                }
-
-                var seed = new Random().Next(tracks.Count - 1);
-                
-                for (int i = 0; i < tracks.Count; i++)
-                {
-                    var artist = tracks[seed].Album.Artist.Name;
-                    var trackName = tracks[seed].Name;
-
-                    var trackInfoDto = await _lastfmApi.GetTrackInfo(artist, trackName);
-
-
-                    if (trackInfoDto.Track != null 
-                        && trackInfoDto.Track.TrackAlbum != null 
-                        && trackInfoDto.Track.TrackAlbum.AlbumImages != null)
+                    var tracks = playlist.Tracks.ToList();
+                    if (!tracks.Any())
                     {
-                        image = trackInfoDto.Track.TrackAlbum.AlbumImages.Last().Url;
-                        if (image != String.Empty)
-                        {
-                            break;
-                        }
+                        return image;
                     }
-    
-                    seed = (seed < tracks.Count - 1) ? ++seed: 0;
+                    var seed = new Random().Next(tracks.Count - 1);
+
+                    for (int i = 0; i < tracks.Count; i++)
+                    {
+                        var artist = tracks[seed].Album.Artist.Name;
+                        var trackName = tracks[seed].Name;
+                        var trackInfoDto = await _lastfmApi.GetTrackInfo(artist, trackName);
+
+                        if (trackInfoDto.Track != null
+                            && trackInfoDto.Track.TrackAlbum != null
+                            && trackInfoDto.Track.TrackAlbum.AlbumImages != null)
+                        {
+                            image = trackInfoDto.Track.TrackAlbum.AlbumImages.Last().Url;
+                            if (image != String.Empty)
+                            {
+                                break;
+                            }
+                        }
+
+                        seed = (seed < tracks.Count - 1) ? ++seed : 0;
+                    }
                 }
 
                 _unitOfWork.Commit();

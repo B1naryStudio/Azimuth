@@ -70,7 +70,7 @@
                 && self.audioManager.$currentTrack.children('.trackId').html() == correctedTracks[i].id) {
                 tmpl.toggleClass('.draggable-item-selected');
                 self.audioManager.$currentTrack = tmpl;
-                tmpl.append(self.audioManager.progressSlider.getSlider());
+                //tmpl.append(self.audioManager.progressSlider.getSlider());
                 if (self.audioManager.audio.paused) {
                     self.audioManager._setPlayImgButton(tmpl);
                     self.audioManager.$currentTrack.find('.track-duration').show();
@@ -111,7 +111,7 @@
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
-                var $trackInfoContainer = $('.modal-body');
+                var $trackInfoContainer = $('#infoModal .modal-body');
                 $trackInfoContainer.text('');
                 object.appendTo($trackInfoContainer);
                 if (trackInfo.Lyric != null) {

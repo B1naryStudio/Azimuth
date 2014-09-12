@@ -31,11 +31,15 @@ textarea {
 
 #user-settings {
     padding: 0;
+    height: 50px;
+    width: 50px;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #user-settings > img {
-    width: 50px;
-    height: 50px;
+    max-width: 100%;
+    max-height: 100%;
     padding: 7px;
 }
 
