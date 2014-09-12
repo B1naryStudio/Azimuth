@@ -101,8 +101,21 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<User>> SearchUsers(string searchText)
         {
-            var users = _userRepository.Get(s => s.Name.FirstName.ToLower().Contains(searchText)).ToList();
-            users.AddRange(_userRepository.Get(s => s.Name.LastName.ToLower().Contains(searchText)).ToList());
+            var users = new List<User>();
+            string[] searchParams = searchText.Split(' ');
+            if ((searchParams.Length == 1) && (searchParams.Length != 0))
+            {
+                users.AddRange(_userRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0])).ToList());
+            }
+            else
+            {
+                users.AddRange(_userRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
+                users.AddRange(_userRepository.Get(s => (s.Name.LastName.ToLower() + " " + s.Name.FirstName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
+                users = users.Distinct().ToList();
+            }
+            //users = _userRepository.Get(s => s.Name.FirstName.ToLower().Contains(searchText)).ToList();
+            //users.AddRange(_userRepository.Get(s => s.Name.LastName.ToLower().Contains(searchText)).ToList());
+            
             return users;
         }
 
