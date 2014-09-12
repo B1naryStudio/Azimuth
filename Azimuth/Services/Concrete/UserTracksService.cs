@@ -44,7 +44,6 @@ namespace Azimuth.Services.Concrete
             _lastfmApi = _musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
             _deezerApi = _musicServiceWorkUnit.GetMusicService<DeezerTrackData.TrackData>() as DeezerApi;
             _chartLyricsApi = _musicServiceWorkUnit.GetMusicService<string[]>() as ChartLyricsApi;
-
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)

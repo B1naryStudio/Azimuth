@@ -107,10 +107,13 @@ namespace Azimuth.Services.Concrete
 
         private User FollowOperation(long followerId, bool isFollow)
         {
+            User user;
+            User loggedUser;
+            Notifications notification;
             using (_unitOfWork)
             {
-                var user = _userRepository.GetFullUserData(followerId);
-                var loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                user = _userRepository.GetFullUserData(followerId);
+                loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
                 if (user == null || loggedUser == null)
                 {
                     throw new EndUserException("Something wrong during unfollowing operation.");
@@ -118,17 +121,19 @@ namespace Azimuth.Services.Concrete
                 if (isFollow)
                 {
                     user.Followers.Add(loggedUser);
-                    _notificationService.CreateNotification(Notifications.Followed, loggedUser, user);
+                    notification = Notifications.Followed;
                 }
                 else
                 {
                     user.Followers.Remove(loggedUser);
-                    _notificationService.CreateNotification(Notifications.Unfollowed, loggedUser, user);
+                    notification = Notifications.Unfollowed;
                 }
                 
                 _unitOfWork.Commit();
-                return user;
             }
+
+            _notificationService.CreateNotification(notification, loggedUser, user);
+            return user;
         }
     }
 }

@@ -43,10 +43,11 @@ namespace Azimuth.Services.Concrete
 
         public void AddCurrentUserAsLiker(int playlistId)
         {
-
+            User user = null;
+            Playlist playlist;
             using (_unitOfWork)
             {
-                var playlist = _playlistRepository.Get(playlistId);
+                playlist = _playlistRepository.Get(playlistId);
                     if (playlist == null)
                     {
                         throw new BadRequestException("Playlist with Id does not exist");
@@ -55,7 +56,7 @@ namespace Azimuth.Services.Concrete
                 {
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
                         //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                    var user = _userRepository.Get(userId);
+                    user = _userRepository.Get(userId);
 
 
                     var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
@@ -68,7 +69,6 @@ namespace Azimuth.Services.Concrete
                             IsLiked = true,
                             IsFavorite = false
                         });
-                        _notificationService.CreateNotification(Notifications.LikedPlaylist, user, recentlyPlaylist: playlist);
                     }
                         
                     else
@@ -80,13 +80,17 @@ namespace Azimuth.Services.Concrete
                 }
                 _unitOfWork.Commit();
             }
+            _notificationService.CreateNotification(Notifications.LikedPlaylist, user, recentlyPlaylist: playlist);
+
         }
 
         public void AddCurrentUserAsFavorite(int playlistId)
         {
+            User user;
+            Playlist playlist;
             using (_unitOfWork)
             {
-                var playlist = _playlistRepository.Get(playlistId);
+                playlist = _playlistRepository.Get(playlistId);
                 if (playlist == null)
                 {
                     throw new BadRequestException("Playlist with Id does not exist");
@@ -95,7 +99,7 @@ namespace Azimuth.Services.Concrete
                 {
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
                        // _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
-                    var user = _userRepository.Get(userId);
+                    user = _userRepository.Get(userId);
 
 
                     var atemp = _likerRepository.GetOne(t => t.Playlist.Id == playlistId && t.Liker.Id == userId);
@@ -108,25 +112,26 @@ namespace Azimuth.Services.Concrete
                             IsLiked = false,
                             IsFavorite = true
                         });
-                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user, recentlyPlaylist: playlist);
                     }
                         
                     else
                     {
                         atemp.IsFavorite = true;
                         _likerRepository.UpdateItem(atemp);
-                        _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user, recentlyPlaylist: playlist);
                     }
                 }
                 _unitOfWork.Commit();
             }
+            _notificationService.CreateNotification(Notifications.FavoritedPlaylist, user, recentlyPlaylist: playlist);
         }
 
         public void RemoveCurrentUserAsLiker(int playlistId)
         {
+            User user;
+            Playlist playlist;
             using (_unitOfWork)
             {
-                var playlist = _playlistRepository.Get(playlistId);
+                playlist = _playlistRepository.Get(playlistId);
                 if (playlist == null)
                 {
                     throw new BadRequestException("Playlist with Id does not exist");
@@ -141,19 +146,21 @@ namespace Azimuth.Services.Concrete
                         liker.IsLiked = false;
                     }
 
-                    var user = _userRepository.GetOne(u => u.Id == userId);
+                    user = _userRepository.GetOne(u => u.Id == userId);
 
-                    _notificationService.CreateNotification(Notifications.UnlikedPlaylist, user, recentlyPlaylist: playlist);
                 }
                 _unitOfWork.Commit();
             }
+            _notificationService.CreateNotification(Notifications.UnlikedPlaylist, user, recentlyPlaylist: playlist);
         }
 
         public void RemoveCurrentUserAsFavorite(int playlistId)
         {
+            User user = null;
+            Playlist playlist;
             using (_unitOfWork)
             {
-                var playlist = _playlistRepository.Get(playlistId);
+                playlist = _playlistRepository.Get(playlistId);
                 if (playlist == null)
                 {
                     throw new BadRequestException("Playlist with Id does not exist");
@@ -168,12 +175,11 @@ namespace Azimuth.Services.Concrete
                         liker.IsFavorite = false;
                     }
 
-                    var user = _userRepository.GetOne(u => u.Id == userId);
-
-                    _notificationService.CreateNotification(Notifications.UnfavoritedPlaylist, user, recentlyPlaylist: playlist);
+                    user = _userRepository.GetOne(u => u.Id == userId);
                 }
                 _unitOfWork.Commit();
             }
+            _notificationService.CreateNotification(Notifications.UnfavoritedPlaylist, user, recentlyPlaylist: playlist);
         }
 
         public Task<bool> IsLiked(int id)
