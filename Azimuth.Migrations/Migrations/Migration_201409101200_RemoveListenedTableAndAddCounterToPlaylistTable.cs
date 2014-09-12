@@ -14,7 +14,7 @@ namespace Azimuth.Migrations
 
         public override void Down()
         {
-            Create.Table("UnauthorizedListeners")
+            Create.Table("Listened")
                 .WithColumn("Id").AsInt64().NotNullable().Identity().PrimaryKey()
                 .WithColumn("PlaylistId").AsInt64().NotNullable().ForeignKey("Playlists", "PlaylistsId")
                 .WithColumn("Amount").AsInt64().NotNullable();
