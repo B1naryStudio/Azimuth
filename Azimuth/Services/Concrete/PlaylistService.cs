@@ -84,8 +84,13 @@ namespace Azimuth.Services.Concrete
 
         public List<PlaylistData> GetPublicPlaylistsSync()
         {
-
-            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public).Select(playlist =>
+            long currentId = -1;
+            if (AzimuthIdentity.Current != null)
+            {
+                currentId = AzimuthIdentity.Current.UserCredential.Id;
+            }
+            var playlists = _playlistRepository.Get(list => list.Accessibilty == Accessibilty.Public
+                                                            && list.Creator.Id != currentId).Select(playlist =>
             {
                 var creator = playlist.Creator;
                 return new PlaylistData
