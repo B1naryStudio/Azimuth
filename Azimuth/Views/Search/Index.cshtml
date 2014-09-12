@@ -10,7 +10,10 @@
             <button type="button" class="btn btn-default searchBtn" data-search="artist">Artist</button>
             <button type="button" class="btn btn-default searchBtn" data-search="myVkTracks">Vk tracks</button>
             <button type="button" class="btn btn-default searchBtn" data-search="vkontakte">Vkontakte</button>
+            <button type="button" class="btn btn-default searchBtn" data-search="user">User</button>
         </div>
+        
+        <div id="users"></div>
 
         <div id="vk-track-list">
             <div id="vkMusic-header" class="table-header">
@@ -70,6 +73,15 @@
 
 @section scripts
 {
+    <script id="searchUserTemplate" type="text/x-jQuery-tmpl">
+        <div class="tableRow user">
+            <span class="user-photo" >
+                <img src="${Photo}" />
+            </span>
+            <a class="user-url" href="https://localhost:44300/UserProfile/Index/${Id}">${Name.FirstName}  ${Name.LastName}</a>
+        </div>
+    </script>
+
     <script id="searchTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
             <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>

@@ -1,0 +1,37 @@
+﻿.user {
+    display: block;
+    height: 50px;
+    width: 100%;
+    -moz-min-width: 250px;
+    -ms-min-width: 250px;
+    -o-min-width: 250px;
+    -webkit-min-width: 250px;
+    min-width: 250px;
+    background-color: #F0F0F0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.user-photo {
+    width: 50px; 
+    height: 50px; 
+    vertical-align: middle; 
+    display: inline; 
+    text-align: center;
+    padding: 5px;
+}
+
+.user-photo > img {
+    margin-top: 5px;
+    max-height: 40px;
+    max-width: 40px;
+    vertical-align: middle;
+}
+
+.user-url {
+    margin-left: 5%;
+    display: inline;
+    vertical-align: middle;
+}

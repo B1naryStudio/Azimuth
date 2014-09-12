@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -98,6 +99,13 @@ namespace Azimuth.Services.Concrete
             return FollowOperation(followerId, false);
         }
 
+        public async Task<List<User>> SearchUsers(string searchText)
+        {
+            var users = _userRepository.Get(s => s.Name.FirstName.ToLower().Contains(searchText)).ToList();
+            users.AddRange(_userRepository.Get(s => s.Name.LastName.ToLower().Contains(searchText)).ToList());
+            return users;
+        }
+
         private UserSocialNetwork GetSocialNetworkData(string provider)
         {
             var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
@@ -138,6 +146,6 @@ namespace Azimuth.Services.Concrete
             }
 
             return user;
-        }
+        } 
     }
 }
