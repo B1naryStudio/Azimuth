@@ -117,8 +117,8 @@ namespace Azimuth.Services.Concrete
                 case Notifications.PlaylistCreated:
                     message = "created new playlist";
                     break;
-                case Notifications.PlaylistRemoved:
-                    message = "removed playlist";
+                case Notifications.RemovedTracks:
+                    message = "removed tracks from";
                     break;
                 case Notifications.PlaylistShared:
                     message = "shared playlist";

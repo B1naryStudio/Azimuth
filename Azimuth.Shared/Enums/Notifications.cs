@@ -6,7 +6,7 @@
         PlaylistShared,
         Followed,
         Unfollowed,
-        PlaylistRemoved,
+        RemovedTracks,
         ChangedPlaylistAccessebilty,
         AddedNewListener,
         RemovedListener,

@@ -316,9 +316,6 @@ namespace Azimuth.Services.Concrete
                 {
                     throw new PrivilegeNotHeldException("Only creator can delete public playlist");
                 }
-                var notification = _notificationService.CreateNotification(Notifications.PlaylistRemoved, user);
-
-                _notificationRepository.AddItem(notification);
 
                 _unitOfWork.Commit();
             }
@@ -344,6 +341,12 @@ namespace Azimuth.Services.Concrete
                 }
 
                 playlist.Tracks.Remove(trackToDelete);
+
+                var notification = _notificationService.CreateNotification(Notifications.RemovedTracks, playlist.Creator, recentlyPlaylist: playlist);
+
+                playlist.Notifications.Add(notification);
+                _notificationRepository.AddItem(notification);
+
                 _unitOfWork.Commit();
             }
         }
