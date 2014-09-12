@@ -32,6 +32,7 @@ var MusicManager = function (manager) {
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
+    this.$errorModal = $('#errorModal');
 
     this._getTracks = function (plId) {
         self.$playlistsLoadingSpinner.fadeIn('normal');
@@ -208,7 +209,7 @@ var MusicManager = function (manager) {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
                 }
-                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                //$('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
@@ -250,7 +251,14 @@ var MusicManager = function (manager) {
                 }
                 self.topTracks = trackInfo.ArtistTopTrackList;
                 $('#listenTopBtn').attr('disabled', false);
-            }
+            },
+        }).fail(function() {
+            var $trackInfoContainer = $('#infoModal .modal-body');
+            self.$infoLoadingSpinner.hide();
+            $trackInfoContainer.append('<div id="forbidden" class="alert alert-danger" style="margin-top: 10px">' +
+                                            '<p class="error">Error occured during searching ...</p>' +
+                                        '</div>');
+            $('#listenTopBtn').attr('disable', true);
         });
     };
 
@@ -816,7 +824,14 @@ MusicManager.prototype.bindListeners = function() {
                             ]
                         });
                         self.$vkMusicLoadingSpinner.hide();
-                    }
+                    },
+            }).fail(function() {
+                self.$vkMusicLoadingSpinner.hide();
+                    self.$errorModal.find('.error').text('Error occured during search ...');
+                    $('#listenTopBtn').attr('disable', true);
+                    $('#okErrorButton').click(function() {
+                        $('#errorModal .error').text("");
+                    });
                 });
             }
         }        
