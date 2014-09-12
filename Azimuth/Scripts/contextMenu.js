@@ -18,25 +18,25 @@
     this.provider = 'Vkontakte';
     this.host = window.location.protocol + "//" + window.location.host + "/";
 
-    this._shuffleTracksAction = function ($currentItem) {
-        var index = 0;
-        var elems = $currentItem.children('.tableRow');
-        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
-        elems.each(function() {
-            if ($(this).children('.track-play-btn').hasClass('glyphicon-pause')) {
-                index = $(this).index();
-            }
-        });
-        if (index != 0) {
-            var temp = elems[index];
-            elems[index] = elems[0];
-            elems[0] = temp;
-        }
-        $currentItem.children().detach('.tableRow');
-        $currentItem.prepend(elems);
+    //this._shuffleTracksAction = function ($currentItem) {
+    //    var index = 0;
+    //    var elems = $currentItem.children('.tableRow');
+    //    elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+    //    elems.each(function() {
+    //        if ($(this).children('.track-play-btn').hasClass('glyphicon-pause')) {
+    //            index = $(this).index();
+    //        }
+    //    });
+    //    if (index != 0) {
+    //        var temp = elems[index];
+    //        elems[index] = elems[0];
+    //        elems[0] = temp;
+    //    }
+    //    $currentItem.children().detach('.tableRow');
+    //    $currentItem.prepend(elems);
 
-        self.manager._moveTrackToNewPosition($currentItem);
-    };
+    //    self.manager._moveTrackToNewPosition($currentItem);
+    //};
 
     this._saveTrackFromVkToPlaylist = function($currentItem, index, playlistId) {
         self.manager._saveTrackFromVkToPlaylist($currentItem, index, playlistId);
@@ -349,9 +349,9 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                         });
                     }
                     break;
-                case 'trackshuffle':
-                    self._shuffleTracksAction(self.musicList.find('.draggable-list'));
-                    break;
+                //case 'trackshuffle':
+                //    self._shuffleTracksAction(self.musicList.find('.draggable-list'));
+                //    break;
                 case 'makepublic':
                     var playlistId = $('.playlist.selected').find('.playlistId').text();
                     self._changePlaylistAccessibility(playlistId, 'Public');
