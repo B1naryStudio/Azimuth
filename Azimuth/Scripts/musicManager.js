@@ -725,7 +725,13 @@ MusicManager.prototype.bindListeners = function() {
     });
 
     $('#repeatBtn').click(function () {
-
+        if ($(this).hasClass('btn-default')) {
+            $(this).removeClass('btn-default').addClass('btn-success');
+            self.audioManager.loop(true);
+        } else {
+            $(this).removeClass('btn-success').addClass('btn-default');
+            self.audioManager.loop(false);
+        }
     });
 
     $('#playlists, .vkMusicTable').mCustomScrollbar({
