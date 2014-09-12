@@ -1,5 +1,6 @@
 ﻿@using Azimuth.Infrastructure.Concrete
 @using Microsoft.AspNet.Identity
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,7 @@
                         <li>@Html.ActionLink("UserProfile", "Index", "UserProfile", new { AzimuthIdentity.Current.UserCredential.Id }, null)</li>
                         <li>@Html.ActionLink("My music", "Index", "Music")</li>
                     
-                        <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists")</li>
+                        <li>@Html.ActionLink("Public Playlists", "Index", "PublicPlaylists", new {id = 0}, null)</li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">
