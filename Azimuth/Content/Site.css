@@ -52,6 +52,10 @@ textarea {
     padding: 0;
 }
 
+#logo-container {
+    padding: 5px;
+}
+
 /* styles for validation helpers */
 .field-validation-error {
     color: #b94a48;
