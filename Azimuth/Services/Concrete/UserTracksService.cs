@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IdentityModel;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
@@ -68,6 +69,11 @@ namespace Azimuth.Services.Concrete
 
         public async Task<TrackInfoDto> GetTrackInfo(string artist, string trackName)
         {
+
+            const string regExp = @"[^\w\d\s\/\\\.\,\[\]!@#$%^&*\(\);:?№']";
+
+            artist = Regex.Replace(artist, regExp, "").Substring(0, 50);
+            trackName = Regex.Replace(trackName, regExp, "").Substring(0, 50);
 
             var trackData = new TrackInfoDto();
 
