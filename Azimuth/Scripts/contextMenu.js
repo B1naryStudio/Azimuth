@@ -400,6 +400,7 @@ ContextMenu.prototype.drawContextMenu = function (event) {
         if ($playlist.find('.readonly').text() == 'true') {
             self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', true);
             self.$contextMenuContainer.children('.tableRow').has('#removeplaylist').toggleClass('unactiveContextMenuAction', false);
+            self.$contextMenuContainer.children('.tableRow').has('#shareplaylist').toggleClass('unactiveContextMenuAction', false);
         } else {
             self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', false);
         }
