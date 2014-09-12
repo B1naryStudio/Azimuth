@@ -281,6 +281,8 @@ namespace Azimuth.Services.Concrete
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
                     if (userId == playlist.Creator.Id)
                     {
+                        user = playlist.Creator;
+
                         var playlistFollowing = _likesRepository.Get(pl => pl.Playlist.Id == playlist.Id && (pl.IsFavorite || pl.IsLiked)).Count();
                         if (playlistFollowing == 0)
                         {
@@ -288,12 +290,10 @@ namespace Azimuth.Services.Concrete
                         }
                         else
                         {
-                            user = playlist.Creator;
                             var admin =
                                 _userRepository.Get(
                                     sysAdmin => sysAdmin.Name.FirstName.ToLower() == "admin" && sysAdmin.Name.LastName.ToLower() == "admin").FirstOrDefault();
                             playlist.Creator = admin;
-                            _notificationService.CreateNotification(Notifications.PlaylistRemoved, user);
                         }
                     }
                     else
