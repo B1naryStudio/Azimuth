@@ -118,23 +118,25 @@ namespace Azimuth.Services.Concrete
                             {
                                 var allAccounts =
                                     _userSNRepository.Get(account => account.User.Id == userSn.User.Id).ToList();
-                                // Getting unlogged user's account playlists
-                                var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSn.User.Id).ToList();
-                                // Taking playlists which he liked or favourited
-                                var notUserPlaylists = _playlistLikerRepository.Get(s => s.Liker.Id == userSn.User.Id).ToList();
-                                var favPlaylists =
-                                    notUserPlaylists.Where(list => list.Playlist.Creator.Id == loggedUser.Id && list.Liker.Id == userSn.User.Id)
-                                        .Select(list => list.Playlist).ToList();
-                                if (favPlaylists.Any())
-                                    userPlaylists.AddRange(favPlaylists);
+                                foreach (var userSocialNetwork in allAccounts)
+                                {
+                                    // Getting unlogged user's account playlists
+                                    var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSocialNetwork.User.Id).ToList();
+                                    // Taking playlists which he liked or favourited
+                                    var notUserPlaylists = _playlistLikerRepository.Get(s => s.Liker.Id == userSocialNetwork.User.Id).ToList();
+                                    var favPlaylists =
+                                        notUserPlaylists.Where(list => list.Playlist.Creator.Id == loggedUser.Id && list.Liker.Id == userSocialNetwork.User.Id)
+                                            .Select(list => list.Playlist).ToList();
+                                    if (favPlaylists.Any())
+                                        userPlaylists.AddRange(favPlaylists);
 
-                                // Find if user liked/favourited his another account's playlists 
+                                    // Find if user liked/favourited his another account's playlists 
                                     var recordsTodelete =
                                         userPlaylists.SelectMany(s => s.PlaylistLikes).Where(
                                             item => item.Playlist.Creator.Id == loggedUser.Id).ToList();
-                                // Getting user's unauthorized account activity
+                                    // Getting user's unauthorized account activity
                                     var notifications =
-                                        _notificationRepository.Get(item => item.User.Id == userSn.User.Id).ToList();
+                                        _notificationRepository.Get(item => item.User.Id == userSocialNetwork.User.Id).ToList();
 
                                     foreach (var playlistLike in recordsTodelete)
                                     {
@@ -178,13 +180,21 @@ namespace Azimuth.Services.Concrete
                                     // Other notifications have to change their user
                                     notifications.Where(
                                         s =>
-                                            s.User.Id == userSn.User.Id).ForEach(item => item.User = loggedUser);
+                                            s.User.Id == userSocialNetwork.User.Id).ForEach(item => item.User = loggedUser);
 
-                                // Delete unauth user record in db and change record in UserSocialNetwork table to show account merge
-                                var userToDelete = userSn.User;
-                                userSn.User = loggedUser;
-                                _userSNRepository.ChangeUserId(userSn);
-                                _userRepository.DeleteItem(userToDelete);    
+                                    if (userSn.User.Id == userSocialNetwork.User.Id)
+                                    {
+                                        var userToDelete = userSn.User;
+                                        userSn.User = loggedUser;
+                                        _userSNRepository.ChangeUserId(userSn);
+                                        _userRepository.DeleteItem(userToDelete);    
+                                    }
+                                    else
+                                    {
+                                        userSocialNetwork.User = loggedUser;
+                                        _userSNRepository.AddItem(userSocialNetwork);
+                                    }
+                                }  
                             }
                             else
                             {
