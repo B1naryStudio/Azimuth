@@ -227,15 +227,25 @@ namespace Azimuth.DataProviders.Concrete
                     if (searchData != null)
                     {
                         var url = BaseUri + "audio.search?q=" + searchData.Artist + " " + searchData.Name +
-                                  "&auto_complete=1&sort=2&offset=0&count=10&v=5.24&access_token=" + accessToken;
+                                  "&auto_complete=1&sort=2&offset=0&count=20&v=5.24&access_token=" + accessToken;
 
                         var trackJson = await _webClient.GetWebData(url);
                         var track = JsonConvert.DeserializeObject<TrackData>(trackJson);
-                        var topTrack =
+                        if (track.Response != null)
+                        {
+                            var topTrack =
                             track.Response.Audios.FirstOrDefault(
-                                author => author.Artist.ToLower() == searchData.Artist.ToLower());
-                        if (topTrack != null)
-                            searchedTracks.Add(topTrack);
+                                item => item.Artist.ToLower() == searchData.Artist.ToLower() && item.Title.ToLower() == searchData.Name.ToLower());
+                            if (topTrack != null)
+                                searchedTracks.Add(topTrack);
+                            else
+                            {
+                                topTrack = track.Response.Audios.FirstOrDefault(
+                                    item => item.Artist.ToLower().Contains(searchData.Artist.ToLower()) && item.Title.ToLower().Contains(searchData.Name.ToLower()));
+                                if (topTrack != null)
+                                    searchedTracks.Add(topTrack);
+                            }   
+                        }
                     }
                 }
             }

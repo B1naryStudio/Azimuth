@@ -442,17 +442,16 @@ namespace Azimuth.Services.Concrete
             string provider)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
-            List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
+            //List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
 
             using (_unitOfWork)
             {
                 var socialNetworkData = GetSocialNetworkData(provider);
-                searchedTracks =
+                var searchedTracks =
                     await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);
                 _unitOfWork.Commit();
+                return searchedTracks;
             }
-
-            return searchedTracks;
         }
 
         public async Task SetPlaylist(DataForTrackSaving tracksInfo, string provider, int index)
