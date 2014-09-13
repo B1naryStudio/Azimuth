@@ -116,6 +116,8 @@ namespace Azimuth.Services.Concrete
                             // If we login again with the same social network, skip updating (merging accounts)
                             if (loggedUser.Id != userSn.User.Id)
                             {
+                                var allAccounts =
+                                    _userSNRepository.Get(account => account.User.Id == userSn.User.Id).ToList();
                                 // Getting unlogged user's account playlists
                                 var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSn.User.Id).ToList();
                                 // Taking playlists which he liked or favourited
@@ -162,11 +164,6 @@ namespace Azimuth.Services.Concrete
                                                 s.NotificationType == Notifications.UnfavoritedPlaylist ||
                                                 s.NotificationType == Notifications.UnlikedPlaylist)).ForEach(item => _notificationRepository.DeleteItem(item));
 
-                                        // Other notifications have to change their user
-                                        notifications.Where(
-                                            s =>
-                                                s.User.Id == userSn.User.Id).ForEach(item => item.User = loggedUser);
-
                                         // Kill connection playlist -> like record of playlist (like/unlike && favourite/unfavouriteown playlists of another account)
                                         likeRecord.Playlist.PlaylistLikes.Remove(playlistLike);
                                         // Kill connection user -> like record of user (like/unlike && favourite/unfavouriteowne own playlists of another account)
@@ -178,6 +175,10 @@ namespace Azimuth.Services.Concrete
                                     userPlaylists.SelectMany(list => list.PlaylistLikes).ForEach(item => item.Liker = loggedUser);
                                     // Added normal user's playlists should also change user link
                                     userPlaylists.ForEach(item => item.Creator = loggedUser);
+                                    // Other notifications have to change their user
+                                    notifications.Where(
+                                        s =>
+                                            s.User.Id == userSn.User.Id).ForEach(item => item.User = loggedUser);
 
                                 // Delete unauth user record in db and change record in UserSocialNetwork table to show account merge
                                 var userToDelete = userSn.User;
