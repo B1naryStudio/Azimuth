@@ -405,6 +405,8 @@
     <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\PlaylistData.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\TracksDto.cshtml" />
+    <Content Include="Views\UserProfile\_UserProfile.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

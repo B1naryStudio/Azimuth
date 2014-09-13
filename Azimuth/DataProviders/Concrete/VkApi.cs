@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Exceptions;
@@ -247,6 +248,7 @@ namespace Azimuth.DataProviders.Concrete
                             }   
                         }
                     }
+                    Thread.Sleep(100);
                 }
             }
             return searchedTracks;
