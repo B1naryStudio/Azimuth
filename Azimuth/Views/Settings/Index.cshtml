@@ -1,5 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@using Azimuth.Infrastructure.Concrete
+﻿@using Azimuth.Infrastructure.Concrete
 @model Azimuth.DataAccess.Entities.User
 
 @{
@@ -15,34 +14,47 @@
         </div>
         <div class="tabbable">
             <ul class="nav nav-tabs" style="width: 90%">
-                <li class="active"><a href="#user-profile" data-toggle="tab">User Profile</a></li>
+                <li class="active"><a href="#user-profile" data-toggle="tab">User profile</a></li>
                 <li><a href="#user-accounts" data-toggle="tab">Accounts</a></li>
             </ul>
 
             <div class="tab-content" style="margin-top: 10px">
                 <div class="tab-pane fade" id="user-accounts">
-                    <ul class="nav nav-pills">
+                    <ul class="nav nav-tabs nav-stacked" style="width: 10%; float:left">
                         @foreach (var sn in ViewBag.Data.ConnectedNetworks)
                         {
-                            <li>
-                                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
-                                {
-                                    <span>@sn.Name</span>
-                                    @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
-                                }
-                            </li>
+                            <li><a href="#@sn.Name" data-toggle="tab">@sn.Name</a></li>
                         }
                         @foreach (var sn in ViewBag.Data.AvailableNetworks)
                         {
-                            <li>
-                                <span>@sn.Name</span>
-                                @Html.ActionLink("Connect", "ConnectAccount", "Account", new { provider = sn.Name, returnUrl = @Url.Action("Index", "Settings") }, new { @class = "btn btn-success btn-large", @style = "margin-left: 5px" })
-                            </li>
+                            <li><a href="#@sn.Name" data-toggle="tab">@sn.Name</a></li>
                         }
                     </ul>
+                    <div class="tab-content" style="margin-top: 10px">
+                        @foreach (var sn in ViewBag.Data.ConnectedNetworks)
+                        {
+                            <div class="tab-pane fade" id="@sn.Name">
+                                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                                {
+                                    @Html.ActionLink("Disconnect", "Disconnect", new { provider = sn.Name }, new { @class = "btn btn-danger btn-large" })
+                                }
+                            </div>
+                        }
+                        @foreach (var sn in ViewBag.Data.AvailableNetworks)
+                        {
+                            <div class="tab-pane fade" id="@sn.Name">
+                                @if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != sn.Name)
+                                {
+                                    @Html.ActionLink("Connect", "ConnectAccount", "Account", new { provider = sn.Name }, new { @class = "btn btn-success btn-large" })
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div class="tab-pane fade active in" id="user-profile">
-                    @{ Html.RenderPartial("~/Views/UserProfile/_UserProfile.cshtml", Model); }  
+                    @{
+                        Html.RenderPartial("~/Views/UserProfile/_UserProfile.cshtml", Model);
+                    }
                 </div>
             </div>
         </div>
