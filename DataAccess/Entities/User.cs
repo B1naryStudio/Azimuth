@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Azimuth.DataAccess.Infrastructure;
 
 namespace Azimuth.DataAccess.Entities
