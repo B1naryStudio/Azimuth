@@ -15,7 +15,7 @@
       <key column="PlaylistId" />
       <one-to-many class="PlaylistListener"/>
     </set>
-    <set name="PlaylistLikes" table="Likes" cascade="save-update">
+    <set name="PlaylistLikes" table="Likes" cascade="all-delete-orphan" inverse="true">
       <key column="PlaylistId"/>
       <one-to-many class="PlaylistLike"/>
     </set>

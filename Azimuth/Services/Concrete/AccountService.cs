@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Services;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,6 +13,7 @@ using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using WebGrease.Css.Extensions;
 using Claim = System.Security.Claims.Claim;
 using ClaimTypes = System.Security.Claims.ClaimTypes;
 
@@ -24,6 +26,7 @@ namespace Azimuth.Services.Concrete
         private readonly UserSocialNetworkRepository _userSNRepository;
         private readonly SocialNetworkRepository _snRepository;
         private readonly PlaylistRepository _playlistRepository;
+        private readonly PlaylistLikerRepository _playlistLikerRepository;
 
         public async Task<bool> LoginCallback(bool autoLogin)
         {
@@ -85,6 +88,7 @@ namespace Azimuth.Services.Concrete
             _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>() as UserSocialNetworkRepository;
             _snRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
             _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+            _playlistLikerRepository = unitOfWork.GetRepository<PlaylistLike>() as PlaylistLikerRepository;
         }
 
         public bool SaveOrUpdateUserData(User user, UserCredential userCredential, AzimuthIdentity loggedIdentity)
@@ -112,6 +116,23 @@ namespace Azimuth.Services.Concrete
 
                                 foreach (var userPlaylist in userPlaylists)
                                 {
+                                    userPlaylist.PlaylistLikes.Select(item =>
+                                    {
+                                        if (item.Playlist.Creator.Id == loggedUser.Id)
+                                        {
+                                            userPlaylist.PlaylistLikes.Remove(item);
+                                            //userSn.User.PlaylistFollowing.Remove(item);
+                                            //_playlistLikerRepository.DeleteItem(item);
+                                            //_playlistLikerRepository.DeleteItem(item);
+                                            //
+                                        }
+                                        else
+                                        {
+                                            item.Liker = loggedUser;
+                                        }
+                                        return item;
+                                    }).ToList();
+
                                     userPlaylist.Creator = loggedUser;
                                 }
 
