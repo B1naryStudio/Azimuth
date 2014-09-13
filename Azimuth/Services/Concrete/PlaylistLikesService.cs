@@ -205,7 +205,7 @@ namespace Azimuth.Services.Concrete
                     }
                     if (dop != null)
                     {
-                        var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        var userId = dop.UserCredential.Id;
                             //_userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                         var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == id && pair.Liker.Id == userId);
                         return (liker != null) && liker.IsLiked;
@@ -229,7 +229,7 @@ namespace Azimuth.Services.Concrete
                     }
                     if (dop != null)
                     {
-                        var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        var userId = dop.UserCredential.Id;
                             //_userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                         var liker = _likerRepository.GetOne(pair => pair.Playlist.Id == id && pair.Liker.Id == userId);
                         return (liker != null) && liker.IsFavorite;
