@@ -4,13 +4,12 @@
     this.$notificationTemplate = $('#notificationTemplate');
     this.$notificationContainer = $('#notification-container');
     this.$recentActivity = $('#recent-activity');
-
 };
 
 
 UserProfileManager.prototype.showNotification = function () {
     var self = this;
-    var userId = self.$loggedUser.html();
+    var userId = self.$loggedUser.val();
     $.ajax({
         url: '/api/notifications/' + userId,
         async: true,

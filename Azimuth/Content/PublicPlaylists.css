@@ -1,29 +1,42 @@
-﻿.playlist-plated {
+﻿#barplaylistArea {
+    width: 100%;
+    height: 90%
+}
+#playlistsArea {
+    width: 100%;
+}
+.playlist-plated {
     width: 300px;
     height: 300px;
+    max-height: 300px;
+    max-width: 300px;
     display: block;
     float: left;
     background-image: url(http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg);
+    -ms-background-size:  contain;
     background-size:  contain;
     background-repeat: no-repeat;
-    /*margin: 10px 10px 10px 10px;*/
+    margin: 10px;
     position: relative;
+    cursor: pointer;
 }
 
 .playlist-plated-info {
     display: none;
     position: absolute;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.7);
     bottom: 0;
-    padding: 10px 10px 10px 10px;
+    padding: 10px;
     width: 100%;
-    height: 45%;
 }
 .playlist-plated-info div{
-    margin: 0em;
+    margin: 0;
     color: white;
     font-weight: bold;
-    /*font-size: 12px;*/
+}
+
+.playlist-plated-info .fa {
+    padding: 3px;
 }
 
 div.playlistName {
@@ -34,11 +47,3 @@ div.playlistName {
 .playlist-plated:hover .playlistName {
     text-decoration: underline;
 }
-
-/*a {
-    color: white;
-}*/
-
-/*.playlist-plated:hover + .playlist-info {
-    display: block;
-}*/

@@ -82,36 +82,19 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public List<PlaylistData> GetPublicPlaylistsSync()
-        {
-            long currentId = -1;
-            if (AzimuthIdentity.Current != null)
-            {
-                currentId = AzimuthIdentity.Current.UserCredential.Id;
-            }
-            var playlists = _playlistRepository
-                .Get(list => list.Accessibilty == Accessibilty.Public
-                             && list.Creator.Id != currentId)
-                             .Select(GetPlaylistData())
-                             .OrderByDescending(order => order.PlaylistListened)
-                             .ToList();
-
-            return playlists;
-        }
-
         public List<PlaylistData> GetPublicPlaylistsSync(long? id)
         {
+            var currentId = id ?? AzimuthIdentity.Current.UserCredential.Id;
+
             var playlists = _playlistRepository
                 .Get(list => list.Accessibilty == Accessibilty.Public
-                             && list.Creator.Id == id)
+                             && list.Creator.Id == currentId)
                              .Select(GetPlaylistData())
                              .OrderByDescending(order => order.PlaylistListened)
                              .ToList();
 
             return playlists;
         }
-
-        
 
         public async Task<List<PlaylistData>> GetFavoritePlaylists()
         {

@@ -1,11 +1,12 @@
 ﻿@model Azimuth.DataAccess.Entities.User
 
-@Styles.Render("~/Content/PublicPlaylists.css")
+@section styles {
+    @Styles.Render("~/Content/PublicPlaylists.css")
+}
 
 <div id="playlist-spinner" class="spinner loader"></div>
 <div id="barplaylistArea">
     <div id="playlistsArea" style="height: 90%; position: absolute;">
-        <h2>Public Playlists</h2>
         <div id="playlists-plated">
             @if (Request.IsAuthenticated)
             {
@@ -73,7 +74,6 @@
     <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="../../Scripts/sliderController.js"></script>
     <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
     
     <script>
         $(document).ready(function() {
@@ -115,12 +115,12 @@
 
             $('.playlist-plated').hover(function() {
                 var $currentPlaylist = $(this);
-                $currentPlaylist.find('.playlist-plated-info').show("medium");
+                $currentPlaylist.find('.playlist-plated-info').slideDown(200);
             });
 
             $('.playlist-plated').mouseleave(function() {
                 var $currentPlaylist = $(this);
-                $currentPlaylist.find('.playlist-plated-info').hide("medium");
+                $currentPlaylist.find('.playlist-plated-info').slideUp(200);
             });
 
             $('#closeModalBtn').click(function() {

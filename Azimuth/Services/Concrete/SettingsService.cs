@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -23,23 +24,28 @@ namespace Azimuth.Services.Concrete
             _networkRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
         }
 
-        public SettingsViewModel GetUserSettings()
+        public SettingsViewModel GetUserSettings(long? id)
         {
             using (_unitOfWork)
             {
                 var snList = _networkRepository.GetAll().ToList();
-                var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                var user = _userRepository.GetOne(x => x.Id == (id ?? AzimuthIdentity.Current.UserCredential.Id));
                 if (user == null || snList.Count == 0)
                 {
                     throw new EndUserException("Can't get current user info");
                 }
                 var connectedSn = user.SocialNetworks.Select(x => x.SocialNetwork).ToList();
-                var availableSn = snList.Except(connectedSn).ToList();
+                var socialNetworkInfo = new List<SocialNetworkInfo>();
+                snList.ForEach(x => socialNetworkInfo.Add(new SocialNetworkInfo
+                {
+                    SocialNetwork = x,
+                    IsConnected = connectedSn.Contains(x)
+                }));
+
                 var viewModel = new SettingsViewModel
                 {
                     User = UserModel.From(user),
-                    AvailableNetworks = availableSn,
-                    ConnectedNetworks = connectedSn
+                    SocialNetworks = socialNetworkInfo
                 };
 
                 _unitOfWork.Commit();

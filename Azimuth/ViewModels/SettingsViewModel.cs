@@ -7,7 +7,12 @@ namespace Azimuth.ViewModels
     public class SettingsViewModel
     {
         public UserModel User { get; set; }
-        public List<SocialNetwork> AvailableNetworks { get; set; }
-        public List<SocialNetwork> ConnectedNetworks { get; set; }
+        public List<SocialNetworkInfo> SocialNetworks { get; set; }
+    }
+
+    public class SocialNetworkInfo
+    {
+        public SocialNetwork SocialNetwork { get; set; }
+        public bool IsConnected { get; set; }
     }
 }

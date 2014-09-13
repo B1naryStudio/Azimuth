@@ -7,6 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", false)
@@ -14,55 +15,51 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" id="logo-container" href="#">
-                    <img src="~/Images/logo.jpg" height="40"/>
+            <div class="col-xs-3">
+                <a id="logo-container" href="@Url.Action("Index", "PublicPlaylists")">
+                    <img src="~/Images/logo.jpg" height="40" />
                 </a>
             </div>
-            <div class="navbar-collapse collapse">
-                @if (Request.IsAuthenticated)
-                {
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("My music", "Index", "Music")</li>
-                        <li><a href="/PublicPlaylists">Public playlists</a></li>
-                    </ul>
-                    
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a id="user-settings" href="@Url.Action("Index", "Settings")">
+            @if (Request.IsAuthenticated)
+            {
+                <div class="col-xs-6 pull-right">
+                    <div class="col-xs-6">
+                        <form role="form" action="/search">
+                            <div class="input-group navbar-btn">
+                                <input type="text" placeholder="Search" class="form-control" name="searchParam" />
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default">
+                                        <div class="glyphicon glyphicon-search"></div>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="nav navbar-nav col-xs-6">
+                        <li id="user-settings">
+                            <a id="user-image" href="@Url.Action("Index", "Music")">
                                 <img src="@AzimuthIdentity.Current.UserCredential.PhotoBig" />
                             </a>
+                            <a href="@Url.Action("Index", "Music")">@User.Identity.GetUserName() </a>
                         </li>
-                        <li id="user-name-item">
-                            <div id="user-name">@User.Identity.GetUserName()</div>
-                            @Html.ActionLink("Log off", "LogOff", "Account", null, new {id = "log-off-link"})
-                        </li>
-                    </ul>
-                    
-                    <ul class="nav navbar-nav" style="width: 15%; float: right; margin-top: 15px; margin-right: 10px;">
-                        <li>
-                            <span class="input-group">
-                                <span class="input-group-btn">
-                                    <button id="searchBtn" class="btn btn-default glyphicon glyphicon-search" type="button" style="height: 22px; width: 20px; border-color: black; background-color: #66757f; margin-top: -2px; padding-top: 2px; padding-left: 2px;" ></button>
-                                </span>
-                                <input id="searchText" type="text" class="form-control" style="height: 22px; border-color: black; background-color: #66757f; border-left: 0; color: white;" />
-                            </span>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sort-desc"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Account", "Index", "UserProfile")</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Log off", "LogOff", "Account")</li>
+                            </ul>
                         </li>
                     </ul>
-                }
-                else
-                {
+                </div>
+            }
+            else
+            {
                 <ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Log in", "Login", "Account")</li>
                 </ul>
                 
-                }
-            </div>
+            }
         </div>
     </div>
     <div class="body-content">
@@ -72,16 +69,5 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    <script>
-        $('#searchBtn').click(function() {
-            window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
-        });
-        $('#searchText').keypress(function(e) {
-            if (e.which == 13) {
-                window.location = window.location.protocol + "//" + window.location.host + '/search?searchParam=' + $('#searchText').val();
-                return false;
-            }
-        });
-    </script>
 </body>
 </html>

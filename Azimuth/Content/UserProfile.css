@@ -1,58 +1,130 @@
-﻿.user-info-container {
-    margin-left: 10%;
-    margin-top: 5%;
-    width: 90%;
-    height: 95%;
+﻿#user-photo img {
+    margin: auto;
+    max-height: 300px;
 }
 
-#user-logo {
-    width: 20%;
-    height: 60%;
-    float: left;
-    margin-right: 20px;
-    display: block;
+#user-name {
+    font-size: 27px
 }
 
-.user-photo {
-    text-align: center;
-}
-
-.user-screen-name {
-    text-align: center;
-    font-size: 20px;
-}
-
-ul.user-listen-info {
-    list-style-type: none;
+#followers-section div {
     display: inline-block;
+    width: 30%;
+    padding: 2%;
+    cursor: pointer;
+}
+
+#playlist-section div {
     width: 100%;
-    margin-left: 10%;
-    text-align: center;
+    padding: 2%;
 }
 
-.user-listen-count {
-    font-size: 20px;
+#social-container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+#social-container .social-network {
+    border: 2px solid white;
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    padding: 1%;
+    cursor: pointer;
     text-align: center;
+    position: relative;
+    -ms-background-size: 100%;
+    background-size: 100% 100%;
+    font: normal normal normal 22px/1 FontAwesome;
+    color: white;
+    -ms-border-radius: 7px;
+    border-radius: 7px;
+}
+
+.social-network.active {
+    border: 2px solid green;
+}
+
+.social-network.active .active-mark {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25px;
+	height: 25px;
+	border-bottom: 25px solid green;
+	border-left: 25px solid transparent;
+}
+
+.active-mark .fa {
+    position: absolute;
+    right: 0;
+    color: white;
+    bottom: -25px;
+    font-size: 14px
+}
+
+#social-container a {
+    width: 100%;
+    height: 100%;
+}
+
+#social-container #Vkontakte {
+    background: #6A96C7;
+}
+
+#social-container #Google {
+    background: #FF6D4B;
+}
+
+#social-container #Twitter{
+    background: #29C3FF;
+}
+
+#social-container #Facebook {
+    background: #496094;
+}
+
+#social-container .social-network:hover {
+    -webkit-transition: background .512s linear;
+    -moz-transition: background .512s linear;
+    -ms-transition: background .512s linear;
+    -o-transition: background .512s linear;
+    transition: background .512s linear;
     cursor: pointer;
 }
 
-.user-listen-label {
-    font-size: 12px;
-    font-style: italic;
-    color: darkgray;
-    cursor: pointer;
+#social-container #Vkontakte:hover {
+    content: "\f189";
+    background: #1e6bc0;
 }
 
-ul.user-listen-info > li {
-    float: left;
-    margin: 5px;
+#social-container #Google:hover {
+    content: "\f0d5";
+    background: #fd2f00;
 }
 
-#recent-activity {
-    margin-left: 20%;
-    height: 60%;
+#social-container #Twitter:hover{
+    content: "\f09a";
+    background: #0698d0;
 }
 
-.notification {
-    margin: 10px 0;
+#social-container #Facebook:hover {
+    content: "\f099";
+    background: #183d92;
+}
+
+#social-container #Vkontakte:before {
+    content: "\f189";
+}
+
+#social-container #Google:before {
+    content: "\f0d5";
+}
+
+#social-container #Twitter:before{
+    content: "\f09a";
+}
+
+#social-container #Facebook:before {
+    content: "\f099";
 }

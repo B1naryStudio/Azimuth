@@ -1,15 +1,20 @@
 ﻿.loader {
-  font-size: 75px;
-  text-indent: -9999em;
-  overflow: hidden;
-  width: 1em;
-  height: 1em;
-  border-radius: 50%;
-  margin: 0.5em auto;
-  position: relative;
-  -webkit-animation: load6 1.7s infinite ease;
-  animation: load6 1.7s infinite ease;
+    font-size: 75px;
+    text-indent: -9999em;
+    overflow: hidden;
+    width: 1em;
+    height: 1em;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    margin: 0.5em auto;
+    position: relative;
+    -webkit-animation: load6 1.7s infinite ease;
+    -moz-animation: load6 1.7s infinite ease;
+    -ms-animation: load6 1.7s infinite ease;
+    -o-animation: load6 1.7s infinite ease;
+    animation: load6 1.7s infinite ease;
 }
+
 @-webkit-keyframes load6 {
   0% {
     -webkit-transform: rotate(0deg);

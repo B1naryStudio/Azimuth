@@ -4,6 +4,6 @@ namespace Azimuth.Services.Interfaces
 {
     public interface ISettingsService
     {
-        SettingsViewModel GetUserSettings();
+        SettingsViewModel GetUserSettings(long? id);
     }
 }

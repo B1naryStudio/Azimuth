@@ -244,7 +244,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MusicController.cs" />
     <Compile Include="Controllers\PublicPlaylistsController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="DataProviders\Concrete\FacebookApi.cs" />
@@ -308,7 +307,6 @@
     <Content Include="Content\Settings.css" />
     <Content Include="Content\Share.css" />
     <Content Include="Content\Track.css" />
-    <Content Include="Content\User.css" />
     <Content Include="Content\UserProfile.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -388,24 +386,19 @@
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Settings\Index.cshtml" />
-    <Content Include="Views\Settings\_UserTracksPartial.cshtml" />
     <Content Include="Views\Music\Index.cshtml" />
     <Content Include="Views\PublicPlaylists\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Test\RunMigrator.cshtml" />
     <Content Include="Views\Test\Drop.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
-    <Content Include="Views\UserProfile\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Share\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\UserProfile\_UserFollowInfo.cshtml" />
     <Content Include="Views\PublicPlaylists\_PublicPlaylists.cshtml" />
     <Content Include="Views\PublicPlaylists\_PlaylistTracks.cshtml" />
     <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\PlaylistData.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\TracksDto.cshtml" />
-    <Content Include="Views\UserProfile\_UserProfile.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
   </ItemGroup>
   <ItemGroup>

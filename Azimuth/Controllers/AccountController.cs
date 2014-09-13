@@ -56,6 +56,12 @@ namespace Azimuth.Controllers
             }
         }
 
+        public ActionResult Disconnect(string provider)
+        {
+            _accountService.DisconnectUserAccount(provider);
+            return RedirectToAction("Index", "Settings");
+        }
+
         public ActionResult LogOff()
         {
             _accountService.SignOut();
