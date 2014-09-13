@@ -633,6 +633,7 @@ MusicManager.prototype.bindListeners = function() {
 
     self.$getUserTracksBtn.click(function(e) {
         self._getUserTracks(self.provider);
+        self.$searchTrackInput.val('');
     });
 
     this.$searchTrackInput.keyup(function(e) {
@@ -792,7 +793,7 @@ MusicManager.prototype.bindListeners = function() {
     });
 
     $('#listenTopBtn').click(function() {
-        $('.modal-body').text('');
+        $('#infoModal .modal-body').text('');
         if (self.topTracks != null) {
             $('#vkMusic-header-title').text('');
             self.$vkMusicLoadingSpinner.show();
@@ -828,9 +829,11 @@ MusicManager.prototype.bindListeners = function() {
             }).fail(function() {
                 self.$vkMusicLoadingSpinner.hide();
                     self.$errorModal.find('.error').text('Error occured during search ...');
-                    $('#listenTopBtn').attr('disable', true);
+                //$('#listenTopBtn').attr('disable', true);
+                    self.$errorModal.modal('show');
                     $('#okErrorButton').click(function() {
                         $('#errorModal .error').text("");
+                        self.$errorModal.modal('hide');
                     });
                 });
             }

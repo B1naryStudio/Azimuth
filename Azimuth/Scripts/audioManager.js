@@ -143,7 +143,7 @@ AudioManager.prototype.refreshPlaylistTracks = function() {
 AudioManager.prototype.updateProgressbar = function (musicSelector) {
     var self = this;
     $(musicSelector).children('.track').each(function() {
-        if ($(this).children('.thirdPartId').text() == self.$currentTrack.children('.thirdPartId').text() &&
+        if (self.$currentTrack != null && $(this).children('.thirdPartId').text() == self.$currentTrack.children('.thirdPartId').text() &&
             $(this).children('.ownerId').text() == self.$currentTrack.children('.ownerId').text()) {
 
             $(this).append(self.progressSlider.getSlider());
