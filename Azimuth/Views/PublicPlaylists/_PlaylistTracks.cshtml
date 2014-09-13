@@ -1,6 +1,11 @@
 ﻿@model ICollection<Azimuth.Shared.Dto.TracksDto>
 
-@{ Html.RenderPartial("_ChangeLikeStatus");}
+@{
+    if (Request.IsAuthenticated)
+    {
+        Html.RenderPartial("_ChangeLikeStatus");
+    }
+}
 
 <button class="btn btn-default" type="button" id="backToPlaylistsBtn">Back</button>
 

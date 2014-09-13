@@ -33,13 +33,6 @@ namespace Azimuth.Services.Concrete
             };
 
             return notification;
-
-            if (recentlyPlaylist != null)
-            {
-                recentlyPlaylist.Notifications.Add(notification);
-            }
-
-            _notificationRepository.AddItem(notification);
         }
 
         public Task<List<NotificationDto>> GetRecentActivity(long userId)

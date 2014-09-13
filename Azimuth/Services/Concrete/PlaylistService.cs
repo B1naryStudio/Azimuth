@@ -119,9 +119,7 @@ namespace Azimuth.Services.Concrete
             {
                 if (AzimuthIdentity.Current != null)
                 {
-
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
                     var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item=>item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
@@ -241,8 +239,11 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<PlaylistData>> GetUsersPlaylists()
         {
-            //var currentEmail = AzimuthIdentity.Current.UserCredential.Email;
-            var userId = AzimuthIdentity.Current.UserCredential.Id;
+            long userId = -1;
+            if (AzimuthIdentity.Current != null)
+            {
+                userId = AzimuthIdentity.Current.UserCredential.Id;
+            }
             return await Task.Run(() =>
             {
                 using (_unitOfWork)
@@ -252,8 +253,6 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new NullReferenceException();
                     }
-                    //var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
 
                     var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
@@ -263,7 +262,6 @@ namespace Azimuth.Services.Concrete
 
         public void RemovePlaylistById(int id)
         {
-            User user = null;
             using (_unitOfWork)
             {
                 var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
@@ -283,8 +281,6 @@ namespace Azimuth.Services.Concrete
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
                     if (userId == playlist.Creator.Id)
                     {
-                        user = playlist.Creator;
-
                         var playlistFollowing = _likesRepository.Get(pl => pl.Playlist.Id == playlist.Id && (pl.IsFavorite || pl.IsLiked)).Count();
                         if (playlistFollowing == 0)
                         {
@@ -293,19 +289,18 @@ namespace Azimuth.Services.Concrete
                         else
                         {
                             var admin =
-                                _userRepository.Get(
-                                    sysAdmin => sysAdmin.Name.FirstName.ToLower() == "admin" && sysAdmin.Name.LastName.ToLower() == "admin").FirstOrDefault();
+                                _userRepository.GetOne(
+                                    sysAdmin => sysAdmin.Name.FirstName.ToLower() == "azimuth" && sysAdmin.Name.LastName.ToLower() == "azimuth");
                             playlist.Creator = admin;
                         }
                     }
                     else
                     {
                         var favouritedPlaylist =
-                            _likesRepository.Get(record => record.Liker.Id == userId && record.IsFavorite).FirstOrDefault();
+                            _likesRepository.GetOne(record => record.Liker.Id == userId && record.IsFavorite);
                         if (favouritedPlaylist != null)
                         {
                             _likesRepository.DeleteItem(favouritedPlaylist);
-                            //favouritedPlaylist.Liker.PlaylistFollowing.Remove(favouritedPlaylist);
                         }
                     }
                 }
@@ -406,17 +401,7 @@ namespace Azimuth.Services.Concrete
                     }
 
                     var sysUser = _userRepository
-                        .GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
-                    if (sysUser == null)
-                    {
-                        sysUser = new User
-                        {
-                            Name = new Name { FirstName = "Admin", LastName = "Admin" },
-                            Email = "sys@gmail.com"
-                        };
-                        _userRepository.AddItem(sysUser);
-                    }
-                                  
+                        .GetOne(p => p.Name.FirstName == "Azimuth" && p.Name.LastName == "Azimuth");                                
 
                     guid = Guid.NewGuid().ToString();
                     var fakePlaylist = new Playlist
@@ -499,16 +484,7 @@ namespace Azimuth.Services.Concrete
                     guid = Guid.NewGuid().ToString();
 
                     var sysUser = _userRepository
-                        .GetOne(p => p.Name.FirstName == "Admin" && p.Name.LastName == "Admin");
-                    if (sysUser == null)
-                    {
-                        sysUser = new User
-                        {
-                            Name = new Name { FirstName = "Admin", LastName = "Admin" },
-                            Email = "sys@gmail.com"
-                        };
-                        _userRepository.AddItem(sysUser);
-                    }
+                        .GetOne(p => p.Name.FirstName == "Azimuth" && p.Name.LastName == "Azimuth");
 
                     var fakePlaylist = new Playlist
                     {
