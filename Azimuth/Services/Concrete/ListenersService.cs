@@ -120,8 +120,7 @@ namespace Azimuth.Services.Concrete
                 }
                 if (AzimuthIdentity.Current != null)
                 {
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
                     var listener = _listenerRepository.GetOne(pair => pair.Playlist.Id == playlistId && pair.Listener.Id == userId);
                     _listenerRepository.DeleteItem(listener);
                 }

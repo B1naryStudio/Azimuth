@@ -140,8 +140,8 @@ namespace Azimuth.Services.Concrete
                 if (dop != null)
                 {
 
-                    var userId =
-                        _userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        //_userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
                     var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item => item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => (i.Creator.Id != currentUser.Id) && 
@@ -251,7 +251,8 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new NullReferenceException();
                     }
-                    var userId = userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
+                    var userId = AzimuthIdentity.Current.UserCredential.Id;
+                        //userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
 
                     var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;

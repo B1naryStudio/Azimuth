@@ -631,7 +631,6 @@ namespace Azimuth.Services.Concrete
                     s =>
                         (s.SocialNetwork.Name == provider) &&
                         (s.User.Email == AzimuthIdentity.Current.UserCredential.Email));
-                _unitOfWork.Commit();
             }
             else
             {
