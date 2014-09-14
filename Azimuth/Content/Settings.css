@@ -11,7 +11,8 @@
 }
 
 #playlists {
-    height: 100%;
+    height: 97%;
+    margin-bottom: 0;
 }
 
 #scrollable-playlist {
