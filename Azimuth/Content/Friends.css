@@ -1,50 +1,34 @@
-﻿#friends-body {
-    position: absolute;
-    width: 300px;
-    min-height: 83%;
-    z-index: 800;
-    border: 2px solid black;
-    margin-left: 61.6%;
-    background: lightgrey;
-}
-
-#friends-header.table-header {
-    margin-bottom: 5px;
-}
-
-#friends-header-spinner.spinner {
-    float: left;
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-}
-
-#friends-container {
-    position: absolute;
-    width: 300px;
-    min-height: 50%;
-    z-index: 1000;
-    height: 94%;
-}
-
-div.friend {
-    display: block;
-    clear: left;
-    height: 106px;
-}
-
-div.friend:hover {
-    background: lightblue;
-    cursor: pointer;
-}
-
-.friend-initials {
+﻿#friends-container {
+    height: 100%;
     width: 100%;
-    height: 20%;
+}
+
+.friend {
+    width: 100%;
+    position: relative;
 }
 
 .friend-photo {
-    float: left;
-    margin: 3px;
-    display: block;
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+}
+
+.friend-photo img{
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+}
+
+.friend-initials {
+    display: inline-block;
+}
+
+.send-message-btn {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
 }

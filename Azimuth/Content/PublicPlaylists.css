@@ -34,8 +34,8 @@
     cursor: pointer;
 }
 .playlist-plated {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     max-height: 300px;
     max-width: 300px;
     display: block;
@@ -64,15 +64,15 @@
     font-weight: bold;
 }
 
+.playlist-plated-info a {
+    text-decoration: none;
+    color: white;
+}
+
 .playlist-plated-info .fa {
     padding: 3px;
 }
 
 div.playlistName {
     font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.playlist-plated:hover .playlistName {
-    text-decoration: underline;
 }

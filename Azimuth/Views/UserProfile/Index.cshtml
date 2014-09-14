@@ -38,7 +38,7 @@
                     {
                         var active = @sn.IsConnected ? "active" : "";
                         var action = @sn.IsConnected ? "Disconnect" : "ConnectAccount";
-                        <a href="@Url.Action(@action, "Account", new {provider = sn.SocialNetwork.Name, redirectUrl = @Url.Action("Index")})">
+                        <a href="@Url.Action(@action, "Account", new {provider = sn.SocialNetwork.Name, redirectUrl = @Url.Action("Index", "UserProfile")})">
                             <div class="social-network @active" id="@sn.SocialNetwork.Name">
                                 @if (sn.IsConnected)
                                 {

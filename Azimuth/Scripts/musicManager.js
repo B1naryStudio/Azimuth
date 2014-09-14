@@ -35,16 +35,17 @@ var MusicManager = function (manager) {
     this.$errorModal = $('#errorModal');
 
     this._getTracks = function (plId) {
-        self.$playlistsLoadingSpinner.fadeIn('normal');
+        self.$vkMusicLoadingSpinner.show();
+        $('.vkMusicList').find('.track').detach();
         var playlistId = $(this).find('.playlistId').text();
         if (playlistId.length == 0) {
             playlistId = plId;
         }
         $.ajax({
-            url: "/api/usertracks?playlistId=" + playlistId, // TODO replace with class playlistID
+            url: "/api/usertracks?playlistId=" + playlistId,
             type: 'GET',
             success: function (tracksData) {
-                self.$playlistsLoadingSpinner.hide();
+                self.$vkMusicLoadingSpinner.hide();
                 for (var i = 0; i < tracksData.length; i++) {
                     tracksData[i].Duration = self._toFormattedTime(tracksData[i].Duration, true);
                 }
@@ -77,20 +78,13 @@ var MusicManager = function (manager) {
                         manager: self
                     });
                 }
-
-                self.$searchPlaylistInput.val('');
             }
         });
         //$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
         var temp = self.playlistsGlobal.filter(function (index) {
             return index.Id == playlistId;
         })[0].Name;
-        self.$playlistsTitle.text(temp);
-        $('#playlistsTable').hide();
-        $('#backToPlaylistsBtn').show();
-        $('#shuffleBtn').show();
-        $('#repeatBtn').show();
-        $('#playlistTracks').show();
+        self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
         $(this).toggleClass("active");
 
@@ -111,7 +105,6 @@ var MusicManager = function (manager) {
             url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
             type: 'POST',
             contentType: 'application/json',
-            async: false,
             success: function (playlistId) {
                 self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
             }
@@ -231,7 +224,6 @@ var MusicManager = function (manager) {
         self.$infoLoadingSpinner.show();
         $.ajax({
             url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
-            async: true,
             success: function (trackInfo) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
@@ -472,30 +464,10 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
     $('.send-message-btn').click(self._sendMessage);
 };
 
-MusicManager.prototype.showPlaylistTracks = function (tracks, playlistId) {
+MusicManager.prototype.showPlaylistTracks = function (tracks) {
     var self = this;
-    $('#playlistTracks').find('.track').remove();
-    for (var i = 0; i < tracks.length; i++) {
-        var tmpl = self.playlistTrackTemplate.tmpl(tracks[i]);
-        tmpl.appendTo('#playlistTracks');
-        if (self.audioManager.$currentTrack !== null
-            && self.audioManager.$currentTrack.children('.track-url').html() == tracks[i].Url) {
-            tmpl.toggleClass('.draggable-item-selected');
-            self.audioManager.$currentTrack = tmpl;
-            tmpl.append(self.audioManager.progressSlider.getSlider());
-            if (self.audioManager.audio.paused) {
-                self.audioManager._setPlayImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').show();
-                self.audioManager.$currentTrack.find('.track-remaining').hide();
-            } else {
-                self.audioManager._setPauseImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').hide();
-                self.audioManager.$currentTrack.find('.track-remaining').show();
-            }
-        }
-    }
+    self.showTracks(tracks, self.playlistTrackTemplate);
     self.audioManager.bindPlayBtnListeners();
-    $('#playlistTracks').append('<div style="display: none" class="playlistId">' + playlistId + '</div>');
 
     $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
 };
@@ -504,7 +476,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
     $('.playlist').remove();
     self.playlists = playlists;
-    self.$playlistsTitle.text('My playlists');
     self.$playlistsLoadingSpinner.show();
     if (typeof playlists === 'undefined') { //Initial run to get playlists from db
         $.ajax({
@@ -645,17 +616,6 @@ MusicManager.prototype.bindListeners = function() {
         }));
         self.audioManager.refreshTracks();
         self.audioManager.updateProgressbar('.vkMusicList');
-        //$.ajax({
-        //    url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('#searchcriteria option:selected').val(),
-        //    type: 'GET',
-        //    dataType: 'json',
-        //    success: function (tracks) {
-        //        $('.vkMusicList').find('.track').remove();
-        //        var template = $('#searchTrackTemplate');
-        //        self.showTracks(tracks, template);
-        //        self.audioManager.refreshTracks();
-        //    }
-        //});
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
@@ -697,53 +657,7 @@ MusicManager.prototype.bindListeners = function() {
         }
     });
 
-    $('#backToPlaylistsBtn').click(function() {
-        $('#backToPlaylistsBtn').hide();
-        $('#shuffleBtn').hide();
-        $('#repeatBtn').hide();
-        $('#playlistTracks').empty();
-
-        $('#playlistTracks').hide();
-        self.$playlistsTable.empty();
-        self.showPlaylists(self.playlistsGlobal);
-        self.$playlistsTable.show();
-        self.$searchPlaylistInput.val('');
-        $('.accordion .tableRow').on("click", self._getTracks);
-    });
-
-    $('#shuffleBtn').click(function() {
-        var index = 0;
-        var $currentItem = $('#playlistTracks');
-        var elems = $currentItem.children('.tableRow');
-        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
-        //elems.each(function () {
-        for (var i=0; i<elems.length; i++) {
-            if ($(elems[i]).find('.track-play-btn').hasClass('glyphicon-pause')) {
-                index = i;
-            }
-        }
-        if (index != 0) {
-            var temp = elems[index];
-            elems[index] = elems[0];
-            elems[0] = temp;
-        }
-        $currentItem.children().detach('.tableRow');
-        $currentItem.prepend(elems);
-
-        self._moveTrackToNewPosition($currentItem);
-    });
-
-    $('#repeatBtn').click(function () {
-        if ($(this).hasClass('btn-default')) {
-            $(this).removeClass('btn-default').addClass('btn-success');
-            self.audioManager.loop(true);
-        } else {
-            $(this).removeClass('btn-success').addClass('btn-default');
-            self.audioManager.loop(false);
-        }
-    });
-
-    $('#playlists, .vkMusicTable').mCustomScrollbar({
+    $('#scrollable-playlist, .vkMusicTable').mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,
@@ -759,7 +673,6 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            async: false
         });
         self.$createNewPlaylistLbl.hide();
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
@@ -771,7 +684,6 @@ MusicManager.prototype.bindListeners = function() {
         } else if (self.$friendList.children().length == 0) {
             $.ajax({
                 url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
-                async: true,
                 success: function(friends) {
                     self.showFriends(friends);
                     self.$friendsBody.show('slow');

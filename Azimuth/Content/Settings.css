@@ -1,25 +1,4 @@
-﻿#playlists {
-    width: 24%;
-    height: 90%;
-    top: 50px; /*navbar height*/
-    left: 5%;
-}
-
-#separator {
-    background-color: #222222; 
-    width: 70px; 
-    left: 30%;
-}
-
-#SN {
-    left: 30%;
-    margin-left: 80px; 
-    width: 63%;
-    height: 90%;
-    overflow: hidden;
-}
-
-.tabbable {
+﻿.tabbable {
     height: calc(100% - 82px);
 }
 
@@ -27,12 +6,41 @@
     height: calc(100% - 42px);
 }
 
+#SN {
+    height: 100%;
+}
+
+#playlists {
+    height: 100%;
+}
+
+#scrollable-playlist {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    padding-top: 70px;
+    width: 90%;
+}
+
 #Vkontakte {
     height: 100%;
 }
 
+#buttons-section {
+    width: 100%;
+}
+
+#searchPlaylistName {
+    margin-bottom: 15px;
+}
+
 #vk-track-list {
-    height: 70%;
+    height: 100%;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    padding-top: 70px;
 }
 
 .stuck {

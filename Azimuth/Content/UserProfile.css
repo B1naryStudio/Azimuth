@@ -133,9 +133,9 @@
 }
 
 #social-container #Twitter:before{
-    content: "\f09a";
+    content: "\f099";
 }
 
 #social-container #Facebook:before {
-    content: "\f099";
+    content: "\f09a";
 }

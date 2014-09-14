@@ -41,7 +41,9 @@
     text-overflow: ellipsis;
     line-height: 40px;
 }
-
+.track-info a {
+    color: black;
+}
 .track-info-btn {
     float: left;
     margin-left: 2%;

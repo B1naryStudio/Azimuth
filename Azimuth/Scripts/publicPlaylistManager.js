@@ -35,28 +35,6 @@
 PublicPlaylistManager.prototype.showPlaylists = function() {
     var self = this;
     self.$trackArea.hide();
-
-    //$('.playlist-plated').click(function () {
-    //    $('#playlistsArea').hide();
-    //    $('#playlist-spinner').show();
-    //    var $currentPlaylist = $(this);
-    //    var playlistId = $currentPlaylist.find('.playlistId').val();
-    //    $.ajax({
-    //        url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
-    //            "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
-    //            "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
-    //            "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
-    //        type: 'GET',
-    //        success: function (data) {
-    //            $(data).appendTo($('#tracksArea'));
-    //            $.ajax({
-    //                url: 'api/playlists/raiselistened?id=' + playlistId,
-    //                type: 'POST'
-    //            });
-    //        }
-    //    });
-    //});
-
 };
 
 PublicPlaylistManager.prototype.showTracks = function() {
@@ -71,12 +49,10 @@ PublicPlaylistManager.prototype.showTracks = function() {
         var $self = $(this);
         var author = $self.parent().children('.track-description').children('.track-info');
         var trackName = $self.parent().children('.track-description').children('.track-title');
-        //self.$infoLoadingSpinner.show();
         $.ajax({
             url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
             async: true,
             success: function (trackInfo) {
-                //self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
                 var $trackInfoContainer = $('.modal-body');

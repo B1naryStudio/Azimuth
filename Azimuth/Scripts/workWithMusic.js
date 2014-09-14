@@ -11,7 +11,7 @@
         sliderSelector: '#volumeSlider', 
         sliderBarClass: 'volumeBar', 
         sliderClass: 'volume', 
-        dirrection: 'vertical'
+        dirrection: 'horizontall'
     });
     var progressSlider = new SliderController({
         sliderSelector: '#progressSlider',
@@ -35,9 +35,9 @@
             mousedownOnProgressBar = true;
         }
         if (!$target.parents().hasClass('draggable-list') && !$target.parents().hasClass('list')) {
-            document.oncontextmenu = function () {
+            document.oncontextmenu = function() {
                 return true;
-            }
+            };
         }
         if (!$target.hasClass('contextMenuActionName') && event.which != 3) {
             $('.contextMenu').detach();

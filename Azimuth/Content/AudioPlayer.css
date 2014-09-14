@@ -32,19 +32,25 @@
 }
 
 #audio-player #item-container {
-    width: 52%;
+    width: 49%;
 }
 
 #audio-player #volume-container {
     width: 15%;
 }
+#audio-player #volume-container #volumeSlider {
+    width: 70%;
+    height: 7px;
+    left: 0;
+    margin: 0;
+}
 
 #audio-player #audio-player-controls {
-    width: 10%;
+    width: 13%;
 }
 
 #audio-player #audio-player-controls > div {
-    width: 40%;
+    width: 30%;
     font-size: 16px;
     cursor: pointer;
 }

@@ -175,7 +175,7 @@ div.tableRow{
 }
 
 .vkMusicTable {
-    height: 70%;
+    height: 100%;
 }
 
 .table-header {
@@ -205,46 +205,6 @@ div.tableRow{
 
 .spinner {
     display: none;
-}
-
-#friends-header-spinner.spinner {
-    background: url(../Images/spinner_loading_circle.gif);
-    background-size: contain;
-    float: left;
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-}
-
-#friends-container {
-    position: absolute;
-    width: 300px;
-    min-height: 50%;
-    z-index: 1000;
-    height: 94%;
-}
-
-div.friend {
-    display: block;
-    clear: left;
-    height: 106px;
-}
-
-div.friend:hover {
-    background: lightblue;
-    cursor: pointer;
-}
-
-.friend-initials {
-    width: 100%;
-    height: 20%;
-}
-
-
-.friend-photo {
-    float: left;
-    margin: 3px;
-    display: block;
 }
 
 span.label {
