@@ -227,11 +227,13 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                 self.$currentTrack = $(this).parent();
                 self.play();
                 self._setPauseImgButton($(this).parent());
-                $('#playTrackBtn').css('background-position', '8px -50px');
+                $('#play-button').children('.fa-play').addClass('hide');
+                $('#play-button').children('.fa-pause').removeClass('hide');
             } else {
                 self.pause();
                 self._setPlayImgButton($(this).parent());
-                $('#playTrackBtn').css('background-position', '8px 0');
+                $('#play-button').children('.fa-play').removeClass('hide');
+                $('#play-button').children('.fa-pause').addClass('hide');
             }
         }
     };
@@ -307,11 +309,13 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                     self.$currentTrack = $currentTrack;
                     self.play();
                     self._setPauseImgButton($($currentTrack));
-                    $('#playTrackBtn').css('background-position', '8px -50px');
+                    $('#play-button').children('.fa-play').addClass('hide');
+                    $('#play-button').children('.fa-pause').removeClass('hide');
                 } else {
                     self.pause();
                     self._setPlayImgButton($($currentTrack));
-                    $('#playTrackBtn').css('background-position', '8px 0');
+                    $('#play-button').children('.fa-play').removeClass('hide');
+                    $('#play-button').children('.fa-pause').addClass('hide');
                 }
                 self._loadNextTracks($currentTrack);
 
@@ -334,19 +338,21 @@ AudioManager.prototype.refreshProgressBar = function () {
 AudioManager.prototype.bindListeners = function() {
     var self = this;
 
-    $('#playTrackBtn').click(function() {
+    $('#play-button').click(function() {
         if (self.audio.paused) {
             if (self.audio.src === '') {
                 $($('.track:not(.draggable-stub)').children('.btn').get(0)).click();
             } else {
                 self.play();
                 self._setPauseImgButton(self.$currentTrack);
-                $('#playTrackBtn').css('background-position', '8px -50px');
+                $('#play-button').children('.fa-play').addClass('hide');
+                $('#play-button').children('.fa-pause').removeClass('hide');
             }
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
-            $('#playTrackBtn').css('background-position', '8px 0');
+            $('#play-button').children('.fa-play').removeClass('hide');
+            $('#play-button').children('.fa-pause').addClass('hide');
         }
     });
 
