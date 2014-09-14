@@ -356,8 +356,8 @@ AudioManager.prototype.bindListeners = function() {
         }
     });
 
-    $('#nextTrackBtn').click(self._nextTrack);
-    $('#prevTrackBtn').click(self._prevTrack);
+    $('#next-button').click(self._nextTrack);
+    $('#prev-button').click(self._prevTrack);
 
     $('#volumeImg').click(function () {
         if (self.audio.volume == 0) {
@@ -390,7 +390,7 @@ AudioManager.prototype.bindListeners = function() {
         self.onProgressBarClick = true;
     });
 
-    $(document).on('mouseup', function (e) {
+    $(document).on('mouseup', function () {
         if (self.onProgressBarClick == true) {
             self.setCurrentTime(self.progressSlider.getPosition() * self.getDuration());
             self.audio.play();
