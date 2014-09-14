@@ -6,7 +6,7 @@ using NHibernate.Linq;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class UserSocialNetworkRepository:BaseRepository<UserSocialNetwork>
+    public class UserSocialNetworkRepository : BaseRepository<UserSocialNetwork>, IUserSocialNetworkRepository
     {
         public UserSocialNetworkRepository(ISession session): base(session)
         {
@@ -29,5 +29,14 @@ namespace Azimuth.DataAccess.Repositories
             _session.Save(userSn);
         }
 
+    }
+
+    public interface IUserSocialNetworkRepository : IRepository<UserSocialNetwork>
+    {
+        UserSocialNetwork GetByThirdPartyId(string id);
+
+        void Remove(long userId, long socialNetworkId);
+
+        void ChangeUserId(UserSocialNetwork userSn);
     }
 }

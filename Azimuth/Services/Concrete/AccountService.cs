@@ -19,11 +19,7 @@ namespace Azimuth.Services.Concrete
 {
     public class AccountService : IAccountService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserRepository _userRepository;
-        private readonly UserSocialNetworkRepository _userSNRepository;
-        private readonly SocialNetworkRepository _snRepository;
-        private readonly PlaylistRepository _playlistRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public async Task<bool> LoginCallback(bool autoLogin)
         {
@@ -76,27 +72,24 @@ namespace Azimuth.Services.Concrete
             }
         }
 
-        public AccountService(IUnitOfWork unitOfWork)
+        public AccountService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _unitOfWork = unitOfWork;
-
-            // Get repositories
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
-            _userSNRepository = _unitOfWork.GetRepository<UserSocialNetwork>() as UserSocialNetworkRepository;
-            _snRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
-            _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public bool SaveOrUpdateUserData(User user, UserCredential userCredential, AzimuthIdentity loggedIdentity)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var _userSNRepository = unitOfWork.GetTypedRepository<IUserSocialNetworkRepository>();
+                var _snRepository = unitOfWork.GetTypedRepository<ISocialNetworkRepository>();
+                var _playlistRepository = unitOfWork.GetRepository<Playlist>();
                 try
                 {
                     User loggedUser = null;
                     if (loggedIdentity != null)
                     {
-                        loggedUser = _userRepository.GetOne(x => x.Email == loggedIdentity.UserCredential.Email);
+                        loggedUser = unitOfWork.UserRepository.GetOne(x => x.Email == loggedIdentity.UserCredential.Email);
                     }
                     var userSn = _userSNRepository.GetByThirdPartyId(userCredential.SocialNetworkId);
                     if (userSn != null)
@@ -118,7 +111,7 @@ namespace Azimuth.Services.Concrete
                                 var userToDelete = userSn.User;
                                 userSn.User = loggedUser;
                                 _userSNRepository.ChangeUserId(userSn);
-                                _userRepository.DeleteItem(userToDelete);    
+                                unitOfWork.UserRepository.DeleteItem(userToDelete);    
                             }
                             else
                             {
@@ -158,7 +151,7 @@ namespace Azimuth.Services.Concrete
 
                         if (loggedIdentity == null)
                         {
-                            _userRepository.AddItem(user);
+                            unitOfWork.UserRepository.AddItem(user);
                         }
                         _userSNRepository.AddItem(new UserSocialNetwork
                         {
@@ -173,11 +166,11 @@ namespace Azimuth.Services.Concrete
                         });
                     }
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                 }
                 catch (Exception)
                 {
-                    _unitOfWork.Rollback();
+                    unitOfWork.Rollback();
                     return false;
                 }
             }
@@ -186,8 +179,12 @@ namespace Azimuth.Services.Concrete
 
         public bool DisconnectUserAccount(string provider)
         {
-            using (_unitOfWork)
+            using (var _unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var _userRepository = _unitOfWork.GetTypedRepository<IUserRepository>();
+                var _userSNRepository = _unitOfWork.GetTypedRepository<IUserSocialNetworkRepository>();
+                var _snRepository = _unitOfWork.GetTypedRepository<ISocialNetworkRepository>();
+                var _playlistRepository = _unitOfWork.GetRepository<Playlist>();
                 try
                 {
                     var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);

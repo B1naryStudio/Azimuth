@@ -12,23 +12,21 @@ namespace Azimuth.Services.Concrete
 {
     public class SettingsService : ISettingsService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserRepository _userRepository;
-        private readonly SocialNetworkRepository _networkRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public SettingsService(IUnitOfWork unitOfWork)
+        public SettingsService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _unitOfWork = unitOfWork;
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
-            _networkRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public SettingsViewModel GetUserSettings()
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var _networkRepository = unitOfWork.GetRepository<SocialNetwork>();
+
                 var snList = _networkRepository.GetAll().ToList();
-                var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                var user = unitOfWork.UserRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
                 if (user == null || snList.Count == 0)
                 {
                     throw new EndUserException("Can't get current user info");
@@ -42,7 +40,7 @@ namespace Azimuth.Services.Concrete
                     ConnectedNetworks = connectedSn
                 };
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
                 return viewModel;
             }
         }

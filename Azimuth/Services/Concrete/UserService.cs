@@ -17,28 +17,24 @@ namespace Azimuth.Services.Concrete
     public class UserService : IUserService
     {
         private ISocialNetworkApi _socialNetworkApi;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserRepository _userRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly INotificationService _notificationService;
-        private readonly NotificationRepository _notificationRepository;
 
-        public UserService(IUnitOfWork unitOfWork, INotificationService notificationService)
+        public UserService(IUnitOfWorkFactory unitOfWorkFactory, INotificationService notificationService)
         {
-            _unitOfWork = unitOfWork;
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
             _notificationService = notificationService;
-            _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
         }
         public async Task<List<VkFriendData.Friend>> GetFriendsInfo(string provider, int offset, int count)
         {
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             UserSocialNetwork socialNetworkData;
 
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                socialNetworkData = GetSocialNetworkData(provider);
+                socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             if (socialNetworkData == null)
@@ -54,11 +50,11 @@ namespace Azimuth.Services.Concrete
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             UserSocialNetwork socialNetworkData;
 
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                socialNetworkData = GetSocialNetworkData(provider);
+                socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             if (socialNetworkData == null)
@@ -71,20 +67,20 @@ namespace Azimuth.Services.Concrete
 
         public User GetUserInfo(long id)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var user = _userRepository.GetFullUserData(id);
-                _unitOfWork.Commit();
+                var user = unitOfWork.UserRepository.GetFullUserData(id);
+                unitOfWork.Commit();
                 return user;
             }
         }
 
         public User GetUserInfo(string email)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var user = _userRepository.GetOne(u => u.Email == email);
-                _unitOfWork.Commit();
+                var user = unitOfWork.UserRepository.GetOne(u => u.Email == email);
+                unitOfWork.Commit();
                 return user;
             }
         }
@@ -103,15 +99,20 @@ namespace Azimuth.Services.Concrete
         {
             var users = new List<User>();
             string[] searchParams = searchText.Split(' ');
-            if ((searchParams.Length == 1) && (searchParams.Length != 0))
+
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                users.AddRange(_userRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0])).ToList());
-            }
-            else
-            {
-                users.AddRange(_userRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
-                users.AddRange(_userRepository.Get(s => (s.Name.LastName.ToLower() + " " + s.Name.FirstName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
-                users = users.Distinct().ToList();
+                if ((searchParams.Length == 1) && (searchParams.Length != 0))
+                {
+                    users.AddRange(unitOfWork.UserRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0])).ToList());
+                }
+                else
+                {
+                    users.AddRange(unitOfWork.UserRepository.Get(s => (s.Name.FirstName.ToLower() + " " + s.Name.LastName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
+                    users.AddRange(unitOfWork.UserRepository.Get(s => (s.Name.LastName.ToLower() + " " + s.Name.FirstName.ToLower()).Contains(searchParams[0] + " " + searchParams[1])).ToList());
+                    users = users.Distinct().ToList();
+                }
+                unitOfWork.Commit();
             }
             //users = _userRepository.Get(s => s.Name.FirstName.ToLower().Contains(searchText)).ToList();
             //users.AddRange(_userRepository.Get(s => s.Name.LastName.ToLower().Contains(searchText)).ToList());
@@ -119,9 +120,9 @@ namespace Azimuth.Services.Concrete
             return users;
         }
 
-        private UserSocialNetwork GetSocialNetworkData(string provider)
+        private UserSocialNetwork GetSocialNetworkData(IUnitOfWork unitOfWork, string provider)
         {
-            var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
+            var userSocialNetworkRepo = unitOfWork.GetRepository<UserSocialNetwork>();
             return userSocialNetworkRepo.GetOne(
                 s =>
                     (s.SocialNetwork.Name == provider) &&
@@ -131,10 +132,10 @@ namespace Azimuth.Services.Concrete
         private User FollowOperation(long followerId, bool isFollow)
         {
             User user;
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                user = _userRepository.GetFullUserData(followerId);
-                var loggedUser = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                user = unitOfWork.UserRepository.GetFullUserData(followerId);
+                var loggedUser = unitOfWork.UserRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
                 if (user == null || loggedUser == null)
                 {
                     throw new EndUserException("Something wrong during unfollowing operation.");
@@ -153,9 +154,9 @@ namespace Azimuth.Services.Concrete
 
                 var notif = _notificationService.CreateNotification(notification, loggedUser, user);
 
-                _notificationRepository.AddItem(notif);
+                unitOfWork.NotificationRepository.AddItem(notif);
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             return user;
