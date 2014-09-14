@@ -6,7 +6,7 @@ using NHibernate.Linq;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class SocialNetworkRepository:BaseRepository<SocialNetwork>
+    public class SocialNetworkRepository : BaseRepository<SocialNetwork>, ISocialNetworkRepository
     {
         public SocialNetworkRepository(ISession session) : base(session)
         {
@@ -16,5 +16,10 @@ namespace Azimuth.DataAccess.Repositories
         {
             return _session.Query<SocialNetwork>().FirstOrDefault(s => s.Name == name);
         }
+    }
+
+    public interface ISocialNetworkRepository : IRepository<SocialNetwork>
+    {
+        SocialNetwork GetByName(string name);
     }
 }

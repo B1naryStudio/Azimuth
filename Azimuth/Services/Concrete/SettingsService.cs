@@ -2,7 +2,6 @@
 using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Infrastructure.Exceptions;
 using Azimuth.Models;
@@ -13,23 +12,21 @@ namespace Azimuth.Services.Concrete
 {
     public class SettingsService : ISettingsService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserRepository _userRepository;
-        private readonly SocialNetworkRepository _networkRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public SettingsService(IUnitOfWork unitOfWork)
+        public SettingsService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _unitOfWork = unitOfWork;
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
-            _networkRepository = _unitOfWork.GetRepository<SocialNetwork>() as SocialNetworkRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public SettingsViewModel GetUserSettings(long? id)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var snList = _networkRepository.GetAll().ToList();
-                var user = _userRepository.GetOne(x => x.Id == (id ?? AzimuthIdentity.Current.UserCredential.Id));
+                var networkRepository = unitOfWork.GetRepository<SocialNetwork>();
+
+                var snList = networkRepository.GetAll().ToList();
+                var user = unitOfWork.UserRepository.GetOne(x => x.Id == (id ?? AzimuthIdentity.Current.UserCredential.Id));
                 if (user == null || snList.Count == 0)
                 {
                     throw new EndUserException("Can't get current user info");
@@ -48,7 +45,7 @@ namespace Azimuth.Services.Concrete
                     SocialNetworks = socialNetworkInfo
                 };
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
                 return viewModel;
             }
         }

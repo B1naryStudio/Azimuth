@@ -12,15 +12,11 @@ namespace Azimuth.Services.Concrete
 {
     public class NotificationService : INotificationService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationRepository _notificationRepository;
-        private readonly UserRepository _userRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public NotificationService(IUnitOfWork unitOfWork)
+        public NotificationService(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            _unitOfWork = unitOfWork;
-            _notificationRepository = _unitOfWork.GetRepository<Notification>() as NotificationRepository;
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
         public Notification CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
         {
@@ -33,13 +29,6 @@ namespace Azimuth.Services.Concrete
             };
 
             return notification;
-
-            if (recentlyPlaylist != null)
-            {
-                recentlyPlaylist.Notifications.Add(notification);
-            }
-
-            _notificationRepository.AddItem(notification);
         }
 
         public Task<List<NotificationDto>> GetRecentActivity(long userId)
@@ -47,8 +36,11 @@ namespace Azimuth.Services.Concrete
             return Task.Run(() =>
             {
                 var notificationsDto = new List<NotificationDto>();
-                using (_unitOfWork)
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
+                    var _notificationRepository = unitOfWork.GetRepository<Notification>();
+
+                    //TODO: move ToList() to the end of the expression
                     var notifications = _notificationRepository.GetAll(n => n.User.Id == userId).ToList().OrderByDescending(s => s.Id).Take(15);
 
                     foreach (var notification in notifications)
@@ -85,11 +77,14 @@ namespace Azimuth.Services.Concrete
         public async Task<List<NotificationDto>> GetFollowingsActivity(long userId)
         {
             var notifications = new List<NotificationDto>();
-            var user = _userRepository.GetOne(u => u.Id == userId);
-
-            foreach (var following in user.Following)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                notifications.AddRange(await GetRecentActivity(following.Id));
+                var user = unitOfWork.UserRepository.GetOne(u => u.Id == userId);
+
+                foreach (var following in user.Following)
+                {
+                    notifications.AddRange(await GetRecentActivity(following.Id));
+                }
             }
 
             return notifications;

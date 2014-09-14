@@ -14,6 +14,7 @@ namespace Azimuth.DataAccess.Infrastructure
     {
         public override void Load()
         {
+            Bind<IUnitOfWorkFactory>().ToFactory();
             Bind<IRepositoryFactory>().ToFactory();
             Bind<IUnitOfWork>().To<UnitOfWork>();
             Bind<ISessionFactory>().ToMethod(ctx =>
@@ -22,28 +23,35 @@ namespace Azimuth.DataAccess.Infrastructure
 #if DEBUG
                 cfg.Configure();
 #else
-                cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate-release.cfg.xml"));
+                cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate.cfg.xml"));
 #endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
                 return cfg.BuildSessionFactory();
             });
-            Bind<IRepository<User>, BaseRepository<User>>().To<UserRepository>();
-            Bind<IRepository<Artist>, BaseRepository<Artist>>().To<ArtistRepository>();
-            Bind<IRepository<Album>, BaseRepository<Album>>().To<AlbumRepository>();
-            Bind<IRepository<Track>, BaseRepository<Track>>().To<TrackRepository>();
-            Bind<IRepository<Playlist>, BaseRepository<Playlist>>().To<PlaylistRepository>();
-            Bind<IRepository<SocialNetwork>, BaseRepository<SocialNetwork>>().To<SocialNetworkRepository>();
-            Bind<IRepository<UserSocialNetwork>, BaseRepository<UserSocialNetwork>>().To<UserSocialNetworkRepository>();
-            Bind<IRepository<PlaylistTrack>, BaseRepository<PlaylistTrack>>().To<PlaylistTrackRepository>();
-            Bind<IRepository<PlaylistListener>, BaseRepository<PlaylistListener>>().To<PlaylistListenersRepository>();
-            Bind<IRepository<SharedPlaylist>, BaseRepository<SharedPlaylist>>().To<SharedPlaylistRepository>();
-            Bind<IRepository<PlaylistLike>, BaseRepository<PlaylistLike>>().To<PlaylistLikerRepository>();
-            Bind<IRepository<Notification>, BaseRepository<Notification>>().To<NotificationRepository>();
+            Bind<IRepository<User>, IUserRepository>().To<UserRepository>();
+            Bind<IRepository<Artist>>().To<ArtistRepository>();
+            Bind<IRepository<Album>>().To<AlbumRepository>();
+            Bind<IRepository<Track>>().To<TrackRepository>();
+            Bind<IRepository<Playlist>, IPlaylistRepository>().To<PlaylistRepository>();
+            Bind<IRepository<SocialNetwork>, ISocialNetworkRepository>().To<SocialNetworkRepository>();
+            Bind<IRepository<UserSocialNetwork>, IUserSocialNetworkRepository>().To<UserSocialNetworkRepository>();
+            Bind<IRepository<PlaylistTrack>>().To<PlaylistTrackRepository>();
+            Bind<IRepository<PlaylistListener>>().To<PlaylistListenersRepository>();
+            Bind<IRepository<SharedPlaylist>>().To<SharedPlaylistRepository>();
+            Bind<IRepository<PlaylistLike>>().To<PlaylistLikerRepository>();
+            Bind<IRepository<Notification>, INotificationRepository>().To<NotificationRepository>();
         }
     }
 
     public interface IRepositoryFactory
     {
         IRepository<T> Resolve<T>(ISession session) where T : IEntity;
+
+        T ResolveTyped<T>(ISession session);
+    }
+
+    public interface IUnitOfWorkFactory
+    {
+        IUnitOfWork NewUnitOfWork();
     }
 }

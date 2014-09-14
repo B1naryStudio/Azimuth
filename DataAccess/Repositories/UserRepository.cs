@@ -6,7 +6,7 @@ using NHibernate.Linq;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class UserRepository : BaseRepository<User>
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(ISession session) : base(session)
         {
@@ -26,5 +26,12 @@ namespace Azimuth.DataAccess.Repositories
         {
             _session.Delete(user);
         }
+    }
+
+    public interface IUserRepository : IRepository<User>
+    {
+        User GetFullUserData(long id);
+
+        void Remove(User user);
     }
 }
