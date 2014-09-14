@@ -118,17 +118,18 @@ namespace Azimuth.Services.Concrete
                             {
                                 var allAccounts =
                                     _userSNRepository.Get(account => account.User.Id == userSn.User.Id).ToList();
+                                var userToDelete = userSn.User;
                                 foreach (var userSocialNetwork in allAccounts)
                                 {
                                     // Getting unlogged user's account playlists
                                     var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSocialNetwork.User.Id).ToList();
                                     // Taking playlists which he liked or favourited
                                     var notUserPlaylists = _playlistLikerRepository.Get(s => s.Liker.Id == userSocialNetwork.User.Id).ToList();
-                                    var favPlaylists =
-                                        notUserPlaylists.Where(list => list.Playlist.Creator.Id == loggedUser.Id && list.Liker.Id == userSocialNetwork.User.Id)
-                                            .Select(list => list.Playlist).ToList();
-                                    if (favPlaylists.Any())
-                                        userPlaylists.AddRange(favPlaylists);
+                                    //var favPlaylists =
+                                    //    notUserPlaylists.Where(list => list.Playlist.Creator.Id == loggedUser.Id && list.Liker.Id == userSocialNetwork.User.Id)
+                                    //        .Select(list => list.Playlist).ToList();
+                                    if (notUserPlaylists.Any())
+                                        userPlaylists.AddRange(notUserPlaylists.Select(s => s.Playlist));
 
                                     // Find if user liked/favourited his another account's playlists 
                                     var recordsTodelete =
@@ -165,6 +166,11 @@ namespace Azimuth.Services.Concrete
                                                 s.NotificationType == Notifications.LikedPlaylist ||
                                                 s.NotificationType == Notifications.UnfavoritedPlaylist ||
                                                 s.NotificationType == Notifications.UnlikedPlaylist)).ForEach(item => _notificationRepository.DeleteItem(item));
+                                        //notifications.Remove(notifications.FirstOrDefault(s => s.RecentlyPlaylist == playlistLike.Playlist &&
+                                        //                                                       (s.NotificationType == Notifications.FavoritedPlaylist ||
+                                        //                                                        s.NotificationType == Notifications.LikedPlaylist ||
+                                        //                                                        s.NotificationType == Notifications.UnfavoritedPlaylist ||
+                                        //                                                        s.NotificationType == Notifications.UnlikedPlaylist)));
 
                                         // Kill connection playlist -> like record of playlist (like/unlike && favourite/unfavouriteown playlists of another account)
                                         likeRecord.Playlist.PlaylistLikes.Remove(playlistLike);
@@ -172,6 +178,7 @@ namespace Azimuth.Services.Concrete
                                         likeRecord.Liker.PlaylistFollowing.Remove(playlistLike);
                                         // Delete like/unlike && favourite/unfavouriteowne  playlists of another users's account 
                                         _playlistLikerRepository.DeleteItem(playlistLike);
+                                        //userPlaylists.Remove(playlistLike.Playlist);
                                     }
                                     // Normal user's activity should change user link
                                     userPlaylists.SelectMany(list => list.PlaylistLikes).ForEach(item => item.Liker = loggedUser);
@@ -182,19 +189,11 @@ namespace Azimuth.Services.Concrete
                                         s =>
                                             s.User.Id == userSocialNetwork.User.Id).ForEach(item => item.User = loggedUser);
 
-                                    if (userSn.User.Id == userSocialNetwork.User.Id)
-                                    {
-                                        var userToDelete = userSn.User;
-                                        userSn.User = loggedUser;
-                                        _userSNRepository.ChangeUserId(userSn);
-                                        _userRepository.DeleteItem(userToDelete);    
-                                    }
-                                    else
-                                    {
                                         userSocialNetwork.User = loggedUser;
-                                        _userSNRepository.AddItem(userSocialNetwork);
-                                    }
-                                }  
+                                        _userSNRepository.ChangeUserId(userSocialNetwork);
+
+                                }
+                                _userRepository.DeleteItem(userToDelete);  
                             }
                             else
                             {

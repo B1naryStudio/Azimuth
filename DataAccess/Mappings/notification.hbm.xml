@@ -6,7 +6,7 @@
     </id>
     <many-to-one name="User" column="UserId"/>
     <many-to-one name="RecentlyUser" column="RecentlyUserId"/>
-    <many-to-one name="RecentlyPlaylist" column="RecentlyPlaylistId" cascade="all"/>
+    <many-to-one name="RecentlyPlaylist" column="RecentlyPlaylistId" cascade="save-update"/>
     <property name="NotificationType" type="NotificationType"/>
   </class>
 </hibernate-mapping>
