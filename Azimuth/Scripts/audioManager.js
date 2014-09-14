@@ -38,8 +38,8 @@
     this._nextTrack = function () {
         self.progressSlider.setPosition(0);
         self.progressSlider.setBackgroundPosition(0);
-        self.$currentTrack.find('.track-duration').show();
-        self.$currentTrack.find('.track-remaining').hide();
+        //self.$currentTrack.find('.track-duration').show();
+        //self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
@@ -65,8 +65,8 @@
     this._prevTrack = function () {
         self.progressSlider.setPosition(0);
         self.progressSlider.setBackgroundPosition(0);
-        self.$currentTrack.find('.track-duration').show();
-        self.$currentTrack.find('.track-remaining').hide();
+        //self.$currentTrack.find('.track-duration').show();
+        //self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
@@ -146,7 +146,7 @@ AudioManager.prototype.updateProgressbar = function (musicSelector) {
         if (self.$currentTrack != null && $(this).children('.thirdPartId').text() == self.$currentTrack.children('.thirdPartId').text() &&
             $(this).children('.ownerId').text() == self.$currentTrack.children('.ownerId').text()) {
 
-            $(this).append(self.progressSlider.getSlider());
+            //$(this).append(self.progressSlider.getSlider());
             self.$currentTrack = $(this);
             if (self.audio.paused == false) {
                 $(this).children('.track-play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
@@ -163,10 +163,10 @@ AudioManager.prototype.loop = function (value) {
 AudioManager.prototype.play = function() {
     var self = this;
 
-    self.$currentTrack.find('.track-duration').hide();
-    self.$currentTrack.find('.track-remaining').show();
-    self.$currentTrack.append(self.progressSlider.getSlider());
-    self.progressSlider.getSlider().show();
+    //self.$currentTrack.find('.track-duration').hide();
+    //self.$currentTrack.find('.track-remaining').show();
+    //self.$currentTrack.append(self.progressSlider.getSlider());
+    //self.progressSlider.getSlider().show();
     self.progressSlider.bindListeners();
     self.audio.play();
     self.refreshProgressBar();
@@ -202,10 +202,10 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
-        if (self.$currentTrack != null) {
-            self.$currentTrack.find('.track-duration').show();
-            self.$currentTrack.find('.track-remaining').hide();
-        }
+        //if (self.$currentTrack != null) {
+        //    self.$currentTrack.find('.track-duration').show();
+        //    self.$currentTrack.find('.track-remaining').hide();
+        //}
         var $currentTrack = $(this).parents('.track');
         var url = $(this).parent().children('.track-url').text();
         if (!url) {
@@ -227,11 +227,13 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                 self.$currentTrack = $(this).parent();
                 self.play();
                 self._setPauseImgButton($(this).parent());
-                $('#playTrackBtn').css('background-position', '8px -50px');
+                $('#play-button').children('.fa-play').addClass('hide');
+                $('#play-button').children('.fa-pause').removeClass('hide');
             } else {
                 self.pause();
                 self._setPlayImgButton($(this).parent());
-                $('#playTrackBtn').css('background-position', '8px 0');
+                $('#play-button').children('.fa-play').removeClass('hide');
+                $('#play-button').children('.fa-pause').addClass('hide');
             }
         }
     };
@@ -307,11 +309,13 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
                     self.$currentTrack = $currentTrack;
                     self.play();
                     self._setPauseImgButton($($currentTrack));
-                    $('#playTrackBtn').css('background-position', '8px -50px');
+                    $('#play-button').children('.fa-play').addClass('hide');
+                    $('#play-button').children('.fa-pause').removeClass('hide');
                 } else {
                     self.pause();
                     self._setPlayImgButton($($currentTrack));
-                    $('#playTrackBtn').css('background-position', '8px 0');
+                    $('#play-button').children('.fa-play').removeClass('hide');
+                    $('#play-button').children('.fa-pause').addClass('hide');
                 }
                 self._loadNextTracks($currentTrack);
 
@@ -334,24 +338,26 @@ AudioManager.prototype.refreshProgressBar = function () {
 AudioManager.prototype.bindListeners = function() {
     var self = this;
 
-    $('#playTrackBtn').click(function() {
+    $('#play-button').click(function() {
         if (self.audio.paused) {
             if (self.audio.src === '') {
                 $($('.track:not(.draggable-stub)').children('.btn').get(0)).click();
             } else {
                 self.play();
                 self._setPauseImgButton(self.$currentTrack);
-                $('#playTrackBtn').css('background-position', '8px -50px');
+                $('#play-button').children('.fa-play').addClass('hide');
+                $('#play-button').children('.fa-pause').removeClass('hide');
             }
         } else {
             self.pause();
             self._setPlayImgButton(self.$currentTrack);
-            $('#playTrackBtn').css('background-position', '8px 0');
+            $('#play-button').children('.fa-play').removeClass('hide');
+            $('#play-button').children('.fa-pause').addClass('hide');
         }
     });
 
-    $('#nextTrackBtn').click(self._nextTrack);
-    $('#prevTrackBtn').click(self._prevTrack);
+    $('#next-button').click(self._nextTrack);
+    $('#prev-button').click(self._prevTrack);
 
     $('#volumeImg').click(function () {
         if (self.audio.volume == 0) {
@@ -384,7 +390,7 @@ AudioManager.prototype.bindListeners = function() {
         self.onProgressBarClick = true;
     });
 
-    $(document).on('mouseup', function (e) {
+    $(document).on('mouseup', function () {
         if (self.onProgressBarClick == true) {
             self.setCurrentTime(self.progressSlider.getPosition() * self.getDuration());
             self.audio.play();

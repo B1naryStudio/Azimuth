@@ -402,12 +402,12 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             tmpl.append(self.audioManager.progressSlider.getSlider());
             if (self.audioManager.audio.paused) {
                 self.audioManager._setPlayImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').show();
-                self.audioManager.$currentTrack.find('.track-remaining').hide();
+                //self.audioManager.$currentTrack.find('.track-duration').show();
+                //self.audioManager.$currentTrack.find('.track-remaining').hide();
             } else {
                 self.audioManager._setPauseImgButton(tmpl);
-                self.audioManager.$currentTrack.find('.track-duration').hide();
-                self.audioManager.$currentTrack.find('.track-remaining').show();
+                //self.audioManager.$currentTrack.find('.track-duration').hide();
+                //self.audioManager.$currentTrack.find('.track-remaining').show();
             }
         }
     }

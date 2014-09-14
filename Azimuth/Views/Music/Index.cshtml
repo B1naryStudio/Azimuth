@@ -6,7 +6,7 @@
 }
 
 <div style="height: 100%">
-    <div class="container" style="height: 100%">
+    <div class="container" style="height: 89%">
         <div>
             @Html.Partial("_AudioPlayer")
         </div>
@@ -30,7 +30,6 @@
                 <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
                 <div id="vk-track-list">
                     <div id="vkMusic-header-spinner" class="spinner loader"></div>
-                    <div id="progressSlider" style="display: none"></div>
                     <div id="vkMusicTable" class="vkMusicTable draggable">
                         <div class="draggable-list vkMusicList"></div>
                     </div>
@@ -40,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 well" style="height: 100%;">
+        <div class="col-md-3 well" style="height: 97%; margin-bottom: 0;">
             <div id="buttons-section">
                 <button id="get-friends-info-btn" class="btn btn-default"><i class="fa fa-users"></i></button>
                 <button id="get-user-tracks" class="btn btn-default"><i class="fa fa-user"></i></button>
@@ -152,7 +151,6 @@
                     <div class="track-info" data-toggle="modal" data-target="#infoModal"><a href="#">${artist} - ${title}</a></div>
                 </div>
                 <div class="track-duration">${duration}</div>
-                <div class="track-remaining" style="display: none"></div>
                 <div style="display: none" class="track-url">${url}</div>
                 <div style="display: none" class="thirdPartId">${id}</div>
                 <div style="display: none" class="ownerId">${owner_id}</div>
@@ -166,7 +164,6 @@
                     <div class="track-info" data-toggle="modal" data-target="#infoModal"><a href="#">${Artist} - ${Name}</a></div>
                 </div>
                 <div class="track-duration">${Duration}</div>
-                <div class="track-remaining" style="display: none"></div>
                 <div style="display: none" class="track-url">${Url}</div>
                 <div style="display: none" class="thirdPartId">${ThirdPartId}</div>
                 <div style="display: none" class="ownerId">${OwnerId}</div>
@@ -181,7 +178,6 @@
                 </div>
                 @*            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>*@
                 <div class="track-duration nowrap">${Duration}</div>
-                <div class="track-remaining" style="display: none"></div>
                 <div style="display: none" class="track-url">${Url}</div>
                 <div style="display: none" class="trackId">${Id}</div>
                 <div style="display: none" class="thirdPartId">${ThirdPartId}</div>
