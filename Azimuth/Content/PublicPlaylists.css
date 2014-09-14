@@ -5,6 +5,34 @@
 #playlistsArea {
     width: 100%;
 }
+#playlist-name {
+    font-size: 25px;
+    overflow: hidden;
+}
+#playlistTracks {
+    height: 100%;
+}
+#tracks-content {
+    height: 100%;
+    width: 90%;
+    margin: auto;
+}
+#playlistFollowActions .fa {
+    padding: 0px 5px 0px 0px;
+}
+#back-container{
+    width: 60%;
+    display: inline-block;   
+}
+#like-container {
+    width: 40%;
+    min-width: 130px;
+}
+#backToPlaylistsBtn {
+    font-size: 15px;
+    padding: 5px;
+    cursor: pointer;
+}
 .playlist-plated {
     width: 300px;
     height: 300px;
@@ -19,6 +47,7 @@
     margin: 10px;
     position: relative;
     cursor: pointer;
+    box-shadow: 4px 4px 5px 1px #888;
 }
 
 .playlist-plated-info {

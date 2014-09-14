@@ -1,34 +1,35 @@
 ﻿@model ICollection<Azimuth.Shared.Dto.TracksDto>
 
-@{ Html.RenderPartial("_ChangeLikeStatus");}
-
-<button class="btn btn-default" type="button" id="backToPlaylistsBtn">Back</button>
-
-<div style="height: 100%;">
-    <div id="playlistTracks" style="position: absolute; height: 70%; width: 90%;">
-        <h2>@ViewBag.playlistName</h2>
-
-        @Html.DisplayFor(x => x)
+<div class="container" id="playlist-items-container">
+    <div id="playlistTracks">
+        <div id="playlist-name">
+            <div id="back-container">
+                <i class="fa fa-reply" id="backToPlaylistsBtn"></i>@ViewBag.playlistName
+            </div>
+            <div class="pull-right" id="like-container">
+                @Html.Partial("_ChangeLikeStatus")
+            </div>
+        </div>
+        <div id="audio-player-container">
+            @Html.Partial("_AudioPlayer")
+        </div>
+        <div id="tracks-content">
+            @Html.DisplayForModel()
+        </div>
     </div>
 </div>
-
-    <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
-    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
         $('#playlist-spinner').hide();
         $('#tracksArea').show();
-        $('button#backToPlaylistsBtn').off('click').click(function() {
+        $('#backToPlaylistsBtn').off('click').click(function() {
             $('#tracksArea').empty();
             if (document.audioManager.$currentTrack) 
                 document.audioManager.stop();   
             $('#playlistsArea').show();
         });
 
-        debugger;
         document.audioManager.refreshTracks();
         document.audioManager.refreshPlaylistTracks();
         document.audioManager.bindPlayBtnListeners();
@@ -66,14 +67,14 @@
             });
         });
 
-        //$('#playlistTracks').mCustomScrollbar({
-        //    theme: 'dark-3',
-        //    scrollButtons: { enable: true },
-        //    updateOnContentResize: true,
-        //    scrollInertia: 0,
-        //    autoHideScrollbar: true,
-        //    advanced: { updateOnSelectorChange: "true" }
-        //});
+        $('#tracks-content').mCustomScrollbar({
+            theme: 'dark-3',
+            scrollButtons: { enable: true },
+            updateOnContentResize: true,
+            scrollInertia: 0,
+            autoHideScrollbar: true,
+            advanced: { updateOnSelectorChange: "true" }
+        });
     });
 </script>
 

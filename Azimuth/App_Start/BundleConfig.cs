@@ -34,6 +34,7 @@ namespace Azimuth
                       "~/Content/draggable.css",
                       "~/Content/friends.css",
                       "~/Content/playlist.css",
+                      "~/Content/audioPlayer.css",
                       "~/Content/track.css",
                       "~/Content/share.css",
                       "~/Content/site.css",

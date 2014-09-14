@@ -1,6 +1,6 @@
 ﻿@model List<Azimuth.Shared.Dto.PlaylistData>
 
-@Html.DisplayFor(x => x)
+@Html.DisplayForModel()
     
 <script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>
 
@@ -40,7 +40,7 @@
             url: '/api/playlists/image/' + id,
             success: function (image) {
                 var $logo = $playlist;
-                $logo.fadeOut(200, function () {
+                $logo.fadeOut(300, function () {
                     if (image != "") {
                         $logo.css({
                             "background-image": 'url(' + image + ')'
@@ -51,7 +51,7 @@
                         });
                     }
                 });
-                $logo.fadeIn(200);
+                $logo.fadeIn(300);
             }
         });
     };

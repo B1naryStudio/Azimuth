@@ -165,11 +165,6 @@
     background: url("../Images/media_play_pause.png") no-repeat 8px 0;
 }
 
-#backToPlaylistsBtn {
-    display: block;
-    width: 70px;
-}
-
 #trackInfo > div{
     display: block;
     overflow: auto;

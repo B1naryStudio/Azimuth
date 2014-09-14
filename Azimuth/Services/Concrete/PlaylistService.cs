@@ -20,7 +20,6 @@ namespace Azimuth.Services.Concrete
     public class PlaylistService : IPlaylistService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMusicServiceWorkUnit _musicServiceWorkUnit;
         private readonly INotificationService _notificationService;
         private readonly LastfmApi _lastfmApi;
         private readonly PlaylistRepository _playlistRepository;
@@ -33,7 +32,6 @@ namespace Azimuth.Services.Concrete
         public PlaylistService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
-            _musicServiceWorkUnit = musicServiceWorkUnit;
             _notificationService = notificationService;
 
             _lastfmApi = musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
@@ -104,7 +102,6 @@ namespace Azimuth.Services.Concrete
                 {
 
                     var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //_userRepository.GetOne(u => u.Email.Equals(AzimuthIdentity.Current.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
                     var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item=>item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => likedPlaylists.Any(j => i.Id == j.Id)).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
@@ -124,7 +121,6 @@ namespace Azimuth.Services.Concrete
                 {
 
                     var userId = dop.UserCredential.Id;
-                        //_userRepository.GetOne(u => u.Email.Equals(dop.UserCredential.Email)).Id;
                     var currentUser = _userRepository.Get(userId);
                     var likedPlaylists = _likesRepository.Get(item => item.Liker.Id == currentUser.Id && item.IsFavorite).Select(item => item.Playlist).ToList();
                     var playlists = _playlistRepository.Get(i => (i.Creator.Id != currentUser.Id) && 
@@ -224,7 +220,6 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<PlaylistData>> GetUsersPlaylists()
         {
-            //var currentEmail = AzimuthIdentity.Current.UserCredential.Email;
             var userId = AzimuthIdentity.Current.UserCredential.Id;
             return await Task.Run(() =>
             {
@@ -235,9 +230,6 @@ namespace Azimuth.Services.Concrete
                     {
                         throw new NullReferenceException();
                     }
-                    //var userId = AzimuthIdentity.Current.UserCredential.Id;
-                        //userRepo.GetOne(u => u.Email.Equals(currentEmail)).Id;
-
                     var playlists = _playlistRepository.Get(s => s.Creator.Id == userId).Select(playlist => Mapper.Map(playlist, new PlaylistData())).ToList();
                     return playlists;
                 }

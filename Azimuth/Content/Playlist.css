@@ -1,4 +1,13 @@
-﻿.playlistsContainer {
+﻿#playlist-items-container {
+    width: 50%;
+    height: 100%;
+}
+
+#tracksArea {
+    height: 100%;
+}
+
+.playlistsContainer {
     display: block;
     float: left;
     width: 23%;

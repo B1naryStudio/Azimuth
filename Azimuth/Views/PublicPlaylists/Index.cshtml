@@ -6,7 +6,7 @@
 
 <div id="playlist-spinner" class="spinner loader"></div>
 <div id="barplaylistArea">
-    <div id="playlistsArea" style="height: 90%; position: absolute;">
+    <div id="playlistsArea">
         <div id="playlists-plated">
             @if (Request.IsAuthenticated)
             {
@@ -33,7 +33,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
-                    @*<button type="button" class="btn btn-primary" id="listenTopBtn" data-dismiss="modal" disabled>Listen top tracks</button>*@
                 </div>
             </div>
         </div>
@@ -66,9 +65,9 @@
 <div class="itemsContainer tableRow" id="itemsContainer"></div>
 
 @section scripts{
-
+    
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
-    <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="../../Scripts/audioManager.js"></script>
     <script type="text/javascript" src="../../Scripts/dragndrop.js"></script>
     <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -210,7 +209,7 @@
                     }
                     document.oncontextmenu = function() {
                         return true;
-                    }
+                    };
                 }
             });
 

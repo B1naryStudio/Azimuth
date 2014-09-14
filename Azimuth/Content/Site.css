@@ -319,7 +319,8 @@ hr {
 }
 
 .draggable-item-selected {
-	background: aquamarine;
+	background: #F9851F;
+    box-shadow: 5px 5px 6px -4px #222;
 }
 
 #trackInfoContainer {
@@ -335,4 +336,51 @@ hr {
 
 #trackInfoContainer .tableRow {
     padding: 3px;
+}
+
+.counter-container {
+    display: inline-block;
+}
+
+.count-label {
+    position: relative;
+    margin-left: 4px;
+    background-color: #fafafa;
+    border: 1px solid #d4d4d4;
+    padding: 2px 5px 2px 4px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: 3px;
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.count-label:before, .count-label:after {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.count-label:before {
+    top: 50%;
+    left: -3px;
+    margin-top: -4px;
+    border-width: 4px 4px 4px 0;
+    border-right-color: #fafafa;
+}
+
+.count-label:after {
+    top: 50%;
+    left: -4px;
+    z-index: -1;
+    margin-top: -5px;
+    border-width: 5px 5px 5px 0;
+    border-right-color: #A8A8A8;
 }

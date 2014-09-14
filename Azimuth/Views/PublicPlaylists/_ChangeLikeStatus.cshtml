@@ -18,21 +18,27 @@
 
 <div id="playlistFollowActions">
     @if (@Request.IsAuthenticated)
+{
+    using (@Ajax.BeginForm("_ChangeLikeStatus", "PublicPlaylists", new AjaxOptions
     {
-        using (@Ajax.BeginForm("_ChangeLikeStatus", "PublicPlaylists", new AjaxOptions
-        {
-            HttpMethod = "Post",
-            UpdateTargetId = "playlistFollowActions",
-            InsertionMode = InsertionMode.Replace
-        }))
-        {
-            <button class="btn btn-default" name="buttonType" id="likeBtn" value="like">@likeAction</button>
-            <button class="btn btn-default" name="buttonType" id="favouriteBtn" value="favourite">@favouriteAction</button>
-            <input type="hidden" name="playlistId" id="playlistId" value="@plailistId" />
-            <input type="hidden" name="isLiked" id="isLiked" value="@isLiked.ToString()" />
-            <input type="hidden" name="isFavourited" id="isFavourited" value="@isFavourited.ToString()" />
-        }
+        HttpMethod = "Post",
+        UpdateTargetId = "playlistFollowActions",
+        InsertionMode = InsertionMode.Replace
+    }))
+    {
+        <div class="counter-container">
+            <button class="btn btn-default btn-xs" name="buttonType" id="likeBtn" value="like"><i class="fa fa-heart"></i>@likeAction</button>
+            <div class="count-label">12</div>
+        </div>
+        <div class="counter-container">
+            <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
+            <div class="count-label">23</div>
+        </div>
+        <input type="hidden" name="playlistId" id="playlistId" value="@plailistId" />
+        <input type="hidden" name="isLiked" id="isLiked" value="@isLiked.ToString()" />
+        <input type="hidden" name="isFavourited" id="isFavourited" value="@isFavourited.ToString()" />
     }
+}
     else
     {
         using (@Html.BeginForm("NeedLogIn", "PublicPlaylists", FormMethod.Post))
@@ -44,5 +50,3 @@
         }
     }
 </div>
-
-<script type="text/javascript" src="../../Scripts/jquery-1.10.2.js"></script>

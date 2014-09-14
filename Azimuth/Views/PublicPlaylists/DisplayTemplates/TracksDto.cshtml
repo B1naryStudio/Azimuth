@@ -3,7 +3,7 @@
     var duration = Convert.ToDecimal(Model.Duration);
     var minutes = Math.Floor(duration / 60);
     var seconds = (duration % 60);
-    string forrmattedDuration = minutes + ":" + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
+    var forrmattedDuration = minutes + ":" + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
 }
 
 <div class="tableRow draggable-item track">
@@ -11,11 +11,10 @@
     <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
     <div class="track-description">
         <div class="track-info">
-            <span class="nowrap">@Model.Artist</span>
+            <span class="nowrap">@Model.Artist - @Model.Name</span>
         </div>
-        <div class="track-title nowrap">@Model.Name</div>
     </div>
-    <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
+@*    <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>*@
     <div class="track-duration nowrap">@forrmattedDuration</div>
     <div class="track-remaining" style="display: none"></div>
     <div style="display: none" class="track-url">@Model.Url</div>
