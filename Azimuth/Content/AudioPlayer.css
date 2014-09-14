@@ -35,6 +35,14 @@
     width: 49%;
 }
 
+#audio-player #item-container #progressSlider {
+    width: 90%;
+    height: 7px;
+    left: 0;
+    margin: 0;
+    float: left;
+}
+
 #audio-player #volume-container {
     width: 15%;
 }

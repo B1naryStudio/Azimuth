@@ -146,7 +146,7 @@ AudioManager.prototype.updateProgressbar = function (musicSelector) {
         if (self.$currentTrack != null && $(this).children('.thirdPartId').text() == self.$currentTrack.children('.thirdPartId').text() &&
             $(this).children('.ownerId').text() == self.$currentTrack.children('.ownerId').text()) {
 
-            $(this).append(self.progressSlider.getSlider());
+            //$(this).append(self.progressSlider.getSlider());
             self.$currentTrack = $(this);
             if (self.audio.paused == false) {
                 $(this).children('.track-play-btn').removeClass('glyphicon-play').addClass('glyphicon-pause');
@@ -165,8 +165,8 @@ AudioManager.prototype.play = function() {
 
     self.$currentTrack.find('.track-duration').hide();
     self.$currentTrack.find('.track-remaining').show();
-    self.$currentTrack.append(self.progressSlider.getSlider());
-    self.progressSlider.getSlider().show();
+    //self.$currentTrack.append(self.progressSlider.getSlider());
+    //self.progressSlider.getSlider().show();
     self.progressSlider.bindListeners();
     self.audio.play();
     self.refreshProgressBar();
