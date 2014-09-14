@@ -38,8 +38,8 @@
     this._nextTrack = function () {
         self.progressSlider.setPosition(0);
         self.progressSlider.setBackgroundPosition(0);
-        self.$currentTrack.find('.track-duration').show();
-        self.$currentTrack.find('.track-remaining').hide();
+        //self.$currentTrack.find('.track-duration').show();
+        //self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
@@ -65,8 +65,8 @@
     this._prevTrack = function () {
         self.progressSlider.setPosition(0);
         self.progressSlider.setBackgroundPosition(0);
-        self.$currentTrack.find('.track-duration').show();
-        self.$currentTrack.find('.track-remaining').hide();
+        //self.$currentTrack.find('.track-duration').show();
+        //self.$currentTrack.find('.track-remaining').hide();
 
         var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev('.tableRow');
         if (trackItem.hasClass('draggable-stub')) {
@@ -163,8 +163,8 @@ AudioManager.prototype.loop = function (value) {
 AudioManager.prototype.play = function() {
     var self = this;
 
-    self.$currentTrack.find('.track-duration').hide();
-    self.$currentTrack.find('.track-remaining').show();
+    //self.$currentTrack.find('.track-duration').hide();
+    //self.$currentTrack.find('.track-remaining').show();
     //self.$currentTrack.append(self.progressSlider.getSlider());
     //self.progressSlider.getSlider().show();
     self.progressSlider.bindListeners();
@@ -202,10 +202,10 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
 
     function onPlayBtnClick() {
-        if (self.$currentTrack != null) {
-            self.$currentTrack.find('.track-duration').show();
-            self.$currentTrack.find('.track-remaining').hide();
-        }
+        //if (self.$currentTrack != null) {
+        //    self.$currentTrack.find('.track-duration').show();
+        //    self.$currentTrack.find('.track-remaining').hide();
+        //}
         var $currentTrack = $(this).parents('.track');
         var url = $(this).parent().children('.track-url').text();
         if (!url) {
