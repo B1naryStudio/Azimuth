@@ -182,6 +182,7 @@ namespace Azimuth.Services.Concrete
 
                                         userSocialNetwork.User = loggedUser;
                                         _userSNRepository.ChangeUserId(userSocialNetwork);
+
                                 }
                                 _userRepository.DeleteItem(userToDelete);  
                             }
