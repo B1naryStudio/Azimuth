@@ -3,6 +3,9 @@
 }
 <div>
     <div style="padding: 10px 0; margin-left: 10%; width: 80%; height: 80%;">
+        <div>
+            @Html.Partial("_AudioPlayer")
+        </div>
         <input class="form-control" id="search" value="@Request.QueryString["searchParam"]">
         <div class="btn-group" style="margin-top: 10px;">
             <button type="button" class="btn btn-primary searchBtn" data-search="track">Track</button>
