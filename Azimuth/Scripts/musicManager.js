@@ -545,7 +545,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                             self.$vkMusicTable.hide();
                         }
                         self.$playlistsLoadingSpinner.hide();
-                        self.setDefaultPlaylist();
                         $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
                         self._createContextMenuForPlaylists();
                     }
@@ -566,6 +565,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
         //self._createContextMenuForPlaylists();
         self.$playlistsLoadingSpinner.hide();
     }
+    self.setDefaultPlaylist();
 
     this._createContextMenuForPlaylists = function() {
         var ctxMenu = new ContextMenu();
