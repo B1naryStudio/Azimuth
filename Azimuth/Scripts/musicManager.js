@@ -579,7 +579,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
         ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
         //$('.playlist').off('mousedown').mousedown(function (event) {
-        $('.playlist').mousedown(function (event) {
+        $('.playlist').mousedown(function(event) {
             if (event.which == 3) {
                 $('.playlist.selected').toggleClass('selected', false);
                 var $target = $(event.target).parents('.playlist');
@@ -592,11 +592,11 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             }
         });
 
-        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+        ctxMenu.$contextMenuContainer.mousedown(function(event) {
             ctxMenu.$contextMenuContainer.hide();
             ctxMenu.selectAction($('.playlist.selected'));
         });
-    }
+    };
 };
 
 MusicManager.prototype.bindListeners = function() {
