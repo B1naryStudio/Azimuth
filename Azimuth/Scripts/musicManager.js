@@ -88,7 +88,7 @@ var MusicManager = function (manager) {
         self.audioManager.bindPlayBtnListeners();
         $(this).toggleClass("active");
 
-        $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
+        $('.vkMusicList > .tableRow').click(self._getTrackInfo);
     };
 
     $('#okPlaylistCreateModalBtn').click(function () {
@@ -202,7 +202,7 @@ var MusicManager = function (manager) {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
                 }
-                //$('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                $('.vkMusicList > .tableRow').click(self._getTrackInfo);
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
@@ -219,11 +219,11 @@ var MusicManager = function (manager) {
 
     this._getTrackInfo = function() {
         var $self = $(this);
-        var author = $self.parent().children('.track-description').children('.track-info');
-        var trackName = $self.parent().children('.track-description').children('.track-title');
+        var author = $self.children('.track-description').children('.track-info').children().children('.track-artist').html();
+        var trackName = $self.children('.track-description').children('.track-info').children().children('.track-title').html();
         self.$infoLoadingSpinner.show();
         $.ajax({
-            url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
+            url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
             success: function (trackInfo) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
@@ -286,7 +286,7 @@ var MusicManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
                 self.$vkMusicLoadingSpinner.hide();
                 $('.vkMusicList').show();
-                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                $('.vkMusicList > .tableRow').click(self._getTrackInfo);
             },
             error: function (thrownException) {
                 
@@ -469,7 +469,7 @@ MusicManager.prototype.showPlaylistTracks = function (tracks) {
     self.showTracks(tracks, self.playlistTrackTemplate);
     self.audioManager.bindPlayBtnListeners();
 
-    $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
+    $('.vkMusicList > .tableRow').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showPlaylists = function (playlists) {

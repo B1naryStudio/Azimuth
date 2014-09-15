@@ -10,6 +10,4 @@ namespace Azimuth.DataAccess.Repositories
         {
         }
     }
-
-    
 }
