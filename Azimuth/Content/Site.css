@@ -145,10 +145,6 @@ div.accordion > div.dropdown {
     background: #e2e2e2 url(../Images/arrow-square.gif  ) no-repeat right -56px;
 }
 
-.accordion .tableRow:hover {
-	background-color: #e3e2e2;
-}
-
 .accordion .tableRow.active {
 	background-position: right 0;
 }

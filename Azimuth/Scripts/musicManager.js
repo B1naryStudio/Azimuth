@@ -35,9 +35,10 @@ var MusicManager = function (manager) {
     this.$errorModal = $('#errorModal');
 
     this._getTracks = function (plId) {
+        var $this = $(this);
         self.$vkMusicLoadingSpinner.show();
         $('.vkMusicList').find('.track').detach();
-        var playlistId = $(this).find('.playlistId').text();
+        var playlistId = $this.find('.playlistId').text();
         if (playlistId.length == 0) {
             playlistId = plId;
         }
@@ -86,7 +87,9 @@ var MusicManager = function (manager) {
         })[0].Name;
         self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
-        $(this).toggleClass("active");
+
+        $this.siblings('.playlist-active').removeClass('playlist-active');
+        $this.toggleClass("playlist-active");
     };
 
     $('#okPlaylistCreateModalBtn').click(function () {

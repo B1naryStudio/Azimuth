@@ -22,6 +22,14 @@ div.playlist {
     
 }
 
+.playlist:hover {
+    background-color: #FFD386;
+}
+
+.playlist-active {
+    background: #F9851F;
+}
+
 .playlist-genres {
     vertical-align: bottom;
     height: 50%;
