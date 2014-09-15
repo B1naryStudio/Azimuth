@@ -66,4 +66,16 @@
             }
         }
     </div>
+    
+    <div class="playlist-plated-short-info">
+        <div class="playlistName">@playlistName</div>
+        
+        <div class="listeners-count"><span>@Model.PlaylistListened</span> listened</div>
+
+        @if (Model.Genres.Any())
+        {
+            var genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
+            <div class="genres">@genres</div>
+        }
+    </div>
 </div>

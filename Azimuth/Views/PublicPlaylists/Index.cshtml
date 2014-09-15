@@ -114,12 +114,16 @@
 
             $('.playlist-plated').hover(function() {
                 var $currentPlaylist = $(this);
+                $currentPlaylist.find('.playlist-plated-short-info').hide();
                 $currentPlaylist.find('.playlist-plated-info').slideDown(200);
             });
 
             $('.playlist-plated').mouseleave(function() {
                 var $currentPlaylist = $(this);
-                $currentPlaylist.find('.playlist-plated-info').slideUp(200);
+                //$currentPlaylist.find('.playlist-plated-info').slideUp(200);
+                $currentPlaylist.find('.playlist-plated-info').hide();
+                //$currentPlaylist.find('.playlist-plated-short-info').slideDown(200);
+                $currentPlaylist.find('.playlist-plated-short-info').show();
             });
 
             $('#closeModalBtn').click(function() {

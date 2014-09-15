@@ -32,12 +32,6 @@
                 <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
                 <div class="count-label">@Model.FavouritesCount</div>
             </div>
-        @*@Html.HiddenFor(x => x.PlaylistId)
-        @Html.HiddenFor(x => x.PlaylistName)
-        @Html.HiddenFor(x => x.IsLiked)
-        @Html.HiddenFor(x => x.IsFavourited)
-        @Html.HiddenFor(x => x.LikesCount)
-        @Html.HiddenFor(x => x.FavouritesCount)*@
 
             <input type="hidden" name="PlaylistId" value="@Model.PlaylistId"/>
             <input type="hidden" name="PlaylistName" value="@Model.PlaylistName"/>
