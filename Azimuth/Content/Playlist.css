@@ -30,6 +30,14 @@ div.playlist {
     background: #F9851F;
 }
 
+.playlist-divider {
+    border: none; /* Убираем границу */
+    background-color: gray; /* Цвет линии */
+    color: gray; /* Цвет линии для IE6-7 */
+    height: 2px; /* Толщина линии */
+    margin: 10px 0;
+}
+
 .playlist-genres {
     vertical-align: bottom;
     height: 50%;
