@@ -7,6 +7,7 @@
     this.beforeMuteVolume = null;
     this.volumeSlider = volumeSlider;
     this.progressSlider = progressSlider;
+    this.paused = true;
 
     this.onProgressBarClick = false;
 
@@ -139,11 +140,19 @@
 AudioManager.prototype.refreshTracks = function() {
     var self = this;
     self.tracksGlobal = $('.vkMusicList').children('.track').children('.track-url');
+    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
+        $('#audio-player .track-artist').text($('.vkMusicList').children('.track-artist')[0].text());
+        $('#audio-player .track-title').text($('.vkMusicList').children('.track-title')[0].text());
+    }
 };
 
 AudioManager.prototype.refreshPlaylistTracks = function() {
     var self = this;
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
+    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
+        $('#audio-player .track-artist').text($('.vkMusicList').children('.track-artist')[0].text());
+        $('#audio-player .track-title').text($('.vkMusicList').children('.track-title')[0].text());
+    }
 };
 
 AudioManager.prototype.updateProgressbar = function (musicSelector) {
@@ -393,7 +402,8 @@ AudioManager.prototype.bindListeners = function() {
     //    self.audio.currentTime = value * self.audio.duration;
     //});
 
-    $('#progress-bar').on('mousedown', function() {
+    $('#progress-bar').on('mousedown', function () {
+        self.paused = self.audio.paused;
         self.audio.pause();
         self.onProgressBarClick = true;
     });
@@ -401,7 +411,9 @@ AudioManager.prototype.bindListeners = function() {
     $(document).on('mouseup', function () {
         if (self.onProgressBarClick == true) {
             self.setCurrentTime(self.progressSlider.getPosition() * self.getDuration());
-            self.audio.play();
+            if (!self.paused) {
+                self.audio.play();
+            }
             self.onProgressBarClick = false;
         }
     });

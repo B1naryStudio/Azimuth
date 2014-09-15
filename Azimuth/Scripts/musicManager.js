@@ -427,6 +427,11 @@ MusicManager.prototype.showTracks = function (tracks, template) {
         }
     }
 
+    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
+        $('#audio-player .track-artist').text($($('.vkMusicList .track-artist')[0]).text());
+        $('#audio-player .track-title').text($($('.vkMusicList .track-title')[0]).text());
+    }
+
     self.$vkMusicTable.makeDraggable({
                 contextMenu: [
                     { 'id': 'selectall', 'name': 'Select all', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
