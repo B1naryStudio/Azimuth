@@ -14,13 +14,30 @@
         $('#playlistsArea').hide();
         $('#playlist-spinner').show();
         var $currentPlaylist = $(this);
+        debugger;
         var playlistId = $currentPlaylist.find('.playlistId').val();
+        var likesCount = $currentPlaylist.find('.likesCount').val();
+        var favouriteCount = $currentPlaylist.find('.favouritesCount').val();
+        var playlistName = $currentPlaylist.find('.playlistName').text();
+        var isLiked = $currentPlaylist.find('.isLiked').val();
+        var isFavourited = $currentPlaylist.find('.isFavourited').val();
+        var curPlaylist = {
+            PlaylistId: playlistId,
+            PlaylistName: playlistName,
+            IsLiked: isLiked,
+            IsFavourited: isFavourited,
+            LikesCount: likesCount,
+            FavouritesCount: favouriteCount
+        };
         $.ajax({
-            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
+            @*url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
                 "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
                 "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
-                "&isFavourited=" + $currentPlaylist.find('.isFavourited').val(),
+                "&isFavourited=" + $currentPlaylist.find('.isFavourited').val() +
+                "&likesCount=" + likesCount + "&favouritesCount=" + favouriteCount,*@
+            url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")',
             type: 'GET',
+            data: { curPlaylist: JSON.stringify(curPlaylist) },
             success: function(data) {
                 $(data).appendTo($('#tracksArea'));
                 $.ajax({

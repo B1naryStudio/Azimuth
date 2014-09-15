@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Concrete;
 using Azimuth.Services.Interfaces;
+using Azimuth.Shared.Dto;
+using Newtonsoft.Json;
 
 namespace Azimuth.Controllers
 {
@@ -38,42 +40,49 @@ namespace Azimuth.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult _ChangeLikeStatus(string playlistId, string isLiked, string isFavourited, string buttonType)
+        public PartialViewResult _ChangeLikeStatus(PublicPlaylistInfo curPlaylist, string buttonType)
         {
-            var playlist = Convert.ToInt32(playlistId);
-            var like = Convert.ToBoolean(isLiked);
-            var favourite = Convert.ToBoolean(isFavourited);
             if (buttonType == "like")
             {
-                if (like)
+                if (curPlaylist.IsLiked)
                 {
-                    _playlistLikesService.RemoveCurrentUserAsLiker(playlist);
+                    _playlistLikesService.RemoveCurrentUserAsLiker(curPlaylist.PlaylistId);
+                    curPlaylist.LikesCount--;
                 }
                 else
                 {
-                    _playlistLikesService.AddCurrentUserAsLiker(playlist);
+                    _playlistLikesService.AddCurrentUserAsLiker(curPlaylist.PlaylistId);
+                    curPlaylist.LikesCount++;
                 }
 
-                ViewBag.isLiked = !like;
-                ViewBag.isFavourited = favourite;
+                curPlaylist.IsLiked = !curPlaylist.IsLiked;
             }
             else
             {
-                if (favourite)
+                if (curPlaylist.IsFavourited)
                 {
-                    _playlistLikesService.RemoveCurrentUserAsFavorite(playlist);
+                    _playlistLikesService.RemoveCurrentUserAsFavorite(curPlaylist.PlaylistId);
+                    curPlaylist.FavouritesCount--;
                 }
                 else
                 {
-                    _playlistLikesService.AddCurrentUserAsFavorite(playlist);
+                    _playlistLikesService.AddCurrentUserAsFavorite(curPlaylist.PlaylistId);
+                    curPlaylist.FavouritesCount++;
                 }
 
-                ViewBag.isLiked = like;
-                ViewBag.isFavourited = !favourite;
+                curPlaylist.IsFavourited = !curPlaylist.IsFavourited;
             }
-            ViewBag.playlistId = playlistId;
 
-            return PartialView();
+            return PartialView(new PublicPlaylistInfo
+            {
+                PlaylistId = curPlaylist.PlaylistId,
+                PlaylistName = curPlaylist.PlaylistName,
+                IsLiked = curPlaylist.IsLiked,
+                IsFavourited = curPlaylist.IsFavourited,
+                FavouritesCount = curPlaylist.FavouritesCount,
+                LikesCount = curPlaylist.LikesCount
+            });
+            //return PartialView(curPlaylist);
         }
 
         public ActionResult NeedLogIn()
@@ -90,24 +99,16 @@ namespace Azimuth.Controllers
             return PartialView(publicPlaylists);
         }
 
-        public PartialViewResult _PlaylistTracks(string playlistId, string playlistName, string isLiked, string isFavourited)
+        public PartialViewResult _PlaylistTracks(string curPlaylist)
         {
-            if (!String.IsNullOrEmpty(playlistId) || !String.IsNullOrWhiteSpace(playlistId))
+            var playlist = JsonConvert.DeserializeObject<PublicPlaylistInfo>(curPlaylist);
+            var tracks = _userTracksService.GetTracksByPlaylistIdSync(playlist.PlaylistId).ToList();
+            var tracksViewModel = new PublicPlaylistTracksViewModel
             {
-                var tracks = _userTracksService.GetTracksByPlaylistIdSync(Convert.ToInt32(playlistId));
-                ViewBag.playlistId = playlistId;
-                ViewBag.playlistName = playlistName;
-                if (isLiked != "undefined")
-                {
-                    ViewBag.isLiked = Convert.ToBoolean(isLiked);
-                }
-                if (isFavourited != "undefined")
-                {
-                    ViewBag.isFavourited = Convert.ToBoolean(isFavourited);
-                }
-                return PartialView(tracks);
-            }
-            return null;
+                Tracks = tracks,
+                CurrentPlaylist = playlist
+            };
+                return PartialView(tracksViewModel);
         }
 	}
 }

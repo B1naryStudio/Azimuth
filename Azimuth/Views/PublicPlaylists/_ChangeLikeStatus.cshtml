@@ -1,12 +1,11 @@
-﻿@{
-    var plailistId = ViewBag.playlistId;
-    var isLiked = ViewBag.isLiked;
-    var isFavourited = ViewBag.isFavourited;
+﻿@model Azimuth.Shared.Dto.PublicPlaylistInfo
+
+@{
     string likeAction, favouriteAction;
     if (Request.IsAuthenticated)
     {
-        likeAction = isLiked ? "Unlike" : "Like";
-        favouriteAction = isFavourited ? "Unfavourite" : "Favourite";
+        likeAction = @Model.IsLiked ? "Unlike" : "Like";
+        favouriteAction = @Model.IsFavourited ? "Unfavourite" : "Favourite";
     }
     else
     {
@@ -14,7 +13,6 @@
         favouriteAction = "Favourite";
     }
 }
-
 
 <div id="playlistFollowActions">
     @if (@Request.IsAuthenticated)
@@ -28,15 +26,25 @@
     {
         <div class="counter-container">
             <button class="btn btn-default btn-xs" name="buttonType" id="likeBtn" value="like"><i class="fa fa-heart"></i>@likeAction</button>
-            <div class="count-label">12</div>
+            <div class="count-label">@Model.LikesCount</div>
         </div>
         <div class="counter-container">
             <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
-            <div class="count-label">23</div>
+            <div class="count-label">@Model.FavouritesCount</div>
         </div>
-        <input type="hidden" name="playlistId" id="playlistId" value="@plailistId" />
-        <input type="hidden" name="isLiked" id="isLiked" value="@isLiked.ToString()" />
-        <input type="hidden" name="isFavourited" id="isFavourited" value="@isFavourited.ToString()" />
+        @*@Html.HiddenFor(x => x.PlaylistId)
+        @Html.HiddenFor(x => x.PlaylistName)
+        @Html.HiddenFor(x => x.IsLiked)
+        @Html.HiddenFor(x => x.IsFavourited)
+        @Html.HiddenFor(x => x.LikesCount)
+        @Html.HiddenFor(x => x.FavouritesCount)*@
+        
+        <input type="hidden" name="PlaylistId" value="@Model.PlaylistId"/>
+        <input type="hidden" name="PlaylistName" value="@Model.PlaylistName"/>
+        <input type="hidden" name="IsLiked" value="@Model.IsLiked.ToString()"/>
+        <input type="hidden" name="IsFavourited" value="@Model.IsFavourited.ToString()"/>
+        <input type="hidden" name="LikesCount" value="@Model.LikesCount"/>
+        <input type="hidden" name="FavouritesCount" value="@Model.FavouritesCount" />
     }
 }
     else

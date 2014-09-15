@@ -57,6 +57,8 @@
     <Compile Include="Dto\LastFMTrackData.cs" />
     <Compile Include="Dto\NotificationDto.cs" />
     <Compile Include="Dto\PlaylistData.cs" />
+    <Compile Include="Dto\PublicPlaylistInfo.cs" />
+    <Compile Include="Dto\PublicPlaylistTracksViewModel.cs" />
     <Compile Include="Dto\TrackInfoDto.cs" />
     <Compile Include="Dto\TrackInPlaylist.cs" />
     <Compile Include="Dto\TracksDto.cs" />

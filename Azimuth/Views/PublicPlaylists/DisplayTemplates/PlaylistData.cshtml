@@ -48,6 +48,8 @@
         </div>
 
         <input type="hidden" class="playlistId" value="@Model.Id.ToString()" />
+        <input type="hidden" class="likesCount" value="@Model.PlaylistLikes.ToString()"/>
+        <input type="hidden" class="favouritesCount" value="@Model.PlaylistFavourited.ToString()"/>
         
         @if (Request.IsAuthenticated)
         {

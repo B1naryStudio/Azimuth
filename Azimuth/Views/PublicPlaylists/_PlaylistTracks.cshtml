@@ -1,20 +1,21 @@
-﻿@model ICollection<Azimuth.Shared.Dto.TracksDto>
+﻿@using Azimuth.Shared.Dto
+@model Azimuth.Shared.Dto.PublicPlaylistTracksViewModel
 
 <div class="container" id="playlist-items-container">
     <div id="playlistTracks">
         <div id="playlist-name">
             <div id="back-container">
-                <i class="fa fa-reply" id="backToPlaylistsBtn"></i>@ViewBag.playlistName
+                <i class="fa fa-reply" id="backToPlaylistsBtn"></i>@Model.CurrentPlaylist.PlaylistName
             </div>
             <div class="pull-right" id="like-container">
-                @Html.Partial("_ChangeLikeStatus")
+                @Html.Partial("_ChangeLikeStatus", @Model.CurrentPlaylist)
             </div>
         </div>
         <div id="audio-player-container">
             @Html.Partial("_AudioPlayer")
         </div>
         <div id="tracks-content">
-            @Html.DisplayForModel()
+            @Html.DisplayFor(x => x.Tracks)
         </div>
     </div>
 </div>
