@@ -111,7 +111,7 @@
 
         self.audioManager.refreshTracks();
         self.audioManager.bindPlayBtnListeners();
-        $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+        $('.track-info > a').click(self._getTrackInfo);
         $('.vkMusicTable').mCustomScrollbar({
             theme: 'dark-3',
             scrollButtons: { enable: true },
@@ -127,11 +127,11 @@
 
     this._getTrackInfo = function () {
         var $self = $(this);
-        var author = $self.parent().children('.track-description').children('.track-info');
-        var trackName = $self.parent().children('.track-description').children('.track-title');
+        var author = $self.children('.track-artist').html();
+        var trackName = $self.children('.track-title').html();
         self.$infoLoadingSpinner.show();
         $.ajax({
-            url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
+            url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
             async: true,
             success: function(trackInfo) {
                 self.$infoLoadingSpinner.hide();
@@ -293,12 +293,12 @@
 SearchManager.prototype.bindListeners = function () {
     var self = this;
 
-    //$(document).click(function(e) {
-    //    var contextMenu = $('.contextMenu');
-    //    if (contextMenu.length > 0) {
-    //        contextMenu.detach();
-    //    }
-    //});
+    $(document).click(function(e) {
+        var contextMenu = $('.contextMenu');
+        if (contextMenu.length > 0) {
+            contextMenu.detach();
+        }
+    });
 
     $('#search').keyup(function () {
         self._delay(function () {
@@ -343,7 +343,7 @@ SearchManager.prototype.bindListeners = function () {
                         });
                         self._showTracks(self.topTracksVk, $('#trackTemplate'));
                         self.audioManager.bindPlayBtnListeners();
-                        $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+                        $('.track-info > a').click(self._getTrackInfo);
                         self.$vkMusicLoadingSpinner.hide();
                     }
                 });
