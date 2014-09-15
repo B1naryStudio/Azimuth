@@ -2,7 +2,7 @@
     ViewBag.Title = "Search";
 }
 <div>
-    <div style="padding-top: 10px; margin-left: 10%; width: 80%; height: 80%;">
+    <div style="padding: 10px 0; margin-left: 10%; width: 80%; height: 80%;">
         <input class="form-control" id="search" value="@Request.QueryString["searchParam"]">
         <div class="btn-group" style="margin-top: 10px;">
             <button type="button" class="btn btn-primary searchBtn" data-search="track">Track</button>
@@ -12,10 +12,9 @@
             <button type="button" class="btn btn-default searchBtn" data-search="vkontakte">Vkontakte</button>
             <button type="button" class="btn btn-default searchBtn" data-search="user">User</button>
         </div>
-        
         <div id="users"></div>
-
-        <div id="vk-track-list">
+        
+        <div id="searched-list">
             <div id="vkMusic-header" class="table-header">
                 <div id="vkMusic-header-title" class="table-title"></div>
             </div>
@@ -84,15 +83,12 @@
 
     <script id="searchTrackTemplate" type="text/x-jQuery-tmpl">
         <div class="tableRow draggable-item track vk-item">
-            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>            
             <div class="track-description" data-title="${artist} ${title}">
-                <div class="track-info">${Artist}</div>
-                <div class="track-title nowrap">${Name}</div>
+                <div class="track-info"><a href="#" data-toggle="modal" data-target="#infoModal"><span class="track-artist">${Artist}</span> - <span class="track-title">${Name}</span></a></div>
             </div>
 
-            <button class="btn  btn-default btn-circle track-info-btn" data-toggle="modal" data-target="#infoModal"><span class="glyphicon glyphicon-info-sign"></span></button>
             <div class="track-duration">${Duration}</div>
-            <div class="track-remaining" style="display: none"></div>
             <div style="display: none" class="track-url">${Url}</div>
             <div style="display: none" class="thirdPartId">${ThirdPartId}</div>
             <div style="display: none" class="ownerId">${OwnerId}</div>
