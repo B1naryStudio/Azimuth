@@ -87,8 +87,6 @@ var MusicManager = function (manager) {
         self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
         $(this).toggleClass("active");
-
-        $('.vkMusicList > .tableRow').click(self._getTrackInfo);
     };
 
     $('#okPlaylistCreateModalBtn').click(function () {
@@ -202,7 +200,6 @@ var MusicManager = function (manager) {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
                 }
-                $('.vkMusicList > .tableRow').click(self._getTrackInfo);
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
@@ -217,10 +214,12 @@ var MusicManager = function (manager) {
         });
     };
 
-    this._getTrackInfo = function() {
+    this._getTrackInfo = function (e) {
         var $self = $(this);
-        var author = $self.children('.track-description').children('.track-info').children().children('.track-artist').html();
-        var trackName = $self.children('.track-description').children('.track-info').children().children('.track-title').html();
+        var author = $self.children('.track-artist').html();
+        var trackName = $self.children('.track-title').html();
+        var $trackInfoContainer = $('#infoModal .modal-body');
+        $trackInfoContainer.text('');
         self.$infoLoadingSpinner.show();
         $.ajax({
             url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
@@ -228,8 +227,7 @@ var MusicManager = function (manager) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
-                var $trackInfoContainer = $('#infoModal .modal-body');
-                $trackInfoContainer.text('');
+                
                 object.appendTo($trackInfoContainer);
                 if (trackInfo.Lyric != null) {
                     for (var i = 0; i < trackInfo.Lyric.length; i++) {
@@ -286,7 +284,6 @@ var MusicManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
                 self.$vkMusicLoadingSpinner.hide();
                 $('.vkMusicList').show();
-                $('.vkMusicList > .tableRow').click(self._getTrackInfo);
             },
             error: function (thrownException) {
                 
@@ -423,7 +420,7 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             });
 
     self.audioManager.bindPlayBtnListeners();
-    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+    $('.track-info > a').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
@@ -468,8 +465,6 @@ MusicManager.prototype.showPlaylistTracks = function (tracks) {
     var self = this;
     self.showTracks(tracks, self.playlistTrackTemplate);
     self.audioManager.bindPlayBtnListeners();
-
-    $('.vkMusicList > .tableRow').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showPlaylists = function (playlists) {
