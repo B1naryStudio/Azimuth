@@ -16,44 +16,48 @@
 
 <div id="playlistFollowActions">
     @if (@Request.IsAuthenticated)
-{
-    using (@Ajax.BeginForm("_ChangeLikeStatus", "PublicPlaylists", new AjaxOptions
     {
-        HttpMethod = "Post",
-        UpdateTargetId = "playlistFollowActions",
-        InsertionMode = InsertionMode.Replace
-    }))
-    {
-        <div class="counter-container">
-            <button class="btn btn-default btn-xs" name="buttonType" id="likeBtn" value="like"><i class="fa fa-heart"></i>@likeAction</button>
-            <div class="count-label">@Model.LikesCount</div>
-        </div>
-        <div class="counter-container">
-            <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
-            <div class="count-label">@Model.FavouritesCount</div>
-        </div>
+        using (@Ajax.BeginForm("_ChangeLikeStatus", "PublicPlaylists", new AjaxOptions
+        {
+            HttpMethod = "Post",
+            UpdateTargetId = "playlistFollowActions",
+            InsertionMode = InsertionMode.Replace
+        }))
+        {
+            <div class="counter-container">
+                <button class="btn btn-default btn-xs" name="buttonType" id="likeBtn" value="like"><i class="fa fa-heart"></i>@likeAction</button>
+                <div class="count-label">@Model.LikesCount</div>
+            </div>
+            <div class="counter-container">
+                <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
+                <div class="count-label">@Model.FavouritesCount</div>
+            </div>
         @*@Html.HiddenFor(x => x.PlaylistId)
         @Html.HiddenFor(x => x.PlaylistName)
         @Html.HiddenFor(x => x.IsLiked)
         @Html.HiddenFor(x => x.IsFavourited)
         @Html.HiddenFor(x => x.LikesCount)
         @Html.HiddenFor(x => x.FavouritesCount)*@
-        
-        <input type="hidden" name="PlaylistId" value="@Model.PlaylistId"/>
-        <input type="hidden" name="PlaylistName" value="@Model.PlaylistName"/>
-        <input type="hidden" name="IsLiked" value="@Model.IsLiked.ToString()"/>
-        <input type="hidden" name="IsFavourited" value="@Model.IsFavourited.ToString()"/>
-        <input type="hidden" name="LikesCount" value="@Model.LikesCount"/>
-        <input type="hidden" name="FavouritesCount" value="@Model.FavouritesCount" />
+
+            <input type="hidden" name="PlaylistId" value="@Model.PlaylistId"/>
+            <input type="hidden" name="PlaylistName" value="@Model.PlaylistName"/>
+            <input type="hidden" name="IsLiked" value="@Model.IsLiked.ToString()"/>
+            <input type="hidden" name="IsFavourited" value="@Model.IsFavourited.ToString()"/>
+            <input type="hidden" name="LikesCount" value="@Model.LikesCount"/>
+            <input type="hidden" name="FavouritesCount" value="@Model.FavouritesCount" />
+        }
     }
-}
     else
     {
         using (@Html.BeginForm("NeedLogIn", "PublicPlaylists", FormMethod.Post))
         {
-            <div id="playlistFollowActions">
-                <button class="btn btn-default">Like</button>
-                <button class="btn btn-default">Favourite</button>
+            <div class="counter-container">
+                <button class="btn btn-default btn-xs" name="buttonType" id="likeBtn" value="like"><i class="fa fa-heart"></i>@likeAction</button>
+                <div class="count-label">@Model.LikesCount</div>
+            </div>
+            <div class="counter-container">
+                <button class="btn btn-default btn-xs" name="buttonType" id="favouriteBtn" value="favourite"><i class="fa fa-star"></i>@favouriteAction</button>
+                <div class="count-label">@Model.FavouritesCount</div>
             </div>
         }
     }

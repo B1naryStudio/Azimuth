@@ -6,7 +6,11 @@ namespace Azimuth.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Request.IsAuthenticated)
+            {
+                return View();   
+            }
+            return RedirectToAction("Login", "Account");
         }
 	}
 }

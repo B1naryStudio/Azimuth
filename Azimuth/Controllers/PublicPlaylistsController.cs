@@ -29,14 +29,13 @@ namespace Azimuth.Controllers
         // GET: /PublicPlaylists/
         public async Task<ActionResult> Index(long? id)
         {
-            if (AzimuthIdentity.Current == null)
+            if (Request.IsAuthenticated)
             {
-                return View();
+                var user = _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id);
+                ViewBag.Id = id;
+                return View(user);
             }
-            //var user = id == null ? _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id) : _userService.GetUserInfo((long)id);
-            var user = _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id);
-            ViewBag.Id = id;
-            return View(user);
+                return View();
         }
 
         [HttpPost]

@@ -13,6 +13,7 @@ using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
+using Ninject.Activation;
 
 namespace Azimuth.Services.Concrete
 {
@@ -73,7 +74,12 @@ namespace Azimuth.Services.Concrete
         {
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var currentId = id ?? AzimuthIdentity.Current.UserCredential.Id;
+                long currentId = -1;
+                if (AzimuthIdentity.Current == null)
+                    currentId = id ?? -1;
+                else
+                    currentId = id ?? AzimuthIdentity.Current.UserCredential.Id;
+                
                 var playlists = unitOfWork.PlaylistRepository
                     .Get(list => list.Accessibilty == Accessibilty.Public
                                  && list.Creator.Id != currentId)
