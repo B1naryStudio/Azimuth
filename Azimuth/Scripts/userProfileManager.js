@@ -35,4 +35,24 @@ UserProfileManager.prototype.bindListeners = function () {
         autoHideScrollbar: true,
         advanced: { updateOnSelectorChange: "true" }
     });
+
+    $('#followersBtn').hover(function() {
+        $(this).data('focused', 'true');
+        //$('#popup').css({ 'display': 'block' }).stop().animate({ left: -130, opacity: 1 }, 300); // анимация появления блока
+
+        $('#popup').css({
+            'top': event.clientX,
+            'left': event.clientY
+        });
+
+
+
+
+
+        $(this).data('focused', 'false'); //устанавливаем для ссылки атрибут data-focused = "false"
+        $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 200,
+         function () {
+             $('#popup').css({ 'display': 'none' });
+         }); //анимация скрытия блока, когда курсор выйдет за пределы ссылки
+    });
 };
