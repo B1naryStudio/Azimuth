@@ -53,6 +53,7 @@
     <Compile Include="Dto\DeezerTrackData.cs" />
     <Compile Include="Dto\ErrorData.cs" />
     <Compile Include="Dto\FacebookUserData.cs" />
+    <Compile Include="Dto\FollowerModel.cs" />
     <Compile Include="Dto\GoogleUserData.cs" />
     <Compile Include="Dto\LastFMTrackData.cs" />
     <Compile Include="Dto\NotificationDto.cs" />

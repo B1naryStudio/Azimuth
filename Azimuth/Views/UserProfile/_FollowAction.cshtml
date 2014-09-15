@@ -19,7 +19,8 @@
         {
                 <button class="btn btn-default btn-xs" id="followBtn" >@followAction</button>
                 @Html.Hidden("userId", @Model.Id)
-                @Html.Hidden("following", @followAction)
+                <input type="hidden" name="following" value="@followAction" />
+                @*@Html.Hidden("following", @followAction)*@
         }
     }
 </div>
