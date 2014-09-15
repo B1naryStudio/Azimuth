@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Services;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,8 +11,10 @@ using Azimuth.DataAccess.Repositories;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
+using Azimuth.Shared.Enums;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using WebGrease.Css.Extensions;
 using Claim = System.Security.Claims.Claim;
 using ClaimTypes = System.Security.Claims.ClaimTypes;
 
@@ -97,21 +100,86 @@ namespace Azimuth.Services.Concrete
                         if (loggedUser != null)
                         {
                             user.Id = loggedUser.Id;
-                            // If we login again with the same social network, skip updating
+                            // If we login again with the same social network, skip updating (merging accounts)
                             if (loggedUser.Id != userSn.User.Id)
                             {
-                                //var userPlaylists = _playlistRepository.GetByCreatorId(userSn.User.Id);
-                                var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSn.User.Id);
+                                var playlistLikerRepository =
+                                        unitOfWork.GetTypedRepository<IPlaylistLikerRepository>();
+                                var notificationRepository =
+                                    unitOfWork.GetTypedRepository<INotificationRepository>();
+                                var userRepository = unitOfWork.GetTypedRepository<IUserRepository>();
 
-                                foreach (var userPlaylist in userPlaylists)
-                                {
-                                    userPlaylist.Creator = loggedUser;
-                                }
-
+                                var allAccounts =
+                                    _userSNRepository.Get(account => account.User.Id == userSn.User.Id).ToList();
                                 var userToDelete = userSn.User;
-                                userSn.User = loggedUser;
-                                _userSNRepository.ChangeUserId(userSn);
-                                unitOfWork.UserRepository.DeleteItem(userToDelete);    
+                                foreach (var userSocialNetwork in allAccounts)
+                                {
+                                    // Getting unlogged user's account playlists
+                                    var userPlaylists = _playlistRepository.Get(s => s.Creator.Id == userSocialNetwork.User.Id).ToList();
+                                    // Taking playlists which he liked or favourited
+
+
+                                    var notUserPlaylists = playlistLikerRepository.Get(s => s.Liker.Id == userSocialNetwork.User.Id).ToList();
+                                    if (notUserPlaylists.Any())
+                                        userPlaylists.AddRange(notUserPlaylists.Select(s => s.Playlist));
+
+                                    // Find if user liked/favourited his another account's playlists 
+                                    var recordsTodelete =
+                                        userPlaylists.SelectMany(s => s.PlaylistLikes).Where(
+                                            item => item.Playlist.Creator.Id == loggedUser.Id).ToList();
+                                    // Getting user's unauthorized account activity
+                                    var notifications =
+                                        notificationRepository.Get(item => item.User.Id == userSocialNetwork.User.Id).ToList();
+
+                                    foreach (var playlistLike in recordsTodelete)
+                                    {
+                                        // Notifications like/unlike and favourite/unfavourited of his another account playlists should be deleted
+                                        var notificationsToDelete = notifications.Where(
+                                            s =>
+                                                s.RecentlyPlaylist == playlistLike.Playlist &&
+                                                s.NotificationType == Notifications.FavoritedPlaylist ||
+                                                s.NotificationType == Notifications.LikedPlaylist ||
+                                                s.NotificationType == Notifications.UnfavoritedPlaylist ||
+                                                s.NotificationType == Notifications.UnlikedPlaylist).ToList();
+
+                                        // Get all records of unauthorizedd user's account from likes table
+                                        var likeRecord = playlistLikerRepository.GetOne(item => item.Id == playlistLike.Id);
+                                        // Kill connection between notifications which would be deleted with playlists
+                                        foreach (var notification in notificationsToDelete)
+                                        {
+                                            likeRecord.Playlist.Notifications.Remove(notification);
+                                        }
+
+                                        // Delete notifications
+                                        notifications.Where(
+                                            s =>
+                                                s.RecentlyPlaylist == playlistLike.Playlist &&
+                                                (s.NotificationType == Notifications.FavoritedPlaylist ||
+                                                s.NotificationType == Notifications.LikedPlaylist ||
+                                                s.NotificationType == Notifications.UnfavoritedPlaylist ||
+                                                s.NotificationType == Notifications.UnlikedPlaylist)).ForEach(item => notificationRepository.DeleteItem(item));
+
+                                        // Kill connection playlist -> like record of playlist (like/unlike && favourite/unfavouriteown playlists of another account)
+                                        likeRecord.Playlist.PlaylistLikes.Remove(playlistLike);
+                                        // Kill connection user -> like record of user (like/unlike && favourite/unfavouriteowne own playlists of another account)
+                                        likeRecord.Liker.PlaylistFollowing.Remove(playlistLike);
+                                        // Delete like/unlike && favourite/unfavouriteowne  playlists of another users's account 
+                                        playlistLikerRepository.DeleteItem(playlistLike);
+                                    }
+                                    // Normal user's activity should change user link
+                                    userPlaylists.SelectMany(list => list.PlaylistLikes).ForEach(item => item.Liker = loggedUser);
+                                    // Added normal user's playlists should also change user link
+                                    userPlaylists.ForEach(item => item.Creator = loggedUser);
+                                    // Other notifications have to change their user
+                                    notifications.Where(
+                                        s =>
+                                            s.User.Id == userSocialNetwork.User.Id).ForEach(item => item.User = loggedUser);
+
+                                    userSocialNetwork.User = loggedUser;
+                                    _userSNRepository.ChangeUserId(userSocialNetwork);
+
+                                }
+                                userRepository.DeleteItem(userToDelete);
                             }
                             else
                             {

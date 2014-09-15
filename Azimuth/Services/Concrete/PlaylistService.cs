@@ -172,14 +172,14 @@ namespace Azimuth.Services.Concrete
             {
                 var playlistRepo = unitOfWork.GetRepository<Playlist>();
                 if (playlistRepo.GetOne(s => (s.Name == name) && 
-                                             (s.Creator.Email == AzimuthIdentity.Current.UserCredential.Email)) != null)
+                                             (s.Creator.Id == AzimuthIdentity.Current.UserCredential.Id)) != null)
                 {
                     throw new BadRequestException("Playlist with this name already exists");
                 }
 
                 //get current user
                 var userRepo = unitOfWork.GetRepository<User>();
-                var user = userRepo.GetOne(s => (s.Email == AzimuthIdentity.Current.UserCredential.Email));
+                var user = userRepo.GetOne(s => (s.Id == AzimuthIdentity.Current.UserCredential.Id));
 
                 var playlist = new Playlist
                 {
