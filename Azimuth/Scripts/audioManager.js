@@ -42,7 +42,7 @@
         //self.$currentTrack.find('.track-duration').show();
         //self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next('.tableRow');
+        var trackItem = self.$currentTrack.next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next('.tableRow');
         }
@@ -58,7 +58,11 @@
             self._loadNextTracks(self.$currentTrack);
         }
 
-        self._setPauseImgButton(trackItem);
+        if (self.audio.paused) {
+            self._setPlayImgButton(trackItem);
+        } else {
+            self._setPauseImgButton(trackItem);
+        }
 
         self._setTrackTo('next');
 
@@ -72,7 +76,7 @@
         //self.$currentTrack.find('.track-duration').show();
         //self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev('.tableRow');
+        var trackItem = self.$currentTrack.prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev('.tableRow');
         }
@@ -85,7 +89,11 @@
             self._getCurrentTrackUrl(self.$currentTrack, url);
         }
 
-        self._setPauseImgButton(trackItem);
+        if (self.audio.paused) {
+            self._setPlayImgButton(trackItem);
+        } else {
+            self._setPauseImgButton(trackItem);
+        }
 
         self._setTrackTo('prev');
 
@@ -140,19 +148,11 @@
 AudioManager.prototype.refreshTracks = function() {
     var self = this;
     self.tracksGlobal = $('.vkMusicList').children('.track').children('.track-url');
-    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
-        $('#audio-player .track-artist').text($('.vkMusicList').children('.track-artist')[0].text());
-        $('#audio-player .track-title').text($('.vkMusicList').children('.track-title')[0].text());
-    }
 };
 
 AudioManager.prototype.refreshPlaylistTracks = function() {
     var self = this;
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
-    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
-        $('#audio-player .track-artist').text($('.vkMusicList').children('.track-artist')[0].text());
-        $('#audio-player .track-title').text($('.vkMusicList').children('.track-title')[0].text());
-    }
 };
 
 AudioManager.prototype.updateProgressbar = function (musicSelector) {
