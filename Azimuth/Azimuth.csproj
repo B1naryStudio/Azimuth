@@ -331,6 +331,7 @@
     <Content Include="Images\media_volume.png" />
     <Content Include="Images\playlist_stub.jpg" />
     <Content Include="Images\spinner_loading_circle.gif" />
+    <Content Include="Images\vk-audio.png" />
     <Content Include="Scripts\audioManager.js" />
     <Content Include="Images\twitter_logo.png" />
     <Content Include="Images\vkontakte_logo.png" />
