@@ -18,14 +18,13 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<TweetSharp.TwitterUser, User>(TwitterUserDataMap);
             AddMapp<Track, TracksDto>(TrackMap);
             AddMapp<User, UserDto>(UserMap);
+            AddMapp<List<User>, List<UserDto>>(UserListMap);
             AddMapp<DeezerTrackData.TrackData, TrackInfoDto>(DeezerDataMap);
             AddMapp<LastfmTrackData, TrackInfoDto>(LastfmDataMap);
             AddMapp<string[], TrackInfoDto>(ChartLyricMap);
             AddMapp<TrackData.Audio, TracksDto>(VkTrackToTrackDto);
             AddMapp<Playlist, PlaylistData>(PlaylistMap);
         }
-
-        
 
         public static void AddMapp<TSource, TDestination>(Action<TSource, TDestination> map)
             where TSource : class
@@ -251,6 +250,22 @@ namespace Azimuth.Infrastructure.Concrete
             dto.Url = vk.Url;
             dto.Duration = vk.Duration.ToString();
             dto.Artist = vk.Artist;
+        }
+        private static void UserListMap(List<User> users, List<UserDto> usersDto)
+        {
+            usersDto.AddRange(users.Select(user => new UserDto
+            {
+                Id = user.Id.ToString(),
+                Birthdate = user.Birthday,
+                City = user.Location.City,
+                Country = user.Location.Country,
+                Email = user.Email,
+                FirstName = user.Name.FirstName,
+                LastName = user.Name.LastName,
+                Gender = user.Gender,
+                Photo = user.Photo,
+                ScreenName = user.ScreenName
+            }));
         }
 
         private static void PlaylistMap(Playlist playlist, PlaylistData playlistData)
