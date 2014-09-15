@@ -10,7 +10,7 @@
         $('#tracksArea').hide(); 
     });
 
-    $('.playlist-plated').click(function () {
+    $('.playlist-plated:not(a)').click(function () {
         $('#playlistsArea').hide();
         $('#playlist-spinner').show();
         var $currentPlaylist = $(this);
@@ -30,11 +30,6 @@
             FavouritesCount: favouriteCount
         };
         $.ajax({
-            @*url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")?playlistId=' + playlistId +
-                "&playlistName=" + $currentPlaylist.find('.playlistName').text() +
-                "&isLiked=" + $currentPlaylist.find('.isLiked').val() +
-                "&isFavourited=" + $currentPlaylist.find('.isFavourited').val() +
-                "&likesCount=" + likesCount + "&favouritesCount=" + favouriteCount,*@
             url: '@Url.Action("_PlaylistTracks", "PublicPlaylists")',
             type: 'GET',
             data: { curPlaylist: JSON.stringify(curPlaylist) },
