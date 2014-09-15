@@ -30,7 +30,7 @@
 
     self.audio.ontimeupdate = function() {
         self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
-        self.progressSlider.setBackgroundPosition(self.audio.buffered.end(0) / self.audio.duration);
+        //self.progressSlider.setBackgroundPosition(self.audio.buffered.end(0) / self.audio.duration);
         var remaining = Math.floor(self.audio.duration - self.audio.currentTime);
         self.$currentTrack.find('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
     };
@@ -337,7 +337,7 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
 AudioManager.prototype.refreshProgressBar = function () {
     var self = this;
 
-    $('#progressSlider').on('mousedown', function () {
+    $('#progress-bar').on('mousedown', function () {
         self.audio.pause();
         self.onProgressBarClick = true;
     });
@@ -393,7 +393,7 @@ AudioManager.prototype.bindListeners = function() {
     //    self.audio.currentTime = value * self.audio.duration;
     //});
 
-    $('#progressSlider').on('mousedown', function() {
+    $('#progress-bar').on('mousedown', function() {
         self.audio.pause();
         self.onProgressBarClick = true;
     });
