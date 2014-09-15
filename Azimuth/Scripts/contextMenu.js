@@ -401,7 +401,9 @@ ContextMenu.prototype.drawContextMenu = function (event) {
             self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', true);
             self.$contextMenuContainer.children('.tableRow').has('#removeplaylist').toggleClass('unactiveContextMenuAction', false);
             self.$contextMenuContainer.children('.tableRow').has('#shareplaylist').toggleClass('unactiveContextMenuAction', false);
-        } else {
+        }else if($playlist.hasClass('default-playlist')){
+            self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', true);
+        }else {
             self.$contextMenuContainer.children('.tableRow').toggleClass('unactiveContextMenuAction', false);
         }
     }

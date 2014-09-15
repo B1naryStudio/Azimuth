@@ -15,8 +15,12 @@ namespace Azimuth.Controllers
         // GET: /UserProfile/   
         public ActionResult Index(long? id)
         {
-            var settings = _settingsService.GetUserSettings(id);
-            return View(settings);
+            if (Request.IsAuthenticated)
+            {
+                var settings = _settingsService.GetUserSettings(id);
+                return View(settings);
+            }
+            return RedirectToAction("Login", "Account");
         }
     }
 }

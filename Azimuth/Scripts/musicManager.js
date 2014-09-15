@@ -35,9 +35,10 @@ var MusicManager = function (manager) {
     this.$errorModal = $('#errorModal');
 
     this._getTracks = function (plId) {
+        var $this = $(this);
         self.$vkMusicLoadingSpinner.show();
         $('.vkMusicList').find('.track').detach();
-        var playlistId = $(this).find('.playlistId').text();
+        var playlistId = $this.children('.playlistId').text();
         if (playlistId.length == 0) {
             playlistId = plId;
         }
@@ -86,30 +87,10 @@ var MusicManager = function (manager) {
         })[0].Name;
         self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
-        $(this).toggleClass("active");
 
-        $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
+        $this.siblings('.playlist-active').removeClass('playlist-active');
+        $this.toggleClass("playlist-active");
     };
-
-    $('#okPlaylistCreateModalBtn').click(function () {
-
-        $('#createPlaylistModal').modal('hide');
-        $('#createPlaylistModal').on('hidden.bs.modal', function () {
-            $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
-            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
-        });
-
-        var playlistName = $('#playlistNameToCreate').val();
-        var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
-        $.ajax({
-            url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
-            type: 'POST',
-            contentType: 'application/json',
-            success: function (playlistId) {
-                self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
-            }
-        });
-    });
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
         var tracks = [];
@@ -180,29 +161,40 @@ var MusicManager = function (manager) {
         return ((withHours) ? hoursString + ':' : '') + minutesString + ':' + secondsString;
     };
 
-    this._getUserTracks = function (provider, reloginUrl) {
+    this._getUserTracks = function () {
         
         self.$vkMusicTitle.text('Loading...');
+
+        $defaultPlaylist = $('.default-playlist');
+        $defaultPlaylist.siblings('.playlist-active').removeClass('playlist-active');
+        $defaultPlaylist.toggleClass("playlist-active");
+
         self.$vkMusicLoadingSpinner.fadeIn('normal');
         $('.vkMusicList').hide();
         $.ajax({
-            url: '/api/usertracks?provider=' + provider,
+            url: '/api/usertracks?provider=' + self.provider,
             success: function (tracks) {
+                self.userTracks = tracks;
                 self.$vkMusicTitle.text('User tracks');
                 if (typeof tracks.Message === 'undefined') {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
-                    var list = $('.vkMusicList');
+                    var allDuration = 0;
                     for (var i = 0; i < tracks.length; i++) {
+                        allDuration += tracks[i].duration;
                         tracks[i].duration = self._toFormattedTime(tracks[i].duration, true);
                     }
+
+                    allDuration = self._toFormattedTime(allDuration, true);
+                    $defaultPlaylist.children('.playlist-duration').html("Duration: " + allDuration);
+                    $defaultPlaylist.children('.playlist-size').html("Songs: " + tracks.length);
+
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
                 } else {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
                 }
-                //$('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
 
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
@@ -217,19 +209,20 @@ var MusicManager = function (manager) {
         });
     };
 
-    this._getTrackInfo = function() {
+    this._getTrackInfo = function (e) {
         var $self = $(this);
-        var author = $self.parent().children('.track-description').children('.track-info');
-        var trackName = $self.parent().children('.track-description').children('.track-title');
+        var author = $self.children('.track-artist').html();
+        var trackName = $self.children('.track-title').html();
+        var $trackInfoContainer = $('#infoModal .modal-body');
+        $trackInfoContainer.text('');
         self.$infoLoadingSpinner.show();
         $.ajax({
-            url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
+            url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
             success: function (trackInfo) {
                 self.$infoLoadingSpinner.hide();
                 var $trackInfoTemplate = $('#trackInfoTemplate');
                 var object = $trackInfoTemplate.tmpl(trackInfo);
-                var $trackInfoContainer = $('#infoModal .modal-body');
-                $trackInfoContainer.text('');
+                
                 object.appendTo($trackInfoContainer);
                 if (trackInfo.Lyric != null) {
                     for (var i = 0; i < trackInfo.Lyric.length; i++) {
@@ -286,7 +279,6 @@ var MusicManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
                 self.$vkMusicLoadingSpinner.hide();
                 $('.vkMusicList').show();
-                $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
             },
             error: function (thrownException) {
                 
@@ -383,6 +375,25 @@ var MusicManager = function (manager) {
     };
 };
 
+MusicManager.prototype.setDefaultPlaylist = function () {
+    var self = this;
+    self.$playlistsTable.prepend('<div class="playlist-divider" />');
+
+    var playlist = {
+        Name: "VK Playlist",
+        Accessibilty: "Private",
+        Genres : []
+    };
+
+    var tmpl = self.playlistTemplate.tmpl(playlist);
+    tmpl.addClass('default-playlist');
+
+    tmpl.click(self._getUserTracks);
+    self.$playlistsTable.prepend(tmpl);
+
+    self._getUserTracks();
+};
+
 MusicManager.prototype.showTracks = function (tracks, template) {
     var self = this;
 
@@ -423,7 +434,7 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             });
 
     self.audioManager.bindPlayBtnListeners();
-    $('.vkMusicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+    $('.track-info > a').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
@@ -468,8 +479,6 @@ MusicManager.prototype.showPlaylistTracks = function (tracks) {
     var self = this;
     self.showTracks(tracks, self.playlistTrackTemplate);
     self.audioManager.bindPlayBtnListeners();
-
-    $('#playlistTracks > .tableRow > .track-info-btn').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showPlaylists = function (playlists) {
@@ -536,13 +545,11 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                             self.$vkMusicTable.hide();
                         }
                         self.$playlistsLoadingSpinner.hide();
-                        $('.accordion .tableRow').on("click", self._getTracks);
+                        self.setDefaultPlaylist();
+                        $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
                         self._createContextMenuForPlaylists();
                     }
                 });
-
-
-
             }
         });
     } else { //using to print playlists after using filter
@@ -572,7 +579,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
         ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
 
         //$('.playlist').off('mousedown').mousedown(function (event) {
-        $('.playlist').mousedown(function (event) {
+        $('.playlist').mousedown(function(event) {
             if (event.which == 3) {
                 $('.playlist.selected').toggleClass('selected', false);
                 var $target = $(event.target).parents('.playlist');
@@ -585,21 +592,39 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             }
         });
 
-        ctxMenu.$contextMenuContainer.mousedown(function (event) {
+        ctxMenu.$contextMenuContainer.mousedown(function(event) {
             ctxMenu.$contextMenuContainer.hide();
             ctxMenu.selectAction($('.playlist.selected'));
         });
-    }
+    };
 };
 
 MusicManager.prototype.bindListeners = function() {
     var self = this;
 
-    self._getUserTracks(self.provider, self.reloginUrl);
-
     $(document).on('PlaylistAdded', function(playlist) { // TODO Remove event triggering on document object
         self.playlistsGlobal.push({ Name: playlist.Name, Accessibilty: playlist.Accessibilty });
         self.$searchPlaylistInput.trigger('input');
+    });
+
+    $('#okPlaylistCreateModalBtn').click(function () {
+
+        $('#createPlaylistModal').modal('hide');
+        $('#createPlaylistModal').on('hidden.bs.modal', function () {
+            $('#createPlaylistModal .modal-body #playlistNameToCreate').val("");
+            $('#createPlaylistModal .modal-body select :first').attr("selected", "selected");
+        });
+
+        var playlistName = $('#playlistNameToCreate').val();
+        var playlistAccessibility = $('#newPlaylistAccessibility option:selected').val();
+        $.ajax({
+            url: '/api/playlists?name=' + playlistName + '&accessibilty=' + playlistAccessibility,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (playlistId) {
+                self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+            }
+        });
     });
 
     self.$getUserTracksBtn.click(function(e) {
@@ -645,7 +670,7 @@ MusicManager.prototype.bindListeners = function() {
             }
 
             self.showPlaylists(foundedPlaylist);
-            $('.accordion .tableRow').on("click", self._getTracks);
+            $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
             //console.log('nothing to do here');
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function(index) {
