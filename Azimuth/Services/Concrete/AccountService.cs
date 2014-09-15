@@ -104,7 +104,7 @@ namespace Azimuth.Services.Concrete
                             if (loggedUser.Id != userSn.User.Id)
                             {
                                 var playlistLikerRepository =
-                                        unitOfWork.GetTypedRepository<IPlaylistLikerRepository>();
+                                        unitOfWork.GetTypedRepository<PlaylistLikerRepository>();
                                 var notificationRepository =
                                     unitOfWork.GetTypedRepository<INotificationRepository>();
                                 var userRepository = unitOfWork.GetTypedRepository<IUserRepository>();

@@ -10,9 +10,4 @@ namespace Azimuth.DataAccess.Repositories
         {
         }
     }
-
-    public interface IPlaylistLikerRepository : IRepository<PlaylistLike>
-    {
-        
-    }
 }
