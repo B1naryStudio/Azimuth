@@ -39,11 +39,11 @@
 
     this._getTrackInfo = function () {
         var $self = $(this);
-        var author = $self.parent().children('.track-description').children('.track-info');
-        var trackName = $self.parent().children('.track-description').children('.track-title');
+        var author = $self.children('.track-artist').html();
+        var trackName = $self.children('.track-title').html();
         self.$infoLoadingSpinner.show();
         $.ajax({
-            url: '/api/usertracks/trackinfo?artist=' + author.html() + '&trackName=' + trackName.html(),
+            url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
             async: true,
             success: function (trackInfo) {
                 self.$infoLoadingSpinner.hide();
@@ -69,7 +69,7 @@
     };
 
 
-    $('#musicList > .tableRow > .track-info-btn').click(self._getTrackInfo);
+    $('.track-info > a').click(self._getTrackInfo);
     $('.track-duration').each(function() {
         var $this = $(this);
         var oldDuration = $this.html();

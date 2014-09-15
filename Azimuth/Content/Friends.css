@@ -1,5 +1,5 @@
 ﻿#friends-container {
-    height: 100%;
+    height: 93%;
     width: 100%;
 }
 
@@ -22,6 +22,11 @@
 
 .friend-initials {
     display: inline-block;
+}
+
+.friend:hover {
+    cursor: pointer;
+    background: #FFD386;
 }
 
 .send-message-btn {
