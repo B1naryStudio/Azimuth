@@ -4,10 +4,12 @@ using NHibernate;
 
 namespace Azimuth.DataAccess.Repositories
 {
-    public class PlaylistLikerRepository:BaseRepository<PlaylistLike>, IPlaylistLikerRepository
+    public class PlaylistLikerRepository:BaseRepository<PlaylistLike>
     {
         public PlaylistLikerRepository(ISession session) : base(session)
         {
         }
     }
+
+    
 }
