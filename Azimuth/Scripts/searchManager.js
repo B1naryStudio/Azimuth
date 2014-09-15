@@ -74,14 +74,12 @@
         var correctedUsers = $.extend(true, [], users);
 
         for (var i = 0; i < correctedUsers.length; i++) {
-            if (typeof(correctedUsers[i].Name) != 'undefined') {
-                var tmpl = template.tmpl(correctedUsers[i]);
-                tmpl.appendTo('#users');
-            }
-        }
+            var tmpl = template.tmpl(correctedUsers[i]);
+            tmpl.appendTo('#users');
+        };
 
         self.$vkMusicLoadingSpinner.hide();
-    }
+    };
 
     this._showTracks = function (tracks, template) {
         var correctedTracks = $.extend(true, [], tracks);
