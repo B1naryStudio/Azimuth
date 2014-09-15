@@ -402,6 +402,7 @@
     <Content Include="Views\PublicPlaylists\DisplayTemplates\TracksDto.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Shared\_AudioPlayer.cshtml" />
+    <Content Include="Views\UserProfile\_FollowAction.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

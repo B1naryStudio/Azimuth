@@ -17,39 +17,30 @@
                 @Html.DisplayFor(x => x.User.Name.FirstName)
                 @Html.DisplayFor(x => x.User.Name.LastName)
             </div>
-            <div id="followers-section">
-                <div id="followers">
-                    <button class="btn btn-default btn-xs"><i class="fa fa-users"></i> Followers</button>
-                    <div class="count-label">@Model.User.Followers.Count</div>
+                @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
+                <div id="playlist-section">
+                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count Favorite playlists</div>
                 </div>
-                <div id="following">
-                    <button class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i> Followed</button>
-                    <div class="count-label">@Model.User.Following.Count</div>
-                </div>
-            </div>
-            <div id="playlist-section">
-                <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count Favorite playlists</div>
-            </div>
 
-            @if (loggedUser.Id == Model.User.Id)
-            {
-                <div id="social-container">
-                    @foreach (var sn in @Model.SocialNetworks)
-                    {
-                        var active = @sn.IsConnected ? "active" : "";
-                        var action = @sn.IsConnected ? "Disconnect" : "ConnectAccount";
-                        <a href="@Url.Action(@action, "Account", new {provider = sn.SocialNetwork.Name, redirectUrl = @Url.Action("Index", "UserProfile")})">
-                            <div class="social-network @active" id="@sn.SocialNetwork.Name">
-                                @if (sn.IsConnected)
-                                {
-                                    <div class="active-mark"><i class="fa fa-check"></i></div>
-                                }
-                            </div>
-                        </a>
-                    }
-                </div>
-            }
-        </div>
+                @if (loggedUser.Id == Model.User.Id)
+                {
+                    <div id="social-container">
+                        @foreach (var sn in @Model.SocialNetworks)
+                        {
+                            var active = @sn.IsConnected ? "active" : "";
+                            var action = @sn.IsConnected ? "Disconnect" : "ConnectAccount";
+                            <a href="@Url.Action(@action, "Account", new {provider = sn.SocialNetwork.Name, redirectUrl = @Url.Action("Index", "UserProfile")})">
+                                <div class="social-network @active" id="@sn.SocialNetwork.Name">
+                                    @if (sn.IsConnected)
+                                    {
+                                        <div class="active-mark"><i class="fa fa-check"></i></div>
+                                    }
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
         <div class="row well">
             <div id="notification-container">
                 <h3>Recent Activity:</h3>
