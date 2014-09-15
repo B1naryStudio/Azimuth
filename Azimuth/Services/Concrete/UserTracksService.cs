@@ -6,6 +6,7 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
@@ -22,29 +23,15 @@ namespace Azimuth.Services.Concrete
     public class UserTracksService : IUserTracksService
     {
         private ISocialNetworkApi _socialNetworkApi;
-        private readonly LastfmApi _lastfmApi;
-        private readonly DeezerApi _deezerApi;
-        private readonly ChartLyricsApi _chartLyricsApi;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMusicServiceWorkUnit _musicServiceWorkUnit;
-        private readonly UserRepository _userRepository;
-        private readonly PlaylistRepository _playlistRepository;
-        private readonly TrackRepository _trackRepository;
-        private readonly PlaylistTrackRepository _playlistTrackRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IMusicServiceFactory _musicServiceFactory;
 
-        public UserTracksService(IUnitOfWork unitOfWork, IMusicServiceWorkUnit musicServiceWorkUnit)
+        public UserTracksService(IUnitOfWorkFactory unitOfWorkFactory, IMusicServiceFactory musicServiceFactory)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWorkFactory = unitOfWorkFactory;
 
-            _userRepository = _unitOfWork.GetRepository<User>() as UserRepository;
-            _playlistRepository = _unitOfWork.GetRepository<Playlist>() as PlaylistRepository;
-            _trackRepository = _unitOfWork.GetRepository<Track>() as TrackRepository;
-            _playlistTrackRepository = _unitOfWork.GetRepository<PlaylistTrack>() as PlaylistTrackRepository;
-
-            _musicServiceWorkUnit = musicServiceWorkUnit;
-            _lastfmApi = _musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
-            _deezerApi = _musicServiceWorkUnit.GetMusicService<DeezerTrackData.TrackData>() as DeezerApi;
-            _chartLyricsApi = _musicServiceWorkUnit.GetMusicService<string[]>() as ChartLyricsApi;
+            _musicServiceFactory = musicServiceFactory;
+            
         }
 
         public async Task<List<TrackData.Audio>> GetTracks(string provider)
@@ -52,11 +39,11 @@ namespace Azimuth.Services.Concrete
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             UserSocialNetwork socialNetworkData;
 
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                socialNetworkData = GetSocialNetworkData(provider);
+                socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             if (socialNetworkData == null)
@@ -80,18 +67,23 @@ namespace Azimuth.Services.Concrete
 
             var trackData = new TrackInfoDto();
 
-            var lastfmData = await _lastfmApi.GetTrackInfo(artist, trackName);
-            var deezerData = await _deezerApi.GetTrackInfo(artist, trackName);
-            string[] lyricData;
-            lyricData = await _chartLyricsApi.GetTrackInfo(artist, trackName);
+            var lastFmApi = _musicServiceFactory.Resolve<LastfmTrackData>();
+            var lastfmData = await lastFmApi.GetTrackInfo(artist, trackName);
+
+            var deezerApi = _musicServiceFactory.Resolve<DeezerTrackData.TrackData>();
+            var deezerData = await deezerApi.GetTrackInfo(artist, trackName);
+
+            var chartLyricsApi = _musicServiceFactory.Resolve<string[]>();
+            var lyricData = await chartLyricsApi.GetTrackInfo(artist, trackName);
+
             if (lyricData == null || !lyricData.Any() || (lyricData.Count() == 1 && String.IsNullOrEmpty(lyricData[0])))
             {
                 _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
                 UserSocialNetwork socialNetworkData = null;
-                using (_unitOfWork)
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    socialNetworkData = GetSocialNetworkData("Vkontakte");
-                    _unitOfWork.Commit();
+                    socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                    unitOfWork.Commit();
                 }
                 if (socialNetworkData != null)
                 {
@@ -122,10 +114,11 @@ namespace Azimuth.Services.Concrete
         {
             return await Task.Run(() =>
             {
-                using (_unitOfWork)
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
+                    var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
                     var pt =
-                        _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                        playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
                             .OrderBy(o => o.TrackPosition)
                             .ToList();
 
@@ -140,7 +133,7 @@ namespace Azimuth.Services.Concrete
                         OwnerId = s.Identifier.Track.OwnerId
                     }).ToList();
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                     return tracks;
                 }
             });
@@ -148,10 +141,11 @@ namespace Azimuth.Services.Concrete
 
         public ICollection<TracksDto> GetTracksByPlaylistIdSync(int id)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
                 var pt =
-                    _playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
+                    playlistTrackRepository.Get(x => x.Identifier.Playlist.Id == id)
                         .OrderBy(o => o.TrackPosition)
                         .ToList();
 
@@ -166,7 +160,7 @@ namespace Azimuth.Services.Concrete
                     OwnerId = s.Identifier.Track.OwnerId
                 }).ToList();
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
                 return tracks;
             }
         }
@@ -175,10 +169,10 @@ namespace Azimuth.Services.Concrete
         {
             return await Task.Run(() =>
             {
-                using (_unitOfWork)
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    var user = _userRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
-                    var playlists = _playlistRepository.Get(s => s.Creator.Id == user.Id).ToList();
+                    var user = unitOfWork.UserRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
+                    var playlists = unitOfWork.PlaylistRepository.Get(s => s.Creator.Id == user.Id).ToList();
                     ICollection<TracksDto> tracks =
                         playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
                         {
@@ -190,7 +184,7 @@ namespace Azimuth.Services.Concrete
                             OwnerId = track.OwnerId
                         }).ToList();
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                     return tracks;
                 }
             });
@@ -201,20 +195,25 @@ namespace Azimuth.Services.Concrete
             string accessToken;
             if (AzimuthIdentity.Current == null)
             {
-                var admin =
-                    _userRepository.GetFullUserData(
-                        _userRepository.Get(user => user.ScreenName == "id268940215"&& user.Name.FirstName == "Azimuth" && user.Name.LastName == "Azimuth")
-                            .FirstOrDefault()
-                            .Id);
-                accessToken =
-                    admin.SocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Vkontakte").AccessToken;
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+                {
+                    var id = unitOfWork.UserRepository.Get(user =>
+                            user.ScreenName == "id268940215" && user.Name.FirstName == "Azimuth" &&
+                            user.Name.LastName == "Azimuth").FirstOrDefault().Id;
+
+                    var admin =
+                        unitOfWork.UserRepository.GetFullUserData(id);
+                    accessToken =
+                        admin.SocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Vkontakte").AccessToken;
+                    unitOfWork.Commit();
+                }
             }
             else
             {
-                using (_unitOfWork)
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    accessToken = GetSocialNetworkData(provider).AccessToken;
-                    _unitOfWork.Commit();
+                    accessToken = GetSocialNetworkData(unitOfWork, provider).AccessToken;
+                    unitOfWork.Commit();
                 }
             }
 
@@ -229,7 +228,12 @@ namespace Azimuth.Services.Concrete
             var trackDtos = new List<TracksDto>();
             var findInVk = new List<TrackData.Audio>();
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
-            var socialNetworkData = GetSocialNetworkData("Vkontakte");
+            UserSocialNetwork socialNetworkData;
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+            {
+                socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                unitOfWork.Commit();
+            }
             findInVk = await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, offset, 20);
             if (findInVk.Count > 0)
             {
@@ -251,23 +255,24 @@ namespace Azimuth.Services.Concrete
             var trackDtos = new List<TracksDto>();
             var tracks = new List<Track>();
             var findInVk = new List<TrackData.Audio>();
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var socialNetworkData = GetSocialNetworkData("Vkontakte");
+                var socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
                 _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+                var trackRepository = unitOfWork.GetRepository<Track>();
 
                 switch (criteria)
                 {
                     case "genre":
-                        tracks = _trackRepository.Get(track => track.Genre.ToLower().Contains(searchText)).ToList();
+                        tracks = trackRepository.Get(track => track.Genre.ToLower().Contains(searchText)).ToList();
                         break;
                     case "artist":
                         tracks =
-                            _trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText))
+                            trackRepository.Get(track => track.Album.Artist.Name.ToLower().Contains(searchText))
                                 .ToList();
                         break;
                     case "track":
-                        tracks = _trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
+                        tracks = trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
                         break;
                     case "vkontakte":
                         findInVk =
@@ -324,7 +329,7 @@ namespace Azimuth.Services.Concrete
                     });
                 }
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             return trackDtos;
@@ -332,9 +337,10 @@ namespace Azimuth.Services.Concrete
 
         public void UpdateTrackPlaylistPosition(long playlistId, int newIndex, List<long> trackId)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
+                var pt = playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
                 int i = 0;
                 foreach (var id in trackId)
                 {
@@ -374,15 +380,16 @@ namespace Azimuth.Services.Concrete
                                     }).ToList();
                     }
                 }
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
         public void UpdateWholePlaylistTrackPositions(List<TrackInPlaylist> playlist, long playlistId)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var pt = _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
+                var pt = playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == playlistId).ToList();
 
                 playlist.ForEach(item =>
                 {
@@ -390,27 +397,28 @@ namespace Azimuth.Services.Concrete
                         .Select(pos => pos.TrackPosition = item.TrackPosition).ToList();
                 });
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
         public void MoveTrackBetweenPlaylists(long playlistId, long trackId)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var track = _trackRepository.GetOne(tr => tr.Id == trackId);
+                var trackRepository = unitOfWork.GetRepository<Track>();
+                var track = trackRepository.GetOne(tr => tr.Id == trackId);
                 if (track == null)
                 {
                     throw new BadRequestException("Track with current Id doesn't exist");
                 }
 
-                var playlistNext = _playlistRepository.GetOne(pl => pl.Id == playlistId);
+                var playlistNext = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == playlistId);
                 if (playlistNext == null)
                 {
                     throw new BadRequestException("Playlist with current Id doesn't exist");
                 }
 
-                var playlistPrevious = _playlistRepository.GetOne(pl => pl.Id == track.Playlists.First().Id);
+                var playlistPrevious = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == track.Playlists.First().Id);
                 if (playlistPrevious == null)
                 {
                     throw new BadRequestException("Playlist with current Id doesn't exist");
@@ -419,22 +427,22 @@ namespace Azimuth.Services.Concrete
                 track.Playlists.Remove(playlistPrevious);
                 track.Playlists.Add(playlistNext);
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
         public void PutTrackToPlaylist(int id, Track track)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == id);
+                var playlist = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == id);
                 if (playlist == null)
                 {
                     throw new InstanceNotFoundException("Playlist with specified id does not exist");
                 }
 
                 playlist.Tracks.Add(track);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
@@ -444,12 +452,12 @@ namespace Azimuth.Services.Concrete
             _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi(provider);
             //List<TrackData.Audio> searchedTracks = new List<TrackData.Audio>();
 
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var socialNetworkData = GetSocialNetworkData(provider);
+                var socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
                 var searchedTracks =
                     await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
                 return searchedTracks;
             }
         }
@@ -460,22 +468,25 @@ namespace Azimuth.Services.Concrete
 
             bool tracksToEnd = index == -1;
 
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
+                var trackRepository = unitOfWork.GetRepository<Track>();
+
                 List<VkTrackResponse.Audio> trackDatas = null;
                 //get checked tracks
-                var socialNetworkData = GetSocialNetworkData(provider);
+                var socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
                 trackDatas = await _socialNetworkApi.GetSelectedTracks(tracksInfo, socialNetworkData.AccessToken);
 
                 if (trackDatas.Any())
                 {
-                    var playlist = _playlistRepository.GetOne(pl => pl.Id == tracksInfo.PlaylistId);
+                    var playlist = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == tracksInfo.PlaylistId);
                     playlist.PlaylistTracks =
-                        _playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == tracksInfo.PlaylistId).ToList();
+                        playlistTrackRepository.Get(s => s.Identifier.Playlist.Id == tracksInfo.PlaylistId).ToList();
 
                     int i = 0;
                     //create Track objects
-                    var artistRepo = _unitOfWork.GetRepository<Artist>();
+                    var artistRepo = unitOfWork.GetRepository<Artist>();
 
                     try
                     {
@@ -518,7 +529,7 @@ namespace Azimuth.Services.Concrete
 
                             track.Playlists.Add(playlist);
                             album.Tracks.Add(track);
-                            _trackRepository.AddItem(track);
+                            trackRepository.AddItem(track);
 
                             if (index == -1)
                             {
@@ -535,7 +546,7 @@ namespace Azimuth.Services.Concrete
                                 TrackPosition = index + i++
                             };
 
-                            _playlistTrackRepository.AddItem(playlistTrack);
+                            playlistTrackRepository.AddItem(playlistTrack);
 
                             playlist.PlaylistTracks.Add(playlistTrack);
                         }
@@ -558,17 +569,19 @@ namespace Azimuth.Services.Concrete
                     }
                 }
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
         public async Task CopyTrackToAnotherPlaylist(long playlistId, List<long> trackIds)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
+                var trackRepository = unitOfWork.GetRepository<Track>();
 
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
-                var tracks = _trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
+                var playlist = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == playlistId);
+                var tracks = trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
                 int i = 0;
                 tracks.ForEach(track =>
                 {
@@ -582,31 +595,34 @@ namespace Azimuth.Services.Concrete
                         },
                         TrackPosition = playlist.Tracks.Count() + i++
                     };
-                    _playlistTrackRepository.AddItem(playlistTrack);
+                    playlistTrackRepository.AddItem(playlistTrack);
                     playlist.PlaylistTracks.Add(playlistTrack);
                 });
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
         public async Task DeleteTracksFromPlaylist(long playlistId, List<long> trackIds)
         {
-            using (_unitOfWork)
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var playlist = _playlistRepository.GetOne(pl => pl.Id == playlistId);
-                var tracks = _trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
+                var playlistTrackRepository = unitOfWork.GetRepository<PlaylistTrack>();
+                var trackRepository = unitOfWork.GetRepository<Track>();
+
+                var playlist = unitOfWork.PlaylistRepository.GetOne(pl => pl.Id == playlistId);
+                var tracks = trackRepository.Get(tr => trackIds.Contains(tr.Id)).ToList();
                 tracks.ForEach(track =>
                 {
                     track.Playlists.Remove(playlist);
                     var playlistTrackToDelete =
-                        _playlistTrackRepository.Get(
+                        playlistTrackRepository.Get(
                             pt => trackIds.Contains(pt.Identifier.Track.Id) && pt.Identifier.Playlist.Id == playlistId);
-                    var curPlaylistPt = _playlistTrackRepository.Get(pt => pt.Identifier.Playlist.Id == playlistId);
+                    var curPlaylistPt = playlistTrackRepository.Get(pt => pt.Identifier.Playlist.Id == playlistId);
                     playlistTrackToDelete.ForEach(pt =>
                     {
                         var curTrackPos = pt.TrackPosition;
-                        _playlistTrackRepository.DeleteItem(pt);
+                        playlistTrackRepository.DeleteItem(pt);
                         playlist.PlaylistTracks.Remove(pt);
                         curPlaylistPt.ForEach(item =>
                         {
@@ -618,13 +634,13 @@ namespace Azimuth.Services.Concrete
                     });
                 });
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
         }
 
-        private UserSocialNetwork GetSocialNetworkData(string provider)
+        private UserSocialNetwork GetSocialNetworkData(IUnitOfWork unitOfWork, string provider)
         {
-            var userSocialNetworkRepo = _unitOfWork.GetRepository<UserSocialNetwork>();
+            var userSocialNetworkRepo = unitOfWork.GetRepository<UserSocialNetwork>();
             if (AzimuthIdentity.Current != null)
             {
                 return userSocialNetworkRepo.GetOne(

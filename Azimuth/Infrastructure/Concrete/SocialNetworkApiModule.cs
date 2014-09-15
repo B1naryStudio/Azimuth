@@ -13,7 +13,7 @@ namespace Azimuth.Infrastructure.Concrete
         public override void Load()
         {
             Bind<IMusicServiceFactory>().ToFactory();
-            Bind<IMusicServiceWorkUnit>().To<MusicServiceWorkUnit>();
+            //Bind<IMusicServiceWorkUnit>().To<MusicServiceWorkUnit>();
             Bind<IUserTracksService>().To<UserTracksService>();
             Bind<ISocialNetworkApi>().To<VkApi>().Named("Vkontakte");
             Bind<IMusicService<LastfmTrackData>>().To<LastfmApi>();

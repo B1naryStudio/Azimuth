@@ -21,14 +21,13 @@ namespace Azimuth.Services.Concrete
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly INotificationService _notificationService;
-        private readonly LastfmApi _lastfmApi;
+        private readonly IMusicServiceFactory _musicServiceFactory;
 
-        public PlaylistService(IUnitOfWorkFactory unitOfWorkFactory, IMusicServiceWorkUnit musicServiceWorkUnit, INotificationService notificationService)
+        public PlaylistService(IUnitOfWorkFactory unitOfWorkFactory, IMusicServiceFactory musicServiceFactory, INotificationService notificationService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _notificationService = notificationService;
-
-            _lastfmApi = musicServiceWorkUnit.GetMusicService<LastfmTrackData>() as LastfmApi;
+            _musicServiceFactory = musicServiceFactory;
         }
  
         public async Task<List<PlaylistData>> GetPublicPlaylists()
@@ -340,7 +339,9 @@ namespace Azimuth.Services.Concrete
                     {
                         var artist = tracks[seed].Album.Artist.Name;
                         var trackName = tracks[seed].Name;
-                        var trackInfoDto = await _lastfmApi.GetTrackInfo(artist, trackName);
+
+                        var lastFmApi = _musicServiceFactory.Resolve<LastfmTrackData>();
+                        var trackInfoDto = await lastFmApi.GetTrackInfo(artist, trackName);
 
                         if (trackInfoDto.Track != null
                             && trackInfoDto.Track.TrackAlbum != null
