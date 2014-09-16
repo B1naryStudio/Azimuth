@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
@@ -129,7 +128,7 @@ namespace Azimuth.Services.Concrete
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
                 user = unitOfWork.UserRepository.GetFullUserData(followerId);
-                var loggedUser = unitOfWork.UserRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                var loggedUser = unitOfWork.UserRepository.GetOne(x => x.Id == AzimuthIdentity.Current.UserCredential.Id);
                 if (user == null || loggedUser == null)
                 {
                     throw new EndUserException("Something wrong during unfollowing operation.");

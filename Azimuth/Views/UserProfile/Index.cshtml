@@ -17,9 +17,11 @@
                 @Html.DisplayFor(x => x.User.Name.FirstName)
                 @Html.DisplayFor(x => x.User.Name.LastName)
             </div>
+            <div id="followers-section">
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
+                </div>
                 <div id="playlist-section">
-                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count Favorite playlists</div>
+                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count(s => s.IsFavorite) Favorite playlists</div>
                 </div>
 
                 @if (loggedUser.Id == Model.User.Id)
@@ -49,6 +51,26 @@
         </div>
     </div>
 </div>
+
+<div id="popup">
+    <div class="data"></div>
+</div>
+
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="popupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            @*<div id="info-header-spinner" class="spinner loader"></div>*@
+            <div class="modal-body">
+                <div class="users"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts
 {
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>

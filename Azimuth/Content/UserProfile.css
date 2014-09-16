@@ -70,6 +70,63 @@
     font-size: 14px
 }
 
+.users {
+    height: auto;
+    overflow: auto;
+}
+
+.userName {
+    display: none;
+}
+
+#popupModal .topPeople {
+    margin: 10px;
+    float: left;
+}
+
+#popup .topPeople {
+    margin: 3px;
+    float: left;
+}
+
+#popup img {
+    width: 30px;
+    height: 30px;
+}
+
+#popupModal img {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#popup {
+background-color: #353535;
+background-image: linear-gradient(#353535,#000000);
+border-radius: 8px;
+box-shadow: 0 0 3px #333;
+color: #000;
+display: none;
+position: absolute;
+height: 40px;
+width: 170px;
+cursor: pointer;
+}
+
+#popup:after {
+content: '';
+position: absolute;
+width: 0;
+height: 0;
+border: 5px solid transparent;
+border-top-color: #353535;
+top: 100%;
+left: 40%;
+margin-left: -15px;
+}
+
 #social-container a {
     width: 100%;
     height: 100%;

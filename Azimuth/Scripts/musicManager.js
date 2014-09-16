@@ -838,7 +838,6 @@ MusicManager.prototype.bindListeners = function() {
             }).fail(function() {
                 self.$vkMusicLoadingSpinner.hide();
                     self.$errorModal.find('.error').text('Error occured during search ...');
-                //$('#listenTopBtn').attr('disable', true);
                     self.$errorModal.modal('show');
                     $('#okErrorButton').click(function() {
                         $('#errorModal .error').text("");

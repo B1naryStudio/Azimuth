@@ -20,9 +20,9 @@
     var hours = Math.Floor(duration / (60 * 60));
     var minutes = Math.Floor(duration / 60) - (60 * hours);
     var seconds = (duration % 60);
-    var formattedDuration = ((hours > 0) ? ((hours > 10) ? hours.ToString() : "0" + hours.ToString()) + ":" : "") +
-                                ((minutes > 10) ? minutes.ToString() : "0" + minutes) + ":"
-                                + ((seconds > 10) ? seconds.ToString() : "0" + seconds);   
+    var formattedDuration = ((hours >= 0) ? ((hours > 10) ? hours.ToString() + ":" : "0" + hours.ToString()) + ":" : "0:") +
+                                ((minutes >= 10) ?  minutes.ToString() : "0" + minutes) + ":"
+                                + ((seconds >= 10) ? seconds.ToString() : "0" + seconds);   
 }
 
 <div class="playlist-plated">
@@ -64,18 +64,6 @@
                 <input type="hidden" class="isLiked" value="False" />
                 <input type="hidden" class="isFavourited" value="False" />
             }
-        }
-    </div>
-    
-    <div class="playlist-plated-short-info">
-        <div class="playlistName">@playlistName</div>
-        
-        <div class="listeners-count"><span>@Model.PlaylistListened</span> listened</div>
-
-        @if (Model.Genres.Any())
-        {
-            var genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + " "));
-            <div class="genres">@genres</div>
         }
     </div>
 </div>
