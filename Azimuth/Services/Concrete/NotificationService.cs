@@ -93,7 +93,7 @@ namespace Azimuth.Services.Concrete
         private string GetMessage(Notification notification)
         {
             string message = "";
-            switch(notification.NotificationType)
+            switch (notification.NotificationType)
             {
                 case Notifications.AddedNewListener:
                     break;
