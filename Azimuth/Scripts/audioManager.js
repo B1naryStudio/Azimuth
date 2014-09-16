@@ -153,7 +153,7 @@
             self._loadNextTracks(self.$currentTrack);
         }
 
-        if (self.audio.paused) {
+        if (self.audio.paused && self.audio.duration != self.audio.currentTime) {
             self._setPlayImgButton(trackItem);
         } else {
             self._setPauseImgButton(trackItem);
@@ -184,7 +184,7 @@
             self._getCurrentTrackUrl(self.$currentTrack, url);
         }
 
-        if (self.audio.paused) {
+        if (self.audio.paused && self.audio.duration != self.audio.currentTime) {
             self._setPlayImgButton(trackItem);
         } else {
             self._setPauseImgButton(trackItem);
