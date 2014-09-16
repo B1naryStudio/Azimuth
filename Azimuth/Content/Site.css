@@ -349,3 +349,73 @@ hr {
     width: 50px;
     height: 50px;
 }
+
+.popup-notification {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 320px;
+    z-index: 10;
+    font-family: Times New Roman;
+    background: #FFD386;
+    display: none;
+}
+
+.close {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #554025;
+    text-shadow: 0 1px 0 #ffffff;
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+    text-decoration: none;
+    margin: 5px;
+}
+.close:hover {
+    color: #000000;
+    text-decoration: none;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    cursor: pointer;
+}
+
+#notification a {
+    color: #05457D;
+}
+
+#notification .content {
+    margin-bottom: 15px;
+}
+
+div.notification-user-photo {
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+.notification-header {
+    height: 50px;
+    font-size: 19px;
+    color: #554025;
+    display: -webkit-inline-box;
+}
+
+.notificationBody {
+    font-size: 16px;
+    color: #554025;
+    margin-top: 15px;
+}
+
+.notification-user-time {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.notification-user-time {
+    font-weight: bold;
+}
+
+.notification-user-time span{
+    display: block;
+}

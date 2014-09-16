@@ -57,10 +57,12 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core">
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.1.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.1.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -223,6 +225,8 @@
     <Compile Include="DataProviders\Concrete\ChartLyricsApi.cs" />
     <Compile Include="DataProviders\Interfaces\IChartLyricsApi.cs" />
     <Compile Include="DataProviders\Interfaces\IMusicServiceWorkUnit.cs" />
+    <Compile Include="Hubs\Concrete\NotificationsHub.cs" />
+    <Compile Include="Hubs\Interfaces\INotificationsHub.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
     <Compile Include="Services\Concrete\NotificationService.cs" />
     <Compile Include="Services\Interfaces\INotificationService.cs" />

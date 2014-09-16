@@ -8,5 +8,6 @@
     <many-to-one name="RecentlyUser" column="RecentlyUserId"/>
     <many-to-one name="RecentlyPlaylist" column="RecentlyPlaylistId" cascade="all"/>
     <property name="NotificationType" type="NotificationType"/>
+    <property name="NotificationDate"/>
   </class>
 </hibernate-mapping>

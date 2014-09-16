@@ -68,6 +68,7 @@
     <Compile Include="Dto\UserBrief.cs" />
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Dto\TrackData.cs" />
+    <Compile Include="Dto\UserNotificationDto.cs" />
     <Compile Include="Dto\VkFriendData.cs" />
     <Compile Include="Dto\VkTrackResponse.cs" />
     <Compile Include="Dto\VkUserData.cs" />
