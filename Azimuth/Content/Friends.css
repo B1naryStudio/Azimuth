@@ -1,6 +1,7 @@
 ﻿#friends-container {
     height: 93%;
     width: 100%;
+    display: none;
 }
 
 .friend {

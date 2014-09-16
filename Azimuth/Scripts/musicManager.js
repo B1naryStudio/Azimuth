@@ -20,8 +20,10 @@ var MusicManager = function (manager) {
     this.$friendsTemplate = $("#friendsTemplate");
     this.$friendsBody = $('#friends-body');
     this.$friendList = $('#friends-container');
+    this.$notificationsList = $('#notifications-container');
     this.$friendButton = $('#friends-button');
     this.$notificationButton = $('#notifications-button');
+    this.$getNotificationsButton = $('#notifications-button');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
     this.$getTrackInfoBtn = $('.track-info-btn');
@@ -498,6 +500,9 @@ MusicManager.prototype.showTracks = function (tracks, template) {
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
     var self = this;
 
+    self.$notificationsList.hide();
+    self.$friendList.show();
+
     for (var i = 0; i < friends.length; i++) {
         var friend = friends[i];
         if (friend.city != null) {
@@ -656,6 +661,51 @@ MusicManager.prototype.showPlaylists = function (playlists) {
     };
 };
 
+MusicManager.prototype.showNotifications = function (notifications, scrollbarInitialized) {
+    var self = this;
+    self.$notificationsList.show();
+    self.$friendList.hide();
+
+    for (var i = 0; i < notifications.length; i++) {
+        var template;
+        if (notifications[i].NotificationType == 0 ||
+            notifications[i].NotificationType == 1 ||
+            notifications[i].NotificationType == 8 ||
+            notifications[i].NotificationType == 9 ||
+            notifications[i].NotificationType == 10 ||
+            notifications[i].NotificationType == 11) {
+            template = $('#playlistNotificationTemplate');
+        } else {
+            template = $('#userNotificationTemplate');
+        }
+        var object = template.tmpl(notifications[i]);
+        var container = scrollbarInitialized ? self.$notificationsList.find('.mCSB_container') : self.$notificationsList;
+
+        container.append(object);
+        //self.$notificationsList.append(object);
+    }
+
+    $('#notifications-container').mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        advanced: { updateOnSelectorChange: "true" },
+        //callbacks: {
+        //    onTotalScroll: function () {
+        //        self.$friendsLoadingSpinner.fadeIn('normal');
+        //$.ajax({
+        //    url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
+        //    success: function (friendsData) {
+        //        self.showFriends(friendsData, true);
+        //        self.friendsOffset += friendsData.length;
+        //        self.$friendsLoadingSpinner.fadeOut('normal');
+        //    }
+        //});
+        //    }
+        //}
+    });
+};
+
 MusicManager.prototype.bindListeners = function() {
     var self = this;
 
@@ -730,6 +780,7 @@ MusicManager.prototype.bindListeners = function() {
             $('.playlist-divider').remove();
             self.showPlaylists();
             self.setDefaultPlaylist();
+            self.$friendList.empty();
         } else {
             $('.friend-active').toggleClass('friend-active', false);
             $('.send-message-btn').hide();
@@ -737,6 +788,49 @@ MusicManager.prototype.bindListeners = function() {
             self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
         }
         
+    });
+
+    this.$notificationButton.click(function () {
+        self.extraContainerShown = !self.extraContainerShown;
+        if (!self.extraContainerShown) {
+            self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
+            self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
+            self.$notificationsList.empty();
+        }
+        else {
+            self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
+            self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+        }
+
+    });
+
+    this.$getNotificationsButton.click(function() {
+        var userId = $('#userId').val();
+        if (self.extraContainerShown) {
+            $.ajax({
+                url: '/api/notifications/' + userId,
+                type: 'GET',
+                success: function (notifications) {
+                    self.showNotifications(notifications);
+                }
+            });
+        }
+
+
+//if (self.$friendsBody.is(':visible')) {
+        //    self.$friendsBody.hide('slow');
+        //} else if (self.$friendList.children().length == 0) {
+        //    $.ajax({
+        //        url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
+        //        success: function (friends) {
+        //            self.showFriends(friends);
+        //            self.$friendsBody.show('slow');
+        //            self.friendsOffset += friends.length;
+        //        }
+        //    });
+        //} else {
+        //    self.$friendsBody.show('slow');
+        //}
     });
 
     this.$searchPlaylistInput.keyup(function(e) {
