@@ -63,7 +63,9 @@
 
                 $('.tableRow.playlist').remove();
                 self.manager.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.manager.showPlaylists();
+                self.manager.setDefaultPlaylist();
             }
         });
     };
@@ -96,7 +98,9 @@
 
                         $('.tableRow.playlist').remove();
                         self.manager.playlistsGlobal.length = 0;
+                        $('.playlist-divider').remove();
                         self.manager.showPlaylists();
+                        self.manager.setDefaultPlaylist();
                     }
                 });
             }
@@ -122,7 +126,9 @@
 
                 $('.tableRow.playlist').remove();
                 self.manager.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.manager.showPlaylists();
+                self.manager.setDefaultPlaylist();
             }
         });
     };
@@ -134,7 +140,9 @@
             contentType: 'application/json; charset=utf-8',
             success: function () {
                 self.manager.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.manager.showPlaylists();
+                self.manager.setDefaultPlaylist();
             }
         });
     };
@@ -143,12 +151,14 @@
         $.ajax({
             url: 'api/playlists/delete/' + playlistId,
             type: 'DELETE',
-            success: function () {
+            success: function() {
                 self.manager.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.manager.showPlaylists();
+                self.manager.setDefaultPlaylist();
             }
         });
-    }
+    };
 
     this._sharePlaylist = function (playlistId) {
         var $sharingLink = $('#sharingLink');
@@ -348,6 +358,14 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                             $("#playlistNameToCreate").focus();
                         });
                     }
+                    break;
+                case 'renameplaylist':
+                    $('#renamePlaylistModal').modal({
+                        show: true
+                    });
+                    $('#renamePlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function () {
+                        $("#playlistNameToRename").focus();
+                    });
                     break;
                 //case 'trackshuffle':
                 //    self._shuffleTracksAction(self.musicList.find('.draggable-list'));

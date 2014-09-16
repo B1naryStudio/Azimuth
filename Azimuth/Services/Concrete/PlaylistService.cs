@@ -5,15 +5,13 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataProviders.Concrete;
-using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
-using Ninject.Activation;
 
 namespace Azimuth.Services.Concrete
 {
@@ -530,9 +528,9 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
+        public async Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
@@ -565,6 +563,62 @@ namespace Azimuth.Services.Concrete
                     return listened;
                 }
 
+            });
+        }
+
+        public async Task<List<string>> GetPlaylistsGenres()
+        {
+            return await Task.Run(() =>
+            {
+                List<string> genres = null;
+
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+                {
+                    genres = unitOfWork.PlaylistRepository.GetAll().SelectMany(p => p.Tracks).Select(t => t.Genre.ToString()).Distinct().OrderBy(s => s).ToList();
+                    unitOfWork.Commit();
+                }
+                return genres;
+            });
+        }
+
+        public List<PlaylistData> GetPublicPlaylistsSync(long? id, string genre)
+        {
+            List<PlaylistData> playlists = null;
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+            {
+                long currentId = -1;
+                if (AzimuthIdentity.Current == null)
+                    currentId = id ?? -1;
+                else
+                    currentId = id ?? AzimuthIdentity.Current.UserCredential.Id;
+
+                playlists = unitOfWork.PlaylistRepository
+                    .Get(list => list.Accessibilty == Accessibilty.Public
+                                 && list.Creator.Id != currentId)
+                                 .Where(s => s.Tracks.Any(t => t.Genre == genre))
+                                 .Select(GetPlaylistData())
+                                 .OrderByDescending(order => order.PlaylistListened)
+                                 .ToList();
+                unitOfWork.Commit();
+            }
+            return playlists;
+        }
+
+        public async Task<string> SetPlaylistName(long id, string playlistName)
+        {
+            return await Task.Run(() =>
+            {
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+                {
+                    var playlistRepository = unitOfWork.GetRepository<Playlist>();
+                    var playlist = playlistRepository.GetOne(p => p.Id == id);
+
+                    playlist.Name = playlistName;
+
+                    unitOfWork.Commit();
+                }
+
+                return playlistName;
             });
         }
 
