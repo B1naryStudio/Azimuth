@@ -36,23 +36,71 @@ UserProfileManager.prototype.bindListeners = function () {
         advanced: { updateOnSelectorChange: "true" }
     });
 
-    $('#followersBtn').hover(function() {
-        $(this).data('focused', 'true');
-        //$('#popup').css({ 'display': 'block' }).stop().animate({ left: -130, opacity: 1 }, 300); // анимация появления блока
+    $('#followersBtn, #followedBtn').off('hover').hover(function () {
+        self._showPopup($(this));
+    });
 
-        $('#popup').css({
-            'top': event.clientX,
-            'left': event.clientY
-        });
+    $('#following, #popup, #followers').mouseleave(function (event) {
+        self._hidePopup(event);
+    });
 
+    $('#followedBtn, #followersBtn, #popup').click(function (event) {
+        var $target = $(event.target);
+        if ($target.is('img'))
+            return;
+        var $followPeople;
+        if ($target.attr('id') == "popup") {
+            $followPeople = $target.find('.topPeople');
+        }
+        else {
+            $followPeople = $target.parent().find('.topPeople');
+        }
+        if ($followPeople.length == 0)
+            return;
+        var $popupModal = $('#popupModal');
+        $popupModal.find('.modal-header').append('<h3>' + $(event.target).text()  +'</h3>');
+        $popupModal.find('.modal-body .users').append($followPeople.clone());
+        $popupModal.find('.topPeople .userName').show();
+        $popupModal.find('.topPeople').show();
+        $popupModal.modal('show');
+    });
 
+    $('#popupModal').on('hidden.bs.modal', function () {
+        $('#popupModal .modal-body .users').empty();
+        $('#popupModal .modal-header').empty();
+    });
+    
+    this._showPopup = function(element) {
+        var $popup = $('#popup');
+        if ($popup.find('.topPeople').length > 0)
+            return;
+        var $self = element;
+        var $area = $self.parent();
+        var $top = $area.find(".topPeople").slice(0, 6);
+        if ($top.length == 0)
+            return;
+        var $btnPos = element.offset();
+        $popup.children('.data').append($top.clone());
+        $popup.find(".topPeople").show();
 
+        $popup.css({
+            'top': $btnPos.top - $popup.height() - 5,
+            'left': $btnPos.left - 15
+        }).animate({ bottom: '50px', opacity: 1 }, 200,
+            function() {
+                $('#popup').css({ 'display': 'block' });
+            });
+    };
 
-
-        $(this).data('focused', 'false'); //устанавливаем для ссылки атрибут data-focused = "false"
+    this._hidePopup = function(event) {
+        var $toElement = $(event.toElement);
+        if ($toElement.attr('id') == "popup" || $toElement.attr('id') == 'following')
+            return;
+        var $popup = $('#popup');
         $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 200,
          function () {
              $('#popup').css({ 'display': 'none' });
-         }); //анимация скрытия блока, когда курсор выйдет за пределы ссылки
-    });
+         });
+        $popup.children('.data').empty();
+    };
 };

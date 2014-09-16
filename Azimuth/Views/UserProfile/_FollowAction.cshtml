@@ -5,29 +5,32 @@
     var followAction = Model.Followers.Any(s => s.Id == loggedUser.Id) ? "Unfollow" : "Follow";
 }
 
-@Styles.Render("../Content/UserProfile.css")
-
-<div id="followers-section">
     <div id="followers">
         <button class="btn btn-default btn-xs" id="followersBtn"><i class="fa fa-users"></i> Followers</button>
         <div class="count-label">@Model.Followers.Count</div>
+        <div class="topFollowers">
+            @Html.DisplayFor(x => x.Followers)
+        </div>
     </div>
     <div id="following">
         <button class="btn btn-default btn-xs" id="followedBtn"><i class="fa fa-thumbs-up"></i>Followed</button>
         <div class="count-label">@Model.Following.Count</div>
+        <div class="topFollowing">
+            @Html.DisplayFor(x => x.Following)
+        </div>
     </div>
     @if (loggedUser.Id != Model.Id)
     {
-        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "followers-section", InsertionMode = InsertionMode.Replace }))
+        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "followers-section", OnSuccess = "rebootPopup" }))
         {
             <button class="btn btn-default btn-xs" id="followBtn" >@followAction</button>
             @Html.Hidden("userId", @Model.Id)
             <input type="hidden" name="following" value="@followAction" />
-                @*@Html.Hidden("following", @followAction)*@
         }
     }
     
-    <div id="popup">
-        <div class="data"></div>
-    </div>
-</div>
+<script>
+    function rebootPopup() {
+        document.manager.bindListeners();
+    }
+</script>
