@@ -403,9 +403,10 @@
     <Content Include="Views\PublicPlaylists\_ChangeLikeStatus.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\PlaylistData.cshtml" />
     <Content Include="Views\PublicPlaylists\DisplayTemplates\TracksDto.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Shared\_AudioPlayer.cshtml" />
     <Content Include="Views\UserProfile\_FollowAction.cshtml" />
+    <Content Include="Views\UserProfile\DisplayTemplates\FollowerModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplate\User.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

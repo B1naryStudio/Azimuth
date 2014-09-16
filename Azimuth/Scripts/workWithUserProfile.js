@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
-    var manager = new UserProfileManager();
+    this.manager = new UserProfileManager();
 
-    manager.bindListeners();
-    manager.showNotification();
+    this.manager.bindListeners();
+    this.manager.showNotification();
 });

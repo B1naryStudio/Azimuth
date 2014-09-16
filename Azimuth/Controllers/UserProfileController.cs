@@ -29,18 +29,9 @@ namespace Azimuth.Controllers
         [HttpPost]
         public ActionResult _FollowAction(long? userId, string following)
         {
-            if (userId != null)
-            {
-                if (following == "Follow")
-                    _userService.FollowPerson((long)userId);
-                else
-                    _userService.UnfollowPerson((long)userId);
-
-                var user = _userService.GetUserInfo((long)userId);
-
-                return PartialView(UserModel.From(user));
-            }
-            return null;
+            if (userId == null) return null;
+            var user = following == "Follow" ? _userService.FollowPerson((long)userId) : _userService.UnfollowPerson((long)userId);
+            return PartialView(UserModel.From(user));
         }
     }
 }

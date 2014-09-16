@@ -4,22 +4,33 @@
     var loggedUser = AzimuthIdentity.Current.UserCredential;
     var followAction = Model.Followers.Any(s => s.Id == loggedUser.Id) ? "Unfollow" : "Follow";
 }
-<div id="followers-section">
+
     <div id="followers">
-        <button class="btn btn-default btn-xs"><i class="fa fa-users"></i> Followers</button>
+        <button class="btn btn-default btn-xs" id="followersBtn"><i class="fa fa-users"></i> Followers</button>
         <div class="count-label">@Model.Followers.Count</div>
+        <div class="topFollowers">
+            @Html.DisplayFor(x => x.Followers)
+        </div>
     </div>
     <div id="following">
         <button class="btn btn-default btn-xs" id="followedBtn"><i class="fa fa-thumbs-up"></i>Followed</button>
         <div class="count-label">@Model.Following.Count</div>
+        <div class="topFollowing">
+            @Html.DisplayFor(x => x.Following)
+        </div>
     </div>
     @if (loggedUser.Id != Model.Id)
     {
-        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "followers-section", InsertionMode = InsertionMode.Replace }))
+        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "followers-section", OnSuccess = "rebootPopup" }))
         {
-                <button class="btn btn-default btn-xs" id="followBtn" >@followAction</button>
-                @Html.Hidden("userId", @Model.Id)
-                @Html.Hidden("following", @followAction)
+            <button class="btn btn-default btn-xs" id="followBtn" >@followAction</button>
+            @Html.Hidden("userId", @Model.Id)
+            <input type="hidden" name="following" value="@followAction" />
         }
     }
-</div>
+    
+<script>
+    function rebootPopup() {
+        document.manager.bindListeners();
+    }
+</script>
