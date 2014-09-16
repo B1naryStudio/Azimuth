@@ -29,6 +29,10 @@
     background: #FFD386;
 }
 
+.friend-active {
+    background: #F9851F;
+}
+
 .send-message-btn {
     height: 40px;
     width: 40px;
@@ -36,4 +40,5 @@
     top: 0;
     bottom: 0;
     right: 0;
+    display: none;
 }

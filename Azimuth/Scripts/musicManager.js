@@ -10,6 +10,7 @@ var MusicManager = function (manager) {
     this.topTracks = null;
     this.extraContainerShown = false;
     this.topTracksVk = [];
+    this.currentFriend = null;
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
@@ -30,7 +31,7 @@ var MusicManager = function (manager) {
     this.$searchTrackInput = $('#searchTrackName');
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
-    this.$getFriendInfoBtn = $('#get-friends-info-btn');
+    this.$getFriendInfoBtn = $('#friends-button');
     this.$friendsLoadingSpinner = $('#friends-header-spinner');
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
@@ -93,8 +94,8 @@ var MusicManager = function (manager) {
         self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
 
-        $('.item-active').toggleClass('item-active', false);
-        $this.toggleClass("item-active", true);
+        $('.playlist-active').toggleClass('playlist-active', false);
+        $this.toggleClass("playlist-active", true);
     };
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
@@ -129,6 +130,7 @@ var MusicManager = function (manager) {
                 $('.tableRow.playlist').remove();
                 self.playlistsGlobal.length = 0;
                 self.showPlaylists();
+                self.setDefaultPlaylist();
             }
         });
     };
@@ -170,9 +172,9 @@ var MusicManager = function (manager) {
         
         self.$vkMusicTitle.text('Loading...');
 
-        $defaultPlaylist = $('.default-playlist');
-        $('.item-active').toggleClass('item-active', false);
-        $defaultPlaylist.toggleClass("item-active", true);
+        var $defaultPlaylist = $('.default-playlist');
+        $('.playlist-active').toggleClass('playlist-active', false);
+        $defaultPlaylist.toggleClass("playlist-active", true);
 
         self.$vkMusicLoadingSpinner.fadeIn('normal');
         $('.vkMusicList').hide();
@@ -252,18 +254,49 @@ var MusicManager = function (manager) {
         });
     };
 
+    this._setFriendDefaultPlaylist = function () {
+        var $currentItem = $(this);
+        $('.friend-active').toggleClass('friend-active', false);
+        $currentItem.toggleClass('friend-active', true);
+        $('.default-playlist').remove();
+        self.currentFriend = $currentItem.children('.friend-id').html();
+        $.ajax({
+            url: '/api/playlists/friend?id=' + self.currentFriend,
+            success: function (playlists) {
+                if (playlists !== null) {
+                    for (var i = 0; i < playlists.length; i++) {
+                        var playlist = playlists[i];
+                        if (playlist.Accessibilty === 1) {
+                            playlist.Accessibilty = "public";
+                        } else {
+                            playlist.Accessibilty = "private";
+                        }
+                        playlist.Duration = self._toFormattedTime(playlist.Duration, true);
+                        playlist.readonly = true;
+                        self.playlistsGlobal.push(playlist);
+                    }
+                } else {
+                    playlists = [];
+                    $currentItem.children('.send-message-btn').show();
+                }
+                
+                self.showPlaylists(playlists);
+                self.setDefaultPlaylist(self.currentFriend);
+            }
+        });
+    };
+
     this._getFriendTracks = function () {
         var $currentItem = $(this);
-        $('.item-active').toggleClass('item-active', false);
+        var $defaultPlaylist = $('.default-playlist');
+        $('.playlist-active').toggleClass('playlist-active', false);
         var currentId = $currentItem.children('.friend-id').html();
-        $currentItem.toggleClass('item-active', true);
-
-        //var provider = "Vkontakte"; // TODO: Fix for all providers
+        $currentItem.toggleClass('playlist-active', true);
         self.$vkMusicTitle.text('Loading...');
         self.$vkMusicLoadingSpinner.fadeIn('normal');
         $('.vkMusicList').hide();
         $.ajax({
-            url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + currentId,
+            url: '/api/user/friends/audio?provider=' + self.provider + '&friendId=' + self.currentFriend,
             success: function (tracks) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
@@ -271,9 +304,17 @@ var MusicManager = function (manager) {
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
+
+                    var allDuration = 0;
                     for (var i = 0; i < tracks.length; i++) {
+                        allDuration += tracks[i].duration;
                         tracks[i].duration = self._toFormattedTime(tracks[i].duration, true);
                     }
+
+                    allDuration = self._toFormattedTime(allDuration, true);
+                    $defaultPlaylist.children('.playlist-duration').html("Duration: " + allDuration);
+                    $defaultPlaylist.children('.playlist-size').html("Songs: " + tracks.length);
+
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
                 } else {
@@ -379,9 +420,8 @@ var MusicManager = function (manager) {
     };
 };
 
-MusicManager.prototype.setDefaultPlaylist = function () {
+MusicManager.prototype.setDefaultPlaylist = function (friendId) {
     var self = this;
-    self.$playlistsTable.prepend('<div class="playlist-divider" />');
 
     var playlist = {
         Name: "VK Playlist",
@@ -389,17 +429,24 @@ MusicManager.prototype.setDefaultPlaylist = function () {
         Genres : []
     };
 
+    self.$playlistsTable.prepend('<div class="playlist-divider" />');
+
     var tmpl = self.playlistTemplate.tmpl(playlist);
 
     var img = tmpl.children('.playlist-logo').children('img');
     img.attr("src", "http://cdn.marketplaceimages.windowsphone.com/v8/images/ab99fcba-4240-45a9-a025-80a0edba0c0a?imageType=ws_icon_large");
 
     tmpl.addClass('default-playlist');
-
-    tmpl.click(self._getUserTracks);
     self.$playlistsTable.prepend(tmpl);
 
-    self._getUserTracks();
+    if (friendId === undefined) {
+        tmpl.click(self._getUserTracks);
+        self._getUserTracks();
+    } else {
+        tmpl.click(self._getFriendTracks);
+        self._getFriendTracks();
+    }
+    self.$playlistsLoadingSpinner.hide();
 };
 
 MusicManager.prototype.showTracks = function (tracks, template) {
@@ -480,7 +527,7 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
         }
     });
 
-    $('.friend').click(self._getFriendTracks);
+    $('.friend').click(self._setFriendDefaultPlaylist);
     $('.send-message-btn').click(self._sendMessage);
 };
 
@@ -553,7 +600,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                             self.$reloginForm.show();
                             self.$vkMusicTable.hide();
                         }
-                        self.$playlistsLoadingSpinner.hide();
                         $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
                         self._createContextMenuForPlaylists();
                     }
@@ -563,7 +609,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
     } else { //using to print playlists after using filter
         self.$playlistsTable.empty();
         if (self.playlists.length !== 0) {
-            for (var i = 0; i < playlists.length; i++) {
+            for (var i = 0; i < self.playlists.length; i++) {
                 var tmpl = this.playlistTemplate.tmpl(playlists[i]);
                 self.$playlistsTable.append(tmpl);
                 self._setNewImage(tmpl);
@@ -571,10 +617,9 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 self._createContextMenuForPlaylists();
             }
         }
+        $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         //self._createContextMenuForPlaylists();
-        self.$playlistsLoadingSpinner.hide();
     }
-    self.setDefaultPlaylist();
 
     this._createContextMenuForPlaylists = function() {
         var ctxMenu = new ContextMenu();
@@ -657,7 +702,12 @@ MusicManager.prototype.bindListeners = function() {
         if (!self.extraContainerShown) {
             self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
             self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
+            $('.playlist-divider').remove();
+            self.showPlaylists();
+            self.setDefaultPlaylist();
         } else {
+            $('.friend-active').toggleClass('friend-active', false);
+            $('.send-message-btn').hide();
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
             self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
         }
@@ -685,6 +735,7 @@ MusicManager.prototype.bindListeners = function() {
                     self.playlistsGlobal = [];
                     $(this).val("");
                     self.showPlaylists();
+                    self.setDefaultPlaylist();
                 }
             } else {
                 self.$createNewPlaylistLbl.hide();

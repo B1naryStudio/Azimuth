@@ -90,6 +90,31 @@ namespace Azimuth.Services.Concrete
             }
         }
 
+        public async Task<List<PlaylistData>> GetUsersPlaylists(string id)
+        {
+            return await Task.Run(() =>
+            {
+                List<PlaylistData> playlists = null;
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+                {
+                    var userRepository = unitOfWork.GetRepository<User>();
+
+                    var user = userRepository.GetOne(u => u.SocialNetworks.Any(usn => usn.ThirdPartId == id) );
+
+                    if (user != null)
+                    {
+                        playlists = unitOfWork.PlaylistRepository.Get(list => list.Creator.Id == user.Id
+                                                                        && list.Accessibilty == Accessibilty.Public)
+                                                              .Select(GetPlaylistData())
+                                                              .OrderByDescending(order => order.PlaylistListened)
+                                                              .ToList();
+                    }
+                    unitOfWork.Commit();
+                }
+                return playlists;
+            });
+        }
+
         public async Task<List<PlaylistData>> GetFavoritePlaylists()
         {
             return await Task.Run(() =>

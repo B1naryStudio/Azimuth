@@ -10,6 +10,7 @@ namespace Azimuth.Services.Interfaces
         Task<List<PlaylistData>> GetPublicPlaylists();
         List<PlaylistData> GetPublicPlaylistsSync(long? id);
         Task<List<PlaylistData>> GetUsersPlaylists();
+        Task<List<PlaylistData>> GetUsersPlaylists(string id);
         Task<List<PlaylistData>> GetFavoritePlaylists();
         Task<List<PlaylistData>> GetNotOwnedFavoritePlaylists();
         void SetAccessibilty(int id, Accessibilty accessibilty);

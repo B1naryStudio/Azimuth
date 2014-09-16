@@ -76,6 +76,24 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("friend")]
+        public async Task<HttpResponseMessage> GetFriendsPlaylists(string id)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetUsersPlaylists(id));
+            }
+            catch (InstanceNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
             try
