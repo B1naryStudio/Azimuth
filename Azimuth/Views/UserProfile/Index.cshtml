@@ -21,7 +21,7 @@
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
                 </div>
                 <div id="playlist-section">
-                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count Favorite playlists</div>
+                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count(s => s.IsFavorite) Favorite playlists</div>
                 </div>
 
                 @if (loggedUser.Id == Model.User.Id)
