@@ -520,4 +520,9 @@ AudioManager.prototype.bindListeners = function() {
         //$('.popover').remove();
         self._getPlaylistsForPopover();
     });
+
+    $('#repeat-btn').on('mousedown', function () {
+        $('#repeat-btn .fa').css('color', !self.audio.loop? 'orange' : '');
+        self.loop(!self.audio.loop);
+    });
 };
