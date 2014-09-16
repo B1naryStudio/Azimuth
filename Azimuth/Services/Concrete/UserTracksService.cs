@@ -250,6 +250,18 @@ namespace Azimuth.Services.Concrete
             return trackDtos;
         }
 
+        public void AddTrack(long ownerId, long trackId)
+        {
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+            {
+                var socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
+                _socialNetworkApi.AddTrack(ownerId.ToString(), trackId.ToString(), socialNetworkData.AccessToken);
+
+                unitOfWork.Commit();
+            }
+        }
+
         public async Task<List<TracksDto>> MakeSearch(string searchText, string criteria)
         {
             var trackDtos = new List<TracksDto>();

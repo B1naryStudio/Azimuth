@@ -102,8 +102,9 @@ var MusicManager = function (manager) {
         var tracks = [];
 
         var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
-        if (currentPlaylist.find('.readonly').text() == 'true')
+        if (currentPlaylist.find('.readonly').text() == 'true') {
             return;
+        }
         $currentItem.children().toggleClass('vk-item', false);
         $currentItem.children('.tableRow').each(function () {
             tracks.push({
@@ -681,6 +682,8 @@ MusicManager.prototype.bindListeners = function() {
                 self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
             }
         });
+
+        $('#createPlaylistModal').trigger('OnPlaylistCreate');
     });
 
     $('#okPlaylistRenameModalBtn').click(function() {
@@ -818,6 +821,11 @@ MusicManager.prototype.bindListeners = function() {
     $('#infoModal').on('hidden.bs.modal', function() {
         $('#infoModal .modal-body').text('');
         $('#listenTopBtn').attr('disabled', true);
+    });
+
+    $(self.audioManager).on('OnAddToPlaylist', function() {
+        self.showPlaylists();
+        self.setDefaultPlaylist();
     });
 
     $('#createPlaylistModal').on('hidden.bs.modal', function () {
