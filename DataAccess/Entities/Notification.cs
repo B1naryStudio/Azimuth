@@ -1,4 +1,5 @@
-﻿using Azimuth.DataAccess.Infrastructure;
+﻿using System;
+using Azimuth.DataAccess.Infrastructure;
 using Azimuth.Shared.Enums;
 using NHibernate.Type;
 
@@ -13,6 +14,7 @@ namespace Azimuth.DataAccess.Entities
         public virtual User RecentlyUser { get; set; }
 
         public virtual Playlist RecentlyPlaylist { get; set; }
+        public virtual DateTime NotificationDate { get; set; }
     }
 
     public class NotificationType : EnumStringType<Notifications>

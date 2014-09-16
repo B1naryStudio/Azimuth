@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
@@ -31,11 +32,12 @@ namespace Azimuth.Services.Concrete
                 NotificationType = type,
                 User = user,
                 RecentlyUser = recentlyUser,
-                RecentlyPlaylist = recentlyPlaylist
+                RecentlyPlaylist = recentlyPlaylist,
+                NotificationDate = DateTime.Now
             };
 
             var notificationDto = new NotificationDto();
-            Mapper.Map(notification, notificationDto);
+            Mapper.Map(notification, notificationDto); 
             notificationDto.Message = GetMessage(notification);
 
             _notificationHub.SendNotification(user.Id, notificationDto);

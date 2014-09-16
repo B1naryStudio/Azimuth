@@ -75,7 +75,7 @@
     </div>
     <div class="body-content">
         @RenderBody()
-        <div id="notification"></div>
+        <div id="notification" class="alert alert-warning popup-notification" role="alert"></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -109,43 +109,42 @@
                 notificationsHub.server.connect(id);
             });
 
-            //$('#myButton').click(function() {
-            //    notificationsHub.client.send("message");
-            //});
-
-            //notificationsHub.client.messageReceived = function(message) {
-            //    $('messagesBody').append(message);
-            //};
+            var timerId = null;
 
             notificationsHub.client.newNotification = function(notification) {
                 console.log(notification);
                 var $notif = $('#notificationTemplate');
                 var object = $notif.tmpl(notification);
-                var timerId = setTimeout(function() {
+                clearTimeout(timerId);
+                timerId = setTimeout(function() {
                     closeNotification($(object));
                 }, 5000);
 
-                addNotice(object);
+                addNotification(object);
             };
 
-            function addNotice(notice) {
-                $('<div class="notice"></div>')
-                    .append('<div class="skin"></div>')
-                    .append('<a href="#" class="close">&times;</a>')
-                    .append($('<div class="content"></div>').html(notice))
+            function addNotification(notification) {
+                var $container = $('#notification');
+                if ($container.children().length == 0) {
+                    $('#notification')
+                        .append('<a href="#" class="close">&times;</a>');
+
+                    $('#notification')
+                        .find('.close')
+                        .on('click', function () {
+                            closeNotification($(this));
+                        });
+                }
+                $('#notification')
+                    .append($('<div class="content"></div>').html(notification))
                     .hide()
                     .appendTo('#notification')
                     .fadeIn(1000);
-
-                $('#notification')
-                .find('.close')
-                .on('click', function () {
-                    closeNotification($(this));
-                });
             }
+
             function closeNotification(notif) {
-                notif
-                    .closest('.notice')
+                var $popup = notif.parents('.popup-notification');
+                $popup
                     .animate({
                         border: 'none',
                         height: 0,
@@ -156,39 +155,28 @@
                         paddingTop: 0,
                         queue: false
                     }, 2000, function () {
-                        $(this).remove();
+                    var $container = $(this);
+                    $container.removeAttr('style');
+                    $container.empty();
                     });
+                clearTimeout(timerId);
             }
         });
     </script>
     
     <script id="notificationTemplate" type="text/x-jQuery-tmpl">
-        
-        <div class="NotificationHeader">
-            <div class="notification-user-photo"><img src="${UserPhoto}"/></div>
+        <div class="notification-header">
+            <div class="notificationalert-user-photo"><img src="${UserPhoto}" /></div>
             <div class="notification-user-time">
-                <h3><a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message}</h3>
+                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a>
                 <span>${DateTime}</span>
             </div>
         </div>
         <div class="notificationBody">
             <div class="notificationMessage">
-                <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyPlaylistName}</a>
+                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message} <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyPlaylistName}</a>
             </div>
         </div>
-        
-        
-
-        @*<div class="tableRow draggable-item track vk-item">
-            <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-            <div class="track-description" data-title="${Artist} ${Name}">
-                <div class="track-info"><a href="#" data-toggle="modal" data-target="#infoModal"><span class="track-artist">${Artist}</span> - <span class="track-title">${Name}</span></a></div>
-            </div>
-            <div class="track-duration">${Duration}</div>
-            <div style="display: none" class="track-url">${Url}</div>
-            <div style="display: none" class="thirdPartId">${ThirdPartId}</div>
-            <div style="display: none" class="ownerId">${OwnerId}</div>
-        </div>*@
     </script>
 </body>
 </html>
