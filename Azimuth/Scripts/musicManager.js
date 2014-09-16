@@ -11,6 +11,7 @@ var MusicManager = function (manager) {
     this.extraContainerShown = false;
     this.topTracksVk = [];
     this.currentFriend = null;
+    this.gettingFriends = false;
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
@@ -515,16 +516,20 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
         updateOnContentResize: true,
         advanced: { updateOnSelectorChange: "true" },
         callbacks: {
-            onTotalScroll: function () {
-                self.$friendsLoadingSpinner.fadeIn('normal');
-                $.ajax({
-                    url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
-                    success: function (friendsData) {
-                        self.showFriends(friendsData, true);
-                        self.friendsOffset += friendsData.length;
-                        self.$friendsLoadingSpinner.fadeOut('normal');
-                    }
-                });
+            whileScrolling: function () {
+                if (this.mcs.topPct >= 75 && !self.gettingFriends) {
+                    self.gettingFriends = true;
+                    self.$friendsLoadingSpinner.fadeIn('normal');
+                    $.ajax({
+                        url: '/api/user/friends/' + self.provider + "?offset=" + self.friendsOffset + "&count=10",
+                        success: function(friendsData) {
+                            self.showFriends(friendsData, true);
+                            self.friendsOffset += friendsData.length;
+                            self.$friendsLoadingSpinner.fadeOut('normal');
+                            self.gettingFriends = false;
+                        }
+                    });
+                }
             }
         }
     });
