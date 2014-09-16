@@ -33,6 +33,8 @@ namespace Azimuth.Infrastructure.Concrete
 
             notificationDto.UserFirstName = notification.User.Name.FirstName;
             notificationDto.UserLastName = notification.User.Name.LastName;
+            notificationDto.UserId = notification.User.Id;
+            notificationDto.NotificationType = notification.NotificationType;
              if (notification.RecentlyUser != null)
             {
                 notificationDto.RecentlyUserId = notification.RecentlyUser.Id;

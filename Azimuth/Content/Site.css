@@ -349,3 +349,64 @@ hr {
     width: 50px;
     height: 50px;
 }
+
+#notification {
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+  width: 320px;
+  z-index: 10;
+  color: orange;
+  font-family: Times New Roman
+}
+
+.notice {
+  position: relative;
+  min-height: 30px;
+}
+
+.skin {
+  position: absolute;
+  background-color: #000000;
+  bottom: 0;
+  left: 0;
+  opacity: 0.6;
+  right: 0;
+  top: 0;
+  z-index: -1;
+  -moz-border-radius: 5px; -webkit-border-radius: 5px;
+}
+
+.close {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  text-decoration: none;
+    margin: 5px;
+}
+.close:hover {
+  color: #000000;
+  text-decoration: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
+}
+
+.NotificationHeader {
+    font-size: 22px;
+    margin: 3px;
+    color: #ff920a;
+}
+
+.notificationBody {
+    font-size: 16px;
+    margin: 3px;
+    color: #ff920a;
+}
+.notificationBody a {
+    color: #e73827;
+}

@@ -1,4 +1,7 @@
-﻿namespace Azimuth.Shared.Dto
+﻿using Azimuth.DataAccess.Entities;
+using Azimuth.Shared.Enums;
+
+namespace Azimuth.Shared.Dto
 {
     public class NotificationDto
     {
@@ -9,6 +12,8 @@
         public string RecentlyPlaylistName { get; set; }
         public long RecentlyPlaylistId { get; set; }
         public long RecentlyUserId { get; set; }
-        public string Message { get; set; } 
+        public long UserId { get; set; }
+        public string Message { get; set; }
+        public Notifications NotificationType { get; set; }
     }
 }

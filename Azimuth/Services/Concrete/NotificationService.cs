@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
 using Azimuth.DataAccess.Repositories;
+using Azimuth.Hubs.Concrete;
+using Azimuth.Hubs.Interfaces;
+using Azimuth.Infrastructure.Concrete;
 using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Dto;
 using Azimuth.Shared.Enums;
@@ -13,10 +16,13 @@ namespace Azimuth.Services.Concrete
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly INotificationsHub _notificationHub;
 
         public NotificationService(IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+
+            _notificationHub = NotificationsHub.Instance;
         }
         public Notification CreateNotification(Notifications type, User user, User recentlyUser, Playlist recentlyPlaylist)
         {
@@ -27,6 +33,12 @@ namespace Azimuth.Services.Concrete
                 RecentlyUser = recentlyUser,
                 RecentlyPlaylist = recentlyPlaylist
             };
+
+            var notificationDto = new NotificationDto();
+            Mapper.Map(notification, notificationDto);
+            notificationDto.Message = GetMessage(notification);
+
+            _notificationHub.SendNotification(user.Id, notificationDto);
 
             return notification;
         }
