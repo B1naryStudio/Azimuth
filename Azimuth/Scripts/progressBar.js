@@ -3,8 +3,9 @@
 
     this.drag = false;
     this.$progressBar = $('#progress-bar');
-    this.$currentProgress = $('.progress-current');
+    this.$currentProgress = $('#progress-current');
     this.$cacheProgress = $('.progress-cache');
+    this.$moveProgress = $('#progress-move');
 
     this._randomInt = function(max, min) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -65,5 +66,35 @@ ProgressBar.prototype.bindListeners = function() {
 
     $(document).mouseup(function() {
         self.drag = false;
+    });
+
+    $('#progress-bar').on('mousemove', function(e) {
+        if (e.pageX < self.$progressBar.offset().left) {
+            position = 0;
+        } else if (e.pageX > self.$progressBar.offset().left + self.$progressBar.width()) {
+            position = self.$progressBar.width();
+        } else {
+            var position = e.pageX - self.$progressBar.offset().left;
+        }
+        var percentage = 100 * position / self.$progressBar.width();
+
+        if (self.$currentProgress.width() > self.$moveProgress.width() && self.$currentProgress.hasClass('light-orange')) {
+            self.$currentProgress.removeClass('light-orange').addClass('dark-orange');
+            self.$moveProgress.removeClass('dark-orange').addClass('light-orange');
+        } else if (self.$currentProgress.width() < self.$moveProgress.width() && self.$currentProgress.hasClass('dark-orange')) {
+            self.$moveProgress.removeClass('light-orange').addClass('dark-orange');
+            self.$currentProgress.removeClass('dark-orange').addClass('light-orange');
+        }
+
+        self.$moveProgress.css('width', percentage + '%');
+    });
+
+    $('#progress-bar').on('mouseleave', function () {
+        if (self.$currentProgress.width() > self.$moveProgress.width()) {
+            self.$moveProgress.removeClass('light-orange').addClass('dark-orange');
+            self.$currentProgress.removeClass('dark-orange').addClass('light-orange');
+        }
+
+        self.$moveProgress.css('width', '0');
     });
 };
