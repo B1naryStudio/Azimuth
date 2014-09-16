@@ -129,6 +129,7 @@ var MusicManager = function (manager) {
 
                 $('.tableRow.playlist').remove();
                 self.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.showPlaylists();
                 self.setDefaultPlaylist();
             }
@@ -279,7 +280,7 @@ var MusicManager = function (manager) {
                     playlists = [];
                     $currentItem.children('.send-message-btn').show();
                 }
-                
+                $('.playlist-divider').remove();
                 self.showPlaylists(playlists);
                 self.setDefaultPlaylist(self.currentFriend);
             }
@@ -734,13 +735,14 @@ MusicManager.prototype.bindListeners = function() {
                     self._createPlaylist();
                     self.playlistsGlobal = [];
                     $(this).val("");
+                    $('.playlist-divider').remove();
                     self.showPlaylists();
                     self.setDefaultPlaylist();
                 }
             } else {
                 self.$createNewPlaylistLbl.hide();
             }
-
+            $('.playlist-divider').remove();
             self.showPlaylists(foundedPlaylist);
             $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
