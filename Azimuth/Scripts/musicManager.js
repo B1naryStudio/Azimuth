@@ -468,7 +468,7 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             && self.audioManager.$currentTrack.children('.trackId').html() == tracks[i].id) {
             tmpl.toggleClass('.draggable-item-selected');
             self.audioManager.$currentTrack = tmpl;
-            tmpl.append(self.audioManager.progressSlider.getSlider());
+            //tmpl.append(self.audioManager.progressSlider.getSlider()); //TODO: Deprecated
             if (self.audioManager.audio.paused) {
                 self.audioManager._setPlayImgButton(tmpl);
             } else {
@@ -828,9 +828,9 @@ MusicManager.prototype.bindListeners = function() {
         $('#listenTopBtn').attr('disabled', true);
     });
 
-    $(self.audioManager).on('OnAddToPlaylist', function() {
-        self.showPlaylists();
-        self.setDefaultPlaylist();
+    $(self.audioManager).on('OnAddToPlaylist', function () {
+        //self.showPlaylists(); //TODO Rework update (if it's necessary)
+        //self.setDefaultPlaylist();
     });
 
     $('#createPlaylistModal').on('hidden.bs.modal', function () {
