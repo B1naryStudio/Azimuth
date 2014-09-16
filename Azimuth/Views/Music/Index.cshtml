@@ -24,9 +24,6 @@
                     <p id="error"> Your time has expired, please login again. </p>
                     @Html.ActionLink("OK", "ConnectAccount", "Account", new { provider = "Vkontakte", returnUrl = @Url.Action("Index", "Music") }, new { @class = "btn btn-danger btn-large" })
                 </div>
-                <div id="vkMusic-header" class="table-header">
-                    <div id="vkMusic-header-title" class="table-title">User Tracks</div>
-                </div>
                 <input class="form-control" id="searchTrackName" placeholder="Enter track name or author for search">
                 <div id="vk-track-list">
                     <div id="vkMusic-header-spinner" class="spinner loader"></div>
