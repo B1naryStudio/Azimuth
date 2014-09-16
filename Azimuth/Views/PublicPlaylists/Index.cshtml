@@ -5,16 +5,20 @@
 }
 
 <div id="playlist-spinner" class="spinner loader"></div>
-<div id="barplaylistArea">
+
+<div>
     <div id="playlistsArea">
+        <div id="genres" class="col-xs-3">
+            <ul id="genres-list" class="nav nav-pills nav-stacked" style="margin-left: 20px;"></ul>
+        </div>
         <div id="playlists-plated">
             @if (Request.IsAuthenticated)
             {
-                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { Model.PlaylistFollowing, ViewBag.Id });
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { Model.PlaylistFollowing, ViewBag.Id, ViewBag.Genre });
             }
             else
             {
-                Html.RenderAction("_PublicPlaylists", "PublicPlaylists");
+                Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { ViewBag.Genre});
             }
         </div>
     </div>
@@ -112,6 +116,16 @@
                 });
             };
 
+            this._getPlaylistByGenre = function () {
+                $.ajax({
+                    url: '',
+                    type: 'GET',
+                    success: function (data) {
+                        
+                    }
+                });
+            };
+
             //$('.playlist-plated').hover(function() {
             //    var $currentPlaylist = $(this);
             //    $currentPlaylist.find('.playlist-plated-short-info').hide();
@@ -130,14 +144,17 @@
             });
 
             $.ajax({
-                url: '/api/playlists/',
+                url: '/api/playlists/genres',
                 type: 'GET',
                 dataType: 'json',
-                success: function(playlists) {
-                    $('#playlistsTable').empty();
-                    $(playlists).each(function() {
-                        $('#playlistsTable').append('<div class="playlist"><div class="playlist-title">' + this.Name + '</div><div class="playlistId">' + this.Id + '</div></div>');
-                    });
+                success: function (genres) {
+                    var $genresList = $('#genres > #genres-list');
+                    var path = "/PublicPlaylists/Index";
+                    $genresList.append($('<li><a href="' + path +'?genre=All" class="genre">All</a></li>'));
+                    for (var i = 0; i < genres.length; i++) {
+                        var $item = $('<li><a href="' + path + "?genre=" + genres[i] + '" class="genre">' + genres[i] + '</a></li>');
+                        $('#genres > #genres-list').append($item);
+                    }
                 }
             });
 
