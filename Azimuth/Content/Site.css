@@ -410,3 +410,13 @@ hr {
 .notificationBody a {
     color: #e73827;
 }
+
+.notification-user-photo {
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+.notification-user-time {
+    
+}

@@ -75,7 +75,6 @@
     </div>
     <div class="body-content">
         @RenderBody()
-        
         <div id="notification"></div>
     </div>
 
@@ -124,7 +123,7 @@
                 var object = $notif.tmpl(notification);
                 var timerId = setTimeout(function() {
                     closeNotification($(object));
-                }, 8000);
+                }, 5000);
 
                 addNotice(object);
             };
@@ -165,12 +164,15 @@
     
     <script id="notificationTemplate" type="text/x-jQuery-tmpl">
         
-        <div class="NotificationHeader"><span>New notification</span></div>
+        <div class="NotificationHeader">
+            <div class="notification-user-photo"><img src="${UserPhoto}"/></div>
+            <div class="notification-user-time">
+                <h3><a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message}</h3>
+                <span>${DateTime}</span>
+            </div>
+        </div>
         <div class="notificationBody">
             <div class="notificationMessage">
-                @*<a href="@Url.Action("Index", "UserProfile", new {id = "${UserId}"})">${UserFirstName} ${UserLastName}</a> ${Message}
-            <a href="@Url.Action("Index", "PublicPlaylists", new { id = "${RecentlyPlaylistId}" })">${RecentlyPlaylistName}</a></div>*@
-                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message}
                 <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyPlaylistName}</a>
             </div>
         </div>

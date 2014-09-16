@@ -35,6 +35,8 @@ namespace Azimuth.Infrastructure.Concrete
             notificationDto.UserLastName = notification.User.Name.LastName;
             notificationDto.UserId = notification.User.Id;
             notificationDto.NotificationType = notification.NotificationType;
+            notificationDto.UserPhoto = notification.User.Photo;
+            notificationDto.DateTime = DateTime.Now.ToString(("MMMM dd, yyyy") + ".");
              if (notification.RecentlyUser != null)
             {
                 notificationDto.RecentlyUserId = notification.RecentlyUser.Id;

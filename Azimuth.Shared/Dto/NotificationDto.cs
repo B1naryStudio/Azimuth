@@ -1,4 +1,5 @@
-﻿using Azimuth.DataAccess.Entities;
+﻿using System;
+using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Enums;
 
 namespace Azimuth.Shared.Dto
@@ -15,5 +16,7 @@ namespace Azimuth.Shared.Dto
         public long UserId { get; set; }
         public string Message { get; set; }
         public Notifications NotificationType { get; set; }
+        public string UserPhoto { get; set; }
+        public string DateTime { get; set; }
     }
 }
