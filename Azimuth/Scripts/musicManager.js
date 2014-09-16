@@ -797,6 +797,10 @@ MusicManager.prototype.bindListeners = function() {
         $('#listenTopBtn').attr('disabled', true);
     });
 
+    $(self.audioManager).on('OnAddToPlaylist', function() {
+        self.showPlaylists();
+    });
+
     $('#createPlaylistModal').on('hidden.bs.modal', function () {
         $('#createPlaylistModal .modal-body #playlistNameToCreate').val('');
     });
