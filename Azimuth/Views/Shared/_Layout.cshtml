@@ -2,7 +2,11 @@
 @using Microsoft.AspNet.Identity
 
 @{
-    var loggedUser = AzimuthIdentity.Current.UserCredential;
+    long loggedUserId = -1;
+    if (AzimuthIdentity.Current != null)
+    {
+        loggedUserId = AzimuthIdentity.Current.UserCredential.Id;
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -103,7 +107,7 @@
         $(document).ready(function() {
             // Declare a proxy to reference the hub.
             var notificationsHub = $.connection.notificationsHub;
-            var id = @loggedUser.Id
+            var id = @loggedUserId;
             // Start Hub
             $.connection.hub.start().done(function() {
                 notificationsHub.server.connect(id);
