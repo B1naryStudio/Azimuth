@@ -51,7 +51,6 @@
 }
 
 .playlist-plated-info {
-    display: none;
     position: absolute;
     background-color: rgba(0,0,0,0.7);
     bottom: 0;
@@ -77,14 +76,8 @@ div.playlistName {
     font-size: 20px;
 }
 
-.playlist-plated-short-info {
-    position: absolute;
-    background-color: rgba(0,0,0,0.7);
-    bottom: 0;
-    padding: 10px;
-    width: 100%;
-    color: white;
-    height: 100px;
+.playlist-plated:hover .playlistName{
+    text-decoration: underline;
 }
 
 .listeners-count span {
