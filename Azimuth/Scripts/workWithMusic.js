@@ -27,6 +27,7 @@
     var manager = new MusicManager(audioManager);
     
     manager.showPlaylists();
+    manager.setDefaultPlaylist();
     manager.bindListeners();
     audioManager.bindListeners();
 

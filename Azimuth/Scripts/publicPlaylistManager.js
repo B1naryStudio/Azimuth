@@ -30,27 +30,14 @@
     $('.playlist-plated').each(function () {
         self._setNewImage($(this), $(this).find('.playlistId').val());
     });
-};
 
-PublicPlaylistManager.prototype.showPlaylists = function() {
-    var self = this;
-    self.$trackArea.hide();
-};
-
-PublicPlaylistManager.prototype.showTracks = function() {
-    var self = this;
-    self.$trackArea.show();
-    self.$backToPlaylistsBtn.off('click').click(function () {
-        $('#tracksArea').empty();
-        $('#playlistsArea').show();
-    });
-
-    $('.track-info-btn').click(function () {
+    this._getTrackInfo = function () {
         var $self = $(this);
-        var author = $self.parent().children('.track-description').children('.track-info');
-        var trackName = $self.parent().children('.track-description').children('.track-title');
+        debugger;
+        var author = $self.children('.track-artist').html();
+        var trackName = $self.children('.track-title').html();
         $.ajax({
-            url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
+            url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
             async: true,
             success: function (trackInfo) {
                 var $trackInfoTemplate = $('#trackInfoTemplate');
@@ -72,6 +59,20 @@ PublicPlaylistManager.prototype.showTracks = function() {
                 $('#listenTopBtn').attr('disabled', false);
             }
         });
+    });
+};
+
+PublicPlaylistManager.prototype.showPlaylists = function() {
+    var self = this;
+    self.$trackArea.hide();
+};
+
+PublicPlaylistManager.prototype.showTracks = function() {
+    var self = this;
+    self.$trackArea.show();
+    self.$backToPlaylistsBtn.off('click').click(function () {
+        $('#tracksArea').empty();
+        $('#playlistsArea').show();
     });
 };
 

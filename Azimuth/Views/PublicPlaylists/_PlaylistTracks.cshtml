@@ -36,14 +36,14 @@
         document.audioManager.bindPlayBtnListeners();
         document.audioManager.bindListeners();
 
-        $('.track-info-btn').click(function() {
+        $('.track-info > a').click(function() {
             var $self = $(this);
             var $trackInfoSpinner = $('#trackInfo-spinner');
-            var author = $self.parent().children('.track-description').children('.track-info').find('span');
-            var trackName = $self.parent().children('.track-description').children('.track-title');
+            var author = $self.children('.track-artist').html();
+            var trackName = $self.children('.track-title').html();
             $trackInfoSpinner.show();
             $.ajax({
-                url: '/api/usertracks/trackinfo?artist=' + author.text() + '&trackName=' + trackName.text(),
+                url: '/api/usertracks/trackinfo?artist=' + author + '&trackName=' + trackName,
                 async: true,
                 success: function(trackInfo) {
                     $trackInfoSpinner.hide();

@@ -8,10 +8,10 @@
 }
 <div class="container" id="user-container">
     @Html.HiddenFor(x => x.User.Id, new { id = "user-id" })
-    <div class="col-md-3" id="user-photo">
+    <div class="col-md-5 col-xs-5" id="user-photo">
         <img src="@Model.User.Photo" />
     </div>
-    <div class="col-md-8" id="user-info">
+    <div class="col-md-7 col-xs-7" id="user-info">
         <div class="row well">
             <div id="user-name">
                 @Html.DisplayFor(x => x.User.Name.FirstName)
