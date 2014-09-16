@@ -213,6 +213,20 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpPost]
+        [Route("{id:int}")]
+        public async Task<HttpResponseMessage> SetPlaylistName(long id, string playlistName)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.SetPlaylistName(id, playlistName));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpDelete]
         [Route("delete/{id:int}")]
         public HttpResponseMessage DeletePlaylistById(int id)

@@ -528,9 +528,9 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
+        public async Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName)
         {
-            return Task.Run(() =>
+            return await Task.Run(() =>
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
@@ -602,6 +602,24 @@ namespace Azimuth.Services.Concrete
                 unitOfWork.Commit();
             }
             return playlists;
+        }
+
+        public async Task<string> SetPlaylistName(long id, string playlistName)
+        {
+            return await Task.Run(() =>
+            {
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+                {
+                    var playlistRepository = unitOfWork.GetRepository<Playlist>();
+                    var playlist = playlistRepository.GetOne(p => p.Id == id);
+
+                    playlist.Name = playlistName;
+
+                    unitOfWork.Commit();
+                }
+
+                return playlistName;
+            });
         }
 
         private Func<Playlist, PlaylistData> GetPlaylistData()

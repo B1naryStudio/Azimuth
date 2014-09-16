@@ -359,6 +359,14 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                         });
                     }
                     break;
+                case 'renameplaylist':
+                    $('#renamePlaylistModal').modal({
+                        show: true
+                    });
+                    $('#renamePlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function () {
+                        $("#playlistNameToRename").focus();
+                    });
+                    break;
                 //case 'trackshuffle':
                 //    self._shuffleTracksAction(self.musicList.find('.draggable-list'));
                 //    break;

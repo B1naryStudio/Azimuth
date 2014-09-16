@@ -628,6 +628,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
             { id: 'makeprivate', name: 'Make private', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
             { id: 'shareplaylist', name: 'Share it', isNewSection: true, hasSubMenu: false, needSelectedItems: false },
+            { id: 'renameplaylist', name: 'Rename', isNewSection: true, hasSubMenu: false, neeSelectedItems: false },
             { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
         ];
 
@@ -678,6 +679,26 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function (playlistId) {
                 self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+            }
+        });
+    });
+
+    $('#okPlaylistRenameModalBtn').click(function() {
+        $('#renamePlaylistModal').modal('hide');
+        $('#renamePlaylistModal').on('hidden.bs.modal', function () {
+            $('#renamePlaylistModal .modal-body #playlistNameToRename').val("");
+            $('#renamePlaylistModal .modal-body select :first').attr("selected", "selected");
+        });
+
+        var $playlist = $('.playlist.selected');
+        var playlistId = $playlist.find('.playlistId').text();
+        var playlistName = $('#playlistNameToRename').val();
+        $.ajax({
+            url: '/api/playlists/' + playlistId + '?playlistName=' + playlistName,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(playlistName) {
+                $playlist.children('.playlist-title').text('Name: ' + playlistName);
             }
         });
     });
