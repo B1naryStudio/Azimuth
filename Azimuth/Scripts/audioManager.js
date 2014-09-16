@@ -7,6 +7,7 @@
     this.beforeMuteVolume = null;
     this.volumeSlider = volumeSlider;
     this.progressSlider = progressSlider;
+    this.paused = true;
 
     this.onProgressBarClick = false;
 
@@ -41,7 +42,7 @@
         //self.$currentTrack.find('.track-duration').show();
         //self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().next('.tableRow');
+        var trackItem = self.$currentTrack.next();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.next('.tableRow');
         }
@@ -57,7 +58,11 @@
             self._loadNextTracks(self.$currentTrack);
         }
 
-        self._setPauseImgButton(trackItem);
+        if (self.audio.paused) {
+            self._setPlayImgButton(trackItem);
+        } else {
+            self._setPauseImgButton(trackItem);
+        }
 
         self._setTrackTo('next');
 
@@ -71,7 +76,7 @@
         //self.$currentTrack.find('.track-duration').show();
         //self.$currentTrack.find('.track-remaining').hide();
 
-        var trackItem = $('.track-play-btn:not(.glyphicon-play)').parent().not('.draggable-stub').prev('.tableRow');
+        var trackItem = self.$currentTrack.prev();
         if (trackItem.hasClass('draggable-stub')) {
             trackItem = trackItem.prev('.tableRow');
         }
@@ -84,7 +89,11 @@
             self._getCurrentTrackUrl(self.$currentTrack, url);
         }
 
-        self._setPauseImgButton(trackItem);
+        if (self.audio.paused) {
+            self._setPlayImgButton(trackItem);
+        } else {
+            self._setPauseImgButton(trackItem);
+        }
 
         self._setTrackTo('prev');
 
@@ -337,7 +346,7 @@ AudioManager.prototype.bindPlayBtnListeners = function() {
 AudioManager.prototype.refreshProgressBar = function () {
     var self = this;
 
-    $('#progressSlider').on('mousedown', function () {
+    $('#progress-bar').on('mousedown', function () {
         self.audio.pause();
         self.onProgressBarClick = true;
     });
@@ -393,7 +402,8 @@ AudioManager.prototype.bindListeners = function() {
     //    self.audio.currentTime = value * self.audio.duration;
     //});
 
-    $('#progressSlider').on('mousedown', function() {
+    $('#progress-bar').on('mousedown', function () {
+        self.paused = self.audio.paused;
         self.audio.pause();
         self.onProgressBarClick = true;
     });
@@ -401,7 +411,9 @@ AudioManager.prototype.bindListeners = function() {
     $(document).on('mouseup', function () {
         if (self.onProgressBarClick == true) {
             self.setCurrentTime(self.progressSlider.getPosition() * self.getDuration());
-            self.audio.play();
+            if (!self.paused) {
+                self.audio.play();
+            }
             self.onProgressBarClick = false;
         }
     });

@@ -187,6 +187,10 @@ div.tableRow{
     font-size: larger;
 }
 
+.item-active {
+    background: #F9851F;
+}
+
 .nowrap {
     overflow: hidden; 
     word-wrap: break-word;

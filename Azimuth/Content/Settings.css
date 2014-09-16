@@ -32,7 +32,7 @@
 }
 
 #searchPlaylistName {
-    margin-bottom: 15px;
+    margin: 0 auto;
 }
 
 #vk-track-list {
@@ -40,7 +40,7 @@
     width: 100%;
     position: absolute;
     top: 0;
-    margin-top: 70px;
+    margin-top: 50px;
 }
 
 .stuck {
