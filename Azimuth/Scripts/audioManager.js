@@ -111,7 +111,7 @@
         self.progressSlider.setPosition(self.audio.currentTime / self.audio.duration);
         self.progressSlider.setBackgroundPosition(self.audio.buffered.end(0) / self.audio.duration);
         var remaining = Math.floor(self.audio.duration - self.audio.currentTime);
-        self.$currentTrack.find('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
+        $('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
     };
 
     this._copyTrackToPlaylist = function (currentTrack, playlistId) {
