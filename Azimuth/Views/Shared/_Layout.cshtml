@@ -2,10 +2,11 @@
 @using Microsoft.AspNet.Identity
 
 @{
-    long loggedUserId = -1;
-    if (AzimuthIdentity.Current != null)
+
+    UserCredential loggedUser = new UserCredential();
+    if (Request.IsAuthenticated)
     {
-        loggedUserId = AzimuthIdentity.Current.UserCredential.Id;
+        loggedUser = AzimuthIdentity.Current.UserCredential;   
     }
 }
 <!DOCTYPE html>
@@ -67,6 +68,8 @@
                         </li>
                     </ul>
                 </div>
+                
+                @Html.Hidden("userId", loggedUser.Id)
             }
             else
             {
@@ -79,7 +82,7 @@
     </div>
     <div class="body-content">
         @RenderBody()
-        <div id="notification" class="alert alert-warning popup-notification" role="alert"></div>
+        <div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -117,8 +120,19 @@
 
             notificationsHub.client.newNotification = function(notification) {
                 console.log(notification);
-                var $notif = $('#notificationTemplate');
-                var object = $notif.tmpl(notification);
+                var $template;
+                if (notification.NotificationType == 0 ||
+                    notification.NotificationType == 1 ||
+                    notification.NotificationType == 8 ||
+                    notification.NotificationType == 9 ||
+                    notification.NotificationType == 10 ||
+                    notification.NotificationType == 11) {
+                    $template = $('#popupPlaylistNotificationTemplate');
+                } else {
+                    $template = $('#popupUserNotificationTemplate');
+                }
+
+                var object = $template.tmpl(notification);
                 clearTimeout(timerId);
                 timerId = setTimeout(function() {
                     closeNotification($(object));
@@ -128,21 +142,24 @@
             };
 
             function addNotification(notification) {
-                var $container = $('#notification');
+                var $container = $('#popup-notification');
                 if ($container.children().length == 0) {
-                    $('#notification')
-                        .append('<a href="#" class="close">&times;</a>');
+                    $('#popup-notification')
+                        .append('<a href="#" class="popup-notification-close right">&times;</a>');
 
-                    $('#notification')
-                        .find('.close')
+                    $('#popup-notification')
+                        .find('.popup-notification-close')
                         .on('click', function () {
                             closeNotification($(this));
                         });
                 }
-                $('#notification')
-                    .append($('<div class="content"></div>').html(notification))
+
+
+
+                $('#popup-notification')
+                    .append($('<div class="popup-notification-content"></div>').html(notification))
                     .hide()
-                    .appendTo('#notification')
+                    .appendTo('#popup-notification')
                     .fadeIn(1000);
             }
 
@@ -162,23 +179,41 @@
                     var $container = $(this);
                     $container.removeAttr('style');
                     $container.empty();
+                        ////////////////////////////////////
+
+                        //////////////////////////////////
                     });
                 clearTimeout(timerId);
             }
         });
     </script>
     
-    <script id="notificationTemplate" type="text/x-jQuery-tmpl">
-        <div class="notification-header">
-            <div class="notificationalert-user-photo"><img src="${UserPhoto}" /></div>
-            <div class="notification-user-time">
+    <script id="popupPlaylistNotificationTemplate" type="text/x-jQuery-tmpl">
+        <div class="popup-notification-header">
+            <div class="popup-notification-user-photo"><img src="${UserPhoto}" /></div>
+            <div class="popup-notification-user-time">
                 <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a>
                 <span>${DateTime}</span>
             </div>
         </div>
-        <div class="notificationBody">
-            <div class="notificationMessage">
+        <div class="popup-notification-body">
+            <div class="popup-notification-message">
                 <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message} <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyPlaylistName}</a>
+            </div>
+        </div>
+    </script>
+    
+    <script id="popupUserNotificationTemplate" type="text/x-jQuery-tmpl">
+        <div class="popup-notification-header">
+            <div class="popup-notification-user-photo"><img src="${UserPhoto}" /></div>
+            <div class="popup-notification-user-time">
+                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a>
+                <span>${DateTime}</span>
+            </div>
+        </div>
+        <div class="popup-notification-body">
+            <div class="popup-notification-message">
+                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message} <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyUserFirstName} ${RecentlyUserlastName}</a>
             </div>
         </div>
     </script>

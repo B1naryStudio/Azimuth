@@ -1,6 +1,4 @@
-﻿using System;
-using Azimuth.DataAccess.Entities;
-using Azimuth.Shared.Enums;
+﻿using Azimuth.Shared.Enums;
 
 namespace Azimuth.Shared.Dto
 {

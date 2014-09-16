@@ -59,28 +59,13 @@ namespace Azimuth.Services.Concrete
 
                     foreach (var notification in notifications)
                     {
-                        var notifDto = new NotificationDto
-                        {
-                            UserFirstName = notification.User.Name.FirstName,
-                            UserLastName = notification.User.Name.LastName,
-                            Message = GetMessage(notification)
-                        };
-                        if (notification.RecentlyUser != null)
-                        {
-                            notifDto.RecentlyUserId = notification.RecentlyUser.Id;
-                            notifDto.RecentlyUserFirstName = notification.RecentlyUser.Name.FirstName;
-                            notifDto.RecentlyUserLastName = notification.RecentlyUser.Name.LastName;
-                        }
-                        if (notification.RecentlyPlaylist != null)
-                        {
-                            if (notification.RecentlyPlaylist.Accessibilty != Accessibilty.Private)
-                            {
-                                notifDto.RecentlyPlaylistId = notification.RecentlyPlaylist.Id;
-                            }
-                            notifDto.RecentlyPlaylistName = notification.RecentlyPlaylist.Name;
-                        }
 
-                        notificationsDto.Add(notifDto);
+                        var notificationDto = new NotificationDto();
+                        Mapper.Map(notification, notificationDto);
+
+                        notificationDto.Message = GetMessage(notification);
+
+                        notificationsDto.Add(notificationDto);
                     }
                 }
 
