@@ -8,14 +8,19 @@ var MusicManager = function (manager) {
     this.reloginUrl = window.location.pathname;
     this.playlistTracksGlobal = [];
     this.topTracks = null;
+    this.extraContainerShown = false;
     this.topTracksVk = [];
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
     this.trackTemplate = $("#trackTemplate");
+    this.$trackContainer = $("#tracks-container");
+    this.$extraContainer = $("#extra-container");
     this.$friendsTemplate = $("#friendsTemplate");
     this.$friendsBody = $('#friends-body');
     this.$friendList = $('#friends-container');
+    this.$friendButton = $('#friends-button');
+    this.$notificationButton = $('#notifications-button');
     this.$reloginForm = $("#relogin");
     this.$vkMusic = $("#vkontakteMusic");
     this.$getTrackInfoBtn = $('.track-info-btn');
@@ -413,12 +418,8 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             tmpl.append(self.audioManager.progressSlider.getSlider());
             if (self.audioManager.audio.paused) {
                 self.audioManager._setPlayImgButton(tmpl);
-                //self.audioManager.$currentTrack.find('.track-duration').show();
-                //self.audioManager.$currentTrack.find('.track-remaining').hide();
             } else {
                 self.audioManager._setPauseImgButton(tmpl);
-                //self.audioManager.$currentTrack.find('.track-duration').hide();
-                //self.audioManager.$currentTrack.find('.track-remaining').show();
             }
         }
     }
@@ -641,6 +642,18 @@ MusicManager.prototype.bindListeners = function() {
         }));
         self.audioManager.refreshTracks();
         self.audioManager.updateProgressbar('.vkMusicList');
+    });
+
+    this.$friendButton.click(function () {
+        self.extraContainerShown = !self.extraContainerShown;
+        if (!self.extraContainerShown) {
+            self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
+            self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
+        } else {
+            self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
+            self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+        }
+        
     });
 
     this.$searchPlaylistInput.keyup(function(e) {

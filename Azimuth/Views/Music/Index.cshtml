@@ -6,9 +6,24 @@
 }
 
 <div style="height: 100%">
+    <div id="feature-widget" class="well">
+        <div id="buttons-section">
+            <div id="friends-button">
+                <i class="fa fa-users"></i>
+            </div>
+            <div id="notifications-button">
+                <i class="fa fa-bell"></i>
+            </div>
+        </div> 
+    </div>
     <div class="container" style="height: 89%">
         <div>
             @Html.Partial("_AudioPlayer")
+        </div>
+        <div class="col-md-0" id="extra-container" style="height: 97%; padding-left: 0px;">
+            <div id="extra-container-content">
+                <div id="friends-container"></div>
+            </div>
         </div>
         <div id="playlists" class="col-md-4 well">
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
@@ -18,7 +33,7 @@
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
         </div>
-        <div id="SN" class="col-md-5">
+        <div id="tracks-container" class="col-md-8">
             <div>
                 <div id="relogin" class="alert alert-danger" style="display: none; margin-top: 10px; z-index: 1001;">
                     <p id="error"> Your time has expired, please login again. </p>
@@ -38,14 +53,6 @@
                     <p class="error"></p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3 well" style="height: 97%; margin-bottom: 0;">
-            <div id="buttons-section">
-                <button id="get-friends-info-btn" class="btn btn-default"><i class="fa fa-users"></i></button>
-                <button id="get-user-tracks" class="btn btn-default"><i class="fa fa-user"></i></button>
-                <button id="get-user-tracks" class="btn btn-default"><i class="fa fa-bell"></i></button>
-            </div>
-            <div id="friends-container"></div>
         </div>
     </div>
     <div class="itemsContainer tableRow" id="itemsContainer"></div>
@@ -130,7 +137,7 @@
         </div>
     </div>
 
-    </div>
+</div>
     @section scripts
 {
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>

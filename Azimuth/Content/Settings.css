@@ -6,8 +6,22 @@
     height: calc(100% - 42px);
 }
 
-#SN {
+.col-md-0 {
+    width: 0%;
+    float: left;
+}
+
+#extra-container-content {
+    transition: width 0.256s linear;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    height: 100%
+}
+
+#tracks-container {
     height: 100%;
+    transition: width 0.256s linear;
 }
 
 #playlists {
@@ -27,8 +41,34 @@
     height: 100%;
 }
 
+#feature-widget {
+    width: 50px;
+    height: 200px;
+    position: fixed;
+    top: 30%;
+    padding: 5px;
+}
+
 #buttons-section {
     width: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 75px;
+}
+
+#buttons-section div {
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#get-friends-info-btn {
+    margin-bottom: 10px;
 }
 
 #searchPlaylistName {
