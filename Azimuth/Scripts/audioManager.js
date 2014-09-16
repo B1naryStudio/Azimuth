@@ -11,38 +11,83 @@
 
     this.onProgressBarClick = false;
 
-    $.ajax({
-        url: 'api/playlists/',
-        type: 'GET',
-        dataType: 'json',
-        success: function (playlists) {
-            var addMenu = $('<div>');
-            $(playlists).each(function () {
-                addMenu.append($('#popoverPlaylistTemplate').tmpl(this));
-                //addMenu.append('<div><div class="btn btn-default">' + this.Name + '</div><div class="playlistId hidden">' + this.Id + '</div></div>');
-            });
-            var popoverSettings = {
-                placement: 'bottom',
-                container: 'body',
-                html: true,
-                content: function() {
-                    return addMenu.html();
+    this._getPlaylistsForPopover = function() {
+        $.ajax({
+            url: 'api/playlists/',
+            type: 'GET',
+            dataType: 'json',
+            success: function(playlists) {
+                var addMenu = $('<div>');
+
+                if (playlists.length != 0) {
+                    $(playlists).each(function() {
+                        addMenu.append($('#popoverPlaylistTemplate').tmpl(this));
+                    });
+                    
+                    $('#plus-btn .fa').popover({
+                        placement: 'bottom',
+                        container: 'body',
+                        html: true,
+                        content: function () {
+                            return addMenu.html();
+                        }
+                    });
+                    var popover = $('#plus-btn .fa').data('bs.popover');
+                    popover.setContent();
+                    popover.$tip.addClass(popover.options.placement);
+
+                    $('#plus-btn .fa').on('click', function() {
+                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                            var playlistId = $(this).parent().children('.playlistId').text();
+                            self._copyTrackToPlaylist(self.$currentTrack, playlistId);
+                            $('#plus-btn .fa').popover('hide');
+
+                            $(self).trigger('OnAddToPlaylist');
+                        });
+                    });
+                } else {
+                    addMenu.append('<div class="btn btn-default popoverPlaylistBtn">Add new playlist</div>');
+                    
+                    $('#plus-btn .fa').popover({
+                        placement: 'bottom',
+                        container: 'body',
+                        html: true,
+                        content: function () {
+                            return addMenu.html();
+                        }
+                    });
+                    var popover = $('#plus-btn .fa').data('bs.popover');
+                    popover.setContent();
+                    popover.$tip.addClass(popover.options.placement);
+
+                    $('#plus-btn .fa').on('click', function() {
+                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                            $('#createPlaylistModal').modal({
+                                show: true
+                            });
+                            $('#createPlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function() {
+                                $("#playlistNameToCreate").focus();
+                            });
+                            $('#itemsContainer').append(self.$currentTrack.clone());
+                            $('#plus-btn .fa').popover('hide');
+                        });
+                    });
                 }
+
+                //$('#plus-btn .fa').popover({
+                //    placement: 'bottom',
+                //    container: 'body',
+                //    html: true,
+                //    content: function() {
+                //        return addMenu.html();
+                //    }
+                //});
+                //var popover = $('#plus-btn .fa').data('bs.popover');
+                //popover.setContent();
+                //popover.$tip.addClass(popover.options.placement);
             }
-
-            $('#plus-btn .fa').popover(popoverSettings);
-
-            $('#plus-btn .fa').on('click', function() {
-                $('.popoverPlaylistBtn').on('mousedown', function () {
-                    var playlistId = $(this).parent().children('.playlistId').text();
-                    self._copyTrackToPlaylist(self.$currentTrack, playlistId);
-                    $('#plus-btn .fa').popover('hide');
-
-                    $(self).trigger('OnAddToPlaylist');
-                });
-            });
-        }
-    });
+        });
+    };
 
     self.audio.onended = function () {
         if (self.audio.loop == false) {
@@ -193,6 +238,8 @@
             });
         }
     };
+
+    self._getPlaylistsForPopover();
 };
 
 AudioManager.prototype.refreshTracks = function() {
@@ -466,5 +513,11 @@ AudioManager.prototype.bindListeners = function() {
             }
             self.onProgressBarClick = false;
         }
+    });
+
+    $('#createPlaylistModal').on('OnPlaylistCreate', function () {
+        //$('#plus-btn .fa').popover('hide');
+        //$('.popover').remove();
+        self._getPlaylistsForPopover();
     });
 };

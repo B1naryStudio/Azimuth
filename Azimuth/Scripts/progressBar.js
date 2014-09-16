@@ -11,7 +11,7 @@
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
-    for (var i = 0; i < self.$progressBar.width() - 9; i += 3) {
+    for (var i = 0; i < self.$progressBar.width(); i += 3) {
         var randomHeight = self._randomInt(100, 20);
         var element = $('<div></div>').addClass('progress-bar-element');
         element.append($('<div></div>').addClass('progress-bar-background-element').css('height', (100 - randomHeight) + '%'));
