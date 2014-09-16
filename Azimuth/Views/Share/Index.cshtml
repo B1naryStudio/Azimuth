@@ -4,7 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div id="musicList">
-    <div id="progressSlider" style="display: none"></div>
+    <div>
+        @Html.Partial("_AudioPlayer")
+    </div>
     @if (Model != null)
     {
         foreach (var track in Model)

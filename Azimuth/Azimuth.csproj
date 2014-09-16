@@ -304,6 +304,7 @@
     <Content Include="Content\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Loading.css" />
     <Content Include="Content\Playlist.css" />
+    <Content Include="Content\ProgressSlider.css" />
     <Content Include="Content\PublicPlaylists.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\Share.css" />
@@ -331,6 +332,7 @@
     <Content Include="Images\media_volume.png" />
     <Content Include="Images\playlist_stub.jpg" />
     <Content Include="Images\spinner_loading_circle.gif" />
+    <Content Include="Images\vk-audio.png" />
     <Content Include="Scripts\audioManager.js" />
     <Content Include="Images\twitter_logo.png" />
     <Content Include="Images\vkontakte_logo.png" />
@@ -355,6 +357,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\progressBar.js" />
     <Content Include="Scripts\publicPlaylistManager.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

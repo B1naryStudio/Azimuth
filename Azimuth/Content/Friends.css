@@ -24,6 +24,11 @@
     display: inline-block;
 }
 
+.friend:hover {
+    cursor: pointer;
+    background: #FFD386;
+}
+
 .send-message-btn {
     height: 40px;
     width: 40px;

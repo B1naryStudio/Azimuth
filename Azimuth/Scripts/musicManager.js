@@ -93,8 +93,8 @@ var MusicManager = function (manager) {
         self.$vkMusicTitle.text(temp);
         self.audioManager.bindPlayBtnListeners();
 
-        $this.siblings('.playlist-active').removeClass('playlist-active');
-        $this.toggleClass("playlist-active");
+        $('.item-active').toggleClass('item-active', false);
+        $this.toggleClass("item-active", true);
     };
 
     this._saveTrackFromVkToPlaylist = function ($currentItem, index, playlistId) {
@@ -171,8 +171,8 @@ var MusicManager = function (manager) {
         self.$vkMusicTitle.text('Loading...');
 
         $defaultPlaylist = $('.default-playlist');
-        $defaultPlaylist.siblings('.playlist-active').removeClass('playlist-active');
-        $defaultPlaylist.toggleClass("playlist-active");
+        $('.item-active').toggleClass('item-active', false);
+        $defaultPlaylist.toggleClass("item-active", true);
 
         self.$vkMusicLoadingSpinner.fadeIn('normal');
         $('.vkMusicList').hide();
@@ -254,9 +254,9 @@ var MusicManager = function (manager) {
 
     this._getFriendTracks = function () {
         var $currentItem = $(this);
-        $currentItem.parent().children('.friend').toggleClass('active', false);
+        $('.item-active').toggleClass('item-active', false);
         var currentId = $currentItem.children('.friend-id').html();
-        $currentItem.toggleClass('active', true);
+        $currentItem.toggleClass('item-active', true);
 
         //var provider = "Vkontakte"; // TODO: Fix for all providers
         self.$vkMusicTitle.text('Loading...');
@@ -268,7 +268,6 @@ var MusicManager = function (manager) {
                 if (typeof tracks.Message === 'undefined') {
                     var currentUser = $currentItem.children('.friend-initials').html();
                     
-                    self.$vkMusicTitle.html("Now playing: " + currentUser + "'s playlist");
                     self.$reloginForm.hide();
                     self.$vkMusicTable.show();
                     var list = $('.vkMusicList');
@@ -391,6 +390,10 @@ MusicManager.prototype.setDefaultPlaylist = function () {
     };
 
     var tmpl = self.playlistTemplate.tmpl(playlist);
+
+    var img = tmpl.children('.playlist-logo').children('img');
+    img.attr("src", "http://cdn.marketplaceimages.windowsphone.com/v8/images/ab99fcba-4240-45a9-a025-80a0edba0c0a?imageType=ws_icon_large");
+
     tmpl.addClass('default-playlist');
 
     tmpl.click(self._getUserTracks);
@@ -422,6 +425,11 @@ MusicManager.prototype.showTracks = function (tracks, template) {
                 self.audioManager._setPauseImgButton(tmpl);
             }
         }
+    }
+
+    if ($('#audio-player .track-artist').text() == '' || $('#audio-player .track-title').text() == '') {
+        $('#audio-player .track-artist').text($($('.vkMusicList .track-artist')[0]).text());
+        $('#audio-player .track-title').text($($('.vkMusicList .track-title')[0]).text());
     }
 
     self.$vkMusicTable.makeDraggable({
