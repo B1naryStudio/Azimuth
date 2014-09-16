@@ -239,6 +239,26 @@
         }
     };
 
+    this._shuffleTracks = function () {
+        var index = 0;
+        var elems = $('.vkMusicList').children('.tableRow');
+        elems.sort(function () { return (Math.round(Math.random()) - 0.5); });
+        for (var i = 0; i < elems.length; i++) {
+            if ($(elems[i]).children('.track-play-btn').hasClass('glyphicon-pause')) {
+                index = i;
+            }
+        }
+        if (index != 0) {
+            var temp = elems[index];
+            elems[index] = elems[0];
+            elems[0] = temp;
+        }
+        $('.vkMusicList').children().detach('.tableRow');
+        $('.vkMusicList').prepend(elems);
+
+        //self.manager._moveTrackToNewPosition($currentTrack);
+    };
+
     self._getPlaylistsForPopover();
 };
 
@@ -524,5 +544,9 @@ AudioManager.prototype.bindListeners = function() {
     $('#repeat-btn').on('mousedown', function () {
         $('#repeat-btn .fa').css('color', !self.audio.loop? 'orange' : '');
         self.loop(!self.audio.loop);
+    });
+
+    $('#shuffle-btn').on('mousedown', function () {
+        self._shuffleTracks();
     });
 };
