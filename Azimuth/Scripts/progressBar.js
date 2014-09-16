@@ -5,6 +5,7 @@
     this.$progressBar = $('#progress-bar');
     this.$currentProgress = $('.progress-current');
     this.$cacheProgress = $('.progress-cache');
+    this.$moveProgress = $('.progress-move');
 
     this._randomInt = function(max, min) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -65,5 +66,17 @@ ProgressBar.prototype.bindListeners = function() {
 
     $(document).mouseup(function() {
         self.drag = false;
+    });
+
+    $('#progress-bar').on('mousemove', function(e) {
+        if (e.pageX < self.$progressBar.offset().left) {
+            position = 0;
+        } else if (e.pageX > self.$progressBar.offset().left + self.$progressBar.width()) {
+            position = self.$progressBar.width();
+        } else {
+            var position = e.pageX - self.$progressBar.offset().left;
+        }
+        var percentage = 100 * position / self.$progressBar.width();
+        self.$moveProgress.css('width', percentage + '%');
     });
 };

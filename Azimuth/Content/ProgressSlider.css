@@ -62,7 +62,7 @@
 	z-index: 1;
 }
 
-.progress-cache {
+.progress-move {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -74,4 +74,13 @@
 	background-image: -webkit-linear-gradient(top, #EF7C39 0%, darkred 100%); 
 	background-image: linear-gradient(to bottom, #EF7C39 0%, darkred 100%);
 	z-index: 0;
+}
+
+.progress-cache {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+    background-color: gray;
+	z-index: -1;
 }
