@@ -94,6 +94,20 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("genres")]
+        public async Task<HttpResponseMessage> GetPlaylistsGenres()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPlaylistsGenres());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
             try
@@ -192,6 +206,20 @@ namespace Azimuth.ApiControllers
             try
             {
                 return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.SetPlaylistName(azimuthPlaylist, playlistName));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id:int}")]
+        public async Task<HttpResponseMessage> SetPlaylistName(long id, string playlistName)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.SetPlaylistName(id, playlistName));
             }
             catch (Exception ex)
             {

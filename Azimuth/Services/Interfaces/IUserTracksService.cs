@@ -23,6 +23,7 @@ namespace Azimuth.Services.Interfaces
         Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider);
         Task<List<TracksDto>> MakeSearch(string searchText, string criteria);
         Task<List<TracksDto>> VkontakteSearch(string searchText, int offset);
+        void AddTrack(long ownerId, long trackId);
 
     }
 }

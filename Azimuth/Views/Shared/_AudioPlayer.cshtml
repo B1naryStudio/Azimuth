@@ -8,7 +8,7 @@
         <div class="track-description">
             <div class="track-info" data-toggle="modal" data-target="#infoModal"><a href="#"><span class="track-artist"></span> - <span class="track-title"></span></a></div>
         </div>
-        <div id="progress-bar">
+        <div id="progress-bar" style="overflow: hidden;">
             <div id="progress-current" class="light-orange"></div>
             <div class="progress-background"></div>
             <div class="progress-cache"></div>
@@ -20,7 +20,9 @@
         <div id="volumeSlider"></div>
     </div>
     <div id="audio-player-controls">
-        <div id="plus-btn"><i class="fa fa-plus"></i></div>
+        <div id="plus-btn">
+            <a href="#" class="fa fa-plus" rel="popover" style="text-decoration: none;"></a>
+        </div>
         <div id="shuffle-btn"><i class="fa fa-random"></i></div>
         <div id="repeat-btn"><i class="fa fa-repeat"></i></div>
     </div>

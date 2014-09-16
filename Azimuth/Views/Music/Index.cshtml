@@ -93,6 +93,23 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="renamePlaylistModal" tabindex="-1" role="dialog" aria-labelledby="renamePlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Rename playlist</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="playlistNameToRename" placeholder="Enter Playlist Name" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="okPlaylistRenameModalBtn" data-dimiss="modal">OK</button>
+                    <button type="button" class="btn btn-default" id="cancelModalBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="sharingLinkModal" tabindex="-1" role="dialog" aria-labelledby="sharingLinkModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -148,6 +165,13 @@
         <script src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="../../Scripts/jquery.clipboard.js"></script>
         <script src="../../Scripts/sliderController.js"></script>
+        
+        <script id="popoverPlaylistTemplate" type="text/x-jQuery-tmpl">
+            <div>
+                <div class="btn btn-default popoverPlaylistBtn">${Name}</div>
+                <div class="playlistId hidden">${Id}</div>
+            </div>
+        </script>
 
         <script id="trackTemplate" type="text/x-jQuery-tmpl">
             <div class="tableRow draggable-item track vk-item">

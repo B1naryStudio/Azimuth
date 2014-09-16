@@ -213,6 +213,21 @@ namespace Azimuth.ApiControllers
             }
         }
 
+        [HttpPost]
+        [Route("addTrack")]
+        public async Task<HttpResponseMessage> AddTrack(long ownerId, long trackId)
+        {
+            try
+            {
+                _userTracksService.AddTrack(ownerId, trackId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (BadRequestException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
         // /api/usertracks/put?id=1
         [HttpPut]
         [Route("put")]

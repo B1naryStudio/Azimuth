@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Azimuth.DataAccess.Entities;
 using Azimuth.Shared.Dto;
+using Azimuth.Shared.Enums;
 
 namespace Azimuth.Infrastructure.Concrete
 {
@@ -24,6 +25,32 @@ namespace Azimuth.Infrastructure.Concrete
             AddMapp<string[], TrackInfoDto>(ChartLyricMap);
             AddMapp<TrackData.Audio, TracksDto>(VkTrackToTrackDto);
             AddMapp<Playlist, PlaylistData>(PlaylistMap);
+            AddMapp<Notification, NotificationDto>(NotificationMap);
+        }
+
+        private static void NotificationMap(Notification notification, NotificationDto notificationDto)
+        {
+
+            notificationDto.UserFirstName = notification.User.Name.FirstName;
+            notificationDto.UserLastName = notification.User.Name.LastName;
+            notificationDto.UserId = notification.User.Id;
+            notificationDto.NotificationType = notification.NotificationType;
+            notificationDto.UserPhoto = notification.User.Photo;
+            notificationDto.DateTime = notification.NotificationDate.ToString(("MMMM dd, yyyy") + ".");
+             if (notification.RecentlyUser != null)
+            {
+                notificationDto.RecentlyUserId = notification.RecentlyUser.Id;
+                notificationDto.RecentlyUserFirstName = notification.RecentlyUser.Name.FirstName;
+                notificationDto.RecentlyUserLastName = notification.RecentlyUser.Name.LastName;
+            }
+            if (notification.RecentlyPlaylist != null)
+            {
+                if (notification.RecentlyPlaylist.Accessibilty != Accessibilty.Private)
+                {
+                    notificationDto.RecentlyPlaylistId = notification.RecentlyPlaylist.Id;
+                }
+                notificationDto.RecentlyPlaylistName = notification.RecentlyPlaylist.Name;
+            }
         }
 
         public static void AddMapp<TSource, TDestination>(Action<TSource, TDestination> map)

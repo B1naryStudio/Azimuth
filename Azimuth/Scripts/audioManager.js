@@ -11,6 +11,84 @@
 
     this.onProgressBarClick = false;
 
+    this._getPlaylistsForPopover = function() {
+        $.ajax({
+            url: 'api/playlists/',
+            type: 'GET',
+            dataType: 'json',
+            success: function(playlists) {
+                var addMenu = $('<div>');
+
+                if (playlists.length != 0) {
+                    $(playlists).each(function() {
+                        addMenu.append($('#popoverPlaylistTemplate').tmpl(this));
+                    });
+                    
+                    $('#plus-btn .fa').popover({
+                        placement: 'bottom',
+                        container: 'body',
+                        html: true,
+                        content: function () {
+                            return addMenu.html();
+                        }
+                    });
+                    var popover = $('#plus-btn .fa').data('bs.popover');
+                    popover.setContent();
+                    popover.$tip.addClass(popover.options.placement);
+
+                    $('#plus-btn .fa').on('click', function() {
+                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                            var playlistId = $(this).parent().children('.playlistId').text();
+                            self._copyTrackToPlaylist(self.$currentTrack, playlistId);
+                            $('#plus-btn .fa').popover('hide');
+
+                            $(self).trigger('OnAddToPlaylist');
+                        });
+                    });
+                } else {
+                    addMenu.append('<div class="btn btn-default popoverPlaylistBtn">Add new playlist</div>');
+                    
+                    $('#plus-btn .fa').popover({
+                        placement: 'bottom',
+                        container: 'body',
+                        html: true,
+                        content: function () {
+                            return addMenu.html();
+                        }
+                    });
+                    var popover = $('#plus-btn .fa').data('bs.popover');
+                    popover.setContent();
+                    popover.$tip.addClass(popover.options.placement);
+
+                    $('#plus-btn .fa').on('click', function() {
+                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                            $('#createPlaylistModal').modal({
+                                show: true
+                            });
+                            $('#createPlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function() {
+                                $("#playlistNameToCreate").focus();
+                            });
+                            $('#itemsContainer').append(self.$currentTrack.clone());
+                            $('#plus-btn .fa').popover('hide');
+                        });
+                    });
+                }
+
+                //$('#plus-btn .fa').popover({
+                //    placement: 'bottom',
+                //    container: 'body',
+                //    html: true,
+                //    content: function() {
+                //        return addMenu.html();
+                //    }
+                //});
+                //var popover = $('#plus-btn .fa').data('bs.popover');
+                //popover.setContent();
+                //popover.$tip.addClass(popover.options.placement);
+            }
+        });
+    };
+
     self.audio.onended = function () {
         if (self.audio.loop == false) {
             self._nextTrack();
@@ -34,6 +112,23 @@
         self.progressSlider.setBackgroundPosition(self.audio.buffered.end(0) / self.audio.duration);
         var remaining = Math.floor(self.audio.duration - self.audio.currentTime);
         self.$currentTrack.find('.track-remaining').text('-' + Math.floor(remaining / 60) + ":" + (remaining % 60 < 10 ? "0" + remaining % 60 : remaining % 60));
+    };
+
+    this._copyTrackToPlaylist = function (currentTrack, playlistId) {
+        var tracks = [];
+        tracks.push({
+            ThirdPartId: currentTrack.find('.thirdPartId').text(),
+            OwnerId: currentTrack.find('.ownerId').text()
+        });
+        $.ajax({
+            url: '/api/usertracks?provider=Vkontakte&index=-1',
+            type: 'POST',
+            data: JSON.stringify({
+                "PlaylistId": playlistId,
+                "TrackInfos": tracks
+            }),
+            contentType: 'application/json'
+        });
     };
 
     this._nextTrack = function () {
@@ -143,6 +238,8 @@
             });
         }
     };
+
+    self._getPlaylistsForPopover();
 };
 
 AudioManager.prototype.refreshTracks = function() {
@@ -416,5 +513,11 @@ AudioManager.prototype.bindListeners = function() {
             }
             self.onProgressBarClick = false;
         }
+    });
+
+    $('#createPlaylistModal').on('OnPlaylistCreate', function () {
+        //$('#plus-btn .fa').popover('hide');
+        //$('.popover').remove();
+        self._getPlaylistsForPopover();
     });
 };

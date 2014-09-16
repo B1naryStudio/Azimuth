@@ -102,8 +102,9 @@ var MusicManager = function (manager) {
         var tracks = [];
 
         var currentPlaylist = $('.playlist .playlistId:contains(' + playlistId + ')').parent('.playlist');
-        if (currentPlaylist.find('.readonly').text() == 'true')
+        if (currentPlaylist.find('.readonly').text() == 'true') {
             return;
+        }
         $currentItem.children().toggleClass('vk-item', false);
         $currentItem.children('.tableRow').each(function () {
             tracks.push({
@@ -129,6 +130,7 @@ var MusicManager = function (manager) {
 
                 $('.tableRow.playlist').remove();
                 self.playlistsGlobal.length = 0;
+                $('.playlist-divider').remove();
                 self.showPlaylists();
                 self.setDefaultPlaylist();
             }
@@ -279,7 +281,7 @@ var MusicManager = function (manager) {
                     playlists = [];
                     $currentItem.children('.send-message-btn').show();
                 }
-                
+                $('.playlist-divider').remove();
                 self.showPlaylists(playlists);
                 self.setDefaultPlaylist(self.currentFriend);
             }
@@ -627,6 +629,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             { id: 'makepublic', name: 'Make public', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
             { id: 'makeprivate', name: 'Make private', isNewSection: false, hasSubMenu: false, needSelectedItems: false },
             { id: 'shareplaylist', name: 'Share it', isNewSection: true, hasSubMenu: false, needSelectedItems: false },
+            { id: 'renameplaylist', name: 'Rename', isNewSection: true, hasSubMenu: false, neeSelectedItems: false },
             { id: 'removeplaylist', name: "Remove", isNewSection: false, hasSubMenu: false, needSelectedItems: false }
         ];
 
@@ -677,6 +680,28 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function (playlistId) {
                 self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+            }
+        });
+
+        $('#createPlaylistModal').trigger('OnPlaylistCreate');
+    });
+
+    $('#okPlaylistRenameModalBtn').click(function() {
+        $('#renamePlaylistModal').modal('hide');
+        $('#renamePlaylistModal').on('hidden.bs.modal', function () {
+            $('#renamePlaylistModal .modal-body #playlistNameToRename').val("");
+            $('#renamePlaylistModal .modal-body select :first').attr("selected", "selected");
+        });
+
+        var $playlist = $('.playlist.selected');
+        var playlistId = $playlist.find('.playlistId').text();
+        var playlistName = $('#playlistNameToRename').val();
+        $.ajax({
+            url: '/api/playlists/' + playlistId + '?playlistName=' + playlistName,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(playlistName) {
+                $playlist.children('.playlist-title').text('Name: ' + playlistName);
             }
         });
     });
@@ -734,13 +759,14 @@ MusicManager.prototype.bindListeners = function() {
                     self._createPlaylist();
                     self.playlistsGlobal = [];
                     $(this).val("");
+                    $('.playlist-divider').remove();
                     self.showPlaylists();
                     self.setDefaultPlaylist();
                 }
             } else {
                 self.$createNewPlaylistLbl.hide();
             }
-
+            $('.playlist-divider').remove();
             self.showPlaylists(foundedPlaylist);
             $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
@@ -795,6 +821,11 @@ MusicManager.prototype.bindListeners = function() {
     $('#infoModal').on('hidden.bs.modal', function() {
         $('#infoModal .modal-body').text('');
         $('#listenTopBtn').attr('disabled', true);
+    });
+
+    $(self.audioManager).on('OnAddToPlaylist', function() {
+        self.showPlaylists();
+        self.setDefaultPlaylist();
     });
 
     $('#createPlaylistModal').on('hidden.bs.modal', function () {
