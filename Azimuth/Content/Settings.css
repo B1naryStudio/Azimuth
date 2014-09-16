@@ -11,8 +11,11 @@
     float: left;
 }
 
-#extra-container-content {
+#extra-container {
     transition: width 0.256s linear;
+}
+
+#extra-container-content {
     background-color: #f5f5f5;
     border: 1px solid #e3e3e3;
     border-radius: 4px;
