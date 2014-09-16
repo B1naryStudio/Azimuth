@@ -94,6 +94,20 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
+        [Route("genres")]
+        public async Task<HttpResponseMessage> GetPlaylistsGenres()
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPlaylistsGenres());
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
         public async Task<HttpResponseMessage> GetPlayListById(int id)
         {
             try

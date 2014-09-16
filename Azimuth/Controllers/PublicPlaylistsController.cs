@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -27,15 +28,16 @@ namespace Azimuth.Controllers
 
         //
         // GET: /PublicPlaylists/
-        public async Task<ActionResult> Index(long? id)
+        public async Task<ActionResult> Index(long? id, string genre)
         {
+            ViewBag.Genre = genre;
             if (Request.IsAuthenticated)
             {
                 var user = _userService.GetUserInfo(AzimuthIdentity.Current.UserCredential.Id);
                 ViewBag.Id = id;
                 return View(user);
             }
-                return View();
+            return View();
         }
 
         [HttpPost]
@@ -89,10 +91,17 @@ namespace Azimuth.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public PartialViewResult _PublicPlaylists(ICollection<PlaylistLike> playlistFollowing, long? id)
+        public PartialViewResult _PublicPlaylists(ICollection<PlaylistLike> playlistFollowing, long? id, string genre)
         {
-            var publicPlaylists = _playlistService.GetPublicPlaylistsSync(id);
-
+            List<PlaylistData> publicPlaylists = null;
+            if (String.IsNullOrEmpty(genre) || genre == "All")
+            {
+                publicPlaylists = _playlistService.GetPublicPlaylistsSync(id);
+            }
+            else
+            {
+                publicPlaylists = _playlistService.GetPublicPlaylistsSync(id, genre);
+            }
             ViewData["playlistFollowing"] = playlistFollowing;
 
             return PartialView(publicPlaylists);
