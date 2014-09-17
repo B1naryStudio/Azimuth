@@ -789,6 +789,7 @@ MusicManager.prototype.bindListeners = function() {
     this.$friendButton.click(function () {
         self.extraContainerShown = !self.extraContainerShown;
         if (!self.extraContainerShown) {
+            self.$friendButton.css('color', '');
             self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
             self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
             $('.playlist-divider').remove();
@@ -796,6 +797,7 @@ MusicManager.prototype.bindListeners = function() {
             self.setDefaultPlaylist();
             $('#friends-container').hide();
         } else {
+            self.$friendButton.css('color', '#FFD386');
             self._getFriendInfo();
             $('#friends-container').show();
             $('.friend-active').toggleClass('friend-active', false);
@@ -808,13 +810,14 @@ MusicManager.prototype.bindListeners = function() {
     this.$notificationButton.click(function () {
         self.extraContainerShown = !self.extraContainerShown;
         if (!self.extraContainerShown) {
+            self.$notificationButton.css('color', '');
             self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
             self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
             //self.$notificationsList.remove('.list-notification-header');
             $('.list-notification-item').remove();
             $('#notification-container').hide();
-        }
-        else {
+        } else {
+            self.$notificationButton.css('color', '#FFD386');
             $('#notification-container').show();
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
             self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
