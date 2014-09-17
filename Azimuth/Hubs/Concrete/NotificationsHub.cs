@@ -44,12 +44,12 @@ namespace Azimuth.Hubs.Concrete
         {
 
             var user = ConnectedUsers.FirstOrDefault(s => s.UserId == id);
-            if (user != null)
-            {
-                user.ConnectionId = Context.ConnectionId;
-            }
-            else
-            {
+            //if (user != null)
+            //{
+            //    user.ConnectionId = Context.ConnectionId;
+            //}
+            //else
+            //{
                 var userDto = new UserNotificationDto
                 {
                     ConnectionId = Context.ConnectionId,
@@ -57,7 +57,7 @@ namespace Azimuth.Hubs.Concrete
                 };
 
                 ConnectedUsers.Add(userDto);
-            }
+            //}
         }
 
         public override Task OnDisconnected(bool stopCalled)

@@ -806,7 +806,8 @@ MusicManager.prototype.bindListeners = function() {
         if (!self.extraContainerShown) {
             self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
             self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
-            self.$notificationsList.empty();
+            //self.$notificationsList.remove('.list-notification-header');
+            $('.list-notification-item').remove();
         }
         else {
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
@@ -822,7 +823,12 @@ MusicManager.prototype.bindListeners = function() {
                 url: '/api/notifications/followings/' + userId,
                 type: 'GET',
                 success: function (notifications) {
-                    self.showNotifications(notifications);
+                    var $scroll = $('#notifications-container').find('.mCSB_container');
+                    if ($scroll.length == 0) {
+                        self.showNotifications(notifications, false);
+                    } else {
+                        self.showNotifications(notifications, true);
+                    }
                 }
             });
         }
