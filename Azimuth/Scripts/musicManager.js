@@ -136,6 +136,8 @@ var MusicManager = function (manager) {
                 $('.playlist-divider').remove();
                 self.showPlaylists();
                 self.setDefaultPlaylist();
+
+                //$('#playlistsTable').trigger('OnChange');
             }
         });
     };
@@ -738,7 +740,7 @@ MusicManager.prototype.bindListeners = function() {
             }
         });
 
-        $('#createPlaylistModal').trigger('OnPlaylistCreate');
+        //$('#createPlaylistModal').trigger('OnPlaylistCreate');
     });
 
     $('#okPlaylistRenameModalBtn').click(function() {
@@ -757,6 +759,7 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function(playlistName) {
                 $playlist.children('.playlist-title').text('Name: ' + playlistName);
+                $('#playlistsTable').trigger('OnChange');
             }
         });
     });
