@@ -391,11 +391,11 @@ hr {
     cursor: pointer;
 }
 
-#popup-notification a {
+.popup-notification a {
     color: #05457D;
 }
 
-#popup-notification .popup-notification-content {
+.popup-notification .popup-notification-content {
     margin-bottom: 15px;
 }
 
