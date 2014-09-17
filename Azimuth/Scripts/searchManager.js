@@ -45,18 +45,23 @@
         var searchParam = $('#search').val().toLocaleLowerCase();
         $('.vkMusicList').find('.track').remove();
         $('#users').find('.user').remove();
-        if (searchParam != '') {
+        
+        if ($('.searchBtn.btn-primary').text() == 'User') {
+            if (searchParam == '') {
+                searchParam = "All";
+            }
             self.$vkMusicLoadingSpinner.show();
-            if ($('.searchBtn.btn-primary').text() == 'User') {
-                $.ajax({
-                    url: 'api/search/users?searchText=' + searchParam,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (users) {
-                        self._showUsers(users, $('#searchUserTemplate'));
-                    }
-                });
-            } else {
+            $.ajax({
+                url: 'api/search/users?searchText=' + searchParam,
+                type: 'GET',
+                dataType: 'json',
+                success: function (users) {
+                    self._showUsers(users, $('#searchUserTemplate'));
+                }
+            });
+        } else {
+            if (searchParam != '') {
+                self.$vkMusicLoadingSpinner.show();
                 $.ajax({
                     url: 'api/usertracks/globalsearch?searchText=' + searchParam + "&criteria=" + $('.btn-primary').data('search').toLocaleLowerCase(),
                     type: 'GET',

@@ -100,10 +100,18 @@ namespace Azimuth.Services.Concrete
 
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var users = unitOfWork.UserRepository
+                List<User> users;
+                if (searchText == "All")
+                {
+                    users = unitOfWork.UserRepository.GetAll().ToList();
+                }
+                else
+                {
+                    users = unitOfWork.UserRepository
                     .GetAll(user =>
                         (user.Name.FirstName.ToLower() + ' ' + user.Name.LastName.ToLower()).Contains(searchText)
                         || (user.Name.LastName.ToLower() + ' ' + user.Name.FirstName.ToLower()).Contains(searchText)).ToList();
+                }
 
                 Mapper.Map(users, usersDto);
 
