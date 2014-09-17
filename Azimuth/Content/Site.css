@@ -396,13 +396,13 @@ hr {
 }
 
 .popup-notification .popup-notification-content {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .popup-notification-user-photo img{
     float: left;
-    width: 50px;
-    height: 50px;
+    width: 65px;
+    height: 65px;
 }
 
 .popup-notification-header {
@@ -426,11 +426,20 @@ hr {
 
 .popup-notification-user-time span{
     display: block;
+    width: 70%;
+    font-size: 14px;
 }
 
 .right {
     position: absolute;
     right: 0px;
+}
+
+.popup-notification-item hr {
+    margin-bottom: 10px;
+    color: #000;
+    background-color: #000;
+    height: 2px;
 }
 
 #notifications-container {

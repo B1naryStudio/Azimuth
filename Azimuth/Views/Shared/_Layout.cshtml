@@ -83,7 +83,7 @@
     <div class="body-content">
         @RenderBody()
         @*<div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>*@
-        <div id="popup-notification"></div>
+        <div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -144,25 +144,27 @@
             };
 
             function addNotification(notification, natifObject) {
-                var $container = $('<div class="alert alert-warning popup-notification" role="alert"></div>');
                 $('#popup-notification').show();
-                $container
-                    .append('<div class="popup-notification-item">')
-                    .append('<a href="#" class="popup-notification-close right">&times;</a>')
+                var $item = $('<div class="popup-notification-item">');
+                $item.append('<a href="#" class="popup-notification-close right">&times;</a>')
                     .append($('<div class="popup-notification-content"></div>').html(notification))
+                if ($('#popup-notification').children().length > 0)
+                    $item.append('<hr>');
+
+                $('#popup-notification')
+                    .prepend($item)
                     .hide()
                     .appendTo('#popup-notification')
                     .fadeIn(1000);
-
                 $('#popup-notification')
-                        .find('.popup-notification-close')
+                        .find('.popup-notification-close').first()
                         .on('click', function() {
                             closeNotification($(this), natifObject);
                         });
             }
 
             function closeNotification(notifHtml, natifObject) {
-                var $popup = notifHtml.parents('.popup-notification');
+                var $popup = notifHtml.parent('.popup-notification-item');
                 $popup
                     .animate({
                         border: 'none',
@@ -175,8 +177,15 @@
                         queue: false
                     }, 2000, function() {
                         var $container = $(this);
-                        $container.removeAttr('style');
-                        $container.empty();
+                    if ($container.hasClass('popup-notification-item')) {
+                        $container.remove();
+                        $container = $('#popup-notification');
+                        if ($container.children().length == 0) {
+                            $container = $('#popup-notification');
+                            $container.removeAttr('style');
+                            $container.hide();
+                        }
+                    }
                     });
                 if ($('#notifications-container').length > 0) {
                     var template;
