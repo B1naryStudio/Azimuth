@@ -549,4 +549,8 @@ AudioManager.prototype.bindListeners = function() {
     $('#shuffle-btn').on('mousedown', function () {
         self._shuffleTracks();
     });
+
+    $(document).on('mousedown', ':not(.popover)', function () {
+        $('#plus-btn .fa').popover('hide');
+    });
 };

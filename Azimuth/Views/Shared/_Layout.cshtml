@@ -3,7 +3,7 @@
 
 @{
 
-    UserCredential loggedUser = new UserCredential();
+    UserCredential loggedUser = new UserCredential{Id = -1};
     if (Request.IsAuthenticated)
     {
         loggedUser = AzimuthIdentity.Current.UserCredential;   
