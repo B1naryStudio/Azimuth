@@ -136,6 +136,7 @@
                 $('.playlist-divider').remove();
                 self.manager.showPlaylists();
                 self.manager.setDefaultPlaylist();
+                $('#playlistsTable').trigger('OnChange');
             }
         });
     };

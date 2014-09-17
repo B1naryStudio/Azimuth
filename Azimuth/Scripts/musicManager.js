@@ -135,6 +135,8 @@ var MusicManager = function (manager) {
                 $('.playlist-divider').remove();
                 self.showPlaylists();
                 self.setDefaultPlaylist();
+
+                //$('#playlistsTable').trigger('OnChange');
             }
         });
     };
@@ -744,7 +746,7 @@ MusicManager.prototype.bindListeners = function() {
             }
         });
 
-        $('#createPlaylistModal').trigger('OnPlaylistCreate');
+        //$('#createPlaylistModal').trigger('OnPlaylistCreate');
     });
 
     $('#okPlaylistRenameModalBtn').click(function() {
@@ -763,6 +765,7 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function(playlistName) {
                 $playlist.children('.playlist-title').text('Name: ' + playlistName);
+                $('#playlistsTable').trigger('OnChange');
             }
         });
     });
@@ -938,8 +941,12 @@ MusicManager.prototype.bindListeners = function() {
     });
 
     $(self.audioManager).on('OnAddToPlaylist', function () {
-        //self.showPlaylists(); //TODO Rework update (if it's necessary)
-        //self.setDefaultPlaylist();
+        if (self.$extraContainer.hasClass('col-md-0')) {
+            self.showPlaylists();
+            self.setDefaultPlaylist();
+            //$('#plus-btn .fa').popover('hide');
+            //self.audioManager._getPlaylistsForPopover();
+        }
     });
 
     $('#createPlaylistModal').on('hidden.bs.modal', function () {

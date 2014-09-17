@@ -11,6 +11,12 @@
 
     this.onProgressBarClick = false;
 
+    $('#plus-btn .fa').popover({
+        placement: 'bottom',
+        container: 'body',
+        html: true
+    });
+
     this._getPlaylistsForPopover = function() {
         $.ajax({
             url: 'api/playlists/',
@@ -18,50 +24,34 @@
             dataType: 'json',
             success: function(playlists) {
                 var addMenu = $('<div>');
-
+                
                 if (playlists.length != 0) {
                     $(playlists).each(function() {
                         addMenu.append($('#popoverPlaylistTemplate').tmpl(this));
                     });
-                    
-                    $('#plus-btn .fa').popover({
-                        placement: 'bottom',
-                        container: 'body',
-                        html: true,
-                        content: function () {
-                            return addMenu.html();
-                        }
-                    });
-                    var popover = $('#plus-btn .fa').data('bs.popover');
-                    popover.setContent();
-                    popover.$tip.addClass(popover.options.placement);
 
-                    $('#plus-btn .fa').on('click', function() {
-                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                    $('#plus-btn .fa').attr('data-content', addMenu.html());
+                    //var popover = $('#plus-btn .fa').data('bs.popover');
+                    //popover.$tip.addClass(popover.options.placement);
+                    //$('#plus-btn .fa').popover('hide');
+
+                    $('#plus-btn .fa').bind('click', function() {
+                        $('.popoverPlaylistBtn').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
                             self._copyTrackToPlaylist(self.$currentTrack, playlistId);
                             $('#plus-btn .fa').popover('hide');
-
-                            $(self).trigger('OnAddToPlaylist');
                         });
                     });
                 } else {
-                    addMenu.append('<div class="btn btn-default popoverPlaylistBtn">Add new playlist</div>');
+                    addMenu.append('<div id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</div>');
                     
-                    $('#plus-btn .fa').popover({
-                        placement: 'bottom',
-                        container: 'body',
-                        html: true,
-                        content: function () {
-                            return addMenu.html();
-                        }
-                    });
+                    $('#plus-btn .fa').attr('data-content', addMenu.html());
                     var popover = $('#plus-btn .fa').data('bs.popover');
-                    popover.setContent();
                     popover.$tip.addClass(popover.options.placement);
+                    $('#plus-btn .fa').popover('hide');
 
-                    $('#plus-btn .fa').on('click', function() {
-                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                    $('#plus-btn .fa').bind('click', function () {
+                        $('#popoverPlaylistBtn').click(function() {
                             $('#createPlaylistModal').modal({
                                 show: true
                             });
@@ -127,7 +117,10 @@
                 "PlaylistId": playlistId,
                 "TrackInfos": tracks
             }),
-            contentType: 'application/json'
+            contentType: 'application/json',
+            success: function() {
+                $(self).trigger('OnAddToPlaylist');
+            }
         });
     };
 
@@ -535,10 +528,11 @@ AudioManager.prototype.bindListeners = function() {
         }
     });
 
-    $('#createPlaylistModal').on('OnPlaylistCreate', function () {
+    $('#playlistsTable').on('OnChange', function () {
+        self._getPlaylistsForPopover();
         //$('#plus-btn .fa').popover('hide');
         //$('.popover').remove();
-        self._getPlaylistsForPopover();
+        //setTimeout(function() { self._getPlaylistsForPopover(); }, 5000);
     });
 
     $('#repeat-btn').on('mousedown', function () {
