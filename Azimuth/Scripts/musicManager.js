@@ -923,8 +923,12 @@ MusicManager.prototype.bindListeners = function() {
     });
 
     $(self.audioManager).on('OnAddToPlaylist', function () {
-        //self.showPlaylists(); //TODO Rework update (if it's necessary)
-        //self.setDefaultPlaylist();
+        if (self.$extraContainer.hasClass('col-md-0')) {
+            self.showPlaylists();
+            self.setDefaultPlaylist();
+            //$('#plus-btn .fa').popover('hide');
+            //self.audioManager._getPlaylistsForPopover();
+        }
     });
 
     $('#createPlaylistModal').on('hidden.bs.modal', function () {
