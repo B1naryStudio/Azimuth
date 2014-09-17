@@ -433,6 +433,12 @@ hr {
     right: 0px;
 }
 
+#notifications-container {
+    height: 93%;
+    width: 100%;
+    display: none;
+}
+
 .list-notification-item a {
     color: #05457D;
 }
