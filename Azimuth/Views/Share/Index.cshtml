@@ -7,24 +7,25 @@
     <div>
         @Html.Partial("_AudioPlayer")
     </div>
-    @if (Model != null)
-    {
-        foreach (var track in Model)
+    <div id="musicList-scrollable">
+        @if (Model != null)
         {
-            <div class="tableRow draggable-item track">
-                <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
-                <div class="track-description" data-title="${artist} ${title}">
-                    <div class="track-info"><a href="#" data-toggle="modal" data-target="#infoModal"><span class="track-artist">@track.Artist</span> - <span class="track-title">@track.Name</span></a></div>
+            foreach (var track in Model)
+            {
+                <div class="tableRow draggable-item track">
+                    <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
+                    <div class="track-description" data-title="${artist} ${title}">
+                        <div class="track-info"><a href="#" data-toggle="modal" data-target="#infoModal"><span class="track-artist">@track.Artist</span> - <span class="track-title">@track.Name</span></a></div>
+                    </div>
+                    <div class="track-duration">@track.Duration</div>
+                    <div style="display: none" class="track-url">@track.Url</div>
+                    <div style="display: none" class="trackId">@track.Id</div>
+                    <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
+                    <div style="display: none" class="ownerId">@track.OwnerId</div>
                 </div>
-                <div class="track-duration">@track.Duration</div>
-                <div style="display: none" class="track-url">@track.Url</div>
-                <div style="display: none" class="trackId">@track.Id</div>
-                <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
-                <div style="display: none" class="ownerId">@track.OwnerId</div>
-            </div>
-        }    
-    }
-        
+            }
+        }
+    </div>
 </div>
 
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">

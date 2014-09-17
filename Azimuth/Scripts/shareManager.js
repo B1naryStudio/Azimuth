@@ -87,4 +87,13 @@ ShareManager.prototype.bindListeners = function () {
         $('#infoModal .modal-body').text('');
         $('#listenTopBtn').attr('disabled', true);
     });
+
+    $('#musicList-scrollable').mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        scrollInertia: 0,
+        autoHideScrollbar: true,
+        advanced: { updateOnSelectorChange: "true" }
+    });
 };

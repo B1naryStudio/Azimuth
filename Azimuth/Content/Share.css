@@ -1,3 +1,8 @@
 ﻿#musicList {
     margin: 5% 20%;
+    height: 70%;
+}
+
+#musicList-scrollable {
+    height: 100%;
 }
