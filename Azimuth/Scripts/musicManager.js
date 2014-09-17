@@ -43,6 +43,7 @@ var MusicManager = function (manager) {
     this.$vkMusicTitle = $('#vkMusic-header-title');
     this.$playlistsTitle = $('#playlist-header-title');
     this.$errorModal = $('#errorModal');
+    this.$messageContainer = $('#message-container');
 
     this._getTracks = function (plId) {
         var $this = $(this);
@@ -282,13 +283,14 @@ var MusicManager = function (manager) {
                         playlist.Duration = self._toFormattedTime(playlist.Duration, true);
                         playlist.readonly = true;
                         self.playlistsGlobal.push(playlist);
+                        self.showPlaylists(playlists);
                     }
                 } else {
                     playlists = [];
-                    $currentItem.children('.send-message-btn').show();
+                    self.showPlaylists(playlists);
+                    self.$messageContainer.show();
                 }
                 $('.playlist-divider').remove();
-                self.showPlaylists(playlists);
                 self.setDefaultPlaylist(self.currentFriend);
             }
         });
@@ -415,19 +417,25 @@ var MusicManager = function (manager) {
 
     this._sendMessage = function(e) {
         var $this = $(this);
-        var friendId = $this.siblings('.friend-id').html();
-        VK.init({
-            apiId: "4469725"
+        var friendId = $('.friend-active').children('.friend-id').html();
+        var text = $this.siblings('textarea').text();
+        
+
+        VK.Auth.getLoginStatus(function (response) {
+            if (response.session) {
+                /* Авторизованный в Open API пользователь */
+            } else {
+                VK.Auth.login(
+                    null,
+                    VK.access.FRIENDS | VK.access.WALL
+                );
+            }
         });
-        VK.Auth.login(
-            null,
-            VK.access.FRIENDS | VK.access.WALL
-        );
 
         VK.api('wall.post', {
                 owner_id: friendId,
-                message: "new message",
-                attachments: "photo261844377_336279002,http://localhost:44300/"
+                message: text,
+                attachments: "photo268940215_338836002,http://localhost:44300/"
         }, function (data) {
         });
 
@@ -550,7 +558,6 @@ MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
     });
 
     $('.friend').click(self._setFriendDefaultPlaylist);
-    $('.send-message-btn').click(self._sendMessage);
 };
 
 MusicManager.prototype.showPlaylistTracks = function (tracks) {
@@ -561,6 +568,7 @@ MusicManager.prototype.showPlaylistTracks = function (tracks) {
 
 MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
+    self.$messageContainer.hide();
     $('.playlist').remove();
     self.playlists = playlists;
     self.$playlistsLoadingSpinner.show();
@@ -729,6 +737,8 @@ MusicManager.prototype.bindListeners = function() {
         self.$searchPlaylistInput.trigger('input');
     });
 
+    $('.send-message-btn').click(self._sendMessage);
+
     $('#okPlaylistCreateModalBtn').click(function () {
 
         $('#createPlaylistModal').modal('hide');
@@ -804,7 +814,6 @@ MusicManager.prototype.bindListeners = function() {
         self._getFriendInfo();
         $('#friends-container').show();
         $('.friend-active').toggleClass('friend-active', false);
-        $('.send-message-btn').hide();
         self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
         self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
         self.friendsListOpen = true;
@@ -813,6 +822,7 @@ MusicManager.prototype.bindListeners = function() {
     this.$friendButton.click(function () {
         var delay = 0;
         self.extraContainerShown = !self.extraContainerShown;
+
         if (!self.extraContainerShown && !self.notificationListOpen) {
             self._collapseFriendsPanel();
         } else {
