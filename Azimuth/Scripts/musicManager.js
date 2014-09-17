@@ -34,7 +34,6 @@ var MusicManager = function (manager) {
     this.$searchTrackInput = $('#searchTrackName');
     this.$vkMusicTable = $('#vkMusicTable').parent();
     this.$createNewPlaylistLbl = $('#create-playlist-lbl');
-    this.$getFriendInfoBtn = $('#friends-button');
     this.$friendsLoadingSpinner = $('#friends-header-spinner');
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$playlistsLoadingSpinner = $('#playlist-header-spinner');
@@ -785,8 +784,8 @@ MusicManager.prototype.bindListeners = function() {
             $('.playlist-divider').remove();
             self.showPlaylists();
             self.setDefaultPlaylist();
-            self.$friendList.empty();
         } else {
+            self._getFriendInfo();
             $('.friend-active').toggleClass('friend-active', false);
             $('.send-message-btn').hide();
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
@@ -900,7 +899,7 @@ MusicManager.prototype.bindListeners = function() {
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
     };
 
-    this.$getFriendInfoBtn.click(function(e) {
+    this._getFriendInfo = function() {
         if (self.$friendsBody.is(':visible')) {
             self.$friendsBody.hide('slow');
         } else if (self.$friendList.children().length == 0) {
@@ -915,7 +914,7 @@ MusicManager.prototype.bindListeners = function() {
         } else {
             self.$friendsBody.show('slow');
         }
-    });
+    };
 
     $('#infoModal').on('hidden.bs.modal', function() {
         $('#infoModal .modal-body').text('');
