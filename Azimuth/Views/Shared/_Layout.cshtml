@@ -110,7 +110,7 @@
         $(document).ready(function() {
             // Declare a proxy to reference the hub.
             var notificationsHub = $.connection.notificationsHub;
-            var id = @loggedUserId;
+            var id = @loggedUser.Id
             // Start Hub
             $.connection.hub.start().done(function() {
                 notificationsHub.server.connect(id);
@@ -120,6 +120,7 @@
 
             notificationsHub.client.newNotification = function(notification) {
                 console.log(notification);
+                var self = this;
                 var $template;
                 if (notification.NotificationType == 0 ||
                     notification.NotificationType == 1 ||
@@ -131,17 +132,17 @@
                 } else {
                     $template = $('#popupUserNotificationTemplate');
                 }
-
+                var notifObject = notification;
                 var object = $template.tmpl(notification);
                 clearTimeout(timerId);
                 timerId = setTimeout(function() {
-                    closeNotification($(object));
+                    closeNotification($(object), self.notifObject);
                 }, 5000);
 
-                addNotification(object);
+                addNotification(object, notifObject);
             };
 
-            function addNotification(notification) {
+            function addNotification(notification, natifObject) {
                 var $container = $('#popup-notification');
                 if ($container.children().length == 0) {
                     $('#popup-notification')
@@ -149,11 +150,10 @@
 
                     $('#popup-notification')
                         .find('.popup-notification-close')
-                        .on('click', function () {
-                            closeNotification($(this));
+                        .on('click', function() {
+                            closeNotification($(this), natifObject);
                         });
                 }
-
 
 
                 $('#popup-notification')
@@ -163,8 +163,8 @@
                     .fadeIn(1000);
             }
 
-            function closeNotification(notif) {
-                var $popup = notif.parents('.popup-notification');
+            function closeNotification(notifHtml, natifObject) {
+                var $popup = notifHtml.parents('.popup-notification');
                 $popup
                     .animate({
                         border: 'none',
@@ -175,14 +175,26 @@
                         paddingBottom: 0,
                         paddingTop: 0,
                         queue: false
-                    }, 2000, function () {
-                    var $container = $(this);
-                    $container.removeAttr('style');
-                    $container.empty();
-                        ////////////////////////////////////
-
-                        //////////////////////////////////
+                    }, 2000, function() {
+                        var $container = $(this);
+                        $container.removeAttr('style');
+                        $container.empty();
                     });
+                if ($('#notifications-container').length > 0) {
+                    var template;
+                    if (natifObject.NotificationType == 0 ||
+                        natifObject.NotificationType == 1 ||
+                        natifObject.NotificationType == 8 ||
+                        natifObject.NotificationType == 9 ||
+                        natifObject.NotificationType == 10 ||
+                        natifObject.NotificationType == 11) {
+                        template = $('#playlistNotificationTemplate');
+                    } else {
+                        template = $('#userNotificationTemplate');
+                    }
+                    var object = template.tmpl(natifObject);
+                    $('#notifications-container').prepend(object);
+                }
                 clearTimeout(timerId);
             }
         });
