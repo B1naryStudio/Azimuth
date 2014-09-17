@@ -1,4 +1,9 @@
 ﻿$(document).ready(function () {
+
+    VK.init({
+        apiId: "4469725"
+    });
+
     var volumeSlider = new SliderController({
         sliderSelector: '#volumeSlider', 
         sliderBarClass: 'volumeBar', 

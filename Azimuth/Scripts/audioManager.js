@@ -46,9 +46,9 @@
                     addMenu.append('<div id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</div>');
                     
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
-                    var popover = $('#plus-btn .fa').data('bs.popover');
-                    popover.$tip.addClass(popover.options.placement);
-                    $('#plus-btn .fa').popover('hide');
+                    //var popover = $('#plus-btn .fa').data('bs.popover');
+                    //popover.$tip.addClass(popover.options.placement);
+                    //$('#plus-btn .fa').popover('hide');
 
                     $('#plus-btn .fa').bind('click', function () {
                         $('#popoverPlaylistBtn').click(function() {
