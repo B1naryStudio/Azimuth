@@ -16,6 +16,7 @@
     {
         playlistName = Model.Name;
     }
+    var genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + ", "));
     var duration = Convert.ToDecimal(Model.Duration);
     var hours = Math.Floor(duration / (60 * 60));
     var minutes = Math.Floor(duration / 60) - (60 * hours);
@@ -25,33 +26,32 @@
                                 + ((seconds >= 10) ? seconds.ToString() : "0" + seconds);   
 }
 
-<div class="playlist-plated">
+<div class="playlist-plated" data-genres="@genres">
     <div id="playlist-header-spinner" class="spinner loader"></div>
     <div class="playlist-plated-info">
         <div class="playlistName">@playlistName</div>
         <div class="creator">
             @Html.ActionLink(Model.Creator.Name, "Index", "UserProfile", new { id = Model.Creator.UserId }, null)
         </div>
-        
+
         @if (Model.Genres.Any())
         {
-            var genres = Model.Genres.Aggregate("", (current, genre) => current + (@genre + ", "));
             genres = genres.Remove(genres.Length - 2);
-            <div class="genres">@genres</div>   
+            <div class="genres">@genres</div>
         }
         <div class="duration pull-left">
             <i class="fa fa-play"></i>@formattedDuration
         </div>
         <div class="playlistFollowers pull-left">
-            <i class="fa fa-heart"></i>@Model.PlaylistLikes 
-            <i class="fa fa-star"></i>@Model.PlaylistFavourited 
+            <i class="fa fa-heart"></i>@Model.PlaylistLikes
+            <i class="fa fa-star"></i>@Model.PlaylistFavourited
             <i class="fa fa-headphones"></i> @Model.PlaylistListened
         </div>
 
         <input type="hidden" class="playlistId" value="@Model.Id.ToString()" />
-        <input type="hidden" class="likesCount" value="@Model.PlaylistLikes.ToString()"/>
-        <input type="hidden" class="favouritesCount" value="@Model.PlaylistFavourited.ToString()"/>
-        
+        <input type="hidden" class="likesCount" value="@Model.PlaylistLikes.ToString()" />
+        <input type="hidden" class="favouritesCount" value="@Model.PlaylistFavourited.ToString()" />
+
         @if (Request.IsAuthenticated)
         {
             var curPlaylistFollowData = temp.FirstOrDefault(s => s.Playlist.Id == Model.Id);
