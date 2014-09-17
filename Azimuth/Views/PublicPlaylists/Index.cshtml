@@ -77,6 +77,7 @@
     <script type="text/javascript" src="../../Scripts/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="../../Scripts/sliderController.js"></script>
     <script type="text/javascript" src="../../Scripts/contextMenu.js"></script>
+    <script type="text/javascript" src="../../Scripts/progressBar.js"></script>
     
     <script>
         $(document).ready(function() {
@@ -158,14 +159,17 @@
                 }
             });
 
-            var progressSlider = new SliderController({
-                sliderSelector: '#progressSlider',
-                sliderBarClass: 'progressBar',
-                sliderClass: 'progress',
-                backgroundSliderClass: 'cache',
+            var volumeSlider = new SliderController({
+                sliderSelector: '#volumeSlider',
+                sliderBarClass: 'volumeBar',
+                sliderClass: 'volume',
                 dirrection: 'horizontall'
             });
-            this.audioManager = new AudioManager(null, progressSlider);
+            var progressBar = new ProgressBar();
+            progressBar.bindListeners();
+
+            this.audioManager = new AudioManager(volumeSlider, progressBar);
+            //audioManager.bindListeners();
 
             var ctxMenu = new ContextMenu();
             var contextMenuActions = [
