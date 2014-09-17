@@ -14,6 +14,7 @@ using Azimuth.Services.Interfaces;
 using Azimuth.Shared.Enums;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using NHibernate.Action;
 using WebGrease.Css.Extensions;
 using Claim = System.Security.Claims.Claim;
 using ClaimTypes = System.Security.Claims.ClaimTypes;
@@ -255,7 +256,7 @@ namespace Azimuth.Services.Concrete
                 var _playlistRepository = _unitOfWork.GetRepository<Playlist>();
                 try
                 {
-                    var user = _userRepository.GetOne(x => x.Email == AzimuthIdentity.Current.UserCredential.Email);
+                    var user = _userRepository.GetOne(x => x.Id == AzimuthIdentity.Current.UserCredential.Id);
                     var socialNetwork = _snRepository.GetOne(x => x.Name == provider);
                     if (user == null || socialNetwork == null)
                     {
@@ -263,7 +264,11 @@ namespace Azimuth.Services.Concrete
                             string.Format("Can't find user or social network (email: {0}, SN name: {1}",
                                 AzimuthIdentity.Current.UserCredential.Email, provider));
                     }
-                    _userSNRepository.Remove(user.Id, socialNetwork.Id);
+                    var entity =
+                        _userSNRepository.GetOne(usn => usn.User.Id == AzimuthIdentity.Current.UserCredential.Id && usn.SocialNetwork.Id == socialNetwork.Id);
+
+                    user.SocialNetworks.Remove(entity);
+                    _userSNRepository.DeleteItem(entity);
 
                     _unitOfWork.Commit();
                 }
