@@ -354,24 +354,27 @@ hr {
     height: 50px;
 }
 
-
-
-
-
 #notifications-container {
     display: none;
     height: 93%;
     width: 100%;
 }
 
-.popup-notification {
+#popup-notification {
     position: absolute;
     bottom: 0px;
     right: 5px;
+}
+
+.popup-notification {
     width: 320px;
     z-index: 10;
     font-family: Times New Roman;
     background: #000000;
+    -webkit-box-shadow: 5px 5px 6px -4px #222;
+    -ms-box-shadow: 5px 5px 6px -4px #222;
+    box-shadow: 5px 5px 6px -4px #222;
+    -ms-opacity: 0.77;
     opacity: 0.77;
     display: none;
 }
@@ -384,9 +387,12 @@ hr {
     font-size: 40px;
     font-weight: bold;
     line-height: 18px;
-    color: #F9F4EA;
-    /*text-shadow: 0 1px 0 #ffffff;*/
+    color: #000000;
+    -ms-opacity: 0.2;
     opacity: 0.2;
+    -webkit-filter: alpha(opacity=20);
+    -moz-filter: alpha(opacity=20);
+    -o-filter: alpha(opacity=20);
     filter: alpha(opacity=20);
     text-decoration: none;
     padding-right: 5px;
@@ -400,7 +406,11 @@ a.popup-notification-close {
 .popup-notification-close:hover {
     color: #ffffff;
     text-decoration: none;
+    -ms-opacity: 0.4;
     opacity: 0.4;
+    -webkit-filter: alpha(opacity=40);
+    -moz-filter: alpha(opacity=40);
+    -o-filter: alpha(opacity=40);
     filter: alpha(opacity=40);
     cursor: pointer;
 }
@@ -418,13 +428,13 @@ a.popup-notification-close {
 .popup-notification-header {
     height: 50px;
     font-size: 19px;
-    color: #F9851F;
+    color: #ffffff;
     display: -webkit-inline-box;
 }
 
 .popup-notification-body {
     font-size: 16px;
-    color: #F9851F;
+    color: #ffffff;
     margin-top: 15px;
 }
 
@@ -439,11 +449,6 @@ a.popup-notification-close {
     width: 70%;
     font-size: 14px;
 }
-
-/*.right {
-    position: absolute;
-    right: 0px;
-}*/
 
 .popup-notification-item hr {
     margin-bottom: 10px;
