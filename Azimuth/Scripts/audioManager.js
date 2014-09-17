@@ -307,7 +307,8 @@ AudioManager.prototype.pause = function() {
 AudioManager.prototype.stop = function() {
     var self = this;
     self.audio.pause();
-    self.audio.currentTime = 0;
+    if (self.audio.currentTime > 0)
+        self.audio.currentTime = 0;
 };
 
 AudioManager.prototype.setVolume = function(value) {

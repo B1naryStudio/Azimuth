@@ -269,7 +269,8 @@ namespace Azimuth.Services.Concrete
             var findInVk = new List<TrackData.Audio>();
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                var socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                //var socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                UserSocialNetwork socialNetworkData;
                 _socialNetworkApi = SocialNetworkApiFactory.GetSocialNetworkApi("Vkontakte");
                 var trackRepository = unitOfWork.GetRepository<Track>();
 
@@ -287,6 +288,21 @@ namespace Azimuth.Services.Concrete
                         tracks = trackRepository.Get(track => track.Name.ToLower().Contains(searchText)).ToList();
                         break;
                     case "vkontakte":
+                        if (AzimuthIdentity.Current.UserCredential.SocialNetworkName != "Vkontakte")
+                        {
+                            var id = unitOfWork.UserRepository.Get(user =>
+                                user.ScreenName == "id268940215" && user.Name.FirstName == "Azimuth" &&
+                                user.Name.LastName == "Azimuth").FirstOrDefault().Id;
+
+                            var admin =
+                                unitOfWork.UserRepository.GetFullUserData(id);
+                            socialNetworkData =
+                                admin.SocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Vkontakte");
+                        }
+                        else
+                        {
+                            socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
+                        }
                         findInVk =
                             await _socialNetworkApi.SearchTracks(searchText, socialNetworkData.AccessToken, 0, 0, 20);
                         if (findInVk.Count > 0)
@@ -303,6 +319,7 @@ namespace Azimuth.Services.Concrete
                         }
                         break;
                     case "myvktracks":
+                        socialNetworkData = GetSocialNetworkData(unitOfWork, "Vkontakte");
                         findInVk =
                             await
                                 _socialNetworkApi.GetTracks(socialNetworkData.ThirdPartId, socialNetworkData.AccessToken);
