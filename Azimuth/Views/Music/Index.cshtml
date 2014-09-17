@@ -30,7 +30,13 @@
             <input class="form-control" id="searchPlaylistName" placeholder="Enter playlist name for search">
             <div id="playlist-header-spinner" class="spinner loader"></div>
             <div id="scrollable-playlist">
-                <div class="list accordion" id="playlistsTable"></div>
+                <div class="list accordion" id="playlistsTable">
+                    
+                </div>
+                <div id="message-container">
+                    <textarea class="form-control input-lg" style="max-width: 100%">Hello! I want to invite you to our website</textarea>
+                    <button class="btn btn-success send-message-btn"><i class="glyphicon glyphicon-ok"></i></button>
+                </div>
             </div>
             <i id="create-playlist-lbl" style="display: none">Press enter to create new playlist</i>
         </div>
@@ -151,7 +157,8 @@
             </div>
         </div>
     </div>
-
+    
+    
 </div>
     @section scripts
 {
@@ -224,7 +231,6 @@
                         <div>${last_name}</div>
                         <div>${first_name}</div>
                 </div>
-                <button class="btn send-message-btn"><i class="fa fa-plus"></i></button>
                 <div style="display: none" class="friend-id">${id}</div>
             </div>
         </script>
