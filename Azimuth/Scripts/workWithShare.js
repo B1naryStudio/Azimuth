@@ -5,15 +5,10 @@
         sliderClass: 'volume',
         dirrection: 'horizontall'
        });
-    var progressSlider = new SliderController({
-        sliderSelector: '#progressSlider',
-        sliderBarClass: 'progressBar',
-        sliderClass: 'progress',
-        backgroundSliderClass: 'cache',
-        dirrection: 'horizontall'
-    });
+    var progressBar = new ProgressBar();
+    progressBar.bindListeners();
 
-    var audioManager = new AudioManager(volumeSlider, progressSlider);
+    var audioManager = new AudioManager(volumeSlider, progressBar);
     var manager = new ShareManager(audioManager);
 
     manager.bindListeners();
