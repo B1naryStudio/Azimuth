@@ -412,6 +412,13 @@ var MusicManager = function (manager) {
     this._sendMessage = function(e) {
         var $this = $(this);
         var friendId = $this.siblings('.friend-id').html();
+        VK.init({
+            apiId: "4469725"
+        });
+        VK.Auth.login(
+            null,
+            VK.access.FRIENDS | VK.access.WALL
+        );
 
         VK.api('wall.post', {
                 owner_id: friendId,
