@@ -83,7 +83,7 @@
     <div class="body-content">
         @RenderBody()
         @*<div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>*@
-        <div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>
+        <div id="popup-notification"></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -145,25 +145,30 @@
 
             function addNotification(notification, natifObject) {
                 $('#popup-notification').show();
-                var $item = $('<div class="popup-notification-item">');
+                var $item = $('<div class="popup-notification-item alert alert-warning popup-notification" role="alert">');
                 $item.append('<a href="#" class="popup-notification-close right">&times;</a>')
                     .append($('<div class="popup-notification-content"></div>').html(notification));
-                if ($('#popup-notification').children().length > 0)
-                    $item.append('<hr>');
+                //if ($('#popup-notification').children().length > 0)
+                //    $item.append('<hr>');
+
 
                 $('#popup-notification')
                     .prepend($item)
                     .hide()
-                    .appendTo('#popup-notification')
+                    //.appendTo('#popup-notification')
                     .fadeIn(1000);
+
+                $('#popup-notification').children('.popup-notification-item').show();
+
+
                 $('#popup-notification')
                         .find('.popup-notification-close').first()
                         .on('click', function() {
                             closeNotification($(this).parent('.popup-notification-item'), natifObject);
                         });
-                setTimeout(function () {
-                    closeNotification($item, natifObject);
-                }, 5000);
+                //setTimeout(function () {
+                //    closeNotification($item, natifObject);
+                //}, 5000);
             }
 
             function closeNotification(notifHtml, natifObject) {
