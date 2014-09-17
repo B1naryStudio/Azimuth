@@ -193,7 +193,7 @@ namespace Azimuth.Services.Concrete
         public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider)
         {
             string accessToken;
-            if (AzimuthIdentity.Current == null)
+            if (AzimuthIdentity.Current == null || AzimuthIdentity.Current.UserCredential.SocialNetworkName != "Vkontakte")
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
@@ -466,6 +466,16 @@ namespace Azimuth.Services.Concrete
 
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
+                if (provider != "Vkontakte")
+                {
+                    var id = unitOfWork.UserRepository.Get(user =>
+                           user.ScreenName == "id268940215" && user.Name.FirstName == "Azimuth" &&
+                           user.Name.LastName == "Azimuth").FirstOrDefault().Id;
+                    var admin =
+                        unitOfWork.UserRepository.GetFullUserData(id);
+                    var accessToken =
+                        admin.SocialNetworks.FirstOrDefault(sn => sn.SocialNetwork.Name == "Vkontakte").AccessToken;
+                }
                 var socialNetworkData = GetSocialNetworkData(unitOfWork, provider);
                 var searchedTracks =
                     await _socialNetworkApi.SearchTracksForLyric(tracksDescription, socialNetworkData.AccessToken);

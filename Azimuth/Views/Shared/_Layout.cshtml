@@ -82,6 +82,7 @@
     </div>
     <div class="body-content">
         @RenderBody()
+        @*<div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>*@
         <div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>
     </div>
 
@@ -136,35 +137,34 @@
                 var object = $template.tmpl(notification);
                 clearTimeout(timerId);
                 timerId = setTimeout(function() {
-                    closeNotification($(object), self.notifObject);
+                    closeNotification($(object), notifObject);
                 }, 5000);
 
                 addNotification(object, notifObject);
             };
 
             function addNotification(notification, natifObject) {
-                var $container = $('#popup-notification');
-                if ($container.children().length == 0) {
-                    $('#popup-notification')
-                        .append('<a href="#" class="popup-notification-close right">&times;</a>');
-
-                    $('#popup-notification')
-                        .find('.popup-notification-close')
-                        .on('click', function() {
-                            closeNotification($(this), natifObject);
-                        });
-                }
-
+                $('#popup-notification').show();
+                var $item = $('<div class="popup-notification-item">');
+                $item.append('<a href="#" class="popup-notification-close right">&times;</a>')
+                    .append($('<div class="popup-notification-content"></div>').html(notification))
+                if ($('#popup-notification').children().length > 0)
+                    $item.append('<hr>');
 
                 $('#popup-notification')
-                    .append($('<div class="popup-notification-content"></div>').html(notification))
+                    .prepend($item)
                     .hide()
                     .appendTo('#popup-notification')
                     .fadeIn(1000);
+                $('#popup-notification')
+                        .find('.popup-notification-close').first()
+                        .on('click', function() {
+                            closeNotification($(this), natifObject);
+                        });
             }
 
             function closeNotification(notifHtml, natifObject) {
-                var $popup = notifHtml.parents('.popup-notification');
+                var $popup = notifHtml.parent('.popup-notification-item');
                 $popup
                     .animate({
                         border: 'none',
@@ -177,8 +177,15 @@
                         queue: false
                     }, 2000, function() {
                         var $container = $(this);
-                        $container.removeAttr('style');
-                        $container.empty();
+                    if ($container.hasClass('popup-notification-item')) {
+                        $container.remove();
+                        $container = $('#popup-notification');
+                        if ($container.children().length == 0) {
+                            $container = $('#popup-notification');
+                            $container.removeAttr('style');
+                            $container.hide();
+                        }
+                    }
                     });
                 if ($('#notifications-container').length > 0) {
                     var template;
@@ -193,7 +200,7 @@
                         template = $('#userNotificationTemplate');
                     }
                     var object = template.tmpl(natifObject);
-                    $('#notifications-container').prepend(object);
+                    $('#notifications-container').find('.mCSB_container').prepend(object);
                 }
                 clearTimeout(timerId);
             }
