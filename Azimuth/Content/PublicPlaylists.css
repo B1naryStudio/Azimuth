@@ -1,6 +1,8 @@
 ﻿#barplaylistArea {
 }
-#playlistsArea {
+#playlistsArea ul li a.selected {
+    text-decoration: none;
+    background-color: #eeeeee; 
 }
 #playlist-name {
     font-size: 25px;

@@ -135,11 +135,14 @@
                             $('#genres > #genres-list').append($item);
                         }
                     }
-                    $('.genre').click(function(event) {
+                    var genresList = $('.genre');
+                    genresList.click(function (event) {
+                        genresList.toggleClass('selected', false);
+                        $(this).toggleClass('selected', true);
                         var genre = $(this).text();
                         var playlistTiles = $('.playlist-plated');
                         if (genre === 'All') {
-                            playlistTiles.show();
+                            playlistTiles.fadeIn();
                         } else {
                             playlistTiles.hide();
                             playlistTiles.filter(function (index, item) {
@@ -160,7 +163,6 @@
             progressBar.bindListeners();
 
             this.audioManager = new AudioManager(volumeSlider, progressBar);
-            //audioManager.bindListeners();
 
             var ctxMenu = new ContextMenu();
             var contextMenuActions = [
