@@ -260,6 +260,11 @@ AudioManager.prototype.refreshTracks = function() {
     self.tracksGlobal = $('.vkMusicList').children('.track').children('.track-url');
 };
 
+AudioManager.prototype.createProgressBar = function () {
+    var self = this;
+    self.progressSlider.createElements();
+};
+
 AudioManager.prototype.refreshPlaylistTracks = function() {
     var self = this;
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');
