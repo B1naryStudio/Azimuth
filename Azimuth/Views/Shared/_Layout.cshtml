@@ -82,7 +82,8 @@
     </div>
     <div class="body-content">
         @RenderBody()
-        <div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>
+        @*<div id="popup-notification" class="alert alert-warning popup-notification" role="alert"></div>*@
+        <div id="popup-notification"></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -143,24 +144,21 @@
             };
 
             function addNotification(notification, natifObject) {
-                var $container = $('#popup-notification');
-                if ($container.children().length == 0) {
-                    $('#popup-notification')
-                        .append('<a href="#" class="popup-notification-close right">&times;</a>');
-
-                    $('#popup-notification')
-                        .find('.popup-notification-close')
-                        .on('click', function() {
-                            closeNotification($(this), natifObject);
-                        });
-                }
-
-
-                $('#popup-notification')
+                var $container = $('<div class="alert alert-warning popup-notification" role="alert"></div>');
+                $('#popup-notification').show();
+                $container
+                    .append('<div class="popup-notification-item">')
+                    .append('<a href="#" class="popup-notification-close right">&times;</a>')
                     .append($('<div class="popup-notification-content"></div>').html(notification))
                     .hide()
                     .appendTo('#popup-notification')
                     .fadeIn(1000);
+
+                $('#popup-notification')
+                        .find('.popup-notification-close')
+                        .on('click', function() {
+                            closeNotification($(this), natifObject);
+                        });
             }
 
             function closeNotification(notifHtml, natifObject) {
