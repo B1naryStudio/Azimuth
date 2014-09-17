@@ -34,16 +34,30 @@
 .track-info {
     display: block;
     float: left;
-    width: 70%;
+    width: 80%;
     white-space: nowrap;
     overflow: hidden;
     -moz-text-overflow: ellipsis;
     text-overflow: ellipsis;
     line-height: 40px;
 }
+
 .track-info a {
     color: black;
 }
+
+.track-remaining {
+    display: inline;
+    float: left;
+    width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    line-height: 40px;
+    font-size: 14px;
+}
+
 .track-info-btn {
     float: left;
     margin-left: 2%;
