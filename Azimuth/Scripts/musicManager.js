@@ -819,7 +819,7 @@ MusicManager.prototype.bindListeners = function() {
         var userId = $('#userId').val();
         if (self.extraContainerShown) {
             $.ajax({
-                url: '/api/notifications/' + userId,
+                url: '/api/notifications/followings/' + userId,
                 type: 'GET',
                 success: function (notifications) {
                     self.showNotifications(notifications);
