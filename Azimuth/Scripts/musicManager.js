@@ -12,6 +12,8 @@ var MusicManager = function (manager) {
     this.topTracksVk = [];
     this.currentFriend = null;
     this.gettingFriends = false;
+    this.friendsListOpen = false;
+    this.notificationListOpen = false;
     this.stringForCreateBtn = "Create new playlist ";
     this.playlistTrackTemplate = $("#playlistTrackTemplate");
     this.playlistTemplate = $("#playlistTemplate");
@@ -786,41 +788,71 @@ MusicManager.prototype.bindListeners = function() {
         self.audioManager.updateProgressbar('.vkMusicList');
     });
 
+    this._collapseFriendsPanel = function() {
+        self.$friendButton.css('color', '');
+        self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
+        self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
+        $('.playlist-divider').remove();
+        self.showPlaylists();
+        self.setDefaultPlaylist();
+        $('#friends-container').hide();
+        self.friendsListOpen = false;
+    };
+
+    this._expandFriendsPanel = function() {
+        self.$friendButton.css('color', '#FFD386');
+        self._getFriendInfo();
+        $('#friends-container').show();
+        $('.friend-active').toggleClass('friend-active', false);
+        $('.send-message-btn').hide();
+        self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
+        self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+        self.friendsListOpen = true;
+    };
+
     this.$friendButton.click(function () {
+        var delay = 0;
         self.extraContainerShown = !self.extraContainerShown;
-        if (!self.extraContainerShown) {
-            self.$friendButton.css('color', '');
-            self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
-            self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
-            $('.playlist-divider').remove();
-            self.showPlaylists();
-            self.setDefaultPlaylist();
-            $('#friends-container').hide();
+        if (!self.extraContainerShown && !self.notificationListOpen) {
+            self._collapseFriendsPanel();
         } else {
-            self.$friendButton.css('color', '#FFD386');
-            self._getFriendInfo();
-            $('#friends-container').show();
-            $('.friend-active').toggleClass('friend-active', false);
-            $('.send-message-btn').hide();
-            self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
-            self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+            if (self.notificationListOpen) {
+                self._collapseNotificationPanel();
+                delay = 800;
+            }
+            setTimeout(function() { self._expandFriendsPanel(); }, delay);
         }
     });
 
+    this._collapseNotificationPanel = function() {
+        self.$notificationButton.css('color', '');
+        self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
+        self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
+        //self.$notificationsList.remove('.list-notification-header');
+        $('.list-notification-item').remove();
+        $('#notification-container').hide();
+        self.notificationListOpen = false;
+    };
+
+    this._expandNotificationPanel = function() {
+        self.$notificationButton.css('color', '#FFD386');
+        $('#notification-container').show();
+        self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
+        self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+        self.notificationListOpen = true;
+    };
+
     this.$notificationButton.click(function () {
+        var delay = 0;
         self.extraContainerShown = !self.extraContainerShown;
-        if (!self.extraContainerShown) {
-            self.$notificationButton.css('color', '');
-            self.$extraContainer.toggleClass('col-md-0', true).toggleClass('col-md-3', false);
-            self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
-            //self.$notificationsList.remove('.list-notification-header');
-            $('.list-notification-item').remove();
-            $('#notification-container').hide();
+        if (!self.extraContainerShown && !self.friendsListOpen) {
+            self._collapseNotificationPanel();
         } else {
-            self.$notificationButton.css('color', '#FFD386');
-            $('#notification-container').show();
-            self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
-            self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
+            if (self.friendsListOpen) {
+                self._collapseFriendsPanel();
+                delay = 800;
+            }
+            setTimeout(function() { self._expandNotificationPanel(); }, delay);
         }
 
     });
