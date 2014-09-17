@@ -265,6 +265,11 @@ AudioManager.prototype.createProgressBar = function () {
     self.progressSlider.createElements();
 };
 
+AudioManager.prototype.createVolumeSlider = function () {
+    var self = this;
+    self.volumeSlider.createSlider();
+};
+
 AudioManager.prototype.refreshPlaylistTracks = function() {
     var self = this;
     self.tracksGlobal = $('#playlistTracks').children('.track').children('.track-url');

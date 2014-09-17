@@ -2,6 +2,7 @@
     var self = this;
 
     this.drag = false;
+    this.opt = options;
     this.relativePosition = 0;
     this.dirrection = options.dirrection;
     this.$sliderBar = $(options.sliderSelector);
@@ -37,6 +38,21 @@
         }
     };
 }
+
+SliderController.prototype.createSlider = function () {
+    var self = this;
+
+    self.$sliderBar = $(self.opt.sliderSelector);
+    self.$sliderBar.append('<div class="slider"></div>');
+    self.$slider = $(self.$sliderBar.find('.slider'));
+    self.$sliderBar.append('<div class="backgroundSlider"></div>');
+    self.$backgroundSlider = $(self.$sliderBar.find('.backgroundSlider'));
+
+    self.$sliderBar.addClass(self.opt.sliderBarClass);
+    self.$slider.addClass(self.opt.sliderClass);
+    self.$backgroundSlider.addClass(self.opt.backgroundSliderClass);
+    self.bindListeners();
+};
 
 SliderController.prototype.getSlider = function () {
     var self = this;
