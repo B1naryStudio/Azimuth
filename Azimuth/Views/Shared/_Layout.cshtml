@@ -135,10 +135,10 @@
                 }
                 var notifObject = notification;
                 var object = $template.tmpl(notification);
-                clearTimeout(timerId);
-                timerId = setTimeout(function() {
-                    closeNotification($(object), notifObject);
-                }, 5000);
+                //clearTimeout(timerId);
+                //timerId = setTimeout(function() {
+                //    closeNotification($(object), notifObject);
+                //}, 5000);
 
                 addNotification(object, notifObject);
             };
@@ -147,7 +147,7 @@
                 $('#popup-notification').show();
                 var $item = $('<div class="popup-notification-item">');
                 $item.append('<a href="#" class="popup-notification-close right">&times;</a>')
-                    .append($('<div class="popup-notification-content"></div>').html(notification))
+                    .append($('<div class="popup-notification-content"></div>').html(notification));
                 if ($('#popup-notification').children().length > 0)
                     $item.append('<hr>');
 
@@ -159,13 +159,15 @@
                 $('#popup-notification')
                         .find('.popup-notification-close').first()
                         .on('click', function() {
-                            closeNotification($(this), natifObject);
+                            closeNotification($(this).parent('.popup-notification-item'), natifObject);
                         });
+                setTimeout(function () {
+                    closeNotification($item, natifObject);
+                }, 5000);
             }
 
             function closeNotification(notifHtml, natifObject) {
-                var $popup = notifHtml.parent('.popup-notification-item');
-                $popup
+                notifHtml
                     .animate({
                         border: 'none',
                         height: 0,
@@ -202,7 +204,7 @@
                     var object = template.tmpl(natifObject);
                     $('#notifications-container').find('.mCSB_container').prepend(object);
                 }
-                clearTimeout(timerId);
+                //clearTimeout(timerId);
             }
         });
     </script>
