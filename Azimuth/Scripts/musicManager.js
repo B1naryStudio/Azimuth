@@ -791,14 +791,15 @@ MusicManager.prototype.bindListeners = function() {
             $('.playlist-divider').remove();
             self.showPlaylists();
             self.setDefaultPlaylist();
+            $('#friends-container').hide();
         } else {
             self._getFriendInfo();
+            $('#friends-container').show();
             $('.friend-active').toggleClass('friend-active', false);
             $('.send-message-btn').hide();
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
             self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
         }
-        
     });
 
     this.$notificationButton.click(function () {
@@ -808,8 +809,10 @@ MusicManager.prototype.bindListeners = function() {
             self.$trackContainer.toggleClass('col-md-5', false).toggleClass('col-md-8', true);
             //self.$notificationsList.remove('.list-notification-header');
             $('.list-notification-item').remove();
+            $('#notification-container').hide();
         }
         else {
+            $('#notification-container').show();
             self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
             self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
         }
