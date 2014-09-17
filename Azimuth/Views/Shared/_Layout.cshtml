@@ -136,7 +136,7 @@
                 var object = $template.tmpl(notification);
                 clearTimeout(timerId);
                 timerId = setTimeout(function() {
-                    closeNotification($(object), self.notifObject);
+                    closeNotification($(object), notifObject);
                 }, 5000);
 
                 addNotification(object, notifObject);
@@ -193,7 +193,7 @@
                         template = $('#userNotificationTemplate');
                     }
                     var object = template.tmpl(natifObject);
-                    $('#notifications-container').prepend(object);
+                    $('#notifications-container').find('.mCSB_container').prepend(object);
                 }
                 clearTimeout(timerId);
             }
