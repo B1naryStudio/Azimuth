@@ -117,28 +117,6 @@
                 });
             };
 
-            this._getPlaylistByGenre = function () {
-                $.ajax({
-                    url: '',
-                    type: 'GET',
-                    success: function (data) {
-                        
-                    }
-                });
-            };
-
-            //$('.playlist-plated').hover(function() {
-            //    var $currentPlaylist = $(this);
-            //    $currentPlaylist.find('.playlist-plated-short-info').hide();
-            //    $currentPlaylist.find('.playlist-plated-info').slideDown(200);
-            //});
-
-            //$('.playlist-plated').mouseleave(function() {
-            //    var $currentPlaylist = $(this);
-            //    $currentPlaylist.find('.playlist-plated-info').hide();
-            //    $currentPlaylist.find('.playlist-plated-short-info').show();
-            //});
-
             $('#closeModalBtn').click(function() {
                 $('#infoModal .modal-body').text('');
                 $('#listenTopBtn').attr('disabled', true);
@@ -150,12 +128,28 @@
                 dataType: 'json',
                 success: function (genres) {
                     var $genresList = $('#genres > #genres-list');
-                    var path = "/PublicPlaylists/Index";
-                    $genresList.append($('<li><a href="' + path +'?genre=All" class="genre">All</a></li>'));
+                    $genresList.append($('<li><a href="#" class="genre">All</a></li>'));
                     for (var i = 0; i < genres.length; i++) {
-                        var $item = $('<li><a href="' + path + "?genre=" + genres[i] + '" class="genre">' + genres[i] + '</a></li>');
-                        $('#genres > #genres-list').append($item);
+                        if (genres[i].toLowerCase() !== 'undefined') {
+                            var $item = $('<li><a href="#" class="genre">' + genres[i] + '</a></li>');
+                            $('#genres > #genres-list').append($item);
+                        }
                     }
+                    var genresList = $('.genre');
+                    genresList.click(function (event) {
+                        genresList.toggleClass('selected', false);
+                        $(this).toggleClass('selected', true);
+                        var genre = $(this).text();
+                        var playlistTiles = $('.playlist-plated');
+                        if (genre === 'All') {
+                            playlistTiles.fadeIn();
+                        } else {
+                            playlistTiles.hide();
+                            playlistTiles.filter(function (index, item) {
+                                return $(item).data('genres').indexOf(genre) > -1;
+                            }).fadeIn();
+                        }
+                    });
                 }
             });
 
@@ -169,7 +163,6 @@
             progressBar.bindListeners();
 
             this.audioManager = new AudioManager(volumeSlider, progressBar);
-            //audioManager.bindListeners();
 
             var ctxMenu = new ContextMenu();
             var contextMenuActions = [

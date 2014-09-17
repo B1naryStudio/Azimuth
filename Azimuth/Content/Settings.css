@@ -48,6 +48,7 @@
     position: fixed;
     top: 30%;
     padding: 5px;
+    z-index: 100;
 }
 
 #buttons-section {
@@ -143,10 +144,6 @@
 
 .volumeBar {
     position: relative;
-    width: 10px;
-    top: 70%;
-    left: 50%;
-    margin-left: -5px;
     height: 100px;
     background-color: #ccc;
     -ms-border-radius: 3px;
@@ -158,7 +155,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50%;
+    height: 100%;
     background-color: #428bca;
     -ms-border-radius: 3px;
     border-radius: 3px;

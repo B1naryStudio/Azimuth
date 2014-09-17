@@ -4,34 +4,51 @@
     border: 1px solid #e3e3e3;
     -ms-border-radius: 4px;
     border-radius: 4px;
+    height: 75px;
 }
 
-#audio-player div{
+#audio-player.small #audio-player-buttons {
+    font-size: 23px;
+}
+
+#audio-player.small #volume-container i {
+    font-size: 19px;  
+}
+
+#audio-player.small #audio-player-buttons #play-button {
+    font-size: 35px;
+}
+
+#audio-player > div{
     height: 100%;
-    display: inline-block; 
+    float: left; 
 }
 
 #audio-player #audio-player-buttons {
     width: 20%;
-    font-size: 20px;
+    font-size: 30px;
     text-align: center;
+    line-height: 65px;
 }
 
 #audio-player #audio-player-buttons #prev-button{
     width: 22%;
     margin: 2%;
     cursor: pointer;
+    float: left; 
 }
 #audio-player #audio-player-buttons #play-button{
     width: 32%;
     margin: 2%;
-    font-size: 25px;
+    font-size: 45px;
     cursor: pointer;
+    float: left; 
 }
 #audio-player #audio-player-buttons #next-button{
     width: 22%;
     margin: 2%;
-    cursor: pointer; 
+    cursor: pointer;
+    float: left; 
 }
 
 #audio-player #item-container {
@@ -50,10 +67,26 @@
     width: 15%;
 }
 #audio-player #volume-container #volumeSlider {
-    width: 70%;
+    width: 100%;
     height: 7px;
     left: 0;
     margin: 0;
+    cursor: pointer;
+}
+
+#audio-player #volume-container i {
+    float: left;
+    height: 100%;
+    width: 15%;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+#audio-player #volume-container #slider-wrapper {
+    height: 100%;
+    width: 75%;
+    float: left;
+    padding: 5% 5%;
 }
 
 #audio-player #audio-player-controls {
@@ -64,6 +97,9 @@
     width: 30%;
     font-size: 16px;
     cursor: pointer;
+    float: left;
+    line-height: 75px;
+    text-align: center;
 }
 
 #audio-player #audio-player-controls > div:hover {
@@ -86,4 +122,15 @@
 .popoverPlaylistBtn:hover{
     cursor: pointer;
     background-color: #FFD386; 
+}
+
+.vertical-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-wrapper-cell {
+    display: table-cell;
+    vertical-align: middle;
 }
