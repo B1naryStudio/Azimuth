@@ -193,7 +193,7 @@ namespace Azimuth.Services.Concrete
         public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider)
         {
             string accessToken;
-            if (AzimuthIdentity.Current == null)
+            if (AzimuthIdentity.Current == null || AzimuthIdentity.Current.UserCredential.SocialNetworkName != "Vkontakte")
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {

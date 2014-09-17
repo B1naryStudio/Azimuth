@@ -444,7 +444,7 @@ hr {
 }
 
 .list-notification-item {
-    width: 100%;
+    width: 97%;
     position: relative;
     background: #ffffff;
     margin-top: 10px;
@@ -491,6 +491,7 @@ hr {
 .list-notification-user-time {
     display: inline-block;
     margin-left: 5px;
+    width: 74%;
 }
 
 .list-notification-user-time {
