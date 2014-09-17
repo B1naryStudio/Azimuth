@@ -12,7 +12,7 @@ body.landing-page{
 }
 
 html, body, .body-content {
-    height: 100%;
+    height: 99%;
     width: 100%;
 }
 
@@ -172,6 +172,10 @@ div.tableRow{
 
 .vkMusicTable {
     height: 100%;
+}
+
+#searched-list > .vkMusicTable {
+    height: 55%;
 }
 
 .table-header {
