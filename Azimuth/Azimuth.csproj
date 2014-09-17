@@ -319,6 +319,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\arrow-square.gif" />
+    <Content Include="Images\background.jpg" />
     <Content Include="Images\facebook_logo.png" />
     <Content Include="Images\google_logo.png" />
     <Content Include="Images\grey-caret-right.png" />
