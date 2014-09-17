@@ -135,11 +135,6 @@
                 }
                 var notifObject = notification;
                 var object = $template.tmpl(notification);
-                //clearTimeout(timerId);
-                //timerId = setTimeout(function() {
-                //    closeNotification($(object), notifObject);
-                //}, 5000);
-
                 addNotification(object, notifObject);
             };
 
@@ -148,27 +143,22 @@
                 var $item = $('<div class="popup-notification-item alert alert-warning popup-notification" role="alert">');
                 $item.append('<a href="#" class="popup-notification-close right">&times;</a>')
                     .append($('<div class="popup-notification-content"></div>').html(notification));
-                //if ($('#popup-notification').children().length > 0)
-                //    $item.append('<hr>');
-
 
                 $('#popup-notification')
                     .prepend($item)
-                    .hide()
-                    //.appendTo('#popup-notification')
+                    .prependTo('#popup-notification')
                     .fadeIn(1000);
 
                 $('#popup-notification').children('.popup-notification-item').show();
-
 
                 $('#popup-notification')
                         .find('.popup-notification-close').first()
                         .on('click', function() {
                             closeNotification($(this).parent('.popup-notification-item'), natifObject);
                         });
-                //setTimeout(function () {
-                //    closeNotification($item, natifObject);
-                //}, 5000);
+                setTimeout(function () {
+                    closeNotification($item, natifObject);
+                }, 5000);
             }
 
             function closeNotification(notifHtml, natifObject) {
@@ -209,7 +199,6 @@
                     var object = template.tmpl(natifObject);
                     $('#notifications-container').find('.mCSB_container').prepend(object);
                 }
-                //clearTimeout(timerId);
             }
         });
     </script>
@@ -239,7 +228,7 @@
         </div>
         <div class="popup-notification-body">
             <div class="popup-notification-message">
-                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message} <a href="Share/Playlist/${RecentlyPlaylistId}">${RecentlyUserFirstName} ${RecentlyUserlastName}</a>
+                <a href="UserProfile/Index/${UserId}">${UserFirstName} ${UserLastName}</a> ${Message} <a href="UserProfile/Index/${UserId}">${RecentlyUserFirstName} ${RecentlyUserlastName}</a>
             </div>
         </div>
     </script>
