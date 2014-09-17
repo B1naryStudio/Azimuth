@@ -73,6 +73,10 @@ div.playlistName {
     font-size: 20px;
 }
 
+.creator {
+    font-size: 16px;
+}
+
 .playlist-plated:hover .playlistName{
     text-decoration: underline;
 }
@@ -80,4 +84,7 @@ div.playlistName {
 .listeners-count span {
     font-size: 20px;
     color: lightgray;
+}
+.genres {
+    font-size: 12px;
 }
