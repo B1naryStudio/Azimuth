@@ -90,6 +90,10 @@ namespace Azimuth.DataAccess.Infrastructure
                 CloseSession();
                 _currentSession.Dispose();
             }
+            if (_sessionFactory != null)
+            {
+                _sessionFactory.Dispose();
+            }
         }
     }
 }
