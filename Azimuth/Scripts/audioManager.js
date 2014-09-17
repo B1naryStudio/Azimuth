@@ -32,11 +32,11 @@
 
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
                     var popover = $('#plus-btn .fa').data('bs.popover');
-                    popover.setContent();
                     popover.$tip.addClass(popover.options.placement);
+                    $('#plus-btn .fa').popover('hide');
 
-                    $('#plus-btn .fa').on('click', function() {
-                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                    $('#plus-btn .fa').bind('click', function() {
+                        $('.popoverPlaylistBtn').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
                             self._copyTrackToPlaylist(self.$currentTrack, playlistId);
                             $('#plus-btn .fa').popover('hide');
@@ -45,15 +45,15 @@
                         });
                     });
                 } else {
-                    addMenu.append('<div class="popoverPlaylistBtn">Add new playlist</div>');
+                    addMenu.append('<div id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</div>');
                     
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
                     var popover = $('#plus-btn .fa').data('bs.popover');
-                    popover.setContent();
                     popover.$tip.addClass(popover.options.placement);
+                    $('#plus-btn .fa').popover('hide');
 
-                    $('#plus-btn .fa').on('click', function() {
-                        $('.popoverPlaylistBtn').on('mousedown', function() {
+                    $('#plus-btn .fa').bind('click', function () {
+                        $('#popoverPlaylistBtn').click(function() {
                             $('#createPlaylistModal').modal({
                                 show: true
                             });
