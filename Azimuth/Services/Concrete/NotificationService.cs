@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
 using Azimuth.Hubs.Concrete;
 using Azimuth.Hubs.Interfaces;
 using Azimuth.Infrastructure.Concrete;
@@ -40,7 +39,9 @@ namespace Azimuth.Services.Concrete
             Mapper.Map(notification, notificationDto); 
             notificationDto.Message = GetMessage(notification);
 
-            _notificationHub.SendNotification(user.Id, notificationDto);
+            List<long> list = user.Followers.Select(s => s.Id).ToList();
+
+            _notificationHub.SendNotification(user.Id, notificationDto, list);
 
             return notification;
         }
