@@ -1051,10 +1051,11 @@ MusicManager.prototype.bindListeners = function() {
             if (self.topTracks != null) {
                 var tracks = JSON.stringify({ trackdata: self.topTracks });
                 $.ajax({
-                    url: '/api/usertracks/tracksearch?provider=Vkontakte&infoForSearch=' + tracks,
+                    url: '/api/usertracks/tracksearch?provider=Vkontakte',
                     type: 'POST',
                     dataType: 'json',
-                    contentType: 'application/json;',
+                    data: tracks,
+                    contentType: 'application/json; charset=utf-8',
                     success: function(data) {
                         self.topTracksVk = [];
                         $(data).each(function() {

@@ -41,12 +41,13 @@ namespace Azimuth.ApiControllers
 
         [HttpPost]
         [Route("tracksearch")]
-        public async Task<HttpResponseMessage> PostSearchinVk(string infoForSearch, string provider)
+        public async Task<HttpResponseMessage> PostSearchinVk(TrackSearchInfo infoForSearch, string provider)
         {
             try
             {
-                var listOfTracks = JsonConvert.DeserializeObject<TrackSearchInfo>(infoForSearch);
-                var data = await _userTracksService.SearchTracksInSn(listOfTracks.TrackDatas, "Vkontakte");
+                //var listOfTracks = JsonConvert.DeserializeObject<TrackSearchInfo>(infoForSearch);
+                //var data = await _userTracksService.SearchTracksInSn(listOfTracks.TrackDatas, "Vkontakte");
+                var data = await _userTracksService.SearchTracksInSn(infoForSearch.TrackDatas, "Vkontakte");
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception exception)
