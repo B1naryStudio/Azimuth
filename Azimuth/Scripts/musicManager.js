@@ -215,8 +215,8 @@ var MusicManager = function (manager) {
                     }
 
                     allDuration = self._toFormattedTime(allDuration, true);
-                    $defaultPlaylist.children('.playlist-duration').html("Duration: " + allDuration);
-                    $defaultPlaylist.children('.playlist-size').html("Songs: " + tracks.length);
+                    $defaultPlaylist.children('.playlist-duration').html('<i class="fa fa-clock-o"></i> &nbsp;' + allDuration);
+                    $defaultPlaylist.children('.playlist-size').html('<i class="fa fa-music"></i> &nbsp;' + tracks.length);
 
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
@@ -338,8 +338,8 @@ var MusicManager = function (manager) {
                     }
 
                     allDuration = self._toFormattedTime(allDuration, true);
-                    $defaultPlaylist.children('.playlist-duration').html("Duration: " + allDuration);
-                    $defaultPlaylist.children('.playlist-size').html("Songs: " + tracks.length);
+                    $defaultPlaylist.children('.playlist-duration').html('<i class="fa fa-clock-o"></i> &nbsp;' + allDuration);
+                    $defaultPlaylist.children('.playlist-size').html('<i class="fa fa-music"></i> &nbsp;' + tracks.length);
 
                     self.tracksGlobal = tracks;
                     self.showTracks(tracks);
