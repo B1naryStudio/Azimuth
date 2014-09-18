@@ -45,7 +45,7 @@ UserProfileManager.prototype.bindListeners = function () {
             if (!$('#followersBtn').is(':hover') && !$('#popup').is(':hover') && !$('#followedBtn').is(':hover')) {
                 self._hidePopup(event);
             }
-        }, 500);
+        }, 200);
     });
 
     $('#followedBtn, #followersBtn, #popup').click(function (event) {
