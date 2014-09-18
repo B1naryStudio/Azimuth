@@ -5,6 +5,29 @@
     var followAction = Model.Followers.Any(s => s.Id == loggedUser.Id) ? "Unfollow" : "Follow";
 }
 
+    @if (loggedUser.Id != Model.Id)
+    {
+        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "followers-section", OnSuccess = "rebootPopup" }, new { @style = "display: block; margin-bottom: 1.4%; vertical-align: middle;" }))
+        {
+             <div id="user-name">
+                @Html.DisplayFor(x => Model.FirstName)
+                @Html.DisplayFor(x => Model.LastName)
+            </div>
+            <button class="btn btn-default" id="followBtn" style="margin: 2%; padding: 0">
+                @if (followAction == "Follow")
+                {
+                    <img src="~/Images/follow.png" width="140" height="35" />
+                }
+                else
+                {
+                    <img src="~/Images/following.png" width="140" height="35" />
+                }
+            </button>
+            @Html.Hidden("userId", @Model.Id)
+            <input type="hidden" name="following" value="@followAction" />
+        }
+    }
+
     <div id="followers">
         <button class="btn btn-default btn-xs" id="followersBtn"><i class="fa fa-users"></i> Followers</button>
         <div class="count-label">@Model.Followers.Count</div>
@@ -19,15 +42,7 @@
             @Html.DisplayFor(x => x.Following)
         </div>
     </div>
-    @if (loggedUser.Id != Model.Id)
-    {
-        using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "followers-section", OnSuccess = "rebootPopup" }, new {@style = "display: inline-block; margin-bottom: 1.4%;"}))
-        {
-            <button class="btn btn-default btn-xs" id="followBtn" style="float: left; margin-bottom: 16%;">@followAction</button>
-            @Html.Hidden("userId", @Model.Id)
-            <input type="hidden" name="following" value="@followAction" />
-        }
-    }
+    
     
 <script>
     function rebootPopup() {
