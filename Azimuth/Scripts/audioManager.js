@@ -23,11 +23,11 @@
             type: 'GET',
             dataType: 'json',
             success: function(playlists) {
-                var addMenu = $('<div>');
+                var addMenu = $('<div><ul class="nav nav-pills nac-stacked"></ul></div>');
                 
                 if (playlists.length != 0) {
                     $(playlists).each(function() {
-                        addMenu.append($('#popoverPlaylistTemplate').tmpl(this));
+                        addMenu.find('ul').append($('#popoverPlaylistTemplate').tmpl(this));
                     });
 
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
@@ -35,7 +35,8 @@
                     //popover.$tip.addClass(popover.options.placement);
                     //$('#plus-btn .fa').popover('hide');
 
-                    $('#plus-btn .fa').bind('click', function() {
+                    $('.popover-content').css('padding', '5px 0');
+                    $('#plus-btn .fa').bind('click', function () {
                         $('.popoverPlaylistBtn').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
                             self._copyTrackToPlaylist(self.$currentTrack, playlistId);
@@ -43,7 +44,7 @@
                         });
                     });
                 } else {
-                    addMenu.append('<div id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</div>');
+                    addMenu.find('ul').append('<li id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</li>');
                     
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
                     //var popover = $('#plus-btn .fa').data('bs.popover');
