@@ -39,7 +39,8 @@ namespace Azimuth
                       "~/Content/share.css",
                       "~/Content/site.css",
                       "~/Content/user.css",
-                      "~/Content/progressslider.css"));
+                      "~/Content/progressslider.css",
+                      "~/Content/usersearch.css"));
         }
     }
 }

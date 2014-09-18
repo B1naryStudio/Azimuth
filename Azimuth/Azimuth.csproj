@@ -315,6 +315,7 @@
     <Content Include="Content\Share.css" />
     <Content Include="Content\Track.css" />
     <Content Include="Content\UserProfile.css" />
+    <Content Include="Content\UserSearch.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

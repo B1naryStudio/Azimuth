@@ -1,0 +1,26 @@
+﻿.user {
+    margin: 5px;
+    height: 50px;
+}
+
+.user > .user-photo {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    float: left;
+    text-align: center;
+}
+
+.user > .user-photo > img {
+    vertical-align: middle;
+    margin: auto;
+    max-height: 50px;
+    max-width: 50px;
+    text-align: center;
+}
+
+.user > a {
+    margin-left: 55px;
+    margin-top: 15px;
+    float: left;
+}
