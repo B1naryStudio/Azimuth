@@ -96,34 +96,41 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<UserDto>> SearchUsers(string searchText)
         {
-            var usersDto = new List<UserDto>();
-
-            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+            return await Task.Run(() =>
             {
-                List<User> users;
-                if (searchText == "All")
+                var usersDto = new List<UserDto>();
+
+                using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    users = unitOfWork.UserRepository.GetAll(user => user.Name.FirstName != "Azimuth"
-                                                            && user.Name.LastName != "Azimuth"
-                                                            && user.Email != "academy.proj@gmail.com").ToList();
-                }
-                else
-                {
-                    users = unitOfWork.UserRepository
-                    .GetAll(user =>
-                        ((user.Name.FirstName.ToLower() + ' ' + user.Name.LastName.ToLower()).Contains(searchText)
-                        || (user.Name.LastName.ToLower() + ' ' + user.Name.FirstName.ToLower()).Contains(searchText))
-                        && (user.Name.FirstName != "Azimuth" 
-                            && user.Name.LastName != "Azimuth" 
-                            && user.Email != "academy.proj@gmail.com")).ToList();
+                    List<User> users;
+                    if (searchText == "All")
+                    {
+                        users = unitOfWork.UserRepository.GetAll(user => user.Name.FirstName != "Azimuth"
+                                                                         && user.Name.LastName != "Azimuth"
+                                                                         && user.Email != "academy.proj@gmail.com")
+                            .ToList();
+                    }
+                    else
+                    {
+                        users = unitOfWork.UserRepository
+                            .GetAll(user =>
+                                ((user.Name.FirstName.ToLower() + ' ' + user.Name.LastName.ToLower()).Contains(
+                                    searchText)
+                                 ||
+                                 (user.Name.LastName.ToLower() + ' ' + user.Name.FirstName.ToLower()).Contains(
+                                     searchText))
+                                && (user.Name.FirstName != "Azimuth"
+                                    && user.Name.LastName != "Azimuth"
+                                    && user.Email != "academy.proj@gmail.com")).ToList();
+                    }
+
+                    Mapper.Map(users, usersDto);
+
+                    unitOfWork.Commit();
                 }
 
-                Mapper.Map(users, usersDto);
-
-                unitOfWork.Commit();
-            }
-            
-            return usersDto;
+                return usersDto;
+            });
         }
 
         private UserSocialNetwork GetSocialNetworkData(IUnitOfWork unitOfWork, string provider)
