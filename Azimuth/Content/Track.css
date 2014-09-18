@@ -34,7 +34,7 @@
 .track-info {
     display: block;
     float: left;
-    width: 80%;
+    width: 75%;
     white-space: nowrap;
     overflow: hidden;
     -moz-text-overflow: ellipsis;
