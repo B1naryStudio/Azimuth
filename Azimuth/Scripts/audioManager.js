@@ -88,14 +88,15 @@
     };
 
     self.audio.onvolumechange = function() {
-        if (self.audio.volume == 0) {
-            $('#volumeImg').css('background-position', '0 -120px');
-        } else if (self.audio.volume <= 0.33) {
-            $('#volumeImg').css('background-position', '0 -80px');
+        if (self.audio.volume <= 0.33) {
+            $('.volume-img').hide();
+            $('.volume-img.fa-volume-off').show();
         } else if (self.audio.volume <= 0.66) {
-            $('#volumeImg').css('background-position', '0 -40px');
+            $('.volume-img').hide();
+            $('.volume-img.fa-volume-down').show();
         } else {
-            $('#volumeImg').css('background-position', '0 0');
+            $('.volume-img').hide();
+            $('.volume-img.fa-volume-up').show();
         }
     };
 
