@@ -76,13 +76,13 @@ namespace Azimuth
 
 #if DEBUG
             app.UseVkontakteAuthentication(
-                appId: "4469725",
-                appSecret: "1vUUwTGWEIp3bSLqDHuw",
+                appId: "4555819",
+                appSecret: "hWvAhsHs1PhtGUyXblkV",
                 scope: "audio,email, offline");
 #else
             app.UseVkontakteAuthentication(
-                appId: "4555819",
-                appSecret: "hWvAhsHs1PhtGUyXblkV",
+                appId: "4469725",
+                appSecret: "1vUUwTGWEIp3bSLqDHuw",
                 scope: "audio,email, offline");
 #endif
         }
