@@ -411,7 +411,7 @@
     <Content Include="Views\Shared\_AudioPlayer.cshtml" />
     <Content Include="Views\UserProfile\_FollowAction.cshtml" />
     <Content Include="Views\UserProfile\DisplayTemplates\FollowerModel.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplate\User.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
