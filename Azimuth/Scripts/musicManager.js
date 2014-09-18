@@ -46,6 +46,7 @@ var MusicManager = function (manager) {
     this.$errorModal = $('#errorModal');
     this.$messageContainer = $('#message-container');
     this.activePlaylistId = null;
+    this.isSearch = false;
 
     this._getTracks = function (plId) {
         var $this = $(this);
@@ -481,10 +482,20 @@ MusicManager.prototype.setDefaultPlaylist = function (friendId) {
 
     if (friendId === undefined) {
         tmpl.click(self._getUserTracks);
-        self._getUserTracks();
+        if (!self.isSearch) {
+            self._getUserTracks();
+        }
+        else {
+            $('.default-playlist').toggleClass("playlist-active", true);
+        }
     } else {
         tmpl.click(self._getFriendTracks);
-        self._getFriendTracks();
+        if (self.isSearch) {
+            self._getFriendTracks();
+        }
+        else {
+            $('.default-playlist').toggleClass("playlist-active", true);
+        }
     }
     self.$playlistsLoadingSpinner.hide();
 };
@@ -969,6 +980,7 @@ MusicManager.prototype.bindListeners = function() {
             }
             $('.playlist-divider').remove();
             self.showPlaylists(foundedPlaylist);
+            self.isSearch = true;
             self.setDefaultPlaylist();
             $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
@@ -980,6 +992,10 @@ MusicManager.prototype.bindListeners = function() {
             self.audioManager.updateProgressbar('#playlistTracks');
         }
         self.$playlistsLoadingSpinner.hide();
+    });
+
+    $('#searchPlaylistName').focusout(function () {
+        self.isSearch = false;
     });
 
     $('#scrollable-playlist, .vkMusicTable').mCustomScrollbar({
