@@ -49,7 +49,13 @@ var MusicManager = function (manager) {
         var $this = $(this);
         self.$vkMusicLoadingSpinner.show();
         $('.vkMusicList').find('.track').detach();
-        var playlistId = $this.children('.playlistId').text();
+        var $activePlaylist = $('.playlist-active');
+        var playlistId;
+        if ($activePlaylist.length > 1) {
+            playlistId = $this.children('.playlistId').text();
+        } else {
+            playlistId = $activePlaylist.find('.playlistId').text();
+        }
         if (playlistId.length == 0) {
             playlistId = plId;
         }
@@ -77,7 +83,8 @@ var MusicManager = function (manager) {
 
                     ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
                 } else {
-                    self.$playlistsTable.parents('.draggable').makeDraggable({
+                    //self.$playlistsTable.parents('.draggable').makeDraggable({
+                   $('.draggable').makeDraggable({
                         contextMenu: [
                             { 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
                             { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },

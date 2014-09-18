@@ -291,7 +291,8 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     break;
                 case 'movetoplaylist':
                     var newPlaylist = $target.parent().children('.playlistId').text();
-                    var oldPlaylist = $currentItem.parent().children('.playlistId').text();
+                    //var oldPlaylist = $currentItem.parent().children('.playlistId').text();
+                    var oldPlaylist = $('.playlist-active').children('.playlistId').text();
                     $currentItem = self.$container;
                     $currentItem.hide();
                     $currentItem.append($('.draggable-item-selected').clone());
@@ -312,7 +313,8 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     self.$container.empty();
                     break;
                 case 'removeselected':
-                    var playlistId = $currentItem.parent().children('.playlistId').text();
+                    //var playlistId = $currentItem.parent().children('.playlistId').text();
+                    var playlistId = $('.playlist-active').children('.playlistId').text();
                     $currentItem = self.$container;
                     $currentItem.hide();
                     $currentItem.append($('.draggable-item-selected').clone());
@@ -448,11 +450,10 @@ ContextMenu.prototype.drawContextMenu = function (event) {
                 var $playlists = $('#playlistsTable').children('.playlist');
                 self.$subContextMenuContainer.children().remove('.tableRow');
                 for (var j = 0; j < $playlists.length; j++) {
-                    var currentplaylist = $('.playlist.active').find('.playlistId').text();
-                    var takenPlaylistId = $($playlists[j]).find('.playlistId').text();
-                    //if (currentplaylist == takenPlaylistId && self.musicList.find('.vkMusicTable').length == 0) {
-                    //    continue;
-                    //}
+                    var $playlist = $($playlists[j]);
+                    if ($playlist.hasClass('default-playlist') || $playlist.hasClass('playlist-active'))
+                        continue;
+
                     var playlist = {
                         "name": $($playlists[j]).children('.playlist-title').text(),
                         "id": $($playlists[j]).children('.playlistId').text()
