@@ -36,13 +36,19 @@ UserProfileManager.prototype.bindListeners = function () {
         advanced: { updateOnSelectorChange: "true" }
     });
 
-    $('#followersBtn, #followedBtn').off('hover').hover(function () {
+    $('#followersBtn, #followedBtn').off('hover').hover(function (event) {
+
+        if ($('#popup').is(":visible")) {
+            //self._hidePopup(event);
+            $('#popup').children('.data').empty();
+        }
+
         self._showPopup($(this));
     });
 
     $('#followersBtn, #popup, #followedBtn').mouseleave(function (event) {
         setTimeout(function() {
-            if (!$('#followersBtn').is(':hover') && !$('#popup').is(':hover') && !$('#followedBtn').is(':hover')) {
+            if (!$('#followersBtn').is(':hover') && !$('#followedBtn').is(':hover') && !$('#popup').is(':hover')) {
                 self._hidePopup(event);
             }
         }, 200);

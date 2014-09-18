@@ -15,7 +15,9 @@
             @Html.Partial("_AudioPlayer")
         </div>
         <div id="tracks-content">
-            @Html.DisplayFor(x => x.Tracks)
+            <div class="draggable-list vkMusicList">
+                @Html.DisplayFor(x => x.Tracks)
+            </div>
         </div>
     </div>
 </div>

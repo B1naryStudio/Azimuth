@@ -87,6 +87,7 @@
 #popup .topPeople {
     margin: 3px;
     float: left;
+    width: 30px;
 }
 
 #popup a {

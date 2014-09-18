@@ -11,8 +11,9 @@
     <div id="musicList-scrollable">
         @if (Model != null)
         {
-            foreach (var track in Model)
-            {
+            <div class="draggable-list vkMusicList">
+                @foreach (var track in Model)
+                {
                 <div class="tableRow draggable-item track">
                     <div class="glyphicon glyphicon-play btn btn-default track-play-btn"></div>
                     <div class="track-description" data-title="${artist} ${title}">
@@ -24,7 +25,8 @@
                     <div style="display: none" class="thirdPartId">@track.ThirdPartId</div>
                     <div style="display: none" class="ownerId">@track.OwnerId</div>
                 </div>
-            }
+                }
+            </div>
         }
     </div>
 </div>
