@@ -17,7 +17,13 @@
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
                 </div>
                 <div id="playlist-section">
-                    <div id="followers"><i class="fa fa-star"></i> @Model.User.PlaylistFollowing.Count(s => s.IsFavorite) Favorite playlists</div>
+                    <div id="favorites">
+                        <button class="btn btn-default btn-xs"><i class="fa fa-star"></i>  Favorite playlists</button>
+                        <div class="count-label" style="display: inline">@Model.User.PlaylistFollowing.Count(s => s.IsFavorite)</div>
+                        @*<div class="topFollowers">
+                            @Html.DisplayFor(x => x.Followers)
+                        </div>*@
+                    </div>
                 </div>
 
                 @if (loggedUser.Id == Model.User.Id)
