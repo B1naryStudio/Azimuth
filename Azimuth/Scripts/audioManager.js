@@ -14,6 +14,7 @@
     $('#plus-btn .fa').popover({
         placement: 'bottom',
         container: 'body',
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="padding: 5px 0;"></div></div>',
         html: true
     });
 
@@ -35,7 +36,7 @@
                     //popover.$tip.addClass(popover.options.placement);
                     //$('#plus-btn .fa').popover('hide');
 
-                    $('.popover-content').css('padding', '5px 0');
+                    //$('.popover-content').css('padding', '5px 0');
                     $('#plus-btn .fa').bind('click', function () {
                         $('.popoverPlaylistBtn').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
