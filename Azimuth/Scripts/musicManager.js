@@ -473,8 +473,8 @@ MusicManager.prototype.setDefaultPlaylist = function (friendId) {
 
     var tmpl = self.playlistTemplate.tmpl(playlist);
 
-    var img = tmpl.children('.playlist-logo').children('img');
-    img.attr("src", "http://cdn.marketplaceimages.windowsphone.com/v8/images/ab99fcba-4240-45a9-a025-80a0edba0c0a?imageType=ws_icon_large");
+    var img = tmpl.children('.playlist-logo').empty();
+    img.append('<i class="fa fa-vk fa-5x"></i>');
 
     tmpl.addClass('default-playlist');
     self.$playlistsTable.prepend(tmpl);
