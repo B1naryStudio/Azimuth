@@ -998,12 +998,16 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
-            success: function() {
+            success: function () {
+                $('.playlist-divider').remove();
                 self.showPlaylists();
+                self.setDefaultPlaylist();
                 self.$playlistsLoadingSpinner.hide();
             },
-            error: function() {
+            error: function () {
+                $('.playlist-divider').remove();
                 self.showPlaylists();
+                self.setDefaultPlaylist();
                 self.$playlistsLoadingSpinner.hide();
             }
         });
