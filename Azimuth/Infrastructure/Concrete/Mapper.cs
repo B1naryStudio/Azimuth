@@ -141,6 +141,8 @@ namespace Azimuth.Infrastructure.Concrete
 
         private static void VkUserDataMap(VkUserData.VkResponse snData, User user)
         {
+            if (snData.Response == null)
+                return;
             var response = snData.Response.FirstOrDefault();
             if (response != null)
             {
