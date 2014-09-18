@@ -452,7 +452,7 @@ var MusicManager = function (manager) {
         VK.api('wall.post', {
                 owner_id: friendId,
                 message: text,
-                attachments: "photo268940215_338836002,http://localhost:44300/"
+                attachments: "photo268940215_338980514,https://" + window.location.host
         }, function (data) {
         });
 
