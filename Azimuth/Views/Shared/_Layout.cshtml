@@ -61,9 +61,9 @@
                         <li class="dropdown col-xs-2">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sort-desc"></i></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Account", "Index", "UserProfile")</li>
+                                <li><a href="@Url.Action("Index", "UserProfile")"><i class="fa fa-lock"></i>&nbsp; Account</a></li>
                                 <li class="divider"></li>
-                                <li>@Html.ActionLink("Log off", "LogOff", "Account")</li>
+                                <li><a href="@Url.Action("LogOff", "Account")"><i class="fa fa-sign-out"></i>&nbsp; Log off</a></li>
                             </ul>
                         </li>
                     </ul>
