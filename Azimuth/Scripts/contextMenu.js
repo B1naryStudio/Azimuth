@@ -452,7 +452,7 @@ ContextMenu.prototype.drawContextMenu = function (event) {
                 self.$subContextMenuContainer.children().remove('.tableRow');
                 for (var j = 0; j < $playlists.length; j++) {
                     var $playlist = $($playlists[j]);
-                    if ($playlist.hasClass('default-playlist') || $playlist.hasClass('playlist-active'))
+                    if ($playlist.hasClass('default-playlist') || $playlist.hasClass('playlist-active') || $playlist.find('.readonly').text() == "true")
                         continue;
 
                     var playlist = {
