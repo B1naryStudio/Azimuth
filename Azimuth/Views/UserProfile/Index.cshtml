@@ -20,9 +20,14 @@
                     <div id="favorites" style="display: inline-block">
                         <div class="dropdown" style="display: inline-block">
                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-star"></i>  Favorite playlists</button>
-                            <ul class="dropdown-menu">
-                                @Html.DisplayFor(x => x.User.PlaylistFollowing)
-                            </ul>
+                                @if (Model.User.PlaylistFollowing.Any())
+                                {
+                                    <ul class="dropdown-menu">
+
+                                        @Html.DisplayFor(x => x.User.PlaylistFollowing)
+                                    </ul>
+
+                                }    
                         </div>
                         <div class="count-label" style="display: inline-block">@Model.User.PlaylistFollowing.Count(s => s.IsFavorite)</div>
                     </div>
