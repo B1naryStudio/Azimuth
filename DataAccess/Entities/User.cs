@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Azimuth.DataAccess.Infrastructure;
 
@@ -29,8 +30,15 @@ namespace Azimuth.DataAccess.Entities
         }
         public override string ToString()
         {
-            return Name.FirstName + Name.LastName + ScreenName + Gender + Email + Birthday + Timezone + Location.City +
-                   ", " + Location.Country + Photo;
+            return Name.FirstName ??
+                   String.Empty + Name.LastName ??
+                   String.Empty + ScreenName ??
+                   String.Empty + Gender ??
+                   String.Empty + Email ??
+                   String.Empty + Birthday ??
+                   String.Empty + Timezone ??
+                   String.Empty + ((Location != null) ? Location.City ?? String.Empty : String.Empty) +
+                   ", " + ((Location != null) ? Location.Country ?? String.Empty : String.Empty) + Photo ?? String.Empty;
         }
     }
 }
