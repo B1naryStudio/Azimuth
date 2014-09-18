@@ -9,7 +9,7 @@
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
 
     this._uploadNewSongs = function () {
-        if ($('.btn-primary.searchBtn').text() == 'Vkontakte' && this.mcs.topPct >= 75 && !self.searching) {
+        if ($('.btn-primary.searchBtn').data('search') == 'vkontakte' && this.mcs.topPct >= 75 && !self.searching) {
             self.searching = true;
             var searchParam = $('#search').val().toLocaleLowerCase();
             self.offset += 20;
