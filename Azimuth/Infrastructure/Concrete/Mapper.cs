@@ -283,15 +283,15 @@ namespace Azimuth.Infrastructure.Concrete
             usersDto.AddRange(users.Select(user => new UserDto
             {
                 Id = user.Id.ToString(),
-                Birthdate = user.Birthday,
-                City = user.Location.City,
-                Country = user.Location.Country,
-                Email = user.Email,
-                FirstName = user.Name.FirstName,
-                LastName = user.Name.LastName,
-                Gender = user.Gender,
-                Photo = user.Photo,
-                ScreenName = user.ScreenName
+                Birthdate = user.Birthday ?? String.Empty,
+                City = user.Location.City ?? String.Empty,
+                Country = user.Location.Country ?? String.Empty,
+                Email = user.Email ?? String.Empty,
+                FirstName = user.Name.FirstName ?? String.Empty,
+                LastName = user.Name.LastName ?? String.Empty,
+                Gender = user.Gender ?? String.Empty,
+                Photo = user.Photo ?? String.Empty,
+                ScreenName = user.ScreenName ?? String.Empty
             }));
         }
 
