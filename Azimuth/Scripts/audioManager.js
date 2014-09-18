@@ -152,6 +152,7 @@
 
         self._setTrackTo('next');
 
+        $('#audio-player .track-description #track-link').show();
         $('#audio-player .track-description .track-artist').text(self.$currentTrack.find('.track-artist').text());
         $('#audio-player .track-description .track-title').text(self.$currentTrack.find('.track-title').text());
     };
@@ -183,6 +184,7 @@
 
         self._setTrackTo('prev');
 
+        $('#audio-player .track-description #track-link').show();
         $('#audio-player .track-description .track-artist').text(self.$currentTrack.find('.track-artist').text());
         $('#audio-player .track-description .track-title').text(self.$currentTrack.find('.track-title').text());
     };
@@ -294,6 +296,7 @@ AudioManager.prototype.loop = function (value) {
 AudioManager.prototype.play = function() {
     var self = this;
 
+    $('#audio-player .track-description #track-link').show();
     $('#audio-player .track-description .track-artist').text(self.$currentTrack.find('.track-artist').text());
     $('#audio-player .track-description .track-title').text(self.$currentTrack.find('.track-title').text());
     //self.$currentTrack.find('.track-duration').hide();
