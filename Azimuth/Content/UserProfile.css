@@ -108,16 +108,16 @@
 }
 
 #popup {
-background-color: #353535;
-background-image: linear-gradient(#353535,#000000);
-border-radius: 8px;
-box-shadow: 0 0 3px #333;
-color: #000;
-display: none;
-position: absolute;
-height: 40px;
-width: 170px;
-cursor: pointer;
+    background-color: #353535;
+    background-image: linear-gradient(#353535,#000000);
+    border-radius: 2px;
+    box-shadow: 0 0 3px #333;
+    color: #000;
+    display: none;
+    position: absolute;
+    height: 40px;
+    width: 170px;
+    cursor: pointer;
 }
 
 #popup:after {
