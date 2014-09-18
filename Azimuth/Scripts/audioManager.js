@@ -25,13 +25,9 @@
                     });
 
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
-                    //var popover = $('#plus-btn .fa').data('bs.popover');
-                    //popover.$tip.addClass(popover.options.placement);
-                    //$('#plus-btn .fa').popover('hide');
 
-                    //$('.popover-content').css('padding', '5px 0');
-                    $('#plus-btn .fa').bind('click', function () {
-                        $('.popoverPlaylistBtn').click( function() {
+                    $('#plus-btn .fa').click( function () {
+                        $('.popoverPlaylistBtn').off('click').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
                             self._copyTrackToPlaylist(self.$currentTrack, playlistId);
                             $('#plus-btn .fa').popover('hide');
@@ -41,12 +37,9 @@
                     addMenu.find('ul').append('<li id="popoverPlaylistBtn" class="popoverPlaylistBtn">Add new playlist</li>');
                     
                     $('#plus-btn .fa').attr('data-content', addMenu.html());
-                    //var popover = $('#plus-btn .fa').data('bs.popover');
-                    //popover.$tip.addClass(popover.options.placement);
-                    //$('#plus-btn .fa').popover('hide');
 
-                    $('#plus-btn .fa').bind('click', function () {
-                        $('#popoverPlaylistBtn').click(function() {
+                    $('#plus-btn .fa').click( function () {
+                        $('#popoverPlaylistBtn').off('click').click(function() {
                             $('#createPlaylistModal').modal({
                                 show: true
                             });
@@ -60,18 +53,6 @@
                         });
                     });
                 }
-
-                //$('#plus-btn .fa').popover({
-                //    placement: 'bottom',
-                //    container: 'body',
-                //    html: true,
-                //    content: function() {
-                //        return addMenu.html();
-                //    }
-                //});
-                //var popover = $('#plus-btn .fa').data('bs.popover');
-                //popover.setContent();
-                //popover.$tip.addClass(popover.options.placement);
             }
         });
     };
