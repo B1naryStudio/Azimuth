@@ -34,7 +34,16 @@ namespace Azimuth.Models
                                             Name = pf.Playlist.Name,
                                             Id = pf.Playlist.Id,
                                             IsFavorite = pf.IsFavorite,
-                                            IsLiked = pf.IsLiked
+                                            IsLiked = pf.IsLiked,
+                                            Duration = pf.Playlist.Tracks.Sum(t => long.Parse(t.Duration)),
+                                            Songs = pf.Playlist.Tracks.Count,
+                                            Genres = pf.Playlist.Tracks.Select(x => x.Genre)
+                                                    .GroupBy(x => x, (key, values) => new { Name = key, Count = values.Count() })
+                                                    .OrderByDescending(x => x.Count)
+                                                    .Where(x => x.Name.ToLower() != "other" && x.Name.ToLower() != "undefined")
+                                                    .Select(x => x.Name)
+                                                    .Take(5)
+                                                    .ToList(),
                                         }).ToList()
             };
         }

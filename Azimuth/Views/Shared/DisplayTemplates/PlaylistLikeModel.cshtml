@@ -1,10 +1,31 @@
 ﻿
+@using System.Web.UI.WebControls
 @model Azimuth.Models.PlaylistLikeModel
 
 @{
     Layout = null;
+    var styles = new List<string> {"label-danger", "label-warning", "label-info", "label-success", "lable-default"};
+    var i = 0;
+    var duration = Convert.ToDecimal(Model.Duration);
+    var minutes = Math.Floor(duration / 60);
+    var seconds = (duration % 60);
+    var forrmattedDuration = minutes + ":" + ((seconds > 10) ? seconds.ToString() : "0" + seconds);
 }
 
-<li role="presentation"><a role="menuitem" tabindex="-1" href="@Url.Action("Playlist", "Share", new {id = @Model.Id})">@Model.Name</a></li>
+<li>
+    <a class="favorite-playlist" role="menuitem" tabindex="-1" href="@Url.Action("Playlist", "Share", new {id = @Model.Id})">
+        <div class="playlist-title playlist-info">@Model.Name</div>
+        <div class="playlist-info playlist-duration"><i class="fa fa-clock-o"></i> &nbsp; @forrmattedDuration</div>
+        <div class="playlist-info playlist-size"><i class="fa fa-music"></i> &nbsp; @Model.Songs</div>
+        <div class="playlist-genres">
+            @foreach (var genre in @Model.Genres)
+            {
+                <span class="label @styles[i]">@genre</span>
+                i++;
+            }
+        </div>
+    </a>
+</li>
+
 
 
