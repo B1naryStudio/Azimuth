@@ -105,7 +105,7 @@ namespace Azimuth.Services.Concrete
                     List<User> users;
                     if (searchText == "All")
                     {
-                        users = unitOfWork.UserRepository.GetAll(user => user.Name.FirstName != "Azimuth"
+                        users = unitOfWork.UserRepository.Get(user => user.Name.FirstName != "Azimuth"
                                                                          && user.Name.LastName != "Azimuth"
                                                                          && user.Email != "academy.proj@gmail.com")
                             .ToList();
