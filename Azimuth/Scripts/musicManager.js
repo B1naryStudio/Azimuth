@@ -652,6 +652,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                                 playlist.readonly = true;
                                 self.playlistsGlobal.push(playlist);
                                 var tmpl = self.playlistTemplate.tmpl(playlist);
+                                tmpl.children('.playlist-title').append($('<i class="fa fa-star"></i>'));
                                 self._setNewImage(tmpl);
                                 self.$playlistsTable.append(tmpl);
                                 self._setChangingPlaylistImage(tmpl);
@@ -672,6 +673,11 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             for (var i = 0; i < self.playlists.length; i++) {
                 var tmpl = this.playlistTemplate.tmpl(playlists[i]);
                 self.$playlistsTable.append(tmpl);
+
+                if (playlists[i].readonly === true) {
+                    tmpl.children('.playlist-title').append($('<i class="fa fa-star"></i>'));
+                }
+
                 self._setNewImage(tmpl);
                 self._setChangingPlaylistImage(tmpl);
                 self._createContextMenuForPlaylists();
