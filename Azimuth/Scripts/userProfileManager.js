@@ -40,8 +40,12 @@ UserProfileManager.prototype.bindListeners = function () {
         self._showPopup($(this));
     });
 
-    $('#following, #popup, #followers').mouseleave(function (event) {
-        self._hidePopup(event);
+    $('#followersBtn, #popup, #followedBtn').mouseleave(function (event) {
+        setTimeout(function() {
+            if (!$('#followersBtn').is(':hover') && !$('#popup').is(':hover') && !$('#followedBtn').is(':hover')) {
+                self._hidePopup(event);
+            }
+        }, 500);
     });
 
     $('#followedBtn, #followersBtn, #popup').click(function (event) {
@@ -94,7 +98,7 @@ UserProfileManager.prototype.bindListeners = function () {
 
     this._hidePopup = function(event) {
         var $toElement = $(event.toElement);
-        if ($toElement.attr('id') == "popup" || $toElement.attr('id') == 'following')
+        if ($toElement.attr('id') == "popup")
             return;
         var $popup = $('#popup');
         $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 200,
