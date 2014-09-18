@@ -10,6 +10,7 @@ var MusicManager = function (manager) {
     this.topTracks = null;
     this.extraContainerShown = false;
     this.topTracksVk = [];
+    this.playlistsTimeouts = [];
     this.currentFriend = null;
     this.gettingFriends = false;
     this.friendsListOpen = false;
@@ -361,13 +362,14 @@ var MusicManager = function (manager) {
     this._setChangingPlaylistImage = function (playlist) {
         var time = Math.floor((Math.random() * 40000) + 25000);
 
+        var timeoutId = setTimeout(timer, time);
+        self.playlistsTimeouts.push(timeoutId);
         function timer() {
             time = Math.floor((Math.random() * 40000) + 25000);
             self._setNewImage(playlist);
-            setTimeout(timer, time);
+            timeoutId = setTimeout(timer, time);
+            self.playlistsTimeouts.push(timeoutId);
         };
-
-        setTimeout(timer, time);
     };
 
     this._setNewImage = function (playlist) {
@@ -568,6 +570,10 @@ MusicManager.prototype.showPlaylistTracks = function (tracks) {
 
 MusicManager.prototype.showPlaylists = function (playlists) {
     var self = this;
+    for (var i = 0; i < self.playlistsTimeouts.length; i++) {
+        clearTimeout(self.playlistsTimeouts[i]);
+    }
+    self.playlistsTimeouts.length = 0;
     self.$messageContainer.hide();
     $('.playlist').remove();
     self.playlists = playlists;
