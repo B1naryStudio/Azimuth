@@ -18,13 +18,15 @@
                 </div>
                 <div id="playlist-section">
                     <div id="favorites" style="display: inline-block">
-                        <button class="btn btn-default btn-xs"><i class="fa fa-star"></i>  Favorite playlists</button>
-                        <div class="count-label" style="display: inline">@Model.User.PlaylistFollowing.Count(s => s.IsFavorite)</div>
-                        @*<div class="topFollowers">
-                            @Html.DisplayFor(x => x.Followers)
-                        </div>*@
+                        <div class="dropdown" style="display: inline-block">
+                            <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-star"></i>  Favorite playlists</button>
+                            <ul class="dropdown-menu">
+                                @Html.DisplayFor(x => x.User.PlaylistFollowing)
+                            </ul>
+                        </div>
+                        <div class="count-label" style="display: inline-block">@Model.User.PlaylistFollowing.Count(s => s.IsFavorite)</div>
                     </div>
-                    <div id="owned-playlists" style="display: inline-block">
+                    <div id="owned-playlists">
                         <a href="/PublicPlaylists/Index/@Model.User.Id" class="btn btn-default btn-xs"><i class="fa fa-music"></i>  Own playlists</a>
                     </div>
                 </div>

@@ -1,0 +1,10 @@
+﻿
+@model Azimuth.Models.PlaylistLikeModel
+
+@{
+    Layout = null;
+}
+
+<li role="presentation"><a role="menuitem" tabindex="-1" href="@Url.Action("Playlist", "Share", new {id = @Model.Id})">@Model.Name</a></li>
+
+

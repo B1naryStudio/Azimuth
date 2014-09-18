@@ -23,8 +23,12 @@
 }
 
 #playlist-section div {
-    width: 40%;
     padding: 2%;
+}
+
+#owned-playlists {
+    margin-left: 1%;
+    display: inline-block;
 }
 
 #social-container {

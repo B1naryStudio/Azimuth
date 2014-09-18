@@ -228,6 +228,7 @@
     <Compile Include="Hubs\Concrete\NotificationsHub.cs" />
     <Compile Include="Hubs\Interfaces\INotificationsHub.cs" />
     <Compile Include="Infrastructure\Exceptions\AccessDeniedException.cs" />
+    <Compile Include="Models\PlaylistLikeModel.cs" />
     <Compile Include="Services\Concrete\NotificationService.cs" />
     <Compile Include="Services\Interfaces\INotificationService.cs" />
     <Compile Include="Services\Interfaces\IPlaylistLikesService.cs" />
@@ -414,6 +415,7 @@
     <Content Include="Views\UserProfile\_FollowAction.cshtml" />
     <Content Include="Views\UserProfile\DisplayTemplates\FollowerModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PlaylistLikeModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
