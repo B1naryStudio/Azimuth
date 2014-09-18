@@ -452,7 +452,7 @@ var MusicManager = function (manager) {
         VK.api('wall.post', {
                 owner_id: friendId,
                 message: text,
-                attachments: "photo268940215_338980546,http://azimuth.apphb.com/"
+                attachments: "photo268940215_338980514,https://" + window.location.host
         }, function (data) {
         });
 
@@ -1000,9 +1000,11 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function() {
                 self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
             },
             error: function() {
                 self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
             }
         });
         self.$createNewPlaylistLbl.hide();
