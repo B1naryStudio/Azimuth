@@ -59,7 +59,7 @@
                 $('#listenTopBtn').attr('disabled', false);
             }
         });
-    });
+    };
 };
 
 PublicPlaylistManager.prototype.showPlaylists = function() {
