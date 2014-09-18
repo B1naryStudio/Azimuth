@@ -95,7 +95,6 @@
     position: absolute;
 }
 
-
 #popup img {
     max-height: 30px;
 }
@@ -131,6 +130,10 @@ border-top-color: #353535;
 top: 100%;
 left: 40%;
 margin-left: -15px;
+}
+
+#popupModal .modal-footer {
+    margin-top: 0;
 }
 
 #social-container a {
