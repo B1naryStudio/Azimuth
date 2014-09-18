@@ -37,13 +37,14 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function() {
-                var playlistId = $('#playlistTracks').find('.playlistId').text();
-                $('#playlistTracks').children().remove();
-                self.manager._getTracks(playlistId);
+                //var playlistId = $('#playlistTracks').find('.playlistId').text();
+                //$('#playlistTracks').children().remove();
+                //self.manager._getTracks(playlistId);
 
                 $('.tableRow.playlist').remove();
                 self.manager.playlistsGlobal.length = 0;
                 $('.playlist-divider').remove();
+                self.manager.activePlaylistId = playlistId;
                 self.manager.showPlaylists();
                 self.manager.setDefaultPlaylist();
             }
@@ -73,7 +74,7 @@
                     data: JSON.stringify(tracksIds),
                     contentType: 'application/json; charset=utf-8',
                     success: function() {
-                        $('#playlistTracks').children().remove();
+                        //$('#playlistTracks').children().remove();
                         self.manager._getTracks(oldPlaylist);
 
                         $('.tableRow.playlist').remove();
@@ -98,11 +99,11 @@
             data: JSON.stringify(tracksIds),
             contentType: 'application/json; charset=utf-8',
             success: function() {
-                if ($('#playlistTracks').children().length > 0) {
-                    var playlistId = $('#playlistTracks').find('.playlistId').text();
-                    $('#playlistTracks').children().remove();
-                    self.manager._getTracks(playlistId);
-                }
+                //if ($('#playlistTracks').children().length > 0) {
+                //    var playlistId = $('#playlistTracks').find('.playlistId').text();
+                //    $('#playlistTracks').children().remove();
+                //    self.manager._getTracks(playlistId);
+                //}
 
                 $('.tableRow.playlist').remove();
                 self.manager.playlistsGlobal.length = 0;
@@ -320,7 +321,7 @@ ContextMenu.prototype.selectAction = function ($currentItem, $musicList) {
                     $currentItem.append($('.draggable-item-selected').clone());
                     if ($currentItem.children().length > 0) {
                         self._removeSelectedTracksAction($currentItem, playlistId);
-                        self._removeSelectedTracksAction($currentItem, playlistId);
+                        //self._removeSelectedTracksAction($currentItem, playlistId);
                         self.$container.empty();
                         $currentItem = null;
                     }
