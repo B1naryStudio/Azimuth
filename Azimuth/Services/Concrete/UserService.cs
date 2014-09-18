@@ -103,14 +103,19 @@ namespace Azimuth.Services.Concrete
                 List<User> users;
                 if (searchText == "All")
                 {
-                    users = unitOfWork.UserRepository.GetAll().ToList();
+                    users = unitOfWork.UserRepository.GetAll(user => user.Name.FirstName != "Azimuth"
+                                                            && user.Name.LastName != "Azimuth"
+                                                            && user.Email != "academy.proj@gmail.com").ToList();
                 }
                 else
                 {
                     users = unitOfWork.UserRepository
                     .GetAll(user =>
-                        (user.Name.FirstName.ToLower() + ' ' + user.Name.LastName.ToLower()).Contains(searchText)
-                        || (user.Name.LastName.ToLower() + ' ' + user.Name.FirstName.ToLower()).Contains(searchText)).ToList();
+                        ((user.Name.FirstName.ToLower() + ' ' + user.Name.LastName.ToLower()).Contains(searchText)
+                        || (user.Name.LastName.ToLower() + ' ' + user.Name.FirstName.ToLower()).Contains(searchText))
+                        && (user.Name.FirstName != "Azimuth" 
+                            && user.Name.LastName != "Azimuth" 
+                            && user.Email != "academy.proj@gmail.com")).ToList();
                 }
 
                 Mapper.Map(users, usersDto);
