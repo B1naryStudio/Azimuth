@@ -178,8 +178,9 @@
             $draggableStub.hide();
         });
 
-        contextMenu.$contextMenuContainer.mousedown(function (event) {
+        contextMenu.$contextMenuContainer.mouseup(function (event) {
             contextMenu.selectAction($currentItem);
+            event.stopPropagation();
         });
 
         //$(document).mousedown(function (event) {
