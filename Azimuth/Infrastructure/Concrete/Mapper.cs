@@ -141,24 +141,27 @@ namespace Azimuth.Infrastructure.Concrete
 
         private static void VkUserDataMap(VkUserData.VkResponse snData, User user)
         {
-            user.Name =
-                new Name
-                {
-                    FirstName = snData.Response.First().FirstName ?? String.Empty,
-                    LastName = snData.Response.First().LastName ?? String.Empty
-                };
-            user.ScreenName = snData.Response.First().ScreenName ?? String.Empty;
-            user.Gender = (snData.Response.First().Sex != 0) ? snData.Response.First().Sex.ToString() : String.Empty;
-            user.Birthday = snData.Response.First().Birthday ?? String.Empty;
-            user.Email = snData.Response.First().Email ?? String.Empty;
-            user.Location =
-                new Location
-                {
-                    City = (snData.Response.First().City !=null) ? snData.Response.First().City.Title : String.Empty,
-                    Country = (snData.Response.First().Country != null) ? snData.Response.First().Country.Title : String.Empty
-                };
-            user.Timezone = snData.Response.First().Timezone;
-            user.Photo = snData.Response.First().Photo;
+            var response = snData.Response.FirstOrDefault();
+            if (response != null)
+            {
+                user.Name = new Name
+                            {
+                                FirstName = response.FirstName ?? String.Empty,
+                                LastName = response.LastName ?? String.Empty
+                            };
+                user.ScreenName = response.ScreenName ?? String.Empty;
+                user.Gender = (response.Sex != 0) ? response.Sex.ToString() : String.Empty;
+                user.Birthday = response.Birthday ?? String.Empty;
+                user.Email = response.Email ?? String.Empty;
+                user.Location = new Location
+                                {
+                                    City = (response.City != null) ? response.City.Title : String.Empty,
+                                    Country = (response.Country != null) ? response.Country.Title : String.Empty
+                                };
+                user.Timezone = response.Timezone;
+                user.Photo = response.Photo;
+            }
+            
         }
 
         private static void TwitterUserDataMap(TweetSharp.TwitterUser snData, User user)
