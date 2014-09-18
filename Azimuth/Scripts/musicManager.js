@@ -965,6 +965,7 @@ MusicManager.prototype.bindListeners = function() {
             }
             $('.playlist-divider').remove();
             self.showPlaylists(foundedPlaylist);
+            self.setDefaultPlaylist();
             $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
             //console.log('nothing to do here');
@@ -975,6 +976,7 @@ MusicManager.prototype.bindListeners = function() {
             self.audioManager.refreshPlaylistTracks();
             self.audioManager.updateProgressbar('#playlistTracks');
         }
+        self.$playlistsLoadingSpinner.hide();
     });
 
     $('#scrollable-playlist, .vkMusicTable').mCustomScrollbar({
