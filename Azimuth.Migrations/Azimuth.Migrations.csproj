@@ -69,6 +69,7 @@
     <Compile Include="Migrations\Migration_201409101200_RemoveListenedTableAndAddCounterToPlaylistTable.cs" />
     <Compile Include="Migrations\Migration_201409111617_UpdateConstraints.cs" />
     <Compile Include="Migrations\Migration_201409162000_AddingDateTimeToNotifications.cs" />
+    <Compile Include="Migrations\Migration_201409181300_AddingAdmin.cs" />
     <Compile Include="Migration_201408091845_Initial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
