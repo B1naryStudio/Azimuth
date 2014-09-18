@@ -784,7 +784,12 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             contentType: 'application/json',
             success: function (playlistId) {
-                self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+                if ($('#itemsContainer').children().length != 0) {
+                    self._saveTrackFromVkToPlaylist($('#itemsContainer'), -1, playlistId);
+                } else {
+                    self.showPlaylists();
+                    self.setDefaultPlaylist();
+                }
             }
         });
 

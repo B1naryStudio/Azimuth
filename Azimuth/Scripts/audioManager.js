@@ -24,7 +24,7 @@
             type: 'GET',
             dataType: 'json',
             success: function(playlists) {
-                var addMenu = $('<div><ul class="nav nav-pills nac-stacked"></ul></div>');
+                var addMenu = $('<div><ul class="nav"></ul></div>');
                 
                 if (playlists.length != 0) {
                     $(playlists).each(function() {
@@ -60,7 +60,9 @@
                             $('#createPlaylistModal').off('shown.bx.modal').on('shown.bs.modal', function() {
                                 $("#playlistNameToCreate").focus();
                             });
-                            $('#itemsContainer').append(self.$currentTrack.clone());
+                            if (self.$currentTrack != null) {
+                                $('#itemsContainer').append(self.$currentTrack.clone());
+                            }
                             $('#plus-btn .fa').popover('hide');
                         });
                     });

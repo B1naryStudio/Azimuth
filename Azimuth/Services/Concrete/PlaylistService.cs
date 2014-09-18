@@ -101,7 +101,7 @@ namespace Azimuth.Services.Concrete
         private static Func<Playlist, bool> GetOwnedPlaylist(long currentId)
         {
             return list => list.Accessibilty == Accessibilty.Public
-                           && list.Creator.Id == currentId;
+                           && list.Creator.Id != currentId;
         }
 
         private static Func<Playlist, bool> GetUserPlaylists(long? id)
