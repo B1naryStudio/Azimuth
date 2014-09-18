@@ -81,6 +81,9 @@
     display: none;
 }
 
+.creator:hover {
+    text-decoration: underline;
+}
 .genres {
     display: none;
 }
