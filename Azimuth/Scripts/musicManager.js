@@ -598,6 +598,7 @@ MusicManager.prototype.showPlaylists = function (playlists) {
             success: function (playlistsData) {
                 console.log(playlistsData.Message);
                 if (typeof playlistsData.Message === 'undefined') {
+                    self.playlistsGlobal.length = 0;
                     self.$reloginForm.hide();
                     self.playlists = playlistsData;
                     for (var i = 0; i < self.playlists.length; i++) {
