@@ -240,12 +240,14 @@
                 <div class="playlist-logo">
                     <img src="http://cdns2.freepik.com/free-photo/music-album_318-1832.jpg" width="100" height="100" />
                 </div>
-                <div class="playlist-title playlist-info">Name: ${Name}</div>
-                <div class="playlist-accessibility playlist-info">
-                    Accessibility: ${Accessibilty}
+                <div class="playlist-title playlist-info">
+                    ${Name}
+                    {{if Accessibilty === "Public"}}
+                    <i class="fa fa-share-alt"></i>
+                    {{/if}}                    
                 </div>
-                <div class="playlist-info playlist-duration">Duration: ${Duration}</div>
-                <div class="playlist-info playlist-size">Songs: ${ItemsCount}</div>
+                <div class="playlist-info playlist-duration"><i class="fa fa-clock-o"></i> &nbsp; ${Duration}</div>
+                <div class="playlist-info playlist-size"><i class="fa fa-music"></i> &nbsp; ${ItemsCount}</div>
                 <div class="playlist-genres">
                     <span class="label label-danger">${Genres[0]}</span>
                     <span class="label label-warning">${Genres[1]}</span>
