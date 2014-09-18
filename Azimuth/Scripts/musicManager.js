@@ -45,13 +45,22 @@ var MusicManager = function (manager) {
     this.$playlistsTitle = $('#playlist-header-title');
     this.$errorModal = $('#errorModal');
     this.$messageContainer = $('#message-container');
+    this.activePlaylistId = null;
 
     this._getTracks = function (plId) {
         var $this = $(this);
         self.$vkMusicLoadingSpinner.show();
         $('.vkMusicList').find('.track').detach();
-        var playlistId = $this.children('.playlistId').text();
-        if (playlistId.length == 0) {
+        var $activePlaylist = $('.playlist-active');
+        var playlistId;
+        if ($this.hasClass('playlist')) {
+            playlistId = $this.children('.playlistId').text();
+        } else {
+            playlistId = $activePlaylist.find('.playlistId').text();
+            this.activePlaylistId = playlistId;
+        }
+
+        if (playlistId == null) {
             playlistId = plId;
         }
         $.ajax({
@@ -78,7 +87,8 @@ var MusicManager = function (manager) {
 
                     ctxMenu.initializeContextMenu(-1, contextMenuActions, this, self);
                 } else {
-                    self.$playlistsTable.parents('.draggable').makeDraggable({
+                    //self.$playlistsTable.parents('.draggable').makeDraggable({
+                   $('.draggable').makeDraggable({
                         contextMenu: [
                             { 'id': 'selectall', 'name': 'Select All', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": false },
                             { 'id': 'copytoplaylist', 'name': 'Copy to another playlist', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
@@ -94,10 +104,12 @@ var MusicManager = function (manager) {
             }
         });
         //$(this).next("#playlistTracksTable").slideToggle(100); // TODO replace with class name
-        var temp = self.playlistsGlobal.filter(function (index) {
-            return index.Id == playlistId;
-        })[0].Name;
-        self.$vkMusicTitle.text(temp);
+        //var temp = self.playlistsGlobal.filter(function (index) {
+        //    return index.Id == playlistId;
+        //})[0].Name;
+        //self.$vkMusicTitle.text(temp);
+
+
         self.audioManager.bindPlayBtnListeners();
 
         $('.playlist-active').toggleClass('playlist-active', false);
@@ -216,7 +228,10 @@ var MusicManager = function (manager) {
                 self.audioManager.bindPlayBtnListeners();
                 $('#vkMusicTable > .tableTitle').text("User Tracks");
                 self.$vkMusicLoadingSpinner.hide();
-                $('.vkMusicList').show();
+                var $activePlaylist = $('.playlist-active');
+                if ($activePlaylist.hasClass('default-playlist')) {
+                    $('.vkMusicList').show();
+                }
             },
             error: function () {
                 $('#vkMusicTable > .tableTitle').text("Error has occurred");
@@ -585,7 +600,6 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 console.log(playlistsData.Message);
                 if (typeof playlistsData.Message === 'undefined') {
                     self.$reloginForm.hide();
-                    self.$vkMusicTable.show();
                     self.playlists = playlistsData;
                     for (var i = 0; i < self.playlists.length; i++) {
                         var playlist = self.playlists[i];
@@ -603,6 +617,17 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                         self.$playlistsTable.append(tmpl);
                         self._setChangingPlaylistImage(tmpl);
                     }
+                    if (self.activePlaylistId != null && self.activePlaylistId.length > 0) {
+                        var $active = $('.playlist span:contains(' + self.activePlaylistId +')').parents('.playlist');
+                        $('.playlist-active').toggleClass('playlist-active', false);
+                        $active.toggleClass('playlist-active', true);
+                        self._getTracks();
+                        $('.playlist-active').toggleClass('playlist-active', false);
+                        $active.toggleClass('playlist-active', true);
+                        $('.vkMusicList').show();
+                    } else {
+                        self.$vkMusicTable.show();
+                    }
                 } else {
                     self.$reloginForm.show();
                     self.$vkMusicTable.hide();
@@ -612,10 +637,9 @@ MusicManager.prototype.showPlaylists = function (playlists) {
                 $.ajax({
                     url: '/api/playlists/favorite/notOwned',
                     success: function (playlistsData) {
-                        console.log('Hi');
                         if (typeof playlistsData.Message === 'undefined') {
                             self.$reloginForm.hide();
-                            self.$vkMusicTable.show();
+                            //self.$vkMusicTable.show();
                             self.playlists = playlistsData;
                             for (var i = 0; i < self.playlists.length; i++) {
                                 var playlist = self.playlists[i];
