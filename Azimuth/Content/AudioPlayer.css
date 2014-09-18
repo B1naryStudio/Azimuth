@@ -115,6 +115,8 @@
 }
 
 .popoverPlaylistBtn{
+    padding-left: 15px;
+    padding-right: 15px;
     width: 100%;
     margin-bottom: 5px; 
 }
