@@ -590,13 +590,14 @@ namespace Azimuth.Services.Concrete
 
         public async Task<List<string>> GetPlaylistsGenres()
         {
+            var currentUserId = AzimuthIdentity.Current.UserCredential.Id;
             return await Task.Run(() =>
             {
                 List<string> genres = null;
 
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    genres = unitOfWork.PlaylistRepository.GetAll().SelectMany(p => p.Tracks).Select(t => t.Genre.ToString()).Distinct().OrderBy(s => s).ToList();
+                    genres = unitOfWork.PlaylistRepository.GetAll().Where(p => p.Creator.Id != currentUserId).SelectMany(p => p.Tracks).Select(t => t.Genre.ToString()).Distinct().OrderBy(s => s).ToList();
                     unitOfWork.Commit();
                 }
                 return genres;

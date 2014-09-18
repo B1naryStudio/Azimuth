@@ -72,12 +72,7 @@
 
         document.audioManager.createProgressBar();
         document.audioManager.createVolumeSlider();
-//        var volumeSlider = new SliderController({
-//            sliderSelector: '#volume-container',
-//            sliderBarClass: 'volumeBar',
-//            sliderClass: 'volume',
-//            dirrection: 'horizontal'
-//        });
+        document.progressBar.bindListeners();
 
         $('#tracks-content').mCustomScrollbar({
             theme: 'dark-3',

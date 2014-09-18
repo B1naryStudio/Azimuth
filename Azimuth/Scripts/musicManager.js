@@ -851,7 +851,7 @@ MusicManager.prototype.bindListeners = function() {
     };
 
     this._expandFriendsPanel = function() {
-        self.$friendButton.css('color', '#FFD386');
+        self.$friendButton.css('color', '#F9851F');
         self._getFriendInfo();
         $('#friends-container').show();
         $('.friend-active').toggleClass('friend-active', false);
@@ -886,7 +886,7 @@ MusicManager.prototype.bindListeners = function() {
     };
 
     this._expandNotificationPanel = function() {
-        self.$notificationButton.css('color', '#FFD386');
+        self.$notificationButton.css('color', '#F9851F');
         $('#notification-container').show();
         self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
         self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
