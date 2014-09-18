@@ -71,21 +71,43 @@ namespace Azimuth.Services.Concrete
         {
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
             {
-                long currentId = -1;
-                if (AzimuthIdentity.Current == null)
-                    currentId = id ?? -1;
+                Func<Playlist, bool> filter = null;
+                if (id != null)
+                {
+                    filter = GetUserPlaylists(id);
+                }
                 else
-                    currentId = id ?? AzimuthIdentity.Current.UserCredential.Id;
-                
+                {
+                    long currentId = -1;
+                    if (AzimuthIdentity.Current != null)
+                    {
+                        currentId = AzimuthIdentity.Current.UserCredential.Id;
+                    }
+
+                    filter = GetOwnedPlaylist(currentId);
+                }
+
                 var playlists = unitOfWork.PlaylistRepository
-                    .Get(list => list.Accessibilty == Accessibilty.Public
-                                 && list.Creator.Id != currentId)
-                                 .Select(GetPlaylistData())
-                                 .OrderByDescending(order => order.PlaylistListened)
-                                 .ToList();
+                                      .Get(filter)
+                                      .Select(GetPlaylistData())
+                                      .OrderByDescending(order => order.PlaylistListened)
+                                      .ToList();
+
                 unitOfWork.Commit();
                 return playlists;
             }
+        }
+
+        private static Func<Playlist, bool> GetOwnedPlaylist(long currentId)
+        {
+            return list => list.Accessibilty == Accessibilty.Public
+                           && list.Creator.Id == currentId;
+        }
+
+        private static Func<Playlist, bool> GetUserPlaylists(long? id)
+        {
+            return list => list.Accessibilty == Accessibilty.Public
+                           && list.Creator.Id == id;
         }
 
         public async Task<List<PlaylistData>> GetUsersPlaylists(string id)

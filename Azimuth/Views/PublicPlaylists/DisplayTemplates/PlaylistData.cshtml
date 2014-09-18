@@ -39,10 +39,10 @@
             genres = genres.Remove(genres.Length - 2);
             <div class="genres">@genres</div>
         }
-        <div class="duration pull-left">
+        <div class="duration">
             <i class="fa fa-play"></i>@formattedDuration
         </div>
-        <div class="playlistFollowers pull-left">
+        <div class="playlistFollowers">
             <i class="fa fa-heart"></i>@Model.PlaylistLikes
             <i class="fa fa-star"></i>@Model.PlaylistFavourited
             <i class="fa fa-headphones"></i> @Model.PlaylistListened

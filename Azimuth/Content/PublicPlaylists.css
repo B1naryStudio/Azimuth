@@ -71,16 +71,38 @@
     padding: 3px;
 }
 
-div.playlistName {
+.playlistName {
     font-size: 20px;
+    display: none;
 }
 
 .creator {
     font-size: 16px;
+    display: none;
+}
+
+.genres {
+    display: none;
+}
+
+@keyframes fadein {
+    from { opacity: 0; display: none;}
+    to   { opacity: 1; display: block;}
 }
 
 .playlist-plated:hover .playlistName{
-    text-decoration: underline;
+    text-decoration: none;
+}
+
+.playlist-plated:hover .playlistName,
+.playlist-plated:hover .creator,
+.playlist-plated:hover .genres {
+    -webkit-animation: fadein 0.5s;
+    -moz-animation: fadein 0.5s;
+    -ms-animation: fadein 0.5s;
+    -o-animation: fadein 0.5s;
+    animation: fadein 0.5s;
+    display: block;
 }
 
 .listeners-count span {
