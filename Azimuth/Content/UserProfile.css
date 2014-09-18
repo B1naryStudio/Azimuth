@@ -23,8 +23,17 @@
 }
 
 #playlist-section div {
-    width: 40%;
     padding: 2%;
+}
+
+.favorite-playlist:hover {
+    background-color: #FFD386 !important;
+    color: #353535 !important;
+}
+
+#owned-playlists {
+    margin-left: 1%;
+    display: inline-block;
 }
 
 #social-container {
