@@ -8,7 +8,7 @@
 }
 
 #user-name {
-    font-size: 27px
+    font-size: 27px;
 }
 
 #followers-section div {
@@ -87,11 +87,17 @@
 #popup .topPeople {
     margin: 3px;
     float: left;
+    width: 30px;
+}
+
+#popup a {
+    width: 30px;
+    text-align: center;
+    position: absolute;
 }
 
 #popup img {
-    width: 30px;
-    height: 30px;
+    max-height: 30px;
 }
 
 #popupModal img {
@@ -125,6 +131,10 @@ border-top-color: #353535;
 top: 100%;
 left: 40%;
 margin-left: -15px;
+}
+
+#popupModal .modal-footer {
+    margin-top: 0;
 }
 
 #social-container a {

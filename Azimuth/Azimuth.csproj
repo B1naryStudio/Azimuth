@@ -321,6 +321,8 @@
     <Content Include="Images\arrow-square.gif" />
     <Content Include="Images\background.jpg" />
     <Content Include="Images\facebook_logo.png" />
+    <Content Include="Images\follow.png" />
+    <Content Include="Images\following.png" />
     <Content Include="Images\google_logo.png" />
     <Content Include="Images\grey-caret-right.png" />
     <Content Include="Images\login_bg.jpeg" />

@@ -13,10 +13,6 @@
     </div>
     <div class="col-md-7 col-xs-7" id="user-info">
         <div class="row well">
-            <div id="user-name">
-                @Html.DisplayFor(x => x.User.FirstName)
-                @Html.DisplayFor(x => x.User.LastName)
-            </div>
             <div id="followers-section">
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
                 </div>
@@ -66,6 +62,7 @@
                 <div class="users"></div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
