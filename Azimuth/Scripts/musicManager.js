@@ -817,7 +817,7 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             contentType: 'application/json',
             success: function(playlistName) {
-                $playlist.children('.playlist-title').text('Name: ' + playlistName);
+                $playlist.children('.playlist-title').text(playlistName);
                 $('#playlistsTable').trigger('OnChange');
             }
         });
