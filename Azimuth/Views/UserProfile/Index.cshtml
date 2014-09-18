@@ -14,8 +14,8 @@
     <div class="col-md-7 col-xs-7" id="user-info">
         <div class="row well">
             <div id="user-name">
-                @Html.DisplayFor(x => x.User.Name.FirstName)
-                @Html.DisplayFor(x => x.User.Name.LastName)
+                @Html.DisplayFor(x => x.User.FirstName)
+                @Html.DisplayFor(x => x.User.LastName)
             </div>
             <div id="followers-section">
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
