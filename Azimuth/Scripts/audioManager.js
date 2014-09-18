@@ -11,16 +11,9 @@
 
     this.onProgressBarClick = false;
 
-    $('#plus-btn .fa').popover({
-        placement: 'bottom',
-        container: 'body',
-        template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="padding: 5px 0;"></div></div>',
-        html: true
-    });
-
     this._getPlaylistsForPopover = function() {
         $.ajax({
-            url: 'api/playlists/',
+            url: '/api/playlists/',
             type: 'GET',
             dataType: 'json',
             success: function(playlists) {
@@ -256,8 +249,6 @@
 
         //self.manager._moveTrackToNewPosition($currentTrack);
     };
-
-    self._getPlaylistsForPopover();
 };
 
 AudioManager.prototype.refreshTracks = function() {
@@ -309,9 +300,9 @@ AudioManager.prototype.play = function() {
     //self.$currentTrack.find('.track-remaining').show();
     //self.$currentTrack.append(self.progressSlider.getSlider());
     //self.progressSlider.getSlider().show();
-    self.progressSlider.bindListeners();
+    //self.progressSlider.bindListeners();
     self.audio.play();
-    self.refreshProgressBar();
+    //self.refreshProgressBar();
 };
 
 AudioManager.prototype.pause = function() {
@@ -343,6 +334,15 @@ AudioManager.prototype.getDuration = function () {
 
 AudioManager.prototype.bindPlayBtnListeners = function() {
     var self = this;
+
+    $('#plus-btn .fa').popover({
+        placement: 'bottom',
+        container: 'body',
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="padding: 5px 0;"></div></div>',
+        html: true
+    });
+
+    self._getPlaylistsForPopover();
 
     function onPlayBtnClick() {
         //if (self.$currentTrack != null) {
