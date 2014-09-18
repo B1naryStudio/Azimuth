@@ -505,7 +505,6 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             && self.audioManager.$currentTrack.children('.trackId').html() == tracks[i].id) {
             tmpl.toggleClass('.draggable-item-selected');
             self.audioManager.$currentTrack = tmpl;
-            //tmpl.append(self.audioManager.progressSlider.getSlider()); //TODO: Deprecated
             if (self.audioManager.audio.paused) {
                 self.audioManager._setPlayImgButton(tmpl);
             } else {
@@ -817,7 +816,7 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             contentType: 'application/json',
             success: function(playlistName) {
-                $playlist.children('.playlist-title').text('Name: ' + playlistName);
+                $playlist.children('.playlist-title').text(playlistName);
                 $('#playlistsTable').trigger('OnChange');
             }
         });
@@ -851,7 +850,7 @@ MusicManager.prototype.bindListeners = function() {
     };
 
     this._expandFriendsPanel = function() {
-        self.$friendButton.css('color', '#FFD386');
+        self.$friendButton.css('color', '#F9851F');
         self._getFriendInfo();
         $('#friends-container').show();
         $('.friend-active').toggleClass('friend-active', false);
@@ -886,7 +885,7 @@ MusicManager.prototype.bindListeners = function() {
     };
 
     this._expandNotificationPanel = function() {
-        self.$notificationButton.css('color', '#FFD386');
+        self.$notificationButton.css('color', '#F9851F');
         $('#notification-container').show();
         self.$extraContainer.toggleClass('col-md-0', false).toggleClass('col-md-3', true);
         self.$trackContainer.toggleClass('col-md-8', false).toggleClass('col-md-5', true);
@@ -963,7 +962,6 @@ MusicManager.prototype.bindListeners = function() {
                     self.playlistsGlobal = [];
                     $(this).val("");
                     $('.playlist-divider').remove();
-                    self.showPlaylists();
                     self.setDefaultPlaylist();
                 }
             } else {
@@ -974,7 +972,6 @@ MusicManager.prototype.bindListeners = function() {
             self.setDefaultPlaylist();
             $('.accordion .tableRow:not(.default-playlist)').on("click", self._getTracks);
         } else {
-            //console.log('nothing to do here');
             self.showPlaylistTracks(self.playlistTracksGlobal.filter(function(index) {
                 self.$searchPlaylistInput.next().children().remove();
                 return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
@@ -1001,6 +998,14 @@ MusicManager.prototype.bindListeners = function() {
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
+            success: function() {
+                self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
+            },
+            error: function() {
+                self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
+            }
         });
         self.$createNewPlaylistLbl.hide();
         $(document).trigger({ type: 'PlaylistAdded', Name: playlistName, Accessibilty: 1 });
@@ -1032,8 +1037,6 @@ MusicManager.prototype.bindListeners = function() {
         if (self.$extraContainer.hasClass('col-md-0')) {
             self.showPlaylists();
             self.setDefaultPlaylist();
-            //$('#plus-btn .fa').popover('hide');
-            //self.audioManager._getPlaylistsForPopover();
         }
     });
 
@@ -1051,10 +1054,11 @@ MusicManager.prototype.bindListeners = function() {
             if (self.topTracks != null) {
                 var tracks = JSON.stringify({ trackdata: self.topTracks });
                 $.ajax({
-                    url: '/api/usertracks/tracksearch?provider=Vkontakte&infoForSearch=' + tracks,
+                    url: '/api/usertracks/tracksearch?provider=Vkontakte',
                     type: 'POST',
                     dataType: 'json',
-                    contentType: 'application/json;',
+                    data: tracks,
+                    contentType: 'application/json; charset=utf-8',
                     success: function(data) {
                         self.topTracksVk = [];
                         $(data).each(function() {
@@ -1070,7 +1074,6 @@ MusicManager.prototype.bindListeners = function() {
                                 { 'id': 'hideselected', 'name': 'Hide selected', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true },
                                 { 'id': 'savevktrack', 'name': 'Move to', "isNewSection": true, "hasSubMenu": true, "needSelectedItems": true },
                                 { 'id': 'createplaylist', 'name': 'Create new playlist', "isNewSection": false, "hasSubMenu": false, "needSelectedItems": true }
-                                //{ 'id': 'trackshuffle', 'name': 'Shuffle', 'isNewSection': false, 'hasSubMenu': false, 'needSelectedItems': false }
                             ]
                         });
                         self.$vkMusicLoadingSpinner.hide();
