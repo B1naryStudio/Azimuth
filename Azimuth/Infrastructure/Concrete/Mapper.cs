@@ -284,8 +284,8 @@ namespace Azimuth.Infrastructure.Concrete
             {
                 Id = user.Id.ToString(),
                 Birthdate = user.Birthday ?? String.Empty,
-                City = user.Location.City ?? String.Empty,
-                Country = user.Location.Country ?? String.Empty,
+                City = (user.Location != null) ? user.Location.City ?? String.Empty : String.Empty,
+                Country = (user.Location != null) ?user.Location.Country ?? String.Empty : String.Empty,
                 Email = user.Email ?? String.Empty,
                 FirstName = user.Name.FirstName ?? String.Empty,
                 LastName = user.Name.LastName ?? String.Empty,
