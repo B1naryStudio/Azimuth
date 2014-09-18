@@ -1001,9 +1001,11 @@ MusicManager.prototype.bindListeners = function() {
             contentType: 'application/json',
             success: function() {
                 self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
             },
             error: function() {
                 self.showPlaylists();
+                self.$playlistsLoadingSpinner.hide();
             }
         });
         self.$createNewPlaylistLbl.hide();
