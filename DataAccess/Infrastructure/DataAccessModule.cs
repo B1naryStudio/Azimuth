@@ -23,7 +23,7 @@ namespace Azimuth.DataAccess.Infrastructure
 #if DEBUG
                 cfg.Configure();
 #else
-                cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate.cfg.xml"));
+                cfg.Configure(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, "hibernate-release.cfg.xml"));
 #endif
                 cfg.AddAssembly(Assembly.GetExecutingAssembly());
                 return cfg.BuildSessionFactory();
