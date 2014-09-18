@@ -3,7 +3,7 @@
     this.audio = new Audio();
     this.tracksGlobal = [];
     this.$currentTrack = null;
-    this.audio.volume = 0.5;
+    this.audio.volume = 1;
     this.beforeMuteVolume = null;
     this.volumeSlider = volumeSlider;
     this.progressSlider = progressSlider;
@@ -14,6 +14,7 @@
     $('#plus-btn .fa').popover({
         placement: 'bottom',
         container: 'body',
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="padding: 5px 0;"></div></div>',
         html: true
     });
 
@@ -35,7 +36,7 @@
                     //popover.$tip.addClass(popover.options.placement);
                     //$('#plus-btn .fa').popover('hide');
 
-                    $('.popover-content').css('padding', '5px 0');
+                    //$('.popover-content').css('padding', '5px 0');
                     $('#plus-btn .fa').bind('click', function () {
                         $('.popoverPlaylistBtn').click( function() {
                             var playlistId = $(this).parent().children('.playlistId').text();
@@ -498,10 +499,10 @@ AudioManager.prototype.bindListeners = function() {
     $('#next-button').click(self._nextTrack);
     $('#prev-button').click(self._prevTrack);
 
-    $('#volumeImg').click(function () {
+    $('.volume-img').click(function () {
         if (self.audio.volume == 0) {
             self.audio.volume = self.beforeMuteVolume;
-            $('#volumeImg').css('background-position', '0 0');
+            //$('#volumeImg').css('background-position', '0 0');
             self.volumeSlider.setPosition(self.beforeMuteVolume);
             //$('#volume').css('height', self.beforeMuteVolume*100 + '%');
         } else {
