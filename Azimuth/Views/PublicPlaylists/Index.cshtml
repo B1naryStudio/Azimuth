@@ -6,6 +6,7 @@
 
 @{
     ViewBag.Title = "Public playlists";
+    var loggedUserId = ViewBag.Id;
 }
 
 <div id="playlist-spinner" class="spinner loader"></div>
@@ -128,14 +129,14 @@
             });
 
             $.ajax({
-                url: '/api/playlists/genres',
+                url: '/api/playlists/genres?id=@loggedUserId',
                 type: 'GET',
                 dataType: 'json',
                 success: function (genres) {
                     var $genresList = $('#genres > #genres-list');
                     $genresList.append($('<li><a href="#" class="genre">All</a></li>'));
                     for (var i = 0; i < genres.length; i++) {
-                        if (genres[i].toLowerCase() !== 'undefined') {
+                        if (genres[i].toLowerCase() !== 'undefined' && genres[i].toLowerCase() !== 'other') {
                             var $item = $('<li><a href="#" class="genre">' + genres[i] + '</a></li>');
                             $('#genres > #genres-list').append($item);
                         }

@@ -24,7 +24,7 @@ namespace Azimuth.Services.Interfaces
         Task<string> GetSharedPlaylist(List<long> tracksId);
         Task<string> SetPlaylistName(string azimuthPlaylist, string playlistName);
         Task<int> RaiseListenedCount(int id);
-        Task<List<string>> GetPlaylistsGenres();
+        Task<List<string>> GetPlaylistsGenres(long? id);
         List<PlaylistData> GetPublicPlaylistsSync(long? id, string genre);
         Task<string> SetPlaylistName(long id, string playlistName);
     }
