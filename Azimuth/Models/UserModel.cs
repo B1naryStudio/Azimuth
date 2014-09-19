@@ -28,7 +28,7 @@ namespace Azimuth.Models
                 Photo = user.Photo,
                 Followers = user.Followers.Select(s => new FollowerModel {Id = s.Id, FirstName = s.Name.FirstName, LastName = s.Name.LastName, ScreenName = s.ScreenName, Photo = s.Photo }).ToList(),
                 Following = user.Following.Select(s => new FollowerModel { Id = s.Id, FirstName = s.Name.FirstName, LastName = s.Name.LastName, ScreenName = s.ScreenName, Photo = s.Photo }).ToList(),
-                PlaylistFollowing = user.PlaylistFollowing
+                PlaylistFollowing = user.PlaylistFollowing.Where(p => p.IsFavorite)
                                         .Select(pf => new PlaylistLikeModel
                                         {
                                             Name = pf.Playlist.Name,
