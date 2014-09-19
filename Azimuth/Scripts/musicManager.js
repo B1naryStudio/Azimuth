@@ -776,7 +776,7 @@ MusicManager.prototype.showNotifications = function (notifications, scrollbarIni
                     var userId = $('#userId').val();
                     $.ajax({
                         //url: '/api/notifications/' + userId + '/' + self.notificationsOffset,
-                        url: '/api/notifications/' + userId + '/' + $('.list-notification-content').length,
+                        url: '/api/notifications/followings' + userId + '/' + $('.list-notification-content').length,
                         type: 'GET',
                         success: function (notificationData) {
                             self.showNotifications(notificationData, true);
@@ -964,7 +964,7 @@ MusicManager.prototype.bindListeners = function() {
         if (self.extraContainerShown) {
             $.ajax({
                 //url: '/api/notifications/followings/' + userId,
-                url: '/api/notifications/' + userId,
+                url: '/api/notifications/followings/' + userId,
                 type: 'GET',
                 success: function (notifications) {
                     var $scroll = $('#notifications-container').find('.mCSB_container');
