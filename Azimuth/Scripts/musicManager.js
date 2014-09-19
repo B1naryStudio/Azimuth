@@ -956,7 +956,8 @@ MusicManager.prototype.bindListeners = function() {
         var userId = $('#userId').val();
         if (self.extraContainerShown) {
             $.ajax({
-                url: '/api/notifications/followings/' + userId,
+                //url: '/api/notifications/followings/' + userId,
+                url: '/api/notifications/' + userId,
                 type: 'GET',
                 success: function (notifications) {
                     var $scroll = $('#notifications-container').find('.mCSB_container');
