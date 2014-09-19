@@ -7,6 +7,7 @@
     this.searching = false;
     this.$infoLoadingSpinner = $('#info-header-spinner');
     this.$vkMusicLoadingSpinner = $('#vkMusic-header-spinner');
+    this.$usersLoadingSpinner = $('#users-spinner');
 
     this._uploadNewSongs = function () {
         if ($('.btn-primary.searchBtn').data('search') == 'vkontakte' && this.mcs.topPct >= 75 && !self.searching) {
@@ -47,10 +48,12 @@
         $('#users').find('.user').remove();
         
         if ($('.searchBtn.btn-primary').text() == 'User') {
+            $('#searched-list').hide();
+            $('#users').show();
             if (searchParam == '') {
                 searchParam = "All";
             }
-            self.$vkMusicLoadingSpinner.show();
+            self.$usersLoadingSpinner.show();
             $.ajax({
                 url: 'api/search/users?searchText=' + searchParam,
                 type: 'GET',
@@ -60,6 +63,8 @@
                 }
             });
         } else {
+            $('#searched-list').show();
+            $('#users').hide();
             if (searchParam != '') {
                 self.$vkMusicLoadingSpinner.show();
                 $.ajax({
@@ -83,7 +88,7 @@
             tmpl.appendTo('#users');
         };
 
-        self.$vkMusicLoadingSpinner.hide();
+        self.$usersLoadingSpinner.hide();
     };
 
     this._showTracks = function (tracks, template) {

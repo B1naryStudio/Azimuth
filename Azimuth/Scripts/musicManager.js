@@ -284,6 +284,7 @@ var MusicManager = function (manager) {
 
     this._setFriendDefaultPlaylist = function () {
         var $currentItem = $(this);
+        $('.message-sent').hide();
         $('.friend-active').toggleClass('friend-active', false);
         $currentItem.toggleClass('friend-active', true);
         $('.default-playlist').remove();
@@ -308,6 +309,7 @@ var MusicManager = function (manager) {
                 } else {
                     playlists = [];
                     self.showPlaylists(playlists);
+                    $('.message-send').show();
                     self.$messageContainer.show();
                 }
                 $('.playlist-divider').remove();
@@ -459,6 +461,9 @@ var MusicManager = function (manager) {
                 attachments: "photo268940215_338980514,https://" + window.location.host
         }, function (data) {
         });
+
+        $('.message-send').hide();
+        $('.message-sent').show();
 
         e.stopPropagation();
     };

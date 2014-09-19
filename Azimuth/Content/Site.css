@@ -519,3 +519,15 @@ a.popup-notification-close {
 .mCSB_inside > .mCSB_container {
 margin-right: 15px;
 }
+
+#message-container i {
+    font-size: 2em;
+}
+
+.message-sent {
+    text-align: center;
+    background: #5cb85c;
+    height: 100px;
+    padding-top: 2%;
+    display: none;
+}
