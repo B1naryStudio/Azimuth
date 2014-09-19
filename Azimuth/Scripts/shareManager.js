@@ -69,7 +69,7 @@
     };
 
 
-    $('.track-info > a').click(self._getTrackInfo);
+    $('.track-info > a').off('click').click(self._getTrackInfo);
     $('.track-duration').each(function() {
         var $this = $(this);
         var oldDuration = $this.html();
