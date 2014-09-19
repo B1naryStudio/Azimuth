@@ -3,7 +3,7 @@
 
 <div style="display: none" class="topPeople">
     <a href="@Url.Action("Index", "UserProfile", new{id = @Model.Id})" title="@Model.FirstName  @Model.LastName">
-        <img src="@Model.Photo"/>
+        <img src="@Model.Photo" width="75" height="75" />
     </a>
     <a class="userName" href="@Url.Action("Index", "UserProfile", new{id = @Model.Id})" title="@Model.FirstName  @Model.LastName"><h4>@Model.FirstName  @Model.LastName</h4></a>
 </div>
