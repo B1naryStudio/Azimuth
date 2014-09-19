@@ -122,19 +122,23 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Shared playlist</h4>
                 </div>
-                <div class="modal-body" style="text-align: center">
-                    <div style="display:block">
+                <div class="modal-body">
+                    <div style="margin: 4px 10%;">
                         @Html.Label("Name:")
                         <input type="text" class="form-control" id="sharing-playlist" style="display: inline" />
                     </div>
-                    <div>
-                        @Html.Label("Link:")
+                    <div style="margin: 4px 10.3%;">
+                        @Html.Label("Link:")&nbsp;&nbsp;
                         <input type="text" class="form-control" id="sharingLink" style="display: inline" readonly />
                         <button id="copy-to-clipboard" class="btn btn-default btn-success">Copy</button>
                         <div id="playlist-guid" style="display: none"></div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
