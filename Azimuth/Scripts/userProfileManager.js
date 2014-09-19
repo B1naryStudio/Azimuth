@@ -3,7 +3,16 @@
     this.$loggedUser = $('#user-id');
     this.$notificationTemplate = $('#notificationTemplate');
     this.$notificationContainer = $('#notification-container');
+    this.$favoritePlaylistsContainer = $('#favorite-playlists-container');
     this.$recentActivity = $('#recent-activity');
+    this.$playlistsCount = $('#playlists-count');
+
+    $.ajax({
+        url: '/api/playlists/',
+        success: function(playlists) {
+            $('#playlists-count').text(playlists.length);
+        }
+    });
 };
 
 
@@ -36,10 +45,18 @@ UserProfileManager.prototype.bindListeners = function () {
         advanced: { updateOnSelectorChange: "true" }
     });
 
+    self.$favoritePlaylistsContainer.mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        scrollInertia: 0,
+        autoHideScrollbar: true,
+        advanced: { updateOnSelectorChange: "true" }
+    });
+
     $('#followersBtn, #followedBtn').off('hover').hover(function (event) {
 
         if ($('#popup').is(":visible")) {
-            //self._hidePopup(event);
             $('#popup').children('.data').empty();
         }
 
@@ -95,7 +112,7 @@ UserProfileManager.prototype.bindListeners = function () {
 
         $popup.css({
             'top': $btnPos.top - $popup.height() - 5,
-            'left': $btnPos.left - 15
+            'left': $btnPos.left - 5
         }).animate({ bottom: '50px', opacity: 1 }, 600,
             function() {
                 $('#popup').css({ 'display': 'block' });
@@ -107,7 +124,7 @@ UserProfileManager.prototype.bindListeners = function () {
         if ($toElement.attr('id') == "popup")
             return;
         var $popup = $('#popup');
-        $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 600,
+        $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 300,
          function () {
              $('#popup').css({ 'display': 'none' });
          });

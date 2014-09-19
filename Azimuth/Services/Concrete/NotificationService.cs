@@ -86,7 +86,7 @@ namespace Azimuth.Services.Concrete
                 }
             }
 
-            return notifications;
+            return notifications.OrderByDescending(s => s.DateTime).ToList();
         }
 
         private string GetMessage(Notification notification)

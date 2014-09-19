@@ -10,34 +10,30 @@
     @Html.HiddenFor(x => x.User.Id, new { id = "user-id" })
     <div class="col-md-5 col-xs-5" id="user-photo">
         <img src="@Model.User.Photo" />
-    </div>
-    <div class="col-md-7 col-xs-7" id="user-info">
-        <div class="row well">
+        <div id="user-name">
+            @Html.DisplayFor(x => Model.User.FirstName)
+            @Html.DisplayFor(x => Model.User.LastName)
+        </div>
+        <div id="stats-section">
             <div id="followers-section">
                 @Html.Partial("~/Views/UserProfile/_FollowAction.cshtml", @Model.User)
+            </div>
+            <div id="playlist-section">
+                <div id="favorites">
+                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#favoriteModal"><i class="fa fa-star"></i></button>
+                    <div class="count-label">@Model.User.PlaylistFollowing.Count</div>
                 </div>
-                <div id="playlist-section">
-                    <div id="favorites" style="display: inline-block">
-                        <div class="dropdown" style="display: inline-block">
-                            <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-star"></i>  Favorite playlists</button>
-                                @if (Model.User.PlaylistFollowing.Any())
-                                {
-                                    <ul class="dropdown-menu">
-
-                                        @Html.DisplayFor(x => x.User.PlaylistFollowing)
-                                    </ul>
-
-                                }    
-                        </div>
-                        <div class="count-label" style="display: inline-block">@Model.User.PlaylistFollowing.Count(s => s.IsFavorite)</div>
-                    </div>
-                    <div id="owned-playlists">
-                        <a href="/PublicPlaylists/Index/@Model.User.Id" class="btn btn-default btn-xs"><i class="fa fa-music"></i>  Own playlists</a>
-                    </div>
+                <div id="owned-playlists">
+                    <button class="btn btn-default btn-xs"><a href="/PublicPlaylists/Index/@Model.User.Id"><i class="fa fa-music"></i></a></button>
+                    <div id="playlists-count" class="count-label"></div>
                 </div>
-
-                @if (loggedUser.Id == Model.User.Id)
-                {
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7 col-xs-7" id="user-info">
+            @if (loggedUser.Id == Model.User.Id)
+            {
+                <div class="row well">
                     <div id="social-container">
                         @foreach (var sn in @Model.SocialNetworks)
                         {
@@ -53,10 +49,10 @@
                             </a>
                         }
                     </div>
-                }
-            </div>
-        <div class="row well">
-            <div id="notification-container">
+                </div>
+            }
+        <div class="row well" style="height: 80%">
+            <div id="notification-container" style="height:100%">
                 <h3>Recent Activity:</h3>
                 <div id="recent-activity"></div>
             </div>
@@ -76,6 +72,30 @@
             @*<div id="info-header-spinner" class="spinner loader"></div>*@
             <div class="modal-body">
                 <div class="users"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="favoriteModal" tabindex="-1" role="dialog" aria-labelledby="favoriteModalLabel" aria-hidden="true" style="height:100%;">
+    <div class="modal-dialog modal-lg" style="height: 100%;">
+        <div class="modal-content" style="height: 100%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Favorite playlists</h4>
+            </div>
+            <div id="favorite-playlists-container" class="modal-body" style="height: 75%;">
+                <div>
+                    @if (Model.User.PlaylistFollowing.Any())
+                    {
+                        <ul class="nav nav-pills nav-stacked">
+                            @Html.DisplayFor(x => x.User.PlaylistFollowing)
+                        </ul>
+                    }
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id="closeModalBtn" data-dismiss="modal">Close</button>
