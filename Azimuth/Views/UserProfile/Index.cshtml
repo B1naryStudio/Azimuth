@@ -114,6 +114,42 @@
     <script id="notificationTemplate" type="text/x-jQuery-tmpl">
         <div class="notification">
             <div class="message">
+                {{if NotificationType == 0}}
+                <i class="fa fa-plus-square"></i>
+                {{/if}}
+                {{if NotificationType == 1}}
+                <i class="fa fa-share-alt"></i>
+                {{/if}}
+                {{if NotificationType == 2}}
+                <i class="fa fa-check-square-o"></i>
+                {{/if}}
+                {{if NotificationType == 3}}
+                <i class="fa fa-square-o"></i>
+                {{/if}}
+                {{if NotificationType == 4}}
+                <i class="fa fa-minus"></i>
+                {{/if}}
+                {{if NotificationType == 5}}
+                <i class="fa fa-exchange"></i>
+                {{/if}}
+                {{if NotificationType == 6}}
+                <i class="fa fa-headphones"></i>
+                {{/if}}
+                {{if NotificationType == 7}}
+                <i class="fa fa-remove"></i>
+                {{/if}}
+                {{if NotificationType == 8}}
+                <i class="fa fa-thumbs-o-up"></i>
+                {{/if}}
+                {{if NotificationType == 9}}
+                <i class="fa fa-thumbs-o-down"></i>
+                {{/if}}
+                {{if NotificationType == 10}}
+                <i class="fa fa-star"></i>
+                {{/if}}
+                {{if NotificationType == 11}}
+                <i class="fa fa-star-half-o"></i>
+                {{/if}}
                 <span>User</span>
                 <a href="/UserProfile/Index/@Model.User.Id">${UserFirstName}&nbsp;${UserLastName}</a>
                 <span>${Message}</span>
