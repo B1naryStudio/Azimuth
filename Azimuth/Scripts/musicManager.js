@@ -548,7 +548,7 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             });
 
     self.audioManager.bindPlayBtnListeners();
-    $('.track-info > a').click(self._getTrackInfo);
+    $('.track-info > a').off('click').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {

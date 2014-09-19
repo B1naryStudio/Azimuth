@@ -119,7 +119,7 @@
 
         self.audioManager.refreshTracks();
         self.audioManager.bindPlayBtnListeners();
-        $('.track-info > a').click(self._getTrackInfo);
+        $('.track-info > a').off('click').click(self._getTrackInfo);
         $('.vkMusicTable').mCustomScrollbar({
             theme: 'dark-3',
             scrollButtons: { enable: true },
@@ -351,7 +351,7 @@ SearchManager.prototype.bindListeners = function () {
                         });
                         self._showTracks(self.topTracksVk, $('#trackTemplate'));
                         self.audioManager.bindPlayBtnListeners();
-                        $('.track-info > a').click(self._getTrackInfo);
+                        $('.track-info > a').off('click').click(self._getTrackInfo);
                         self.$vkMusicLoadingSpinner.hide();
                     }
                 });
