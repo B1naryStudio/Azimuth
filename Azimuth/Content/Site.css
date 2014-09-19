@@ -531,3 +531,9 @@ margin-right: 15px;
     padding-top: 2%;
     display: none;
 }
+
+.no-result {
+    margin: 20px;
+    font-size: 6em;
+    display: none;
+}
