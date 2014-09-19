@@ -1097,6 +1097,7 @@ MusicManager.prototype.bindListeners = function() {
 
     $(self.audioManager).on('OnAddToPlaylist', function () {
         if (self.$extraContainer.hasClass('col-md-0')) {
+            $('.playlist-divider').remove();
             self.showPlaylists();
             self.setDefaultPlaylist();
         }
