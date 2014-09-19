@@ -483,7 +483,7 @@ MusicManager.prototype.setDefaultPlaylist = function (friendId, isClicked) {
     var tmpl = self.playlistTemplate.tmpl(playlist);
 
     var img = tmpl.children('.playlist-logo').empty();
-    img.append('<i class="fa fa-vk fa-5x"></i>');
+    img.append('<i class="fa fa-vk fa-5x" style="padding-top: 10px; padding-left: 10px;"></i>');
 
     tmpl.addClass('default-playlist');
     self.$playlistsTable.prepend(tmpl);
