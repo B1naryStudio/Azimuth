@@ -27,6 +27,10 @@ div#user-photo i {
     cursor: pointer;
 }
 
+.favorite-playlist {
+    color: black !important;
+}
+
 .favorite-playlist:hover {
     background-color: #FFD386 !important;
     color: #353535 !important;

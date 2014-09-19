@@ -3,7 +3,16 @@
     this.$loggedUser = $('#user-id');
     this.$notificationTemplate = $('#notificationTemplate');
     this.$notificationContainer = $('#notification-container');
+    this.$favoritePlaylistsContainer = $('#favorite-playlists-container');
     this.$recentActivity = $('#recent-activity');
+    this.$playlistsCount = $('#playlists-count');
+
+    $.ajax({
+        url: '/api/playlists/',
+        success: function(playlists) {
+            $('#playlists-count').text(playlists.length);
+        }
+    });
 };
 
 
@@ -28,6 +37,15 @@ UserProfileManager.prototype.bindListeners = function () {
     var self = this;
 
     self.$notificationContainer.mCustomScrollbar({
+        theme: 'dark-3',
+        scrollButtons: { enable: true },
+        updateOnContentResize: true,
+        scrollInertia: 0,
+        autoHideScrollbar: true,
+        advanced: { updateOnSelectorChange: "true" }
+    });
+
+    self.$favoritePlaylistsContainer.mCustomScrollbar({
         theme: 'dark-3',
         scrollButtons: { enable: true },
         updateOnContentResize: true,
