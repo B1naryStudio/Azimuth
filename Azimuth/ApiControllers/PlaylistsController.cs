@@ -95,11 +95,11 @@ namespace Azimuth.ApiControllers
 
         [HttpGet]
         [Route("genres")]
-        public async Task<HttpResponseMessage> GetPlaylistsGenres()
+        public async Task<HttpResponseMessage> GetPlaylistsGenres(long? id)
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPlaylistsGenres());
+                return Request.CreateResponse(HttpStatusCode.OK, await _playlistService.GetPlaylistsGenres(id));
             }
             catch (Exception ex)
             {

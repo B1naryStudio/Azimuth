@@ -6,6 +6,7 @@
 
 @{
     ViewBag.Title = "Public playlists";
+    var loggedUserId = ViewBag.Id;
 }
 
 <div id="playlist-spinner" class="spinner loader"></div>
@@ -128,7 +129,7 @@
             });
 
             $.ajax({
-                url: '/api/playlists/genres',
+                url: '/api/playlists/genres?id=@loggedUserId',
                 type: 'GET',
                 dataType: 'json',
                 success: function (genres) {
