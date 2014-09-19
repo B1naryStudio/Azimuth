@@ -1,5 +1,6 @@
 ﻿#user-container {
     width: 60%;
+    height: 100%;
 }
 
 #user-photo img {
@@ -17,6 +18,10 @@ div#user-photo i {
 #user-name {
     font-size: 27px;
     padding: 4px;
+}
+
+#user-info {
+    height: 100%;
 }
 
 #followers-section div,
