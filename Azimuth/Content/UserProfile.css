@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+#user-photo {
+    text-align: center;
+}
+
 #user-photo img {
     margin: auto;
     max-height: 300px;
