@@ -4,6 +4,7 @@ var MusicManager = function (manager) {
     this.tracksGlobal = [];
     this.playlistsGlobal = [];
     this.friendsOffset = 0;
+    this.notificationsOffset = 0;
     this.provider = "Vkontakte";
     this.reloginUrl = window.location.pathname;
     this.playlistTracksGlobal = [];
@@ -13,6 +14,7 @@ var MusicManager = function (manager) {
     this.playlistsTimeouts = [];
     this.currentFriend = null;
     this.gettingFriends = false;
+    this.gettingNotification = false;
     this.friendsListOpen = false;
     this.notificationListOpen = false;
     this.stringForCreateBtn = "Create new playlist ";
@@ -766,6 +768,25 @@ MusicManager.prototype.showNotifications = function (notifications, scrollbarIni
         scrollButtons: { enable: true },
         updateOnContentResize: true,
         advanced: { updateOnSelectorChange: "true" },
+        callbacks: {
+            whileScrolling: function () {
+                if (this.mcs.topPct >= 75 && !self.gettingNotifications) {
+                    self.gettingNotifications = true;
+                    self.$friendsLoadingSpinner.fadeIn('normal');
+                    var userId = $('#userId').val();
+                    $.ajax({
+                        url: '/api/notifications/' + userId + '/' + self.notificationsOffset,
+                        type: 'GET',
+                        success: function (notificationData) {
+                            self.showNotifications(notificationData, true);
+                            self.notificationsOffset += notificationData.length;
+                            self.$friendsLoadingSpinner.fadeOut('normal');
+                            self.gettingNotifications = false;
+                        }
+                    });
+                }
+            }
+        }
         //callbacks: {
         //    onTotalScroll: function () {
         //        self.$friendsLoadingSpinner.fadeIn('normal');
@@ -900,6 +921,7 @@ MusicManager.prototype.bindListeners = function() {
         $('.list-notification-item').remove();
         $('#notification-container').hide();
         self.notificationListOpen = false;
+        self.notificationsOffset = 0;
     };
 
     this._expandNotificationPanel = function() {

@@ -80,7 +80,7 @@ UserProfileManager.prototype.bindListeners = function () {
             $followPeople = $target.find('.topPeople');
         }
         else {
-            $followPeople = $target.parent().find('.topPeople');
+            $followPeople = $target.parent().parent().find('.topPeople');
         }
         if ($followPeople.length == 0)
             return;
