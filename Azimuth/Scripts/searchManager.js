@@ -69,6 +69,7 @@
             });
         } else {
             $('#searched-list').show();
+            self.$noResults.hide();
             $('#users').hide();
             if (searchParam != '') {
                 self.$vkMusicLoadingSpinner.show();
