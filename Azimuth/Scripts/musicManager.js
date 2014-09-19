@@ -796,6 +796,10 @@ MusicManager.prototype.showNotifications = function (notifications, scrollbarIni
         //    }
         //}
     });
+    $('.list-notification-close').click(function () {
+        var $notificationToDelete = $(this).parents('.list-notification-item');
+        $notificationToDelete.remove();
+    });
 };
 
 MusicManager.prototype.bindListeners = function() {
