@@ -12,12 +12,11 @@
 <div id="playlist-spinner" class="spinner loader"></div>
 
 <div style="height:100%">
-    <div id="playlistsArea">
+    <div id="playlistsArea" style="height:100%">
         <div id="genres" class="col-md-3">
             <ul id="genres-list" class="nav nav-pills nav-stacked" style="margin-left: 20px;"></ul>
         </div>
-        <div id="playlists-plated" class="col-md-9
-             ">
+        <div id="playlists-plated" class="col-md-9" style="height:100%">
             @if (Request.IsAuthenticated)
             {
                 Html.RenderAction("_PublicPlaylists", "PublicPlaylists", new { Model.PlaylistFollowing, ViewBag.Id, ViewBag.Genre });
@@ -89,7 +88,7 @@
         $(document).ready(function() {
             var self = this;
 
-            $('#playlistsArea').mCustomScrollbar({
+            $('#playlists-plated').mCustomScrollbar({
                 theme: 'dark-3',
                 scrollButtons: { enable: true },
                 updateOnContentResize: true,

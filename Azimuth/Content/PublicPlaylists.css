@@ -1,4 +1,5 @@
-﻿#barplaylistArea {
+﻿#playlistsArea {
+    height: 100%;
 }
 #playlistsArea ul li a.selected {
     text-decoration: none;
@@ -32,6 +33,11 @@
     padding: 5px;
     cursor: pointer;
 }
+
+#playlists-playted {
+    height: 100%;
+}
+
 .playlist-plated {
     width: 200px;
     height: 200px;
