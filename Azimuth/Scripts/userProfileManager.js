@@ -39,7 +39,6 @@ UserProfileManager.prototype.bindListeners = function () {
     $('#followersBtn, #followedBtn').off('hover').hover(function (event) {
 
         if ($('#popup').is(":visible")) {
-            //self._hidePopup(event);
             $('#popup').children('.data').empty();
         }
 
