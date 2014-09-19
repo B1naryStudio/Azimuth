@@ -24,7 +24,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header col-xs-12 col-sm-6 col-lg-8">
-                <a class="col-xs-4" href="@Url.Action("Index", "PublicPlaylists")">
+                <a class="col-xs-4" href="/PublicPlaylists">
                     <img src="~/Images/logo.jpg" height="40" />
                 </a>
                 @if (Request.IsAuthenticated)
@@ -61,7 +61,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sort-desc"></i></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="@Url.Action("Index", "UserProfile")"><i class="fa fa-lock"></i>&nbsp; Account</a></li>
+                                <li><a href="/UserProfile"><i class="fa fa-lock"></i>&nbsp; Account</a></li>
                                 <li class="divider"></li>
                                 <li><a href="@Url.Action("LogOff", "Account")"><i class="fa fa-sign-out"></i>&nbsp; Log off</a></li>
                             </ul>
