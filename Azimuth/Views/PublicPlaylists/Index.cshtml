@@ -136,7 +136,7 @@
                     var $genresList = $('#genres > #genres-list');
                     $genresList.append($('<li><a href="#" class="genre">All</a></li>'));
                     for (var i = 0; i < genres.length; i++) {
-                        if (genres[i].toLowerCase() !== 'undefined') {
+                        if (genres[i].toLowerCase() !== 'undefined' && genres[i].toLowerCase() !== 'other') {
                             var $item = $('<li><a href="#" class="genre">' + genres[i] + '</a></li>');
                             $('#genres > #genres-list').append($item);
                         }
