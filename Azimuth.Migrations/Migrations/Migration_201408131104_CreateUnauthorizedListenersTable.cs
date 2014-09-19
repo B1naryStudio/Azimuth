@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Azimuth.Migrations.Migrations
+namespace Azimuth.Migrations
 {
     [Migration(201408131104)]
     public class Migration_201408131104_CreateUnauthorizedListenersTable : Migration
