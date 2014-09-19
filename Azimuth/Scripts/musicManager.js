@@ -775,11 +775,12 @@ MusicManager.prototype.showNotifications = function (notifications, scrollbarIni
                     self.$friendsLoadingSpinner.fadeIn('normal');
                     var userId = $('#userId').val();
                     $.ajax({
-                        url: '/api/notifications/' + userId + '/' + self.notificationsOffset,
+                        //url: '/api/notifications/' + userId + '/' + self.notificationsOffset,
+                        url: '/api/notifications/' + userId + '/' + $('.list-notification-content').length,
                         type: 'GET',
                         success: function (notificationData) {
                             self.showNotifications(notificationData, true);
-                            self.notificationsOffset += notificationData.length;
+                            //self.notificationsOffset += notificationData.length;
                             self.$friendsLoadingSpinner.fadeOut('normal');
                             self.gettingNotifications = false;
                         }

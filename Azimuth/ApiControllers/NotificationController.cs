@@ -23,7 +23,8 @@ namespace Azimuth.ApiControllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetRecentActivity(id, offset));
+                //return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetRecentActivity(id, offset));
+                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetFollowingsActivity(id, offset));
             }
             catch (Exception ex)
             {

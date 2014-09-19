@@ -588,16 +588,33 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public async Task<List<string>> GetPlaylistsGenres()
+        public async Task<List<string>> GetPlaylistsGenres(long? id)
         {
-            var currentUserId = AzimuthIdentity.Current.UserCredential.Id;
+            long currentUserId = -1;
+            if (AzimuthIdentity.Current != null)
+            {
+                currentUserId = AzimuthIdentity.Current.UserCredential.Id;
+            }
             return await Task.Run(() =>
             {
                 List<string> genres = null;
 
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    genres = unitOfWork.PlaylistRepository.GetAll().Where(p => p.Creator.Id != currentUserId).SelectMany(p => p.Tracks).Select(t => t.Genre.ToString()).Distinct().OrderBy(s => s).ToList();
+                    IEnumerable<Playlist> userPlaylists = null;
+                    if (id == null)
+                    {
+                         userPlaylists = unitOfWork.PlaylistRepository.GetAll().Where(p => p.Creator.Id != currentUserId);
+                    }
+                    else
+                    {
+                        userPlaylists = unitOfWork.PlaylistRepository.GetAll().Where(p => p.Creator.Id == id);
+                    }
+
+                    genres = userPlaylists.SelectMany(p => p.Tracks).Select(t => t.Genre.ToString())
+                        .Distinct()
+                        .OrderBy(s => s)
+                        .ToList();
                     unitOfWork.Commit();
                 }
                 return genres;

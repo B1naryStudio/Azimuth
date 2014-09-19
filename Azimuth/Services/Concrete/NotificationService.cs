@@ -73,7 +73,7 @@ namespace Azimuth.Services.Concrete
             });
         }
 
-        public async Task<List<NotificationDto>> GetFollowingsActivity(long userId)
+        public async Task<List<NotificationDto>> GetFollowingsActivity(long userId, int offset = 0)
         {
             var notifications = new List<NotificationDto>();
             using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
@@ -82,7 +82,7 @@ namespace Azimuth.Services.Concrete
 
                 foreach (var following in user.Following)
                 {
-                    notifications.AddRange(await GetRecentActivity(following.Id));
+                    notifications.AddRange(await GetRecentActivity(following.Id, offset / user.Following.Count));
                 }
             }
 
