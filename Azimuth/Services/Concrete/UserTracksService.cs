@@ -6,10 +6,8 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using Azimuth.DataAccess.Entities;
 using Azimuth.DataAccess.Infrastructure;
-using Azimuth.DataAccess.Repositories;
 using Azimuth.DataProviders.Concrete;
 using Azimuth.DataProviders.Interfaces;
 using Azimuth.Infrastructure.Concrete;
@@ -171,8 +169,7 @@ namespace Azimuth.Services.Concrete
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    var user = unitOfWork.UserRepository.GetOne(s => s.Email == AzimuthIdentity.Current.UserCredential.Email);
-                    var playlists = unitOfWork.PlaylistRepository.Get(s => s.Creator.Id == user.Id).ToList();
+                    var playlists = unitOfWork.PlaylistRepository.Get(s => s.Creator.Id == AzimuthIdentity.Current.UserCredential.Id).ToList();
                     ICollection<TracksDto> tracks =
                         playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
                         {
