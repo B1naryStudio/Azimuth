@@ -290,6 +290,7 @@ var MusicManager = function (manager) {
             url: '/api/playlists/friend?id=' + self.currentFriend,
             success: function (playlists) {
                 if (playlists !== null) {
+                    self.playlistsGlobal.length = 0;
                     for (var i = 0; i < playlists.length; i++) {
                         var playlist = playlists[i];
                         if (playlist.Accessibilty === 1) {
@@ -308,7 +309,7 @@ var MusicManager = function (manager) {
                     self.$messageContainer.show();
                 }
                 $('.playlist-divider').remove();
-                self.setDefaultPlaylist(self.currentFriend);
+                self.setDefaultPlaylist(self.currentFriend, true);
             }
         });
     };
@@ -461,7 +462,7 @@ var MusicManager = function (manager) {
     };
 };
 
-MusicManager.prototype.setDefaultPlaylist = function (friendId) {
+MusicManager.prototype.setDefaultPlaylist = function (friendId, isClicked) {
     var self = this;
 
     var playlist = {
@@ -490,7 +491,7 @@ MusicManager.prototype.setDefaultPlaylist = function (friendId) {
         }
     } else {
         tmpl.click(self._getFriendTracks);
-        if (self.isSearch) {
+        if (self.isSearch || isClicked) {
             self._getFriendTracks();
         }
         else {
