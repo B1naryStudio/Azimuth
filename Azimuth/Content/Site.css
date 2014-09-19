@@ -416,8 +416,11 @@ a.popup-notification-close {
 
 .popup-notification-user-photo img{
     float: left;
-    width: 65px;
-    height: 65px;
+    vertical-align: middle;
+    margin: auto;
+    max-height: 65px;
+    max-width: 65px;
+    text-align: center;
 }
 
 .popup-notification-header {
