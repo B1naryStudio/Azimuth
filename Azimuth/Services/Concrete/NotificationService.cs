@@ -46,7 +46,7 @@ namespace Azimuth.Services.Concrete
             return notification;
         }
 
-        public Task<List<NotificationDto>> GetRecentActivity(long userId)
+        public Task<List<NotificationDto>> GetRecentActivity(long userId, int offset = 0)
         {
             return Task.Run(() =>
             {
@@ -55,8 +55,7 @@ namespace Azimuth.Services.Concrete
                 {
                     var _notificationRepository = unitOfWork.GetRepository<Notification>();
 
-                    //TODO: move ToList() to the end of the expression
-                    var notifications = _notificationRepository.GetAll(n => n.User.Id == userId).ToList().OrderByDescending(s => s.Id).Take(15);
+                    var notifications = _notificationRepository.GetAll(n => n.User.Id == userId).OrderByDescending(s => s.Id).Skip(offset).Take(15).ToList();
 
                     foreach (var notification in notifications)
                     {
