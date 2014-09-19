@@ -223,3 +223,26 @@
 .descriptionPhoto img {
     width: 100%;
 }
+
+.list-notification-close {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #000000;
+    /*-ms-opacity: 0.2;
+    opacity: 0.2;
+    -webkit-filter: alpha(opacity=20);
+    -moz-filter: alpha(opacity=20);
+    -o-filter: alpha(opacity=20);*/
+    /*filter: alpha(opacity=20);*/
+    text-decoration: none;
+    margin-top: 5%;
+    margin-right: -2%;
+}
+
+a.list-notification-close {
+    text-decoration: none;
+}
+.list-notification-close:hover {
+    color: black;
+}
