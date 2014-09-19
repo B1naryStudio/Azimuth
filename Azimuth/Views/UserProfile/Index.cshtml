@@ -22,19 +22,10 @@
                 <div id="favorites">
                     <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#favoriteModal"><i class="fa fa-star"></i></button>
                     <div class="count-label">@Model.User.PlaylistFollowing.Count</div>
-                    @*                <div class="dropdown" style="display: inline-block">*@
-                    @**@
-                    @*                    @if (Model.User.PlaylistFollowing.Any())*@
-                    @*                    {*@
-                    @*                        <ul class="dropdown-menu">*@
-                    @*                            @Html.DisplayFor(x => x.User.PlaylistFollowing)*@
-                    @*                        </ul>*@
-                    @*                    }*@
-                    @*                </div>*@
                 </div>
                 <div id="owned-playlists">
                     <button class="btn btn-default btn-xs"><a href="/PublicPlaylists/Index/@Model.User.Id"><i class="fa fa-music"></i></a></button>
-                    <div class="count-label">@Model.User.PlaylistFollowing.Count</div>
+                    <div id="playlists-count" class="count-label"></div>
                 </div>
             </div>
         </div>

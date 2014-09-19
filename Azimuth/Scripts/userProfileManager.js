@@ -5,6 +5,14 @@
     this.$notificationContainer = $('#notification-container');
     this.$favoritePlaylistsContainer = $('#favorite-playlists-container');
     this.$recentActivity = $('#recent-activity');
+    this.$playlistsCount = $('#playlists-count');
+
+    $.ajax({
+        url: '/api/playlists/',
+        success: function(playlists) {
+            $('#playlists-count').text(playlists.length);
+        }
+    });
 };
 
 
