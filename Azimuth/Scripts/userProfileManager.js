@@ -94,7 +94,7 @@ UserProfileManager.prototype.bindListeners = function () {
 
         $popup.css({
             'top': $btnPos.top - $popup.height() - 5,
-            'left': $btnPos.left - 15
+            'left': $btnPos.left - 5
         }).animate({ bottom: '50px', opacity: 1 }, 600,
             function() {
                 $('#popup').css({ 'display': 'block' });
@@ -106,7 +106,7 @@ UserProfileManager.prototype.bindListeners = function () {
         if ($toElement.attr('id') == "popup")
             return;
         var $popup = $('#popup');
-        $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 600,
+        $('#popup').stop().animate({ bottom: '50px', opacity: 0 }, 300,
          function () {
              $('#popup').css({ 'display': 'none' });
          });

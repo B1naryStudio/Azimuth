@@ -7,23 +7,24 @@
     max-height: 300px;
 }
 
+div#user-photo i {
+    font-size: 20px;
+    color: black;
+}
+#stats-section {
+    padding-top: 10px;
+}
 #user-name {
     font-size: 27px;
+    padding: 4px;
 }
 
-#followers-section div {
+#followers-section div,
+#playlist-section div {
     display: inline-block;
-    width: 40%;
+    width: 30%;
     padding: 2%;
     cursor: pointer;
-}
-
-#followers-section > div {
-    min-width: 150px;
-}
-
-#playlist-section div {
-    padding: 2%;
 }
 
 .favorite-playlist:hover {
@@ -136,15 +137,15 @@
 }
 
 #popup:after {
-content: '';
-position: absolute;
-width: 0;
-height: 0;
-border: 5px solid transparent;
-border-top-color: #353535;
-top: 100%;
-left: 40%;
-margin-left: -15px;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: #353535;
+    top: 100%;
+    left: 40%;
+    margin-left: -15px;
 }
 
 #popupModal .modal-footer {

@@ -9,10 +9,6 @@
     {
         using (@Ajax.BeginForm("_FollowAction", "UserProfile", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "followers-section", OnSuccess = "rebootPopup" }, new { @style = "display: block; margin-bottom: 1.4%; vertical-align: middle;" }))
         {
-             <div id="user-name">
-                @Html.DisplayFor(x => Model.FirstName)
-                @Html.DisplayFor(x => Model.LastName)
-            </div>
             <button class="btn btn-default" id="followBtn" style="margin: 2%; padding: 0">
                 @if (followAction == "Follow")
                 {
@@ -29,14 +25,14 @@
     }
 
     <div id="followers">
-        <button class="btn btn-default btn-xs" id="followersBtn"><i class="fa fa-users"></i> Followers</button>
+        <button class="btn btn-default btn-xs" id="followersBtn"><i class="fa fa-users"></i></button>
         <div class="count-label">@Model.Followers.Count</div>
         <div class="topFollowers">
             @Html.DisplayFor(x => x.Followers)
         </div>
     </div>
     <div id="following">
-        <button class="btn btn-default btn-xs" id="followedBtn"><i class="fa fa-thumbs-up"></i>Followed</button>
+        <button class="btn btn-default btn-xs" id="followedBtn"><i class="fa fa-thumbs-up"></i></button>
         <div class="count-label">@Model.Following.Count</div>
         <div class="topFollowing">
             @Html.DisplayFor(x => x.Following)

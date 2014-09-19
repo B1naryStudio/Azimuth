@@ -139,6 +139,7 @@ div.accordion > div.tableRow{
 	font: bold 100%/100% Arial, Helvetica, sans-serif;
 	border-bottom: none;
 	cursor: pointer;
+    padding: 5px;
 }
 
 div.accordion > div.dropdown {
@@ -373,10 +374,6 @@ hr {
     display: none;
 }
 
-.popup-notification a {
-    color: #05457D;
-}
-
 .popup-notification-close {
     font-size: 40px;
     font-weight: bold;
@@ -438,13 +435,12 @@ a.popup-notification-close {
 .popup-notification-user-time {
     display: inline-block;
     margin-left: 8px;
-    font-weight: bold;
 }
 
 .popup-notification-user-time span{
     display: block;
     width: 70%;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .popup-notification-item hr {
@@ -470,8 +466,7 @@ a.popup-notification-close {
     background: #ffffff;
     margin-top: 10px;
     margin-left: 3px;
-    border: solid 2px rgb(186, 182, 182);
-    box-shadow: 5px 5px 6px -4px #222;
+    box-shadow: 3px 3px 4px -4px #222;
 }
 
 .list-notification-item:hover {
@@ -511,12 +506,9 @@ a.popup-notification-close {
 
 .list-notification-user-time {
     display: inline-block;
+    font-size: 16px;
     margin-left: 5px;
     width: 74%;
-}
-
-.list-notification-user-time {
-    font-weight: bold;
 }
 
 .list-notification-user-time span{
