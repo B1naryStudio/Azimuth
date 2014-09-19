@@ -127,7 +127,7 @@
 
         self.audioManager.refreshTracks();
         self.audioManager.bindPlayBtnListeners();
-        $('.track-info > a').click(self._getTrackInfo);
+        $('.track-info > a').off('click').click(self._getTrackInfo);
         $('.vkMusicTable').mCustomScrollbar({
             theme: 'dark-3',
             scrollButtons: { enable: true },
@@ -345,10 +345,11 @@ SearchManager.prototype.bindListeners = function () {
             if (self.topTracks != null) {
                 var tracks = JSON.stringify({ trackdata: self.topTracks });
                 $.ajax({
-                    url: '/api/usertracks/tracksearch?provider=Vkontakte&infoForSearch=' + tracks,
+                    url: '/api/usertracks/tracksearch?provider=Vkontakte',
                     type: 'POST',
                     dataType: 'json',
-                    contentType: 'application/json;',
+                    data: tracks,
+                    contentType: 'application/json; charset=utf-8',
                     success: function (data) {
                         self.topTracksVk = [];
                         $(data).each(function () {
@@ -359,7 +360,7 @@ SearchManager.prototype.bindListeners = function () {
                         });
                         self._showTracks(self.topTracksVk, $('#trackTemplate'));
                         self.audioManager.bindPlayBtnListeners();
-                        $('.track-info > a').click(self._getTrackInfo);
+                        $('.track-info > a').off('click').click(self._getTrackInfo);
                         self.$vkMusicLoadingSpinner.hide();
                     }
                 });

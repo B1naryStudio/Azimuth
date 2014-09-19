@@ -38,7 +38,7 @@
         document.audioManager.bindPlayBtnListeners();
         document.audioManager.bindListeners();
 
-        $('.track-info > a').click(function() {
+        $('.track-info > a').off('click').click(function() {
             var $self = $(this);
             var $trackInfoSpinner = $('#trackInfo-spinner');
             var author = $self.children('.track-artist').html();

@@ -548,7 +548,7 @@ MusicManager.prototype.showTracks = function (tracks, template) {
             });
 
     self.audioManager.bindPlayBtnListeners();
-    $('.track-info > a').click(self._getTrackInfo);
+    $('.track-info > a').off('click').click(self._getTrackInfo);
 };
 
 MusicManager.prototype.showFriends = function (friends, scrollbarInitialized) {
@@ -776,7 +776,7 @@ MusicManager.prototype.showNotifications = function (notifications, scrollbarIni
                     var userId = $('#userId').val();
                     $.ajax({
                         //url: '/api/notifications/' + userId + '/' + self.notificationsOffset,
-                        url: '/api/notifications/' + userId + '/' + $('.list-notification-content').length,
+                        url: '/api/notifications/followings' + userId + '/' + $('.list-notification-content').length,
                         type: 'GET',
                         success: function (notificationData) {
                             self.showNotifications(notificationData, true);
@@ -873,11 +873,18 @@ MusicManager.prototype.bindListeners = function() {
 
     this.$searchTrackInput.keyup(function(e) {
         var searchParam = $(this).val().toLocaleLowerCase();
-
-        self.showTracks(self.tracksGlobal.filter(function (index) {
+        if ($('.playlist-active').hasClass('default-playlist')) {
+            self.showTracks(self.tracksGlobal.filter(function (index) {
             self.$searchTrackInput.next().next().children().remove();
             return ((index.title.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.artist.toLocaleLowerCase().indexOf(searchParam) != -1));
         }));
+        } else {
+
+            self.showTracks(self.playlistTracksGlobal.filter(function (index) {
+                self.$searchTrackInput.next().next().children().remove();
+                return ((index.Name.toLocaleLowerCase().indexOf(searchParam) != -1) || (index.Artist.toLocaleLowerCase().indexOf(searchParam) != -1));
+            }), self.playlistTrackTemplate);
+        }
         self.audioManager.refreshTracks();
         self.audioManager.updateProgressbar('.vkMusicList');
     });
@@ -957,7 +964,7 @@ MusicManager.prototype.bindListeners = function() {
         if (self.extraContainerShown) {
             $.ajax({
                 //url: '/api/notifications/followings/' + userId,
-                url: '/api/notifications/' + userId,
+                url: '/api/notifications/followings/' + userId,
                 type: 'GET',
                 success: function (notifications) {
                     var $scroll = $('#notifications-container').find('.mCSB_container');

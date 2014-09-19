@@ -18,7 +18,21 @@ namespace Azimuth.ApiControllers
         }
 
         [HttpGet]
-        [Route("{id:int}/{offset:int?}")]
+        [Route("{id:int}")]
+        public async Task<HttpResponseMessage> GetRecentActivity(int id, int offset = 0)
+        {
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _notificationService.GetRecentActivity(id, offset));
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("followings/{id:int}/{offset:int?}")]
         public async Task<HttpResponseMessage> GetFollowingsActivity(int id, int offset = 0)
         {
             try
