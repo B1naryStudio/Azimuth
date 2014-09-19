@@ -35,8 +35,13 @@
                     
                 </div>
                 <div id="message-container">
-                    <textarea class="form-control input-lg" style="max-width: 100%">Hello! I want to invite you to our website</textarea>
-                    <button class="btn btn-success send-message-btn"><i class="glyphicon glyphicon-ok"></i></button>
+                    <div class="message-send">
+                        <textarea class="form-control input-lg" style="max-width: 100%">Hello! I want to invite you to our website</textarea>
+                        <button class="btn btn-success send-message-btn"><i class="fa fa-envelope-o"></i></button>
+                    </div>
+                    <div class="message-sent">
+                        <i class="glyphicon glyphicon-ok-circle" style="font-size: 5em;"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -359,6 +364,7 @@
         
         <script id="playlistNotificationTemplate" type="text/x-jQuery-tmpl">
             <div class="list-notification-item">
+                <a href="#" class="list-notification-close right">&times;</a>
                 <div class="list-notification-content">
                     <div class="list-notification-header">
                         <div class="list-notification-user-photo"><img src="${UserPhoto}"/></div>
@@ -379,6 +385,7 @@
         
         <script id="userNotificationTemplate" type="text/x-jQuery-tmpl">
             <div class="list-notification-item">
+                <a href="#" class="list-notification-close right">&times;</a>
                 <div class="list-notification-content">
                     <div class="list-notification-header">
                         <div class="list-notification-user-photo"><img src="${UserPhoto}" /></div>
