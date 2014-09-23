@@ -74,6 +74,7 @@ PublicPlaylistManager.prototype.showTracks = function() {
         $('#tracksArea').empty();
         $('#playlistsArea').show();
     });
+
 };
 
 

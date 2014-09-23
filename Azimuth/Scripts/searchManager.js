@@ -140,6 +140,29 @@
         });
         self._createContextMenu();
         self.$vkMusicLoadingSpinner.hide();
+
+        $('.download-btn').mousedown(function (e) {
+            var $self = $(this);
+            var trackInfo = {
+                trackData: [
+                    { ownerId: $self.siblings('.ownerId').text(), thirdPartId: $self.siblings('.thirdPartId').text() }
+                ]
+            };
+            $.ajax({
+                url: '/api/usertracks/trackurl?provider=Vkontakte',
+                type: 'GET',
+                dataType: 'json',
+                data: { trackData: JSON.stringify(trackInfo) },
+                success: function (track) {
+                    var link = document.createElement("a");
+                    link.download = "Download";
+                    link.href = track[0];
+                    link.click();
+                }
+            });
+
+            e.stopPropagation();
+        });
     };
 
     this._getTrackInfo = function () {
