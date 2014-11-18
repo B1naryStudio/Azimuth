@@ -47,7 +47,12 @@
 
                 var currentMousePos = { x: event.clientX, y: event.clientY };
                 if (moveEnable == false) {
-                    if (Math.abs(mouseClickPosition.x - currentMousePos.x) > mouseMovePxOffset || Math.abs(mouseClickPosition.y - currentMousePos.y) > mouseMovePxOffset) {
+                    //if (Math.abs(mouseClickPosition.x - currentMousePos.x) > mouseMovePxOffset || Math.abs(mouseClickPosition.y - currentMousePos.y) > mouseMovePxOffset) {
+                    //    moveEnable = true;
+                    //} else {
+                    //    return;
+                    //}
+                    if ($('.draggable-stub').length == 0) {
                         moveEnable = true;
                     } else {
                         return;
@@ -86,8 +91,10 @@
                         var childPos = $currentItem.offset();
                         var parentPos = $draggableStub.parent().offset();
 
-                        if ($elem.length > 0 &&
-                            (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
+                        //if ($elem.length > 0 &&
+                        //    (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
+                        if ($elem.length > 0
+                            || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList'))) {
                             clearTimeout(timerId);
                             var $savedItem = $currentItem;
                             timerId = setTimeout(function () {
@@ -96,10 +103,13 @@
                                     $elem.trigger('MergeItems', [$elem, $savedItem, event.pageY]);
                                 }
                             }, 2000);
+                            //if (childPos && parentPos && childPos.top - parentPos.top < $($currentItem.children[0]).outerHeight() / 2 &&
+                        //    (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
                             if (childPos && parentPos && childPos.top - parentPos.top < $($currentItem.children[0]).outerHeight() / 2 &&
-                                (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList')))) {
+                                    ($currentItem.children().hasClass('vk-item'))) {
                                 $draggableStub.insertBefore($elem);
-                            } else if (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList'))) {
+                                //} else if (!$elem.parents().hasClass('vkMusicList') || ($currentItem.children().hasClass('vk-item') && $elem.parents().hasClass('vkMusicList'))) {
+                            } else  {
                                 $draggableStub.insertAfter($elem);
                             }
                         }
@@ -175,7 +185,9 @@
                     }
                 }
             }
-            $draggableStub.hide();
+            //$draggableStub.hide();
+            $draggableStub.detach();
+            //moveEnable = true;
         });
 
         contextMenu.$contextMenuContainer.mouseup(function (event) {

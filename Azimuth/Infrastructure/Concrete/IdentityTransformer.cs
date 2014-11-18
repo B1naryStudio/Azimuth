@@ -7,7 +7,6 @@ namespace Azimuth.Infrastructure.Concrete
 {
     public class IdentityTransformer : ClaimsAuthenticationManager
     {
-
         public override ClaimsPrincipal Authenticate(string resourceName, ClaimsPrincipal incomingPrincipal)
         {
             var identity = incomingPrincipal.Identity as ClaimsIdentity;
