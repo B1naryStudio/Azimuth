@@ -169,7 +169,36 @@ namespace Azimuth.Services.Concrete
             {
                 using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
                 {
-                    var playlists = unitOfWork.PlaylistRepository.Get(s => s.Creator.Id == AzimuthIdentity.Current.UserCredential.Id).ToList();
+                    if (AzimuthIdentity.Current  != null)
+                    {
+                        var playlists = unitOfWork.PlaylistRepository.Get(s => s.Creator.Id == AzimuthIdentity.Current.UserCredential.Id).ToList();
+                        ICollection<TracksDto> tracks =
+                            playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
+                            {
+                                Name = track.Name,
+                                Duration = track.Duration,
+                                Album = track.Album.Name,
+                                Artist = track.Album.Artist.Name,
+                                ThirdPartId = track.ThirdPartId,
+                                OwnerId = track.OwnerId
+                            }).ToList();
+
+                        unitOfWork.Commit();
+                        return tracks;
+                    }
+                    return null;
+                }
+            });
+        }
+
+        public ICollection<TracksDto> GetUserTracksSync()
+        {
+            using (var unitOfWork = _unitOfWorkFactory.NewUnitOfWork())
+            {
+                if (AzimuthIdentity.Current != null)
+                {
+                    var playlists = unitOfWork.PlaylistRepository.Get(
+                        s => s.Creator.Id == AzimuthIdentity.Current.UserCredential.Id).ToList();
                     ICollection<TracksDto> tracks =
                         playlists.SelectMany(s => s.Tracks).Distinct().Select(track => new TracksDto
                         {
@@ -178,13 +207,15 @@ namespace Azimuth.Services.Concrete
                             Album = track.Album.Name,
                             Artist = track.Album.Artist.Name,
                             ThirdPartId = track.ThirdPartId,
-                            OwnerId = track.OwnerId
+                            OwnerId = track.OwnerId,
+                            Genre = track.Genre
                         }).ToList();
 
                     unitOfWork.Commit();
                     return tracks;
                 }
-            });
+                return null;
+            }
         }
 
         public async Task<List<string>> GetTrackUrl(TrackSocialInfo tracks, string provider)

@@ -214,6 +214,7 @@
   <ItemGroup>
     <Compile Include="ApiControllers\NotificationController.cs" />
     <Compile Include="ApiControllers\SearchController.cs" />
+    <Compile Include="Controllers\RecommendationController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="ApiControllers\FavoritesController.cs" />
     <Compile Include="Controllers\ShareController.cs" />
@@ -418,6 +419,7 @@
     <Content Include="Views\UserProfile\DisplayTemplates\FollowerModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\User.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\PlaylistLikeModel.cshtml" />
+    <Content Include="Views\Recommendation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
